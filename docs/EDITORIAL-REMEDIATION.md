@@ -42,8 +42,9 @@ The Ledger Hub's styling now totals 17,674 bytes instead of 18,441 bytes across 
 - [ ] Review local Home/Journal/Ledger desktop and phone previews, including original overlay positions. Previews use actual renderers and candidate CSS with explicitly labelled sample/captured content; they are not a production mirror.
 - [ ] Resolve every genuine local/CI failure; CI must be green. Keep source/runtime advisories classified rather than suppressing them to reach a score.
 - [ ] Dalton merges Ledger 2.8.22 first. Plugin main auto-deploys.
+- [ ] Verify the deployed Ledger through the read-only `/wp-json/lunara-ledger/v1/status` endpoint: a successful response, `plugin_version` exactly `2.8.22`, and a positive `dataset.nominations` count are required before deploying the companion theme. A plugin merge alone does not prove deployment completed.
 - [ ] Dalton merges Theme 3.2.104 and clicks its WordPress.com deploy while theme auto-deploy remains off.
-- [ ] Check installed build/assets and anonymous public rendering once across the frozen page-type/state manifest; run the bounded public acceptance workflow. A passing HTTP200 or a merge is insufficient.
+- [ ] Check installed build/assets and anonymous public rendering once across the frozen page-type/state manifest; run the bounded public acceptance workflow with expected theme `3.2.104` and expected Ledger `2.8.22`. Both version inputs are required, and a stale Ledger fails acceptance even when its records are healthy. A passing HTTP200 or a merge is insufficient.
 - [ ] If the original browser setup reproduces the unidentified clipping/contour annotations, capture the exact node plus computed property and producing stylesheet/script. Investigate that component only.
 - [ ] Record live acceptance separately, then stop rechecking unchanged state. A regression or new change is the trigger for further checks.
 

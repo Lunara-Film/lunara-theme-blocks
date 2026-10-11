@@ -36,9 +36,19 @@ function failuresFor(result, expectedVersion='') {
     if(result.pageErrors?.length) failures.push('Unhandled page JavaScript error');
     return failures;
 }
+function ledgerFailuresFor(health, expectedVersion) {
+    const failures=[];
+    if(health.status<200||health.status>=300) failures.push('Unexpected Ledger HTTP status '+health.status);
+    if(!(Number(health.dataset?.nominations)>0)) failures.push('Ledger nominations are unavailable or empty');
+    if(!expectedVersion) failures.push('Expected Ledger version is required');
+    else if(health.pluginVersion!==expectedVersion) failures.push('Expected Ledger '+expectedVersion+', received '+(health.pluginVersion||'missing version'));
+    return failures;
+}
 async function run() {
     const origin=process.env.LUNARA_WATCH_ORIGIN||'https://lunarafilm.com';
     const expectedVersion=process.env.LUNARA_EXPECTED_THEME_VERSION||'';
+    const expectedLedgerVersion=(process.env.LUNARA_EXPECTED_LEDGER_VERSION||'').trim();
+    if(!expectedLedgerVersion) throw new Error('LUNARA_EXPECTED_LEDGER_VERSION is required for companion-release acceptance');
     const out=path.resolve(process.env.LUNARA_WATCH_OUT||'test-results/public-design-watch');
     fs.mkdirSync(out,{recursive:true});
     const routes=['/','/journal/','/reviews/','/debrief/','/about/','/film/','/talent/','/oscars/','/oscars/categories/','/oscars/ceremonies/','/search/?q=unlikely-lunara-no-result-20261011'];
@@ -63,18 +73,19 @@ async function run() {
         try {
             const response=await context.request.get(new URL('/wp-json/lunara-ledger/v1/status',origin).href,{timeout:30000});
             const data=await response.json();
-            health={status:response.status(),pluginVersion:data.plugin_version,dataset:data.dataset,
-                passed:response.ok()&&Number(data.dataset?.nominations)>0};
+            health={status:response.status(),pluginVersion:data.plugin_version,dataset:data.dataset};
+            health.failures=ledgerFailuresFor(health,expectedLedgerVersion);
+            health.passed=health.failures.length===0;
         } catch(error) {health={passed:false,error:error.message};}
         finally {await context.close();}
     } finally {await browser.close();}
     const builds=[...new Set(results.map(result=>result.build).filter(Boolean))];
     const coherence=builds.length===1?[]:['Representative routes served different build markers: '+builds.join(', ')];
-    const report={capturedAt:new Date().toISOString(),expectedVersion:expectedVersion||null,coherence,health,results};
+    const report={capturedAt:new Date().toISOString(),expectedVersion:expectedVersion||null,expectedLedgerVersion,coherence,health,results};
     fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
     const failed=results.filter(result=>result.failures.length);
-    console.log(JSON.stringify({cases:results.length,failed:failed.length,coherence,report:path.join(out,'report.json')},null,2));
+    console.log(JSON.stringify({cases:results.length,failed:failed.length,coherence,ledgerFailures:health.failures||[health.error].filter(Boolean),report:path.join(out,'report.json')},null,2));
     process.exitCode=failed.length||coherence.length||!health.passed?1:0;
 }
-module.exports={inspectPage,failuresFor};
+module.exports={inspectPage,failuresFor,ledgerFailuresFor};
 if(require.main===module)run().catch(error=>{console.error(error);process.exitCode=1;});
