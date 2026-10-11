@@ -27,7 +27,7 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ## 2026-10-11 — Editorial presentation remediation candidate
 
-- **Shipped:** review candidates only: Ledger 2.8.22 (PR #54) and Theme 3.2.104 on `codex/editorial-remediation`; shared ornamental surfaces retired, metadata/links readable, all story/forecast records preserved, archive first-paint and saved configuration guarded. Nothing merged or deployed.
+- **Shipped:** review candidates only: Ledger 2.8.22 (PR #54) and Theme 3.2.104 (PR #230) on `codex/editorial-remediation`; shared ornamental surfaces retired, metadata/links readable, all story/forecast records preserved, archive first-paint and saved configuration guarded. Nothing merged or deployed.
 - **Live:** unchanged by this task. Ledger PR #54 CI is green; live version/build acceptance remains a separate release gate.
 - **Holding:** Codex candidate branches await final visual review and green companion theme CI. The complete plan, original 158-instance dispositions,125-case baseline and desktop/phone previews are in this chat's `lunara-remediation-plan` artifact. See `docs/EDITORIAL-REMEDIATION.md` for release order and limits.
 - **Next:** review the four Home/Journal previews and both PRs; Dalton merges Ledger first, then Theme and its manual WordPress.com deploy click. Perform one versioned public acceptance pass, then stop rechecking unchanged state.

@@ -95,6 +95,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     dot.addEventListener('click', function() {
                         scrollToIndex(index);
                     });
+                    dot.addEventListener('focus', function() {
+                        const strip = dot.parentElement;
+                        if (!strip || strip.scrollWidth <= strip.clientWidth) {
+                            return;
+                        }
+                        // Native focus may leave a partly visible button clipped.
+                        // Reveal its full target and ring in this strip only.
+                        const stripRect = strip.getBoundingClientRect();
+                        const dotRect = dot.getBoundingClientRect();
+                        const padding = parseFloat(window.getComputedStyle(strip).scrollPaddingLeft) || 0;
+                        const left = dotRect.left - stripRect.left - padding;
+                        const right = dotRect.right - stripRect.right + padding;
+                        if (left < 0 || right > 0) {
+                            strip.scrollBy({ left: left < 0 ? left : right, behavior: 'auto' });
+                        }
+                    });
                 });
             }
 
