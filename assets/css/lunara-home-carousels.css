@@ -27,6 +27,7 @@
 .lunara-home-curated-hero .lunara-hero-arrow-prev svg { transform: rotate(180deg); }
 body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
     display: block !important; -webkit-line-clamp: unset !important; max-height: none !important;
+    max-width: 24ch; font-size: clamp(2.8rem, 4.4vw, 4.5rem); line-height: 1.06;
     overflow: visible; overflow-wrap: anywhere;
 }
 .lunara-home-curated-hero .lunara-cinematic-hero-content { padding-bottom: 48px; }
@@ -34,6 +35,14 @@ body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
 .lunara-home-curated-hero .lunara-cinematic-hero-track::before,
 .lunara-home-curated-hero .lunara-cinematic-hero-track::after { content: none; }
 .lunara-home-curated-journal, .lunara-home-curated-reviews { min-width: 0; }
+/* Journal reads as a news desk; Reviews retains its portrait-led composition. */
+.lunara-home-curated-journal {
+    --lunara-story-media-ratio: 2 / 1;
+    --lunara-story-title-size: clamp(1.4rem, 2.05vw, 1.875rem);
+    --lunara-story-title-leading: 1.15;
+    --lunara-story-excerpt-size: 1rem;
+}
+body.home .lunara-home-curated-journal .lunara-home-section-title { max-width: 26ch !important; }
 .lunara-home-curated-reviews .lunara-home-section-title { max-width: 100%; min-width: 0; overflow-wrap: anywhere; }
 .lunara-home-curated-reviews .lunara-section-link { box-sizing: border-box; max-width: 100%; }
 .lunara-home-journal-carousel { position: relative; padding-bottom: 64px; }
@@ -41,16 +50,15 @@ body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
 .lunara-home-journal-carousel .splide__slide { min-width: 0; height: auto; }
 .lunara-home-news-card { height: 100%; border: 0 !important; border-radius: 0 !important; overflow: visible !important; background: transparent !important; }
 .lunara-home-news-card > a { display: flex; flex-direction: column; height: 100%; color: inherit; text-decoration: none; }
-.lunara-home-news-media { aspect-ratio: 16 / 10; overflow: hidden; flex: none; background: #07111b; }
+.lunara-home-news-media { aspect-ratio: var(--lunara-story-media-ratio, 16 / 10); overflow: hidden; flex: none; background: #07111b; }
 .lunara-home-review-media { aspect-ratio: 2 / 3; }
 .lunara-home-news-media img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: var(--carousel-focal-x,50%) var(--carousel-focal-y,30%); transform: scale(var(--carousel-zoom,1)); }
 .lunara-home-news-media.is-full-frame img { object-fit: contain; transform: none; }
 .lunara-home-news-copy { display: flex; flex: 1; flex-direction: column; padding: 20px 0 8px !important; gap: 12px !important; }
 .lunara-home-news-copy p { margin: 0; }
-.lunara-home-news-copy h3 { margin: 0; color: var(--lunara-text, #fafbfc) !important; line-height: 1.25 !important; }
-.lunara-home-news-copy h3 { color: var(--lunara-text, #fafbfc) !important; font-size: clamp(1.15rem,1.65vw,1.55rem); line-height: 1.25 !important; overflow-wrap: anywhere; }
+.lunara-home-news-copy h3 { margin: 0; color: var(--lunara-text, #fafbfc) !important; font-size: var(--lunara-story-title-size, clamp(1.15rem,1.65vw,1.55rem)); line-height: var(--lunara-story-title-leading, 1.25) !important; overflow-wrap: anywhere; }
 .lunara-home-news-kicker { color: #e0c481; font-size: 0.8125rem; letter-spacing: 0; text-transform: none; }
-.lunara-home-news-excerpt { color: #c3cbd1; font-size: .93rem; line-height: 1.55; overflow-wrap: anywhere; }
+.lunara-home-news-excerpt { color: #c3cbd1; font-size: var(--lunara-story-excerpt-size, .93rem); line-height: 1.55; overflow-wrap: anywhere; }
 .lunara-home-news-meta { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px !important; font-size: .8125rem !important; color: #bec5ca; line-height: 1.4 !important; }
 .lunara-home-news-meta > span { color: #e0c481; }
 .lunara-home-journal-carousel .splide__arrows { position: absolute; bottom: 0; left: 0; display: flex; gap: 8px; }
@@ -81,7 +89,6 @@ body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
 @media (max-width: 640px) {
     .lunara-home-journal-carousel:not(.is-initialized) .splide__list,
     .lunara-home-journal-carousel.has-carousel-error .splide__list { grid-template-columns: minmax(0,1fr); gap: 14px; }
-    .lunara-home-news-copy { padding: 20px 0 8px !important; gap: 12px !important; }
     .lunara-home-curated-hero .lunara-home-carousel-toggle { right: 12px; bottom: 8px; }
     .lunara-home-curated-hero .lunara-hero-pagination { left: 16px; right: 100px; }
 }

@@ -14,6 +14,10 @@ and restrained gold. This contract applies to the existing visitor features.
 - Journal leads with headlines; dates, visual credits and useful taxonomy remain
   readable supporting information. Entries without artwork are intentional text
   compositions, not failed image placeholders.
+  The newest main archive edition has one lead and two supporting stories, then
+  a quieter thumbnail index on desktop. Alternate sorts, taxonomy results and
+  later pages stay uniform; phone order remains the source reading order.
+  Responsive image hints and synchronous route geometry must change with layout.
 - Oscar records retain category, film/person, status, evidence and destinations.
   Status has words as well as color. Long names and complete records remain usable.
 - Use whitespace, image proportions, typography and restrained separators for

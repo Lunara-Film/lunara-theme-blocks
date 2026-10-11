@@ -100,7 +100,7 @@
 
 #primary.lunara-journal-archive-page .lunara-archive-hero-title {
     font-family: var(--lunara-font-glamour, var(--lunara-font-display, "Canela Deck", "Tiempos Headline", Georgia, "Times New Roman", serif)) !important;
-    font-size: clamp(2rem, 3.2vw, 2.5rem) !important;
+    font-size: clamp(2.7rem, 6vw, 4.5rem) !important;
     font-weight: 400 !important;
     letter-spacing: 0 !important;
     line-height: 1.02 !important;
@@ -329,7 +329,7 @@
     align-items: stretch !important;
     display: grid !important;
     gap: var(--lunara-journal-archive-grid-gap, 24px) !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     margin: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
@@ -809,6 +809,48 @@
     min-width: 44px !important;
     padding: 8px 12px !important;
     text-decoration: none !important;
+}
+
+/* The newest edition has a lead and two supporting stories. Older/filter
+   results keep the uniform index; missing artwork keeps its editorial place. */
+@media (min-width: 981px) {
+    #primary.lunara-journal-archive-page > .is-editorial-edition {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+
+        & > .lunara-journal-archive-card {
+            grid-column: span 3 !important;
+        }
+        & > .lunara-journal-archive-card:nth-child(-n + 3) {
+            grid-column: span 2 !important;
+        }
+        & > .lunara-journal-archive-card.is-lead {
+            grid-column: span 4 !important;
+            grid-row: span 2 !important;
+        }
+        & > .is-lead .lunara-review-grid-title {
+            font-size: calc(var(--lunara-journal-archive-lead-title, 1.72rem) * 1.6) !important;
+            line-height: 1.12 !important;
+        }
+        & > .is-lead .lunara-review-grid-excerpt {
+            font-size: 1.125rem !important;
+            -webkit-line-clamp: unset !important;
+            max-height: none !important;
+            overflow: visible !important;
+            max-width: 58ch;
+        }
+        & > .is-lead .lunara-review-grid-footer {
+            margin: 12px 0 0 !important;
+        }
+        & > .has-media:nth-child(n + 4) .lunara-review-grid-link {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) !important;
+            grid-template-rows: auto !important;
+            gap: 20px;
+            align-items: start;
+        }
+        & > :nth-child(n + 4) .lunara-review-grid-copy {
+            padding: 0 0 24px !important;
+        }
+    }
 }
 
 @media (max-width: 980px) {

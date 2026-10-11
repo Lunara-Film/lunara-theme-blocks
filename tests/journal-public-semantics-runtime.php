@@ -18,6 +18,17 @@ jp_assert( 0 === $dom->query( '//p[contains(@class,"kicker")]' )->length, 'Defau
 jp_assert( 1 === $dom->query( '//nav[@aria-label="Sort journal archive"]//a[@aria-current="page"]' )->length, 'One named sort choice is current.' );
 jp_assert( 1 === $dom->query( '//nav[contains(@class,"lunara-journal-archive-filters")]//a[@aria-current="page"]' )->length, 'The active all-items filter announces its current state.' );
 if ( in_array( '--fixture', $argv ?? array(), true ) ) { echo $html; exit( 0 ); }
+jp_assert( 1 === $dom->query( '//section[contains(@class,"is-editorial-edition")]' )->length, 'The newest main archive receives the editorial composition.' );
+foreach ( array( 'date_asc', 'modified_desc' ) as $sort ) {
+    $GLOBALS['jp_sort'] = $sort;
+    $sorted = jp_dom( jp_render() );
+    jp_assert( 0 === $sorted->query( '//*[contains(@class,"is-editorial-edition") or contains(@class,"is-lead")]' )->length, 'Changing sort removes the lead hierarchy from actual public markup.' );
+    jp_assert( 8 === $sorted->query( '//h2[@class="lunara-review-grid-title"]' )->length, 'Sorting preserves all story destinations.' );
+}
+unset( $GLOBALS['jp_sort'] );
+$GLOBALS['jp_paged'] = true;
+jp_assert( 0 === jp_dom( jp_render() )->query( '//*[contains(@class,"is-editorial-edition") or contains(@class,"is-lead")]' )->length, 'Later pages render a uniform archive.' );
+unset( $GLOBALS['jp_paged'] );
 $GLOBALS['jp_config']['kicker'] = 'Dalton’s dispatches';
 $GLOBALS['jp_config']['labels']['toolbar_kicker'] = 'Recently revisited';
 $GLOBALS['jp_config']['labels']['lead_kicker'] = 'An editorial selection';
@@ -31,4 +42,6 @@ $GLOBALS['jp_config']['section_visibility']['hero'] = false;
 jp_assert( 1 === jp_dom( jp_render() )->query( '//h1' )->length, 'A hidden visual hero retains the accessible page heading.' );
 $GLOBALS['jp_term'] = new WP_Term();
 jp_assert( 'Signal' === jp_dom( jp_render() )->query( '//h1' )->item(0)->textContent, 'Taxonomy framing preserves the selected term identity.' );
+jp_assert( 0 === jp_dom( jp_render() )->query( '//*[contains(@class,"is-editorial-edition") or contains(@class,"is-lead")]' )->length, 'Taxonomy results render a uniform archive.' );
+
 echo "Journal public semantics: {$checks} checks passed.\n";

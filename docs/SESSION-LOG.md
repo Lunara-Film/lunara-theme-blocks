@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Concurrent Theme editorial finish; Ledger reserved for Claude Code
+
+- **Shipped:** local Theme 3.2.106 candidate on `codex/bespoke-runtime` for existing PR #231: distinct Home story/forecast hierarchy; Journal lead and thumbnail index with matching first-paint/media delivery; readable, unframed Review/Journal and complete Debrief arguments. No merge or deployment. Final receipts are in this chat's `implementation/theme-editorial-finish` artifact.
+- **Live:** unchanged. Prior architecture candidate CI completed successfully in all four affected repositories; this corrects the preceding checkpoint's pending-CI status. The new Theme finishing delta requires its own final CI result.
+- **Holding:** Codex owns the Theme, its shared log/finding register and final integration. Claude Code exclusively owns Ledger presentation in `C:\Users\silve\Local\Projects\lunara-concurrent\claude-oscars-editorial`, starting `fdcef1bbb57a1b8a0946528a91d4fcb049ea241b`. Codex has not edited Ledger source during this assignment. Claude's frozen `claude-oscars-artifacts/HANDOFF.md` is the integration gate; no handoff was present at this checkpoint.
+- **Next:** finish candidate visual/performance evidence and required Theme CI. Read Claude's frozen handoff, review and integrate its exact commit, resolve Theme-owned interfaces, and run only the combined affected checks. Dalton reviews one result; existing plugin-before-Theme release order and manual Theme deployment apply.
+- **Found, not fixed:** original HQ02 clipped child and JQ25 eight-curve path remain unattributed. The focused follow-up found no PNG DOM metadata and could not initialize original browser-context access; extensions/settings were unchanged. Local component previews and controlled fixture timings cannot establish deployed WordPress, licensed-font, CDN or transport acceptance. The original finding register remains authoritative; no repeat whole-site scan occurred.
+
 ## 2026-10-11 — Bespoke architecture integration candidate
 
 - **Shipped:** review candidates only: Theme 3.2.105 and Ledger 2.8.23 on `codex/bespoke-runtime`, Foundation 1.4.1 (PR #27), Dispatch 3.4.1 (PR #16). Shared lifecycle/disposal, bounded Explorer snapshots, semantic automation ingestion, safe Home stylesheet trimming, immediately readable hero text. The Theme/Ledger follow-ups stack on editorial PRs #230/#54. No merges or deployment.

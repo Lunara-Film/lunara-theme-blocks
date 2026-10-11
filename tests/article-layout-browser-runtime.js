@@ -8,6 +8,9 @@ const fixtures = JSON.parse(execFileSync('php', [path.join(__dirname, 'article-l
 const sharedCss = ['style.css', 'assets/css/lunara-shell.css', 'assets/css/lunara-review-components.css', 'assets/css/lunara-public-guardrails.css'].map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');
 const journalCss = fs.readFileSync(path.join(root, 'assets/css/lunara-journal-single.css'), 'utf8');
 const reviewCss = fs.readFileSync(path.join(root, 'assets/css/lunara-review-single.css'), 'utf8');
+const debriefCss = fs.readFileSync(path.join(root, 'assets/css/lunara-debrief-method.css'), 'utf8');
+const debriefMethod = execFileSync('php', [path.join(__dirname, 'debrief-method-runtime.php'), '--fixture'], { encoding: 'utf8' });
+const pairFixtures = JSON.parse(execFileSync('php', ['-r', `ob_start();require '${path.join(__dirname, 'fixtures/debrief-public-renderer-harness.php').replace(/\\/g, '/')}';ob_end_clean();echo json_encode(array($canonical, $poster_fallback));`], { encoding: 'utf8' }));
 let assertions = 0;
 const assert = (condition, message, value) => { assertions++; if (!condition) throw new Error(message + (value ? '\n' + JSON.stringify(value, null, 2) : '')); };
 const metrics = [];
@@ -53,7 +56,7 @@ const metrics = [];
                 assert(data.paragraphSize >= 16, `${label}: phone body text stays at least16px`, data);
                 assert(!data.duplicateMetaDots, `${label}: metadata uses one separator between items`, data);
                 if (width <= 640) {
-                    assert(data.content.width >= width - 48 && data.content.left >= 12 && data.content.right <= width - 12, `${label}: consistent useful reading width and safe phone gutters`, data);
+                    assert(data.content.width >= width - 48 && data.content.left >= 20 && data.content.right <= width - 20, `${label}: consistent useful reading width and 20px phone gutters`, data);
                     assert(data.title.width >= width - 48, `${label}: heading uses available phone width`, data);
                     assert(data.sectionGaps.every(gap=>gap>=-1&&gap<=40), `${label}: phone sections have one spacing rhythm without stacked margins`, data);
                 }
@@ -86,6 +89,31 @@ const metrics = [];
         for(const width of [320,390,768,1440]) {
             const normal=metrics.find(row=>row.case===`journal-normal@${width}`),small=metrics.find(row=>row.case===`journal-framed-small@${width}`),large=metrics.find(row=>row.case===`journal-framed-large@${width}`);
             assert(small.titleSize<=normal.titleSize&&normal.titleSize<large.titleSize, `Journal headline size affects actual private rendering at${width}px while preserving a readable phone floor`, {small,normal,large});
+        }
+        // The same production pairing renderer serves Review and Method. Exercise
+        // its canonical and missing-poster outputs with complete arguments, no JS.
+        for (const width of [320, 768, 1440]) {
+            for (const [index, fixture] of pairFixtures.entries()) {
+                const page = await browser.newPage({ viewport: { width, height: 1000 }, javaScriptEnabled: false });
+                await page.route('**/*', route => route.fulfill({ contentType:'image/svg+xml', body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#183441"/></svg>' }));
+                await page.setContent(`<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}main{padding:20px}</style><style>${sharedCss}\n${reviewCss}</style><body class="single-review"><main><article class="lunara-review-single">${fixture.pairings_html}</article></main></body>`, {waitUntil:'load'});
+                const pairs = await page.evaluate(() => [...document.querySelectorAll('.lunara-pair-card')].map(card => {
+                    const note=card.querySelector('.lunara-pair-card-note'), title=card.querySelector('.lunara-pair-card-title-link');
+                    const bounds=card.getBoundingClientRect(), copy=note.getBoundingClientRect(), range=document.createRange();range.selectNodeContents(note);
+                    return {left:bounds.left,right:bounds.right,top:bounds.top,noteSize:parseFloat(getComputedStyle(note).fontSize),noteWidth:copy.width,clamped:getComputedStyle(title).webkitLineClamp,textVisible:[...range.getClientRects()].every(r=>r.bottom<=copy.bottom+1&&r.right<=copy.right+1),hasLink:!!card.querySelector('a[href]')};
+                }));
+                assert(pairs.length===3 && pairs.every(card=>card.left>=19&&card.right<=width-19&&card.noteSize>=16&&card.textVisible&&card.hasLink&&card.clamped==='none'), `Pairings ${index}@${width}: all three complete arguments and links remain readable`, pairs);
+                if(width===320) assert(pairs.every(card=>card.noteWidth>=width-42)&&pairs[1].top>pairs[0].top, `Pairings ${index}@${width}: phones stack full-width arguments`, pairs);
+                if(width===1440) assert(pairs.every(card=>Math.abs(card.top-pairs[0].top)<1), `Pairings ${index}@${width}: three editorial columns share their opening`, pairs);
+                await page.close();
+            }
+            const method=await browser.newPage({viewport:{width,height:1000},javaScriptEnabled:false});
+            await method.route('**/*', route => route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#183441"/></svg>'}));
+            await method.setContent(`<style>body{margin:0}</style><style>${sharedCss}\n${debriefCss}</style>${debriefMethod}`, {waitUntil:'load'});
+            const composition=await method.evaluate(()=>({width:document.documentElement.scrollWidth,moves:[...document.querySelectorAll('.lunara-debrief-move')].map(el=>({top:el.getBoundingClientRect().top,width:el.getBoundingClientRect().width,font:parseFloat(getComputedStyle(el.querySelector('.lunara-debrief-move-copy')).fontSize)})),title:document.querySelector('.lunara-debrief-title').textContent}));
+            assert(composition.width<=width+1&&composition.moves.length===3&&composition.moves.every(move=>move.font>=16)&&composition.title.length>0, `Method@${width}: all relationships and headline remain readable without JS`, composition);
+            if(width===1440) assert(composition.moves.every(move=>Math.abs(move.top-composition.moves[0].top)<1), 'Method uses three aligned editorial columns on desktop', composition);
+            await method.close();
         }
         if (process.env.LUNARA_ARTICLE_ARTIFACT_DIR) fs.writeFileSync(path.join(process.env.LUNARA_ARTICLE_ARTIFACT_DIR, 'article-layout-metrics.json'), JSON.stringify(metrics, null, 2));
         process.stdout.write(`Article layout browser: ${metrics.length} actual-template scenarios, ${assertions} assertions passed.\n`);
