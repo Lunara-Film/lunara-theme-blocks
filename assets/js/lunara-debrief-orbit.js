@@ -52,8 +52,10 @@
 		slide.classList.add( 'is-laid-out' );
 	}
 
-	function Orbit( root ) {
+	function Orbit( root, scope ) {
 		this.root = root;
+		this.scope = scope;
+		this.disposed = false;
 		this.slides = Array.prototype.slice.call( root.querySelectorAll( '[data-orbit-slide]' ) );
 		this.tabs = Array.prototype.slice.call( root.querySelectorAll( '[data-orbit-go]' ) );
 		this.controls = root.querySelector( '[data-orbit-controls]' );
@@ -69,6 +71,13 @@
 		this.hovered = false;
 		this.visible = false;
 		this.started = false;
+		var savedNodes = [ root, this.controls, this.toggle, this.caption ].concat( this.slides, this.tabs, Array.prototype.slice.call( root.querySelectorAll( '.lunara-debrief-orbit-line' ) ) ).filter( Boolean );
+		this.initial = savedNodes.map( function ( node ) {
+			var attributes = {};
+			[ 'class', 'style', 'hidden', 'inert', 'aria-hidden', 'aria-current', 'aria-pressed', 'href' ].forEach( function ( name ) { attributes[ name ] = node.getAttribute( name ); } );
+			return { node: node, attributes: attributes, inert: node.inert };
+		} );
+		this.initialCaption = this.caption ? this.caption.textContent : '';
 		this.init();
 	}
 
@@ -100,10 +109,10 @@
 		}
 
 		this.tabs.forEach( function ( tab ) {
-			tab.addEventListener( 'click', function () {
+			self.scope.on( tab, 'click', function () {
 				self.go( parseInt( tab.getAttribute( 'data-orbit-go' ), 10 ), true );
 			} );
-			tab.addEventListener( 'keydown', function ( event ) {
+			self.scope.on( tab, 'keydown', function ( event ) {
 				var step = 'ArrowRight' === event.key ? 1 : ( 'ArrowLeft' === event.key ? -1 : 0 );
 				if ( step ) {
 					event.preventDefault();
@@ -115,7 +124,7 @@
 		} );
 
 		if ( this.toggle ) {
-			this.toggle.addEventListener( 'click', function () {
+			this.scope.on( this.toggle, 'click', function () {
 				self.userPaused = ! self.userPaused;
 				self.toggle.setAttribute( 'aria-pressed', self.userPaused ? 'true' : 'false' );
 				self.sync();
@@ -123,38 +132,39 @@
 		}
 
 		var stage = this.root.querySelector( '.lunara-debrief-orbit-stage' );
-		stage.addEventListener( 'mouseenter', function () { self.hovered = true; self.sync(); } );
-		stage.addEventListener( 'mouseleave', function () { self.hovered = false; self.sync(); } );
-		this.root.addEventListener( 'focusin', function () { self.hovered = true; self.sync(); } );
-		this.root.addEventListener( 'focusout', function ( event ) {
+		this.scope.on( stage, 'mouseenter', function () { self.hovered = true; self.sync(); } );
+		this.scope.on( stage, 'mouseleave', function () { self.hovered = false; self.sync(); } );
+		this.scope.on( this.root, 'focusin', function () { self.hovered = true; self.sync(); } );
+		this.scope.on( this.root, 'focusout', function ( event ) {
 			if ( ! self.root.contains( event.relatedTarget ) ) {
 				self.hovered = false;
 				self.sync();
 			}
 		} );
-		document.addEventListener( 'visibilitychange', function () { self.sync(); } );
+		this.scope.on( document, 'visibilitychange', function () { self.sync(); } );
 
 		if ( 'ResizeObserver' in window ) {
-			new ResizeObserver( function () { layoutSlide( self.slides[ self.index ] ); } ).observe( stage );
+			this.scope.observe( new ResizeObserver( function () { if ( ! self.disposed ) layoutSlide( self.slides[ self.index ] ); } ) ).observe( stage );
 		} else {
-			window.addEventListener( 'resize', function () { layoutSlide( self.slides[ self.index ] ); } );
+			this.scope.on( window, 'resize', function () { layoutSlide( self.slides[ self.index ] ); } );
 		}
 		// Posters arriving late move the centres.
 		this.root.querySelectorAll( 'img' ).forEach( function ( img ) {
 			if ( ! img.complete ) {
-				img.addEventListener( 'load', function () { layoutSlide( self.slides[ self.index ] ); }, { once: true } );
+				self.scope.on( img, 'load', function () { layoutSlide( self.slides[ self.index ] ); }, { once: true } );
 			}
 		} );
 
 		if ( 'IntersectionObserver' in window ) {
-			new IntersectionObserver( function ( entries ) {
+			this.scope.observe( new IntersectionObserver( function ( entries ) {
+				if ( self.disposed || ! entries.length ) return;
 				self.visible = entries[ 0 ].isIntersecting;
 				if ( self.visible && ! self.started ) {
 					self.started = true;
 					self.draw( self.slides[ self.index ] );
 				}
 				self.sync();
-			}, { threshold: 0.35 } ).observe( this.root );
+			}, { threshold: 0.35 } ) ).observe( this.root );
 		} else {
 			this.visible = true;
 			this.started = true;
@@ -164,17 +174,19 @@
 	};
 
 	Orbit.prototype.draw = function ( slide ) {
+		var self = this;
+		if ( this.disposed ) return;
 		layoutSlide( slide );
 		// Two frames: commit the undrawn state, then let the transitions run.
-		window.requestAnimationFrame( function () {
-			window.requestAnimationFrame( function () {
-				slide.classList.add( 'is-drawn' );
+		this.scope.frame( function () {
+			self.scope.frame( function () {
+				if ( ! self.disposed ) slide.classList.add( 'is-drawn' );
 			} );
 		} );
 	};
 
 	Orbit.prototype.go = function ( next, fromUser ) {
-		if ( next === this.index || ! this.slides[ next ] ) {
+		if ( this.disposed || next === this.index || ! this.slides[ next ] ) {
 			return;
 		}
 		var current = this.slides[ this.index ];
@@ -210,7 +222,7 @@
 	};
 
 	Orbit.prototype.playing = function () {
-		return this.slides.length > 1 && ! reducedMotion() && this.started && this.visible &&
+		return ! this.disposed && this.slides.length > 1 && ! reducedMotion() && this.started && this.visible &&
 			! this.userPaused && ! this.hovered && ! document.hidden;
 	};
 
@@ -242,21 +254,46 @@
 			if ( self.elapsed >= self.hold ) {
 				self.go( ( self.index + 1 ) % self.slides.length, false );
 			}
-			self.frame = window.requestAnimationFrame( tick );
+			self.frame = self.scope.frame( tick );
 		};
-		this.frame = window.requestAnimationFrame( tick );
+		this.frame = this.scope.frame( tick );
 	};
 
-	function boot() {
-		document.querySelectorAll( '[data-debrief-orbit]' ).forEach( function ( root ) {
+	Orbit.prototype.destroy = function () {
+		this.disposed = true;
+		window.cancelAnimationFrame( this.frame );
+		this.initial.forEach( function ( saved ) {
+			Object.keys( saved.attributes ).forEach( function ( name ) {
+				if ( saved.attributes[ name ] === null ) saved.node.removeAttribute( name );
+				else saved.node.setAttribute( name, saved.attributes[ name ] );
+			} );
+			if ( typeof saved.inert === 'boolean' ) saved.node.inert = saved.inert;
+		} );
+		if ( this.caption ) this.caption.textContent = this.initialCaption;
+		delete this.root.lunaraOrbit;
+	};
+
+	function mount( pageRoot, scope ) {
+		scope = scope || {
+			on: function ( target, type, fn, options ) { if ( target ) target.addEventListener( type, fn, options ); },
+			frame: window.requestAnimationFrame.bind( window ), observe: function ( observer ) { return observer; }, cleanup: function () {}
+		};
+		var roots = Array.prototype.slice.call( pageRoot.querySelectorAll( '[data-debrief-orbit]' ) );
+		if ( pageRoot.matches && pageRoot.matches( '[data-debrief-orbit]' ) ) roots.unshift( pageRoot );
+		roots.forEach( function ( root ) {
 			if ( ! root.lunaraOrbit ) {
-				root.lunaraOrbit = new Orbit( root );
+				root.lunaraOrbit = new Orbit( root, scope );
+				var orbit = root.lunaraOrbit;
+				scope.cleanup( function () { orbit.destroy(); } );
 			}
 		} );
 	}
 
-	if ( 'loading' === document.readyState ) {
-		document.addEventListener( 'DOMContentLoaded', boot );
+	function boot() { mount( document ); }
+	if ( window.LunaraApp && window.LunaraApp.register ) {
+		window.LunaraApp.register( 'debrief-orbit', mount );
+	} else if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', boot, { once: true } );
 	} else {
 		boot();
 	}

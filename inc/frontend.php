@@ -1281,7 +1281,34 @@ function lunara_output_oscars_ledger_critical_css() {
 add_action( 'wp_head', 'lunara_output_oscars_ledger_critical_css', 7 );
 
 /**
- * The canonical Home renderer does not consume block or theme.json markup.
+ * Only the known section renderers can safely omit block/global CSS.
+ * Hybrid Home composition may also contain core, synced or third-party blocks.
+ */
+function lunara_home_can_trim_block_styles() {
+    if ( ! is_front_page() || is_preview() || is_customize_preview() || ! empty( $GLOBALS['lunara_site_studio_preview_context'] ) ) {
+        return false;
+    }
+    if ( ! function_exists( 'lunara_home_uses_block_composition' ) || ! lunara_home_uses_block_composition() ) {
+        return true; // The legacy registry renders only owned sections.
+    }
+    if ( ! function_exists( 'parse_blocks' ) || ! function_exists( 'lunara_home_section_block_map' ) ) {
+        return false;
+    }
+    $owned = array_values( lunara_home_section_block_map() );
+    $blocks = parse_blocks( lunara_home_front_page_content( lunara_home_front_page_id() ) );
+    foreach ( $blocks as $block ) {
+        if ( empty( $block['blockName'] ) && '' === trim( isset( $block['innerHTML'] ) ? $block['innerHTML'] : '' ) ) {
+            continue;
+        }
+        if ( ! in_array( $block['blockName'], $owned, true ) || ! empty( $block['innerBlocks'] ) ) {
+            return false; // Unknown output retains its styles; no recursive guess.
+        }
+    }
+    return true;
+}
+
+/**
+ * The canonical Home section renderers do not consume theme.json markup.
  *
  * WordPress core prints the full global stylesheet through actions in both
  * the header and footer, so dequeueing the handle alone cannot prevent the
@@ -1289,7 +1316,7 @@ add_action( 'wp_head', 'lunara_output_oscars_ledger_critical_css', 7 );
  * mobile pixel comparisons confirmed this stylesheet has no visual effect.
  */
 function lunara_disable_unused_home_global_styles() {
-    if ( ! is_front_page() ) {
+    if ( ! lunara_home_can_trim_block_styles() ) {
         return;
     }
 
@@ -1304,7 +1331,7 @@ add_action( 'wp', 'lunara_disable_unused_home_global_styles', 0 );
  * these unused styles were removed, so keep them off this route only.
  */
 function lunara_trim_unused_home_styles() {
-    if ( ! is_front_page() ) {
+    if ( ! lunara_home_can_trim_block_styles() ) {
         return;
     }
 

@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.104
+Version: 3.2.105
 Template: blocksy
 Requires at least: 6.0
 Tested up to: 6.4
@@ -17114,22 +17114,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-hero::after { right: 5%; tr
 }
 
 /* ===== LUNARA ATMOSPHERE V2 ===== */
-/* Title Cards — kicker/title/CTA rise from a baseline mask on each hero
-   slide change. The hidden from-state exists ONLY inside the keyframes
-   (fill backwards), so text is never hidden for JS-off, reduced-motion,
-   or pre-mount readers; the carousel replays it via .is-title-live. */
-@media (prefers-reduced-motion: no-preference) {
-    .lunara-cinematic-hero-content.is-title-live > * {
-        animation: lunara-title-card-rise 560ms var(--lunara-ease-cine, cubic-bezier(.2, .8, .2, 1)) backwards;
-    }
-    .lunara-cinematic-hero-content.is-title-live > :nth-child(2) { animation-delay: 90ms; }
-    .lunara-cinematic-hero-content.is-title-live > :nth-child(3) { animation-delay: 180ms; }
-    .lunara-cinematic-hero-content.is-title-live > :nth-child(4) { animation-delay: 270ms; }
-    @keyframes lunara-title-card-rise {
-        from { clip-path: inset(0 -8% 100% -8%); transform: translateY(18px); }
-        to   { clip-path: inset(-20% -8% -20% -8%); transform: none; }
-    }
-}
+/* Hero text is immediately readable on every slide; no entrance delays. */
 
 /* Chapter Hairline — a gold playhead that draws in under each section
    kicker as the chapter enters. Rides the reveal system: .lunara-reveal is

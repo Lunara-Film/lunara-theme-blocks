@@ -39,6 +39,11 @@ const fixture = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-nav
                 await page.keyboard.press('Escape');
                 await page.locator('#lunara-offcanvas').waitFor({state:'hidden'});
                 assert.equal(await opener.evaluate(e=>e===document.activeElement),true); ++checks;
+                await opener.click();
+                await page.evaluate(() => window.dispatchEvent(new CustomEvent('lunara:page:teardown')));
+                assert.equal(await page.locator('#lunara-offcanvas').evaluate(el=>el.hidden&&!el.classList.contains('is-open')),true,'Navigation closes the persistent menu immediately'); ++checks;
+                await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+                assert.equal(await opener.getAttribute('aria-expanded'),'false','No pending frame reopens the outgoing menu'); ++checks;
             }
             if(process.env.LUNARA_HEADER_ARTIFACTS) {
                 fs.mkdirSync(process.env.LUNARA_HEADER_ARTIFACTS,{recursive:true});

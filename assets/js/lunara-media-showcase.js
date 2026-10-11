@@ -1,3 +1,14 @@
+(function () {
+    'use strict';
+    function mount(pageRoot, scope) {
+        pageRoot = pageRoot || document;
+        // Standalone documents keep their native page-unload lifecycle.
+        scope = scope || {
+            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
+            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
+            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
+            cleanup: function () {}
+        };
 /**
  * Lunara Media Showcase — slider arrow driver.
  *
@@ -19,6 +30,7 @@
 			return;
 		}
 		root.dataset.lunaraMediaSliderReady = '1';
+        scope.cleanup(function () { delete root.dataset.lunaraMediaSliderReady; });
 
 		var track = root.querySelector( '.lunara-media-slider-track' );
 		if ( ! track ) {
@@ -46,26 +58,30 @@
 		}
 
 		arrows.forEach( function ( btn ) {
-			btn.addEventListener( 'click', function () {
+			scope.on(btn,  'click', function () {
 				var dir = parseInt( btn.getAttribute( 'data-dir' ), 10 ) || 1;
-				track.scrollBy( { left: dir * step(), behavior: 'smooth' } );
+				track.scrollBy( { left: dir * step(), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' } );
 			} );
 		} );
 
-		track.addEventListener( 'scroll', function () {
-			window.requestAnimationFrame( updateArrows );
+		scope.on(track,  'scroll', function () {
+			scope.frame( updateArrows );
 		}, { passive: true } );
-		window.addEventListener( 'resize', updateArrows );
+		scope.on(window,  'resize', updateArrows );
 		updateArrows();
 	}
 
 	function bootAll() {
-		document.querySelectorAll( '.lunara-media-slider[data-lunara-media-slider]' ).forEach( init );
+		pageRoot.querySelectorAll( '.lunara-media-slider[data-lunara-media-slider]' ).forEach( init );
 	}
 
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', bootAll );
-	} else {
-		bootAll();
-	}
+	bootAll();
 } )();
+
+    }
+    if (window.LunaraApp && window.LunaraApp.register) {
+        window.LunaraApp.register('media-showcase', mount);
+    } else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
+    } else { mount(); }
+}());

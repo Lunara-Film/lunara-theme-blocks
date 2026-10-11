@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Bespoke architecture integration candidate
+
+- **Shipped:** review candidates only: Theme 3.2.105 and Ledger 2.8.23 on `codex/bespoke-runtime`, Foundation 1.4.1 (PR #27), Dispatch 3.4.1 (PR #16). Shared lifecycle/disposal, bounded Explorer snapshots, semantic automation ingestion, safe Home stylesheet trimming, immediately readable hero text. The Theme/Ledger follow-ups stack on editorial PRs #230/#54. No merges or deployment.
+- **Live:** unchanged by this task. Four anonymous browser reads confirmed existing native prefetch plus unaudited Jetpack/Blocksy/inline scripts. Native navigation remains the production default; optional Swup is disabled and incurs no default bundle download. Foundation's native WordPress PHP matrix and Dispatch CI are green at integration.
+- **Holding:** required Theme CI and final Ledger CI for the integrated candidates. Ledger's first CI exposed the ceremony source-size budget after lifecycle adaptation; the owner is correcting that bounded failure. Full module ownership, effort and release gates are in `docs/BESPOKE-RUNTIME.md`; final receipts remain with the chat's architecture-review artifact.
+- **Next:** finish the candidate CI failures only, then Dalton reviews the PR set. Foundation precedes Dispatch; Ledger precedes Theme; merge the visual bases before their runtime follow-ups. The Theme requires its WordPress.com deploy click. Run one versioned public acceptance pass after release.
+- **Found, not fixed:** third-party/inline page-swap lifecycle and Stats contracts block enabling Swup; native navigation preserves them. Host JSON/CORS/compression/performance still need deployed evidence. Expired Explorer JSON is collected, but old generation directory/lock metadata remains. Original two unattributed overlay locations and external extension findings retain their existing dispositions; no new detector sweep or production content migration occurred.
+
 ## 2026-10-11 — Editorial presentation remediation candidate
 
 - **Shipped:** review candidates only: Ledger 2.8.22 (PR #54) and Theme 3.2.104 (PR #230) on `codex/editorial-remediation`; shared ornamental surfaces retired, metadata/links readable, all story/forecast records preserved, archive first-paint and saved configuration guarded. Nothing merged or deployed.
