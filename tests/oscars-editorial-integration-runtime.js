@@ -25,7 +25,7 @@ const cases = [
       for (const width of [390,1440]) {
         const page = await browser.newPage({viewport:{width,height:900}, reducedMotion:'reduce', javaScriptEnabled:false});
         await page.route('**/*', route => route.abort());
-        const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">${head.vars}${head.critical}<style>${styles.slice(0,4).join('\n')}</style>${head.studio}<style>${styles.slice(4).join('\n')}</style></head><body class="aat-shell-page"><main id="main"><article class="aat-container aat-profile-file"><section class="aat-entity-hero"><div class="aat-entity-poster-wrap"><img width="400" height="600" class="aat-entity-poster" alt="Chosen artwork"></div><div class="aat-entity-summary"><h1>One saved film identity</h1><a class="aat-btn" href="#history">Oscar history</a></div></section><div id="history">Complete history remains available.</div></article><section class="aat-container"><div class="aat-filmography-poster-wrap"><img width="120" height="180" alt="Ceremony or category artwork"></div></section></main></body></html>`;
+        const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">${head.vars}${head.critical}<style>/* Minimal component contrast contract; the shared shell must not recolor its ink. */ .aat-winner-badge{background:#c9a961;color:#0a1520}</style><style>${styles.slice(0,4).join('\n')}</style>${head.studio}<style>${styles.slice(4).join('\n')}</style></head><body class="aat-shell-page"><main id="main"><article class="aat-container aat-profile-file"><section class="aat-entity-hero"><div class="aat-entity-poster-wrap"><img width="400" height="600" class="aat-entity-poster" alt="Chosen artwork"></div><div class="aat-entity-summary"><h1>One saved film identity</h1><a class="aat-btn" href="#history">Oscar history</a></div></section><div id="history">Complete history remains available. <span class="aat-winner-badge">Winner</span></div></article><section class="aat-container"><div class="aat-filmography-poster-wrap"><img width="120" height="180" alt="Ceremony or category artwork"></div></section></main></body></html>`;
         await page.setContent(html);
         const snapshot = () => {
           const image = document.querySelector('.aat-entity-poster');
@@ -42,6 +42,8 @@ const cases = [
         check(before.background === 'none', `${label}: late Studio cannot restore a decorative gradient`);
         check(before.overflow <= width + 1, `${label}: no document overflow`);
         check(await page.locator('.aat-filmography-poster-wrap').evaluate(el=>getComputedStyle(el).animationName==='none'), `${label}: no Ledger shimmer without JavaScript under reduced motion`);
+        const badge = await page.locator('.aat-winner-badge').evaluate(el => ({ink:getComputedStyle(el).color, fill:getComputedStyle(el).backgroundColor}));
+        check(badge.ink === 'rgb(10, 21, 32)' && badge.fill === 'rgb(201, 169, 97)', `${label}: shared shell preserves dark winner ink on gold (8.178:1 contrast)`);
         await page.locator('.aat-btn').focus();
         check(await page.locator('.aat-btn').evaluate(el => getComputedStyle(el).outlineStyle !== 'none'), `${label}: focused action is visible`);
         await page.evaluate(() => document.getElementById('lunara-oscars-ledger-critical-css').remove());

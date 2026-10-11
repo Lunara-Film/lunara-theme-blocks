@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Winner badge contrast integration correction
+
+- **Shipped:** Theme 3.2.107 candidate follow-up: remove `.aat-winner-badge` from the shell's forced gold-ink group and regenerate the non-portal shell. Final visual review found 1.327:1 contrast on filled gold profile badges; component-owned dark ink now remains authoritative. Ledger 2.8.24 is unchanged at `02e97e0`.
+- **Live:** unchanged. Ledger complete CI38161978681 passed. Theme's earlier3be9863 run is superseded by this concrete contrast correction; final exact-commit CI and affected renderer receipts are tracked in the existing draft PR and integration report.
+- **Holding:** Codex final integration. The enduring Theme emitter regression now includes badge ink/fill contrast; the focused renderer check covers profile, category and ceremony badge variants. No whole-site or performance recheck is added.
+- **Next:** complete affected contrast confirmation, push this follow-up to existing draft PR231 and require CI on that exact commit; then Dalton reviews the combined gallery before the approved plugin-before-Theme release sequence.
+- **Found, not fixed:** original HQ02/JQ25 attribution and full WordPress/deployed acceptance remain open as recorded in the preceding checkpoint. No production or extension change occurred.
+
 ## 2026-10-11 — Frozen Claude Ledger handoff integrated with the Theme
 
 - **Shipped:** candidates only: Ledger 2.8.24 includes Claude's exact frozen `8522933`/`eecdd18` commits plus integration `02e97e0`; Theme 3.2.107 resolves shell/Studio/Ledger ownership, saved media caps, first-paint geometry, residual shimmer and duplicate aggregate-band display. Category spans no longer imply retirement; no-JavaScript table links retain their filters. Existing drafts #55/#231 remain the release candidates; no main merge or deployment.
