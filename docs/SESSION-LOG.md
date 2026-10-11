@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Reviews initial-layout correction and preview evidence
+
+- **Shipped:** local follow-up to Theme 3.2.106, still an unmerged candidate. Required CI run 38151302323 at `a63611b` exposed a real mismatch between the Reviews archive's synchronous pairing rules and the finished shared component. `inc/review-archive-critical.php` now mirrors the component's gaps, padding, readable type, full titles and phone layout. The affected 36-case first-paint gate and PHP syntax pass; the seed is 12,111 bytes against its unchanged 12,288-byte budget. Existing tests, tolerances and budgets are unchanged.
+- **Live:** unchanged. The failure supersedes the preceding checkpoint's pending status; the corrected candidate requires a new passing CI run at its pushed commit.
+- **Holding:** Claude Code still owns Ledger source at reserved base `fdcef1b`; its frozen handoff is absent at this checkpoint. Final combined integration and Dalton's release approval remain separate gates.
+- **Next:** push this correction to existing draft PR #231 and record its exact CI result in the review artifact and PR. Then review Claude's exact frozen commit and run the combined affected checks. No whole-site scan or repeated timing cohort is required.
+- **Found, not fixed:** original HQ02/JQ25 provenance remains open. The closed 18-navigation timing cohort does not establish a speed improvement: Home's preview omitted an existing synchronous sizing rule, and Review's local font paths returned 404 in both revisions. Their frozen inputs remain intact. Separate reading/Method visual captures now confirm HTTP 200 and loaded Tiempos faces; Home's visual builder is being corrected at its own source. Local fixtures cannot establish full WordPress or deployed performance acceptance.
+
 ## 2026-10-11 — Concurrent Theme editorial finish; Ledger reserved for Claude Code
 
 - **Shipped:** local Theme 3.2.106 candidate on `codex/bespoke-runtime` for existing PR #231: distinct Home story/forecast hierarchy; Journal lead and thumbnail index with matching first-paint/media delivery; readable, unframed Review/Journal and complete Debrief arguments. No merge or deployment. Final receipts are in this chat's `implementation/theme-editorial-finish` artifact.
