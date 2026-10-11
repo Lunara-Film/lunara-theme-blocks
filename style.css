@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.106
+Version: 3.2.107
 Template: blocksy
 Requires at least: 6.0
 Tested up to: 6.4
@@ -9940,12 +9940,6 @@ div[class*="likes-widget"],
     animation: lunaraShimmer 1.8s ease-in-out infinite;
 }
 
-.aat-filmography-poster-wrap,
-.aat-entity-poster-wrap {
-    background-size: 200% 100%;
-    animation: lunaraShimmer 1.8s ease-in-out infinite;
-}
-
 .lunara-review-grid-poster-wrap:has(.lunara-img-loaded),
 .lunara-review-feature-media:has(.lunara-img-loaded),
 .lunara-poster-card-image-wrap:has(.lunara-img-loaded),
@@ -9954,11 +9948,6 @@ div[class*="likes-widget"],
 .lunara-home-pulse-poster-wrap:has(.lunara-img-loaded) {
     animation: none;
     background: rgba(255,255,255,.03);
-}
-
-.aat-filmography-poster-wrap:has(.lunara-img-loaded),
-.aat-entity-poster-wrap:has(.lunara-img-loaded) {
-    animation: none;
 }
 
 .lunara-review-grid-poster,

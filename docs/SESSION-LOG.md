@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Frozen Claude Ledger handoff integrated with the Theme
+
+- **Shipped:** candidates only: Ledger 2.8.24 includes Claude's exact frozen `8522933`/`eecdd18` commits plus integration `02e97e0`; Theme 3.2.107 resolves shell/Studio/Ledger ownership, saved media caps, first-paint geometry, residual shimmer and duplicate aggregate-band display. Category spans no longer imply retirement; no-JavaScript table links retain their filters. Existing drafts #55/#231 remain the release candidates; no main merge or deployment.
+- **Live:** unchanged. Theme 3.2.106 did pass complete CI at `9c7d03f` (38152535299), superseding the preceding entry's pending status. New integration CI is tracked separately at its exact pushed commits in the PRs and this chat's `implementation/oscars-integration/REPORT.md`.
+- **Holding:** Codex owns final integration; Claude's worktree remains frozen and untouched. The bounded combined renderer gate covers seven families, phone/desktop, saved and missing media, actual early/late styles and licensed-font visual captures. Concrete first-pass failures receive affected reruns only; required repository CI follows final source freeze. Local fixtures remain distinct from full WordPress acceptance.
+- **Next:** complete the combined receipts and exact-commit CI, then Dalton reviews the gallery and approves release. Preserve Foundation-before-Dispatch, Ledger-before-Theme and editorial-base-before-runtime order. Theme needs its WordPress.com deploy click. Perform one versioned public acceptance pass after release; do not repeat the whole-site scan or closed timing cohort.
+- **Found, not fixed:** HQ02's exact clipped child and JQ25's curve producer remain unattributed; the original158-instance dispositions are unchanged. Full WordPress/DataTables, upstream caches, host transport and deployed speed need public acceptance. Optional Swup remains disabled; the earlier timing cohort establishes no speed gain. No production settings, data or extensions were changed.
+
 ## 2026-10-11 — Reviews initial-layout correction and preview evidence
 
 - **Shipped:** local follow-up to Theme 3.2.106, still an unmerged candidate. Required CI run 38151302323 at `a63611b` exposed a real mismatch between the Reviews archive's synchronous pairing rules and the finished shared component. `inc/review-archive-critical.php` now mirrors the component's gaps, padding, readable type, full titles and phone layout. The affected 36-case first-paint gate and PHP syntax pass; the seed is 12,111 bytes against its unchanged 12,288-byte budget. Existing tests, tolerances and budgets are unchanged.

@@ -1781,14 +1781,14 @@ body.aat-shell-page .aat-entity-breadcrumbs {
     color: rgba(244, 239, 227, 0.72) !important;
 }
 
-body.aat-shell-page .aat-hub-page a,
-body.aat-shell-page .aat-entity-page a {
+body.aat-shell-page .aat-hub-page a:not(.aat-btn-primary),
+body.aat-shell-page .aat-entity-page a:not(.aat-btn-primary) {
     color: #e0c481 !important;
     text-decoration: none !important;
 }
 
-body.aat-shell-page .aat-hub-page a:hover,
-body.aat-shell-page .aat-entity-page a:hover {
+body.aat-shell-page .aat-hub-page a:not(.aat-btn-primary):hover,
+body.aat-shell-page .aat-entity-page a:not(.aat-btn-primary):hover {
     color: #fff2c2 !important;
 }
 
@@ -1820,7 +1820,6 @@ body.aat-shell-page .aat-hub-spotlight-meta {
 }
 
 body.aat-shell-page .aat-hub-actions,
-body.aat-shell-page .aat-entity-actions,
 body.aat-shell-page .aat-winner-circle-actions {
     display: flex !important;
     align-items: center !important;
@@ -1836,25 +1835,16 @@ body.aat-shell-page .aat-winner-circle-action {
     justify-content: center !important;
     min-height: 44px !important;
     padding: 10px 16px !important;
-    color: #e0c481 !important;
     font-weight: 700 !important;
     text-decoration: none !important;
 }
 
-body.aat-shell-page .aat-hub-section,
-body.aat-shell-page .aat-entity-section {
-    margin-top: clamp(28px, 5vw, 60px) !important;
+body.aat-shell-page .aat-btn:not(.aat-btn-primary),
+body.aat-shell-page .aat-hub-card-action,
+body.aat-shell-page .aat-winner-circle-action {
+    color: #e0c481 !important;
 }
 
-body.aat-shell-page .aat-ceremony-marquee {
-    display: grid !important;
-    grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr) !important;
-    gap: clamp(18px, 3vw, 34px) !important;
-    align-items: stretch !important;
-    padding: clamp(18px, 2.6vw, 34px) !important;
-}
-
-body.aat-shell-page .aat-ceremony-marquee-stack,
 body.aat-shell-page .aat-hub-chip-stack {
     display: grid !important;
     gap: 16px !important;
@@ -1863,8 +1853,6 @@ body.aat-shell-page .aat-hub-chip-stack {
 
 body.aat-shell-page .aat-hub-grid,
 body.aat-shell-page .aat-winner-circle-grid,
-body.aat-shell-page .aat-filmography-grid,
-body.aat-shell-page .aat-related-reviews-grid,
 body.aat-shell-page .aat-best-picture-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
@@ -1880,12 +1868,7 @@ body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest {
 body.aat-shell-page .aat-hub-card,
 body.aat-shell-page .aat-hub-spotlight-card,
 body.aat-shell-page .aat-hub-chip-rich,
-body.aat-shell-page .aat-winner-circle-card,
-body.aat-shell-page .aat-filmography-card,
-body.aat-shell-page .aat-related-review-card,
-body.aat-shell-page .aat-entity-status-banner,
-body.aat-shell-page .aat-history-item,
-body.aat-shell-page .aat-timeline-card {
+body.aat-shell-page .aat-winner-circle-card {
     min-width: 0 !important;
     overflow: hidden !important;
 }
@@ -1919,36 +1902,24 @@ body.aat-shell-page .aat-winner-circle-top {
 }
 
 body.aat-shell-page .aat-hub-spotlight-media,
-body.aat-shell-page .aat-winner-circle-media,
-body.aat-shell-page .aat-filmography-poster-wrap,
-body.aat-shell-page .aat-related-review-media,
-body.aat-shell-page .aat-entity-poster-wrap {
+body.aat-shell-page .aat-winner-circle-media {
     position: relative !important;
     width: 100% !important;
     min-height: 0 !important;
     overflow: hidden !important;
 }
 
-body.aat-shell-page .aat-hub-spotlight-media,
-body.aat-shell-page .aat-entity-poster-wrap,
-body.aat-shell-page .aat-filmography-poster-wrap {
+body.aat-shell-page .aat-hub-spotlight-media {
     aspect-ratio: 2 / 3 !important;
 }
 
-body.aat-shell-page .aat-winner-circle-media,
-body.aat-shell-page .aat-related-review-media {
+body.aat-shell-page .aat-winner-circle-media {
     aspect-ratio: 16 / 10 !important;
 }
 
 body.aat-shell-page .aat-hub-spotlight-media img,
 body.aat-shell-page .aat-winner-circle-media img,
-body.aat-shell-page .aat-winner-circle-photo,
-body.aat-shell-page .aat-filmography-poster,
-body.aat-shell-page .aat-filmography-poster-wrap img,
-body.aat-shell-page .aat-related-review-image,
-body.aat-shell-page .aat-related-review-media img,
-body.aat-shell-page .aat-entity-poster-wrap img,
-body.aat-shell-page .aat-entity-poster {
+body.aat-shell-page .aat-winner-circle-photo {
     display: block !important;
     width: 100% !important;
     max-width: none !important;
@@ -1957,20 +1928,7 @@ body.aat-shell-page .aat-entity-poster {
     opacity: 1 !important;
 }
 
-body.aat-shell-page .aat-entity-hero {
-    display: grid !important;
-    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) !important;
-    gap: clamp(20px, 3vw, 38px) !important;
-    align-items: start !important;
-}
-
-body.aat-shell-page .aat-entity-poster-wrap {
-    max-width: 260px !important;
-}
-
 body.aat-shell-page .aat-winner-circle-grid,
-body.aat-shell-page .aat-filmography-grid,
-body.aat-shell-page .aat-related-reviews-grid,
 body.aat-shell-page .aat-best-picture-grid {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
     gap: 14px !important;
@@ -1999,41 +1957,6 @@ body.aat-shell-page .aat-winner-circle-card.is-marquee-latest .aat-winner-circle
     width: min(100%, 168px) !important;
 }
 
-body.aat-shell-page .aat-entity-hero {
-    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr) !important;
-    gap: clamp(16px, 2vw, 24px) !important;
-}
-
-body.aat-shell-page .aat-entity-poster-wrap {
-    max-width: 210px !important;
-}
-
-body.aat-shell-page .aat-entity-poster-wrap img,
-body.aat-shell-page .aat-entity-poster {
-    max-height: 320px !important;
-}
-
-body.aat-shell-page .aat-stats-bar.aat-entity-stats {
-    display: grid !important;
-    gap: 10px !important;
-    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)) !important;
-    margin: 16px 0 30px !important;
-}
-
-body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat {
-    align-content: start !important;
-    display: grid !important;
-    gap: 4px !important;
-    min-width: 0 !important;
-    padding: 11px 12px !important;
-    text-align: left !important;
-}
-
-body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-number,
-body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-label {
-    display: block !important;
-}
-
 body.aat-shell-page .aat-winner-badge,
 body.aat-shell-page .aat-hub-kicker,
 body.aat-shell-page .aat-hub-chip,
@@ -2058,17 +1981,13 @@ body.aat-shell-page a.aat-hub-chip {
 }
 
 body.aat-shell-page .aat-hub-spotlight-title,
-body.aat-shell-page .aat-winner-circle-title,
-body.aat-shell-page .aat-filmography-title,
-body.aat-shell-page .aat-related-review-title {
+body.aat-shell-page .aat-winner-circle-title {
     margin: 0 !important;
     color: #FAFBFC !important;
     overflow-wrap: anywhere !important;
 }
 
-body.aat-shell-page .aat-hub-spotlight-body,
-body.aat-shell-page .aat-filmography-body,
-body.aat-shell-page .aat-related-review-body {
+body.aat-shell-page .aat-hub-spotlight-body {
     display: grid !important;
     align-content: start !important;
     gap: 10px !important;
@@ -2077,25 +1996,12 @@ body.aat-shell-page .aat-related-review-body {
 
 @media (max-width: 900px) {
     body.aat-shell-page .aat-hub-header,
-    body.aat-shell-page .aat-entity-header,
-    body.aat-shell-page .aat-ceremony-marquee,
-    body.aat-shell-page .aat-entity-hero {
+    body.aat-shell-page .aat-entity-header {
         grid-template-columns: 1fr !important;
     }
 
-    body.aat-shell-page .aat-hub-actions,
-    body.aat-shell-page .aat-entity-actions {
+    body.aat-shell-page .aat-hub-actions {
         justify-content: flex-start !important;
-    }
-
-    body.aat-shell-page .aat-entity-poster-wrap {
-        justify-self: start !important;
-        max-width: 146px !important;
-    }
-
-    body.aat-shell-page .aat-entity-poster-wrap img,
-    body.aat-shell-page .aat-entity-poster {
-        max-height: 220px !important;
     }
 }
 
@@ -2111,8 +2017,6 @@ body.aat-shell-page .aat-related-review-body {
 
     body.aat-shell-page .aat-hub-grid,
     body.aat-shell-page .aat-winner-circle-grid,
-    body.aat-shell-page .aat-filmography-grid,
-    body.aat-shell-page .aat-related-reviews-grid,
     body.aat-shell-page .aat-best-picture-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
@@ -2124,8 +2028,7 @@ body.aat-shell-page .aat-related-review-body {
 
     body.aat-shell-page .aat-winner-circle-grid,
     body.aat-shell-page .aat-winner-circle-grid.is-hero-latest,
-    body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest,
-    body.aat-shell-page .aat-related-reviews-grid {
+    body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest {
         grid-template-columns: 1fr !important;
     }
 
@@ -2134,10 +2037,6 @@ body.aat-shell-page .aat-related-review-body {
     body.aat-shell-page .aat-winner-circle-card.is-marquee-latest .aat-winner-circle-media {
         max-width: 132px !important;
         width: 132px !important;
-    }
-
-    body.aat-shell-page .aat-entity-poster-wrap {
-        max-width: 132px !important;
     }
 }
 
@@ -2696,18 +2595,15 @@ body.aat-shell-page .aat-container {
 
 body.aat-shell-page .aat-hub-header,
 body.aat-shell-page .aat-entity-header,
-body.aat-shell-page .aat-category-latest-winner,
-body.aat-shell-page .aat-ceremony-marquee {
+body.aat-shell-page .aat-category-latest-winner {
     padding: clamp(20px, 2.8vw, 32px) !important;
 }
 
-body.aat-shell-page .aat-category-latest-winner,
-body.aat-shell-page .aat-ceremony-marquee {
+body.aat-shell-page .aat-category-latest-winner {
     gap: clamp(16px, 2vw, 24px) !important;
 }
 
-body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
-body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
+body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
     grid-template-columns: minmax(104px, 148px) minmax(0, 1fr) !important;
     gap: 14px !important;
     max-width: 760px !important;
@@ -2715,9 +2611,7 @@ body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
 }
 
 body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media,
-body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link,
-body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media,
-body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media-link {
+body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link {
     max-width: 148px !important;
     min-height: 0 !important;
     width: 148px !important;
@@ -2733,9 +2627,7 @@ body.aat-shell-page .aat-hub-metric-card,
 body.aat-shell-page .aat-stat,
 body.aat-shell-page .aat-category-history-winner,
 body.aat-shell-page .aat-category-ceremony-row,
-body.aat-shell-page .aat-nominee-row,
-body.aat-shell-page .aat-history-item,
-body.aat-shell-page .aat-timeline-card {
+body.aat-shell-page .aat-nominee-row {
     gap: 8px !important;
     padding: 12px 14px !important;
 }
@@ -2895,29 +2787,24 @@ body.single-journal .lunara-review-single-content {
         grid-template-columns: minmax(92px, 31vw) minmax(0, 1fr) !important;
     }
 
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
-    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
         max-width: 100% !important;
     }
 }
 
 @media (max-width: 560px) {
-    body.aat-shell-page .aat-category-latest-winner,
-    body.aat-shell-page .aat-ceremony-marquee {
+    body.aat-shell-page .aat-category-latest-winner {
         padding: 18px !important;
     }
 
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
-    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
         grid-template-columns: minmax(88px, 108px) minmax(0, 1fr) !important;
         max-width: 100% !important;
         padding: 10px !important;
     }
 
     body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media,
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link,
-    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media,
-    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media-link {
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link {
         max-width: 108px !important;
         width: 108px !important;
     }

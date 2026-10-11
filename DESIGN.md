@@ -62,6 +62,12 @@ variables, Customizer output and first-paint styles can win over a static file.
 | Menu and search | `inc/header-command.php`, `inc/live-search.php`, scoped public CSS |
 | Oscar records and explorer | Ledger plugin templates and public CSS; theme `assets/css/oscars.css` owns integration only |
 
+The Oscars shell owns page framing and shared controls; it must not restate the
+Ledger's profile, record-row, filmography or ceremony composition. Dossier Studio
+owns saved media fit, focal point, aspect, responsive size limits and density.
+Verify those late-emitted choices together with the real Ledger styles and the
+early structural seed. Standalone plugin fixtures cannot prove that cascade.
+
 `inc/` normally supplies the live function before guarded duplicates in
 `functions.php`, but Home forecast/Method and Journal provenance have live
 exceptions. Trace definitions rather than assuming every duplicate is dead.

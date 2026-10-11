@@ -73,20 +73,6 @@
             min-width: 0 !important;
         }
 
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats {
-            display: grid !important;
-            gap: 10px !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
-
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat {
-            align-content: start !important;
-            display: grid !important;
-            gap: 4px !important;
-            min-width: 0 !important;
-            text-align: left !important;
-        }
-
         body.aat-shell-page .aat-decade-nav {
             display: flex !important;
             flex-wrap: wrap !important;
@@ -178,10 +164,6 @@
             max-width: 132px !important;
             min-height: 0 !important;
             width: 132px !important;
-        }
-
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         }
 
         body.aat-shell-page .aat-hub-chip-rich,

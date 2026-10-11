@@ -5099,7 +5099,7 @@ function lunara_output_oscars_dossier_studio_css() {
         max-width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
         overflow: hidden !important;
         width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
-        background: linear-gradient(180deg, rgba(8, 20, 32, .94), rgba(5, 12, 21, .98)) !important;
+        background: var(--aat-black, #0a1520) !important;
     }
 
     body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap img,
@@ -5142,14 +5142,9 @@ function lunara_output_oscars_dossier_studio_css() {
         gap: 14px !important;
     }
 
-    body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-card,
-    body.aat-shell-page .aat-related-review-card.aat-related-treatment-compact-rail {
-        border-radius: 16px !important;
-    }
-
     body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-body {
         gap: 9px !important;
-        padding: 15px !important;
+        padding: 12px 0 0 !important;
     }
 
     @media (min-width: 860px) {
@@ -5197,10 +5192,19 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-person,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-company {
-            flex-basis: min(100%, 260px) !important;
+            flex-basis: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
             max-height: min(var(--lunara-oscars-profile-media-height), 420px) !important;
-            max-width: min(100%, 260px) !important;
-            width: min(100%, 260px) !important;
+            max-width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
+            width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
+        }
+    }
+    @media (max-width: 540px) {
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap,
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-person,
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-company {
+            flex-basis: auto !important;
+            max-width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
+            width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
         }
     }
     </style>

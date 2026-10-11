@@ -454,30 +454,6 @@ body.home .lunara-journal-home-grid,
             max-width: 100% !important;
         }
 
-        .aat-stats-bar.aat-entity-stats {
-            display: grid !important;
-            gap: 10px !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            justify-content: stretch !important;
-            margin: 20px 0 30px !important;
-        }
-
-        .aat-stats-bar.aat-entity-stats .aat-stat {
-            align-content: start !important;
-            display: grid !important;
-            gap: 4px !important;
-            min-width: 0 !important;
-            padding: 13px 14px !important;
-            text-align: left !important;
-        }
-
-        .aat-stats-bar.aat-entity-stats .aat-stat-number,
-        .aat-stats-bar.aat-entity-stats .aat-stat-label {
-            display: block !important;
-            min-width: 0 !important;
-            overflow-wrap: anywhere !important;
-        }
-
         .aat-decade-nav,
         .aat-hub-chips,
         .aat-winner-circle-actions,
