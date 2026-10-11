@@ -290,8 +290,8 @@ if ( ! function_exists( 'lunara_render_journal_image_carousel' ) ) {
 		<section class="lunara-journal-image-carousel" data-lunara-journal-carousel data-lunara-site-studio-section="gallery">
 			<div class="lunara-journal-image-carousel-head">
 				<div>
-					<p class="lunara-home-section-kicker"><?php esc_html_e( 'Visual File', 'lunara-film' ); ?></p>
 					<h2><?php echo esc_html( $heading ); ?></h2>
+					<p class="lunara-home-section-kicker"><?php esc_html_e( 'Visual File', 'lunara-film' ); ?></p>
 					<?php if ( '' !== $context ) : ?>
 						<p><?php echo esc_html( $context ); ?></p>
 					<?php endif; ?>
@@ -421,8 +421,8 @@ if ( have_posts() ) :
 			<section class="lunara-journal-single-hero lunara-journal-cinematic-hero<?php echo $has_thumb ? ' has-hero-image' : ' has-no-hero-image'; ?>" data-lunara-site-studio-section="hero">
 				<div class="lunara-journal-cinematic-hero-header">
 					<div class="lunara-journal-cinematic-hero-inner">
-						<p class="lunara-review-single-kicker"><?php echo esc_html( $kicker ); ?></p>
 						<h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
+						<p class="lunara-review-single-kicker"><?php echo esc_html( $kicker ); ?></p>
 
 						<?php if ( '' !== $signal_note ) : ?>
 							<p class="lunara-journal-single-signal"><?php echo esc_html( $signal_note ); ?></p>
@@ -646,8 +646,8 @@ if ( have_posts() ) :
 			if ( $related_query->have_posts() ) : ?>
 				<section class="lunara-journal-single-related lunara-home-section">
 					<div class="lunara-home-section-head">
-						<p class="lunara-home-section-kicker"><?php esc_html_e( 'More files from the desk', 'lunara-film' ); ?></p>
 						<h2 class="lunara-home-section-title"><?php esc_html_e( 'Keep reading', 'lunara-film' ); ?></h2>
+
 					</div>
 					<div class="lunara-review-grid lunara-review-related-grid">
 						<?php while ( $related_query->have_posts() ) : $related_query->the_post(); ?>
@@ -665,8 +665,8 @@ if ( have_posts() ) :
 										</div>
 									<?php endif; ?>
 									<div class="lunara-review-grid-copy">
-										<p class="lunara-review-grid-kicker"><?php echo esc_html( $rkicker ); ?></p>
 										<h3 class="lunara-review-grid-title"><?php the_title(); ?></h3>
+										<p class="lunara-review-grid-kicker"><?php echo esc_html( $rkicker ); ?></p>
 										<p class="lunara-review-grid-meta"><?php echo esc_html( get_the_date( 'F j, Y' ) ); ?></p>
 									</div>
 								</a>

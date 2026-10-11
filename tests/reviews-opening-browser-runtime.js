@@ -79,7 +79,9 @@ const assert = (condition, message) => { if (!condition) throw new Error(message
                     assert(geometry.toolbar.height <= 260, `${label}: archive controls must remain compact in the published cascade.`);
                     if (width >= 360 && geometry.yearBounds.length) {
                         const [labelBounds, selectBounds, buttonBounds] = geometry.yearBounds;
-                        assert(labelBounds.right <= selectBounds.left && selectBounds.right <= buttonBounds.left && Math.abs(selectBounds.top - buttonBounds.top) < 1, `${label}: the year label, selector and button must share a row when space permits.`);
+                        const labelAbove = labelBounds.bottom <= Math.min(selectBounds.top, buttonBounds.top) + 1;
+                        const labelBeside = labelBounds.right <= selectBounds.left + 1;
+                        assert((labelAbove || labelBeside) && selectBounds.right <= buttonBounds.left + 1 && Math.abs(selectBounds.top - buttonBounds.top) < 1, `${label}: the year label may wrap above its bounded selector/button row, without overlapping either control.`);
                     }
                     assert(geometry.toolbar.left >= 15 && geometry.toolbar.right <= width - 15, `${label}: toolbar must keep mobile gutters.`);
                     if (geometry.hero) assert(geometry.hero.left >= 15 && geometry.hero.right <= width - 15, `${label}: introduction must keep mobile gutters.`);

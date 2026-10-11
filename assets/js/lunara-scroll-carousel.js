@@ -57,9 +57,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 const trackRect = track.getBoundingClientRect();
                 const cardRect = card.getBoundingClientRect();
-                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left;
+                const padding = parseFloat(window.getComputedStyle(track).scrollPaddingLeft) || 0;
+                const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left - padding;
                 track.scrollTo({
-                    left: Math.max(0, targetLeft),
+                    left: Math.min(maxScroll, Math.max(0, targetLeft)),
                     behavior: reduceMotion ? 'auto' : 'smooth'
                 });
             }

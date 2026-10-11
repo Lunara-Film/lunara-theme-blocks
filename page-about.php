@@ -50,7 +50,6 @@ $journal_total = isset( $journal_total->publish ) ? (int) $journal_total->publis
 		<?php endif; ?>
 		<div class="lunara-about-hero-overlay" aria-hidden="true"></div>
 		<div class="lunara-about-hero-inner">
-			<p class="lunara-about-kicker"><?php esc_html_e( 'The Desk', 'lunara-film' ); ?></p>
 			<h1 class="lunara-about-title"><?php echo esc_html( $about_title ); ?></h1>
 			<p class="lunara-about-thesis"><?php echo esc_html( apply_filters( 'lunara_about_thesis', __( 'Film criticism and the living record of the Oscars — one publication, argued by a critic, never served by an algorithm.', 'lunara-film' ) ) ); ?></p>
 		</div>

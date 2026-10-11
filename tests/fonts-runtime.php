@@ -42,8 +42,14 @@ function add_filter( $hook, $callback, $priority = 10, $args = 1 ) { $GLOBALS['f
 function remove_action( $hook, $callback, $priority = 10 ) { $GLOBALS['fonts_test']['removed'][] = array( $hook, $callback, $priority ); return true; }
 function is_admin() { return $GLOBALS['fonts_test']['is_admin']; }
 function apply_filters( $hook, $value ) { return $value; }
+function __( $text, $domain = '' ) { return $text; }
+function get_option( $name, $default = false ) { return 'lunara_design_tokens' === $name ? ( $GLOBALS['fonts_test']['saved'] ?? array() ) : $default; }
+function get_theme_mod( $name, $default = false ) { return $default; }
+function sanitize_key( $value ) { return preg_replace( '/[^a-z0-9_-]/', '', strtolower( (string) $value ) ); }
+function sanitize_hex_color( $value ) { return preg_match( '/^#(?:[a-f0-9]{3}|[a-f0-9]{6})$/i', $value ) ? $value : null; }
 
 require ABSPATH . 'inc/fonts.php';
+require ABSPATH . 'inc/design-tokens.php';
 
 // 1. The Font Library's front-end output is unhooked, at the point WordPress adds it (wp_head, priority 50).
 lunara_test_assert( function_exists( 'lunara_fonts_unhook_font_library' ), 'inc/fonts.php defines lunara_fonts_unhook_font_library().' );
@@ -90,25 +96,49 @@ foreach ( $tiempos as $face ) {
 	lunara_test_assert( false !== strpos( $face['decl'], 'font-display: swap' ), $face['file'] . ' keeps font-display: swap.' );
 }
 
-// 4. Metric-matched fallbacks exist and the stacks name them right after the family.
+// 4. The real synchronous head output contains the local metric-matched faces
+// and resolves default/custom font roles before deferred base styles arrive.
+$GLOBALS['fonts_test']['is_admin'] = false;
+ob_start();
+lunara_design_tokens_output_css();
+$head = (string) ob_get_clean();
+preg_match_all( '/@font-face\s*\{([^}]*)\}/s', $head, $fallback_faces );
+$expected_metrics = array(
+	'Tiempos Text Fallback' => array( 'size-adjust' => '105.89%', 'ascent-override' => '99.54%', 'descent-override' => '23.23%', 'line-gap-override' => '0%' ),
+	'Tiempos Headline Fallback' => array( 'size-adjust' => '105.15%', 'ascent-override' => '74.47%', 'descent-override' => '20.64%', 'line-gap-override' => '19.02%' ),
+);
 foreach ( array( 'Tiempos Text Fallback', 'Tiempos Headline Fallback' ) as $fallback ) {
 	$found = false;
-	foreach ( $faces[1] as $decl ) {
+	foreach ( $fallback_faces[1] as $decl ) {
 		if ( false === strpos( $decl, "'" . $fallback . "'" ) && false === strpos( $decl, '"' . $fallback . '"' ) ) {
 			continue;
 		}
 		$found = true;
 		lunara_test_assert( preg_match( '/src:\s*local\(/', $decl ), $fallback . ' is a local() face (Georgia), never a download.' );
-		lunara_test_assert( preg_match( '/size-adjust:\s*1\d\d(\.\d+)?%/', $decl ), $fallback . ' carries a size-adjust in the 100-199% range.' );
-		lunara_test_assert( preg_match( '/ascent-override:\s*\d/', $decl ) && preg_match( '/descent-override:\s*\d/', $decl ), $fallback . ' carries ascent and descent overrides.' );
+		foreach ( $expected_metrics[ $fallback ] as $property => $expected ) {
+			preg_match( '/' . preg_quote( $property, '/' ) . ':\s*([^;}]+)/', $decl, $metric );
+			lunara_test_assert( trim( $metric[1] ?? '' ) === $expected, $fallback . ' preserves measured ' . $property . ' metrics.' );
+		}
 	}
-	lunara_test_assert( $found, $fallback . ' is declared in style.css.' );
+	lunara_test_assert( $found, $fallback . ' is available in the synchronous public head output.' );
 }
-$tokens = (string) file_get_contents( ABSPATH . 'inc/design-tokens.php' );
-lunara_test_assert( false !== strpos( $tokens, '"Tiempos Text", "Tiempos Text Fallback", Georgia' ), 'The tiempos-text stack names the fallback right after the family.' );
-lunara_test_assert( false !== strpos( $tokens, '"Tiempos Headline", "Tiempos Headline Fallback", "Tiempos Text"' ), 'The tiempos-headline stack names the fallback right after the family.' );
-lunara_test_assert( false !== strpos( $css, '--lunara-font-display: "Tiempos Headline", "Tiempos Headline Fallback"' ), 'The style.css default display stack names the fallback.' );
-lunara_test_assert( false !== strpos( $css, '--lunara-font-body: "Tiempos Text", "Tiempos Text Fallback", Georgia' ), 'The style.css default body stack names the fallback.' );
+$choices = lunara_design_token_font_choices();
+foreach ( lunara_design_token_font_role_specs() as $role => $spec ) {
+	preg_match( '/' . preg_quote( $spec['var'], '/' ) . ':\s*([^;}]+)/', $head, $role_value );
+	lunara_test_assert( trim( $role_value[1] ?? '' ) === $choices[ $spec['default'] ]['stack'], 'The default ' . $role . ' role is resolved before deferred CSS.' );
+}
+foreach ( array( 'body-font' => 'body', 'heading-font' => 'display', 'label-font' => 'label', 'body-font-stack' => 'body', 'heading-font-stack' => 'display' ) as $alias => $role ) {
+	preg_match( '/--lunara-' . $alias . ':\s*([^;}]+)/', $head, $alias_value );
+	lunara_test_assert( trim( $alias_value[1] ?? '' ) === 'var(--lunara-font-' . $role . ')', 'The legacy ' . $alias . ' alias shares its resolved canonical role.' );
+}
+$GLOBALS['fonts_test']['saved'] = array( 'fonts' => array( 'body' => 'georgia', 'display' => 'canela-deck', 'label' => array( 'invalid' ) ) );
+ob_start();
+lunara_design_tokens_output_css();
+$custom_head = (string) ob_get_clean();
+foreach ( array( 'body' => 'georgia', 'display' => 'canela-deck', 'label' => 'tiempos-text' ) as $role => $choice ) {
+	preg_match( '/--lunara-font-' . $role . ':\s*([^;}]+)/', $custom_head, $role_value );
+	lunara_test_assert( trim( $role_value[1] ?? '' ) === $choices[ $choice ]['stack'], 'Saved ' . $role . ' font is preserved, or falls back safely when malformed.' );
+}
 
 // 5. No preload points at a file the CSS does not declare.
 $frontend = (string) file_get_contents( ABSPATH . 'inc/frontend.php' );

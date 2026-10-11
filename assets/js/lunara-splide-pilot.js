@@ -63,7 +63,6 @@
 		var toggle = root.querySelector('.splide__toggle');
 		var currentCounter = root.querySelector('.lunara-oscar-facts-current');
 		var totalCounter = root.querySelector('.lunara-oscar-facts-total');
-		var progressBar = root.querySelector('.lunara-oscar-facts-progress-bar');
 		var interval = numberAttr(root, 'data-lunara-splide-autoplay', 6500);
 		var heightFrame = 0;
 
@@ -152,15 +151,13 @@
 
 			root.setAttribute('data-lunara-current-slide', String(displayCurrent));
 			root.style.setProperty('--lunara-oscar-facts-progress', progressValue);
+			root.style.setProperty('--lunara-oscar-facts-progress-ratio', (progress / 100).toFixed(6));
 
 			if (currentCounter) {
 				currentCounter.textContent = padNumber(displayCurrent);
 			}
 			if (totalCounter) {
 				totalCounter.textContent = padNumber(total);
-			}
-			if (progressBar) {
-				progressBar.style.width = progressValue;
 			}
 		}
 

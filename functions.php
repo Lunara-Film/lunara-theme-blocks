@@ -201,13 +201,6 @@ function lunara_print_late_oscars_guardrail_styles() {
 add_action( 'wp_footer', 'lunara_print_late_oscars_guardrail_styles', 999 );
 }
 
-if ( ! function_exists( 'lunara_inject_room_tone_markup' ) ) {
-function lunara_inject_room_tone_markup() {
-    echo '<div id="lunara-grain" class="is-live" aria-hidden="true"></div><div id="lunara-vignette" aria-hidden="true"></div>';
-}
-add_action( 'wp_body_open', 'lunara_inject_room_tone_markup', 1 );
-}
-
 /**
  * One-time restoration (3.1.38): the homepage Latest Reviews section was
  * toggled off in a stored theme mod, and the Control Desk switch proved
@@ -13705,7 +13698,7 @@ if ( ! function_exists( 'lunara_render_oscar_facts_carousel' ) ) {
 				<a class="lunara-section-link" href="<?php echo esc_url( $args['cta_url'] ); ?>"><?php echo esc_html( $args['cta_text'] ); ?></a>
 			</div>
 
-			<div class="lunara-oscar-facts-carousel lunara-carousel" data-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-splide-pilot data-lunara-splide-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-facts-total="<?php echo esc_attr( (string) $fact_total ); ?>" style="--lunara-oscar-facts-progress:<?php echo esc_attr( $fact_total > 0 ? (string) ( 100 / $fact_total ) . '%' : '0%' ); ?>;" aria-label="<?php esc_attr_e( 'Rotating Oscar facts', 'lunara-film' ); ?>">
+			<div class="lunara-oscar-facts-carousel lunara-carousel" data-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-splide-pilot data-lunara-splide-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-facts-total="<?php echo esc_attr( (string) $fact_total ); ?>" style="--lunara-oscar-facts-progress:<?php echo esc_attr( $fact_total > 0 ? (string) ( 100 / $fact_total ) . '%' : '0%' ); ?>;--lunara-oscar-facts-progress-ratio:<?php echo esc_attr( $fact_total > 0 ? (string) ( 1 / $fact_total ) : '0' ); ?>;" aria-label="<?php esc_attr_e( 'Rotating Oscar facts', 'lunara-film' ); ?>">
 				<?php if ( $fact_total > 1 ) : ?>
 					<div class="lunara-oscar-facts-console" aria-label="<?php esc_attr_e( 'Oscar Facts carousel status', 'lunara-film' ); ?>">
 						<span class="lunara-oscar-facts-console-label"><?php esc_html_e( 'Oscar Ledger File', 'lunara-film' ); ?></span>
@@ -15449,9 +15442,9 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 			<div class="lunara-pairing-desk-inner">
 				<div class="lunara-pairing-desk-head">
 					<div>
-						<p class="lunara-pairing-desk-claim"><?php esc_html_e( 'Only on Lunara', 'lunara-film' ); ?></p>
-						<p class="lunara-home-section-kicker"><?php echo esc_html( $kicker ); ?></p>
-						<h2 class="lunara-home-section-title"><?php echo esc_html( $title ); ?></h2>
+
+						<h2 class="lunara-home-section-title"><?php echo esc_html( '' !== $kicker ? $kicker : __( 'The Lunara Method', 'lunara-film' ) ); ?></h2>
+						<p class="lunara-pairing-desk-thesis"><?php echo esc_html( $title ); ?></p>
 					</div>
 					<div class="lunara-pairing-desk-intro">
 						<p class="lunara-pairing-desk-copy"><?php echo esc_html( $copy ); ?></p>

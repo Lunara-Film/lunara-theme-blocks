@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-11 — Editorial presentation remediation candidate
+
+- **Shipped:** review candidates only: Ledger 2.8.22 (PR #54) and Theme 3.2.104 on `codex/editorial-remediation`; shared ornamental surfaces retired, metadata/links readable, all story/forecast records preserved, archive first-paint and saved configuration guarded. Nothing merged or deployed.
+- **Live:** unchanged by this task. Ledger PR #54 CI is green; live version/build acceptance remains a separate release gate.
+- **Holding:** Codex candidate branches await final visual review and green companion theme CI. The complete plan, original 158-instance dispositions,125-case baseline and desktop/phone previews are in this chat's `lunara-remediation-plan` artifact. See `docs/EDITORIAL-REMEDIATION.md` for release order and limits.
+- **Next:** review the four Home/Journal previews and both PRs; Dalton merges Ledger first, then Theme and its manual WordPress.com deploy click. Perform one versioned public acceptance pass, then stop rechecking unchanged state.
+- **Found, not fixed:** original eight-curve contour producer and HQ02's exact clipped child remain unattributed;46 Reader Mode/Link Grabber findings are externally owned and extensions unchanged; authored wording advisories retained; development-only source-map-js advisory deferred; scheduled PHP-log/Lighthouse watch remains unbuilt (manual public acceptance workflow added).
+
 ## 2026-10-10 (late) — The hero film loop removed (Theme 3.2.103)
 
 - **Shipped:** theme 3.2.103 on a PR: the `/oscars/` hero video, its script, its 1.2 MB mp4 and its CSS removed. Dalton asked why the video was playing; it played on any screen over 820px (desktop by design, but also phones held sideways and tablets); he said remove it.

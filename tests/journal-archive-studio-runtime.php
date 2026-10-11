@@ -246,6 +246,16 @@ lunara_test_assert( 'tiempos-text' === lunara_journal_archive_resolved_label_fon
 $lunara_test_design_tokens = array();
 
 $defaults = lunara_journal_archive_studio_defaults();
+$optional_labels = $defaults;
+$optional_labels['kicker'] = '';
+$optional_labels['gallery']['kicker'] = '';
+foreach ( lunara_journal_archive_studio_optional_labels() as $optional_key ) { $optional_labels['labels'][ $optional_key ] = ''; }
+$optional_labels['retention'][0]['label'] = '';
+$optional_validated = lunara_journal_archive_studio_validate_config( $optional_labels );
+lunara_test_assert( ! is_wp_error( $optional_validated ) && '' === $optional_validated['kicker'] && '' === $optional_validated['gallery']['kicker'] && '' === $optional_validated['labels']['toolbar_title'] && '' === $optional_validated['retention'][0]['label'], 'Deliberately blank secondary labels are valid and are not repaired back into decorative defaults.' );
+$optional_labels['labels']['sort_newest'] = '';
+lunara_test_assert( 'journal_archive_label_required' === lunara_journal_archive_studio_validate_config( $optional_labels )->get_error_code(), 'Functional sort labels remain required so controls never lose their accessible names.' );
+
 lunara_test_assert(
 	array( 'hero', 'deskbar', 'filters', 'toolbar', 'grid', 'retention', 'pagination' ) === $defaults['section_order'],
 	'Default section order must preserve the proven public sequence.'
@@ -281,7 +291,7 @@ delete_option( LUNARA_JOURNAL_ARCHIVE_STUDIO_OPTION );
 set_theme_mod( 'lunara_journal_archive_kicker', 'The Lunara Journal' );
 set_theme_mod( 'lunara_journal_archive_title', 'Journal' );
 $pre_studio_identity = lunara_journal_archive_studio_get_public_config( false );
-lunara_test_assert( 'Journal' === $pre_studio_identity['kicker'] && 'Lunara Journal' === $pre_studio_identity['title'], 'An exact pre-Studio legacy sentinel pair must preserve the 3.2.43 effective public identity without a write.' );
+lunara_test_assert( '' === $pre_studio_identity['kicker'] && 'Lunara Journal' === $pre_studio_identity['title'], 'An exact pre-Studio legacy sentinel pair must use the current uncluttered default identity without a write.' );
 update_option( LUNARA_JOURNAL_ARCHIVE_STUDIO_OPTION, array( 'schema_version' => 1 ) );
 $post_studio_identity = lunara_journal_archive_studio_get_public_config( false );
 lunara_test_assert( 'The Lunara Journal' === $post_studio_identity['kicker'] && 'Journal' === $post_studio_identity['title'], 'Once the existing Studio schema marker is present, those same explicit phrases must round-trip verbatim.' );
@@ -423,7 +433,7 @@ $critical_css = lunara_journal_archive_critical_css();
 lunara_test_assert( false !== strpos( $critical_css, 'order:initial!important' ), 'The first-paint seed must neutralize stale numeric order rules so DOM order stays canonical.' );
 lunara_test_assert( 0 === preg_match( '/(?<![a-z-])order:[1-9]/', $critical_css ), 'The first-paint seed must never become a second numeric section-order owner.' );
 lunara_test_assert( false !== strpos( $critical_css, '.lunara-journal-archive-retention-media' ) && false !== strpos( $critical_css, 'object-position:var(--lunara-retention-focus-x' ), 'Retention media geometry and focal controls must exist before deferred CSS settles.' );
-lunara_test_assert( false !== strpos( $critical_css, '@media(max-width:620px)' ), 'The first-paint seed must reserve the true mobile composition.' );
+lunara_test_assert( false !== strpos( $critical_css, '@media(max-width:640px)' ), 'The first-paint seed must reserve the true mobile composition.' );
 
 $retention_media_card = $defaults['retention'][0];
 $retention_media_card['image_id'] = 101;
@@ -617,7 +627,7 @@ lunara_journal_archive_studio_store_invalid_stage(
 $private_stage = lunara_journal_archive_studio_get_invalid_stage();
 lunara_test_assert( is_array( $private_stage ) && 'Do not make me retype this private edit.' === $private_stage['supporting_copy'], 'Rejected edits must return as a bounded private per-user draft instead of disappearing.' );
 lunara_test_assert( 2 === $private_stage['_staged_positions']['hero'] && 2 === $private_stage['_staged_positions']['grid'], 'Rejected duplicate section positions must remain visible for correction.' );
-lunara_test_assert( 'Add both the archive kicker and headline.' === lunara_journal_archive_studio_validation_message(), 'Invalid save feedback must resolve through the bounded validator-message allowlist.' );
+lunara_test_assert( 'Add the archive headline. The secondary label is optional.' === lunara_journal_archive_studio_validation_message(), 'Invalid save feedback must resolve through the bounded validator-message allowlist.' );
 lunara_journal_archive_studio_clear_invalid_stage();
 lunara_test_assert( false === lunara_journal_archive_studio_get_invalid_stage(), 'A successful transition must be able to clear the rejected private draft.' );
 

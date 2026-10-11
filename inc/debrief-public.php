@@ -298,7 +298,7 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_signature' ) ) {
         }
 
         $html  = '<section class="lunara-debrief-block lunara-debrief-block--signature">';
-        $html .= '<h3 class="lunara-debrief-heading">' . esc_html__( 'LUNARA DEBRIEF', 'lunara-film' ) . '</h3>';
+        $html .= '<h2 class="lunara-debrief-heading">' . esc_html__( 'Lunara Debrief', 'lunara-film' ) . '</h2>';
         if ( '' !== $kicker ) {
             $html .= '<div class="lunara-debrief-kicker">' . esc_html( $kicker ) . '</div>';
         }
@@ -597,7 +597,7 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
             $card .= '' !== $tt ? ' data-pair-tt="' . esc_attr( $tt ) . '"' : '';
             $card .= '>' . $media . '<div class="lunara-pair-card-body">';
             $card .= '<p class="lunara-pair-card-role">' . esc_html( (string) $row['label'] ) . '</p>';
-            $card .= '<h4 class="lunara-pair-card-title">' . $title_html . '</h4>';
+            $card .= '<h3 class="lunara-pair-card-title">' . $title_html . '</h3>';
             if ( '' !== trim( $note ) ) {
                 $card .= '<p class="lunara-pair-card-note">' . esc_html( $note ) . '</p>';
             }
@@ -621,7 +621,7 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
             $review_id
         );
         $html  = '<section class="lunara-pair-cards" aria-label="' . esc_attr__( 'Pair It With', 'lunara-film' ) . '">';
-        $html .= '<div class="lunara-pair-cards-head"><h3 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h3>';
+        $html .= '<div class="lunara-pair-cards-head"><h2 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h2>';
         if ( '' !== trim( $subtitle ) ) {
             $html .= '<p class="lunara-pair-cards-sub">' . esc_html( $subtitle ) . '</p>';
         }

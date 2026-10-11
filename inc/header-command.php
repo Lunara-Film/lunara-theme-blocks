@@ -356,7 +356,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-header-brand-sub {
 			color: rgba(244,239,227,.62);
 			font-family: var(--lunara-font-label, sans-serif);
-			font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+			font-size: .875rem; letter-spacing: 0; text-transform: none;
 		}
 		.lunara-header-nav { display: flex; align-items: center; gap: 22px; margin-left: 8px; }
 		.lunara-header-nav ul, .lunara-header-nav li,
@@ -466,7 +466,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			width: min(420px, 92vw); padding: 84px 40px 40px;
 			display: flex; flex-direction: column;
 			background:
-				radial-gradient(circle at top right, rgba(201,169,97,.14), transparent 42%),
+
 				linear-gradient(200deg, rgba(15,29,46,.97), rgba(6,13,21,.99));
 			-webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
 			border-left: 1px solid rgba(201,169,97,.3);
@@ -483,7 +483,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-offcanvas-kicker {
 			margin: 0 0 18px; color: var(--lunara-gold, #c9a961);
 			font-family: var(--lunara-font-label, sans-serif);
-			font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+			font-size: .875rem; letter-spacing: 0; text-transform: none;
 		}
 		.lunara-offcanvas-nav { display: flex; flex-direction: column; }
 		.lunara-offcanvas-nav a, .lunara-offcanvas-link {
@@ -492,10 +492,10 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			font-family: var(--lunara-font-display, Georgia, serif);
 			font-size: clamp(1.5rem, 4.4vw, 1.9rem); line-height: 1.15;
 			border-bottom: 1px solid rgba(201,169,97,.18);
-			transition: color .18s ease, padding-left .18s ease;
+			transition: color .18s ease;
 		}
 		.lunara-offcanvas-nav a:hover, .lunara-offcanvas-nav a:focus-visible {
-			color: var(--lunara-gold-light, #e0c481); padding-left: 8px;
+			color: var(--lunara-gold-light, #e0c481); text-decoration: underline; text-underline-offset: .2em;
 		}
 		.lunara-offcanvas-foot {
 			margin: auto 0 0; padding-top: 26px;

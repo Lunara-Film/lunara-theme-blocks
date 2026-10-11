@@ -215,6 +215,7 @@ function dm_render() {
 }
 dm_catalogue();
 $html = dm_render();
+if ( in_array( '--fixture', $argv ?? array(), true ) ) { echo $html; exit( 0 ); }
 preg_match_all( '/data-lunara-site-studio-section="([a-z-]+)"/', $html, $markers );
 dm_assert( array( 'hero', 'moves', 'why', 'specimen', 'recent', 'next' ) === $markers[1], 'Default render shows every public section with content; the desk seat waits for page content.' );
 dm_assert( false !== strpos( $html, '<h1 class="lunara-debrief-title">Lunara Debrief</h1>' ), 'An empty heading setting falls back to the page title.' );

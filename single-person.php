@@ -30,8 +30,8 @@ while ( have_posts() ) :
                     <div class="lunara-entity-hero-poster is-portrait"><?php the_post_thumbnail( 'large', array( 'fetchpriority' => 'high' ) ); ?></div>
                 <?php endif; ?>
                 <div class="lunara-entity-hero-copy">
-                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Talent File', 'lunara-film' ); ?></p>
                     <h1 class="lunara-entity-title"><?php the_title(); ?></h1>
+                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Talent File', 'lunara-film' ); ?></p>
                     <?php if ( ! empty( $roles ) ) : ?>
                         <p class="lunara-entity-meta"><span><?php echo esc_html( implode( ' · ', array_map( 'ucfirst', $roles ) ) ); ?></span></p>
                     <?php endif; ?>

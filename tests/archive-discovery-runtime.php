@@ -67,11 +67,16 @@ $tag = new WP_Query( array( 'is_tag' => true ) );
 lunara_separate_review_from_editorial_archives( $tag );
 discovery_assert( array( 'journal', 'review', 'post' ) === $tag->get( 'post_type' ), 'A tag archive gathers Journal entries, Reviews and Posts.' );
 discovery_assert( 'date' === $tag->get( 'orderby' ) && 'DESC' === $tag->get( 'order' ), 'Tag archives keep the editorial sort.' );
-foreach ( array( 'is_category', 'is_author', 'is_date', 'is_home' ) as $flag ) {
+foreach ( array( 'is_author', 'is_date', 'is_home' ) as $flag ) {
 	$query = new WP_Query( array( $flag => true ) );
 	lunara_separate_review_from_editorial_archives( $query );
 	discovery_assert( 'post' === $query->get( 'post_type' ), 'Editorial archives other than tags keep the Posts lane: ' . $flag );
 }
+$category = new WP_Query( array( 'is_category' => true ), array( 'cat' => 1960, 'paged' => 2, 'tax_query' => array( 'taxonomy' => 'category', 'terms' => array( 1960 ) ) ) );
+lunara_separate_review_from_editorial_archives( $category );
+discovery_assert( array( 'journal', 'review', 'post' ) === $category->get( 'post_type' ), 'A category must include its assigned Review instead of silently returning an empty Posts-only archive.' );
+discovery_assert( 1960 === $category->get( 'cat' ) && 2 === $category->get( 'paged' ) && array( 'taxonomy' => 'category', 'terms' => array( 1960 ) ) === $category->get( 'tax_query' ), 'Including eligible types preserves the category constraint and pagination.' );
+discovery_assert( 'date' === $category->get( 'orderby' ) && 'DESC' === $category->get( 'order' ), 'Category archives retain the chosen editorial sort.' );
 $secondary = new WP_Query( array( 'is_tag' => true ) ); $secondary->main = false;
 lunara_separate_review_from_editorial_archives( $secondary );
 discovery_assert( '' === $secondary->get( 'post_type' ), 'Secondary queries are never rewritten.' );

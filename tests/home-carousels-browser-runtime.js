@@ -55,6 +55,39 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             await page.keyboard.press('ArrowRight');
             await page.waitForFunction(() => document.querySelector('[data-lunara-journal-carousel] .splide__slide:nth-child(3)').classList.contains('is-active'));
             assert(await news.locator('.splide__slide:nth-child(3)').isVisible(), 'Focused keyboard navigation must work.');
+            if ([390, 1440].includes(width)) {
+                for (const selector of ['.lunara-home-curated-hero', '[data-lunara-journal-carousel]']) {
+                    const carousel = page.locator(selector);
+                    const pause = carousel.getByRole('button', { name: 'Pause autoplay', exact: true });
+                    if (await pause.count()) await pause.click();
+                    const seen = new Set();
+                    for (let step = 0; step < 6; step++) {
+                        await carousel.locator('.splide__list').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))));
+                        const items = await carousel.evaluate(root => {
+                            const clip = root.querySelector('.splide__track').getBoundingClientRect();
+                            return [...root.querySelectorAll('.splide__slide')].map((slide, index) => {
+                                if (!slide.classList.contains('is-visible')) return null;
+                                const box = slide.getBoundingClientRect();
+                                const copy = slide.querySelector('.lunara-cinematic-hero-content,.lunara-home-news-copy') || slide;
+                                const readable = [...copy.querySelectorAll('h1,h2,h3,p')].filter(node => node.getBoundingClientRect().height);
+                                return { index, bounded: box.left >= clip.left - 2 && box.right <= clip.right + 2,
+                                    copyFits: readable.every(node => node.scrollWidth <= node.clientWidth + 1 && node.scrollHeight <= node.clientHeight + 2),
+                                    destination: slide.querySelector('a[href]')?.getAttribute('href'),
+                                    title: slide.querySelector('h1,h2,h3')?.textContent.trim() };
+                            }).filter(Boolean);
+                        });
+                        for (const item of items) {
+                            seen.add(item.index);
+                            assert(item.bounded && item.copyFits && item.destination && item.title, `${width}px ${selector} item ${item.index + 1} stays readable when active: ${JSON.stringify(item)}`);
+                        }
+                        const active = await carousel.locator('.splide__slide.is-active').getAttribute('id');
+                        // Splide relabels the rewind arrow "Go to first slide" at the end.
+                        await carousel.locator('button.splide__arrow--next').click();
+                        await page.waitForFunction(({selector, active}) => document.querySelector(selector + ' .splide__slide.is-active').id !== active, {selector, active});
+                    }
+                    assert(seen.size === 6, `${width}px ${selector}: all six published items must be reachable, including the imageless item.`);
+                }
+            }
             await page.close();
         }
         // Include the real native-fallback wrapper and header offset: both supplied

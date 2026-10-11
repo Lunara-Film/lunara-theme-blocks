@@ -1,0 +1,34 @@
+name: Public design acceptance
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_theme_version:
+        description: Deployed theme version to verify after release
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  public-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Inspect public build, representative layouts and Ledger health
+        env:
+          LUNARA_BROWSER_EXECUTABLE: /usr/bin/google-chrome
+          LUNARA_EXPECTED_THEME_VERSION: ${{ inputs.expected_theme_version }}
+        run: node tests/tools/lunara-public-design-watch.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-design-acceptance
+          path: test-results/public-design-watch
+          retention-days: 14

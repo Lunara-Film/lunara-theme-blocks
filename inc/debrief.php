@@ -1435,7 +1435,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             $card .= $media;
             $card .= '<div class="lunara-pair-card-body">';
             $card .= '<p class="lunara-pair-card-role">' . esc_html( $row['label'] ) . '</p>';
-            $card .= '<h4 class="lunara-pair-card-title">' . $title_html . '</h4>';
+            $card .= '<h3 class="lunara-pair-card-title">' . $title_html . '</h3>';
             if ( '' !== trim( $note ) ) {
                 $card .= '<p class="lunara-pair-card-note">' . esc_html( $note ) . '</p>';
             }
@@ -1462,7 +1462,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
 
         $html  = '<section class="lunara-pair-cards" aria-label="' . esc_attr__( 'Pair It With', 'lunara-film' ) . '">';
         $html .= '<div class="lunara-pair-cards-head">';
-        $html .= '<h3 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h3>';
+        $html .= '<h2 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h2>';
         if ( '' !== trim( $subtitle ) ) {
             $html .= '<p class="lunara-pair-cards-sub">' . esc_html( $subtitle ) . '</p>';
         }
@@ -1692,7 +1692,7 @@ function lunara_debrief_shortcode( $atts ) {
     ob_start();
     ?>
     <section class="lunara-debrief-block">
-        <h3 class="lunara-debrief-heading">LUNARA DEBRIEF</h3>
+        <h2 class="lunara-debrief-heading">Lunara Debrief</h2>
         <?php $kicker = trim( (string) get_theme_mod( 'lunara_debrief_kicker_text', 'A LUNARA FILM SIGNATURE' ) ); ?>
         <?php if ( $kicker !== '' ) : ?>
             <div class="lunara-debrief-kicker"><?php echo esc_html( $kicker ); ?></div>

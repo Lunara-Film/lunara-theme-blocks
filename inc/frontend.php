@@ -1539,7 +1539,7 @@ function lunara_render_custom_footer() {
             <nav class="lunara-footer-nav-grid" aria-label="<?php esc_attr_e( 'Footer navigation', 'lunara-film' ); ?>">
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col1_head ) : ?>
-                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col1_head ); ?></h4>
+                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col1_head ); ?></h2>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['editorial'] );
@@ -1547,7 +1547,7 @@ function lunara_render_custom_footer() {
                 </div>
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col2_head ) : ?>
-                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col2_head ); ?></h4>
+                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col2_head ); ?></h2>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['oscars'] );
@@ -1555,7 +1555,7 @@ function lunara_render_custom_footer() {
                 </div>
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col3_head ) : ?>
-                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col3_head ); ?></h4>
+                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col3_head ); ?></h2>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['utility'] );
@@ -3676,11 +3676,7 @@ add_action( 'wp_head', 'lunara_output_review_seo_meta', 7 );
  * Suppress Blocksy's native footer via CSS so ours is the only one.
  */
 function lunara_hide_blocksy_footer_css() {
-    if ( ! apply_filters( 'lunara_use_custom_footer', true ) ) {
-        return;
-    }
-
-    echo '<style id="lunara-hide-blocksy-footer">.ct-footer,footer.site-footer:not(.lunara-site-footer){display:none!important;}#header .menu-item-27569 .ct-menu-badge{display:none!important;}.lunara-site-footer{position:relative;overflow:hidden;margin-top:clamp(76px,8vw,120px);padding:clamp(48px,6vw,86px) 0 54px;background:radial-gradient(circle at top center,rgba(201,169,97,.08),transparent 34%),linear-gradient(180deg,rgba(15,29,46,.95),rgba(10,21,32,.98));border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text,#FAFBFC);}.lunara-footer-inner{max-width:min(100%,1360px);margin:0 auto;padding-inline:var(--lunara-shell-pad,28px);display:grid;gap:48px;}.lunara-footer-brand{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}.lunara-footer-logo{max-height:var(--lunara-logo-max,64px);width:auto;}.lunara-footer-tagline{max-width:48ch;margin:0;color:var(--lunara-text-muted,#A8A8B8);font-size:.98rem;line-height:1.55;}.lunara-footer-nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;}.lunara-footer-nav-col{padding:20px;border:1px solid rgba(201,169,97,.12);border-radius:22px;background:linear-gradient(180deg,rgba(18,31,47,.82),rgba(10,20,32,.56));}.lunara-footer-col-heading{margin:0 0 16px;color:var(--lunara-gold,#c9a961);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;}.lunara-footer-nav-col ul,.lunara-site-footer .menu{list-style:none!important;margin:0!important;padding:0!important;display:grid!important;gap:10px!important;}.lunara-footer-nav-col li,.lunara-site-footer .menu li{list-style:none!important;margin:0!important;padding:0!important;}.lunara-footer-nav-col a,.lunara-site-footer .menu a{display:inline-flex!important;align-items:center;min-height:38px;padding:8px 14px;border:1px solid rgba(201,169,97,.12);border-radius:999px;background:rgba(255,255,255,.02);color:var(--lunara-text,#FAFBFC)!important;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none!important;}.lunara-footer-nav-col a:hover,.lunara-site-footer .menu a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;}.lunara-footer-utility{display:flex;justify-content:space-between;gap:14px 18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text-muted,#A8A8B8);font-size:.78rem;}.lunara-footer-utility a{color:var(--lunara-text-muted,#A8A8B8)!important;text-decoration:none!important;}@media(max-width:900px){.lunara-footer-nav-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}@media(max-width:640px){.lunara-footer-nav-grid{grid-template-columns:1fr;}.lunara-footer-utility{justify-content:center;text-align:center;}}</style>' . "\n";
+    // Compatibility callback. The cacheable public guardrails own footer CSS.
 }
 // Phase 1C: behavior moved to cacheable route assets.
 
@@ -4242,22 +4238,21 @@ if ( ! function_exists( 'lunara_render_newsletter_signup' ) ) {
         ?>
         <section class="lunara-newsletter" aria-label="<?php esc_attr_e( 'Newsletter signup', 'lunara-film' ); ?>">
             <style>
-            .lunara-newsletter{width:min(100%,1080px);margin:clamp(40px,6vw,86px) auto;padding:clamp(28px,4vw,52px);box-sizing:border-box;border:1px solid rgba(201,169,97,.28);border-radius:20px;background:radial-gradient(circle at 88% 0%,rgba(201,169,97,.12),transparent 42%),linear-gradient(180deg,rgba(15,29,46,.92),rgba(8,16,27,.96));box-shadow:0 30px 70px rgba(0,0,0,.34);}
+            .lunara-newsletter{width:min(100%,1080px);margin:clamp(40px,6vw,86px) auto;padding:clamp(28px,4vw,52px) 20px;box-sizing:border-box;border:0;border-top:1px solid rgba(201,169,97,.28);border-radius:0;background:transparent;box-shadow:none;}
             .lunara-newsletter-inner{display:grid;gap:clamp(14px,2vw,20px);max-width:640px;margin-inline:auto;text-align:center;}
-            .lunara-newsletter-kicker{margin:0;color:var(--lunara-gold-light,#e0c481);font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;}
             .lunara-newsletter-heading{margin:0;color:var(--lunara-gold,#c9a961);font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.12;}
             .lunara-newsletter-blurb{margin:0 auto;max-width:52ch;color:rgba(223,228,234,.86);font-size:clamp(.95rem,1vw,1.05rem);line-height:1.6;}
             .lunara-newsletter-form{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px;}
-            .lunara-newsletter-input{flex:1 1 280px;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.34);border-radius:999px;background:rgba(5,11,18,.6);color:var(--lunara-text,#fafbfc);font-size:1rem;}
-            .lunara-newsletter-input::placeholder{color:rgba(223,228,234,.5);}
+            .lunara-newsletter-input{flex:1 1 280px;min-width:0;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.5);border-radius:3px;background:#0a1520;color:var(--lunara-text,#fafbfc);font-size:1rem;}
+            .lunara-newsletter-input::placeholder{color:#bac4ce;}
             .lunara-newsletter-input:focus{outline:none;border-color:rgba(224,196,129,.8);box-shadow:0 0 0 3px rgba(201,169,97,.18);}
-            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:999px;background:linear-gradient(135deg,#e0c481,#c9a961);color:#0a1525;font-family:var(--lunara-label-font,"Arial Narrow",sans-serif);font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease;}
-            .lunara-newsletter-submit:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(201,169,97,.32);}
-            .lunara-newsletter-fineprint{margin:0;color:rgba(223,228,234,.5);font-size:.76rem;}
-            @media(max-width:540px){.lunara-newsletter-form{flex-direction:column;align-items:stretch;}.lunara-newsletter-input{max-width:none;}}
+            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:3px;background:#e0c481;color:#0a1525;font-family:var(--lunara-font-label,serif);font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;transition:background-color .16s ease;}
+            .lunara-newsletter-submit:hover{background:#c9a961;}
+            .lunara-newsletter-submit:focus-visible{outline:2px solid #fafbfc;outline-offset:3px;}
+            .lunara-newsletter-fineprint{margin:0;color:#bac4ce;font-size:.8125rem;}
+            @media(max-width:540px){.lunara-newsletter-form{flex-direction:column;align-items:stretch;}.lunara-newsletter-input{flex:none;width:100%;max-width:none;}}
             </style>
             <div class="lunara-newsletter-inner">
-                <p class="lunara-newsletter-kicker"><?php esc_html_e( 'The Lunara Dispatch', 'lunara-film' ); ?></p>
                 <h2 class="lunara-newsletter-heading"><?php echo esc_html( $heading ); ?></h2>
                 <p class="lunara-newsletter-blurb"><?php echo esc_html( $blurb ); ?></p>
                 <form class="lunara-newsletter-form" action="<?php echo esc_url( $action ); ?>" method="post" target="_blank" rel="noopener">
@@ -5381,23 +5376,19 @@ function lunara_output_utility_search_studio_css() {
     body.search .lunara-search-oscar-card,
     body.search .lunara-search-empty-shell,
     body.error404 .lunara-404-panel {
-        background:
-            linear-gradient(135deg, rgba(201, 169, 97, .11), transparent 44%),
-            rgba(8, 22, 36, .92);
-        border: 1px solid rgba(201, 169, 97, .18);
-        box-shadow: 0 18px 44px rgba(0, 0, 0, .2);
+        background: transparent;
+        border: 0;
+        box-shadow: none;
         min-width: 0;
     }
 
     body.search .lunara-search-page--focus-ledger .lunara-search-oscar-shell,
     body.search .lunara-search-page--focus-reviews .lunara-search-results-shell,
     body.search .lunara-search-page--focus-journal .lunara-search-results-shell {
-        border: 1px solid var(--lunara-utility-focus-ring);
-        border-radius: 18px;
-        padding: clamp(16px, 2.4vw, 26px);
-        background:
-            linear-gradient(135deg, rgba(201, 169, 97, .08), transparent 45%),
-            rgba(6, 18, 31, .34);
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        background: transparent;
     }
 
     body.search .lunara-search-page--focus-reviews .lunara-search-results-head .lunara-home-section-kicker::after,
@@ -5431,8 +5422,8 @@ function lunara_output_utility_search_studio_css() {
     body.error404 .lunara-404-page--primary-journal .lunara-404-action--journal,
     body.error404 .lunara-404-page--primary-search .lunara-404-action--search,
     body.error404 .lunara-404-page--primary-home .lunara-404-action--home {
-        box-shadow: 0 0 0 1px rgba(201, 169, 97, .34), 0 18px 38px rgba(0, 0, 0, .22);
-        transform: translateY(-1px);
+        color: #07111b;
+        background: #c9a961;
     }
 
     body.search .lunara-search-empty-shell,
@@ -5909,10 +5900,10 @@ if ( ! function_exists( 'lunara_separate_review_from_editorial_archives' ) ) {
             return;
         }
 
-        // Journal entries and Reviews both carry post_tag, and their pages link to
-        // /tag/…/. A tag archive gathers everything filed under the tag; limiting it
-        // to Posts (of which there are none) left every tag link on an empty page.
-        if ( $query->is_tag() ) {
+        // Journal entries and Reviews share editorial taxonomies with ordinary Posts.
+        // Category and tag archives must include every eligible assigned type;
+        // limiting categories to Posts hid Reviews and reported a false zero total.
+        if ( $query->is_tag() || $query->is_category() ) {
             $query->set( 'post_type', array( 'journal', 'review', 'post' ) );
 
             if ( function_exists( 'lunara_apply_editorial_archive_sort_args' ) ) {
@@ -5932,7 +5923,7 @@ if ( ! function_exists( 'lunara_separate_review_from_editorial_archives' ) ) {
             return;
         }
 
-        if ( $query->is_home() || $query->is_category() || $query->is_author() || $query->is_date() ) {
+        if ( $query->is_home() || $query->is_author() || $query->is_date() ) {
             $query->set( 'post_type', 'post' );
 
             if ( function_exists( 'lunara_apply_editorial_archive_sort_args' ) ) {

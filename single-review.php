@@ -205,8 +205,8 @@ if ( have_posts() ) :
             <article <?php post_class( 'lunara-journal-single lunara-review-single' . ( $is_full_spoiler ? ' lunara-review-single--full-spoiler' : '' ) ); ?>>
                 <section class="lunara-review-single-hero" data-lunara-site-studio-section="hero">
                     <div class="lunara-review-single-hero-inner">
-                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $display_label ); ?></p>
                         <h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
+                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $display_label ); ?></p>
 
                         <?php if ( '' !== trim( $excerpt ) ) : ?>
                             <p class="lunara-review-single-excerpt"><?php echo esc_html( $excerpt ); ?></p>
@@ -392,8 +392,8 @@ if ( have_posts() ) :
                     <section class="lunara-home-section lunara-review-related lunara-review-related--retention<?php echo $is_full_spoiler ? ' lunara-spoiler-protected-content lunara-spoiler-protected-content--module' : ''; ?>"<?php echo $is_full_spoiler ? ' data-lunara-spoiler-protected data-lunara-spoiler-post="' . esc_attr( $post_id ) . '"' : ''; ?>>
                         <div class="lunara-home-section-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php echo esc_html( $related_kicker ); ?></p>
                                 <h2 class="lunara-section-title"><?php echo esc_html( get_theme_mod( 'lunara_review_related_title', __( 'More Lunara Criticism', 'lunara-film' ) ) ); ?></h2>
+                                <p class="lunara-home-section-kicker"><?php echo esc_html( $related_kicker ); ?></p>
                             </div>
                             <a class="lunara-section-link" href="<?php echo esc_url( $archive_url ); ?>">
                                 <?php esc_html_e( 'Open Reviews', 'lunara-film' ); ?>

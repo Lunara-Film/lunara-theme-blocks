@@ -50,6 +50,11 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                         footer:document.querySelectorAll('footer.lunara-site-footer').length,
                         columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>node.querySelectorAll('a').length),
                         footerLabels:[...document.querySelectorAll('.lunara-footer-nav-col a')].map(node=>node.textContent),
+                        footerPresentation:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({
+                            shadow:getComputedStyle(node).boxShadow,
+                            background:getComputedStyle(node).backgroundImage,
+                            labels:[...node.querySelectorAll('a,h2,h3,h4,p')].filter(visible).map(item=>parseFloat(getComputedStyle(item).fontSize))
+                        })),
                         bodyText:document.body.textContent,
                         titles:[...document.querySelectorAll('.lunara-search-result-title')].map(node=>node.textContent),
                         excerpts:[...document.querySelectorAll('.lunara-search-result-copy')].map(node=>({text:node.textContent,...rect(node)})),
@@ -69,6 +74,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 check(data.clipped.length===0, `${tag}: complete headings, labels and configured copy remain readable`, data.clipped);
                 check(data.controls.length>0&&data.controls.every(item=>item.height>=43.9&&item.width>=43.9), `${tag}: every public link, input and button has a44px target`, data.controls.filter(item=>item.height<43.9||item.width<43.9));
                 check(JSON.stringify(data.columns)===JSON.stringify(fixture.expected_columns), `${tag}: exact zero/one/twelve or inherited footer lists`, data.columns);
+                check(data.footerPresentation.every(group=>group.shadow==='none'&&group.background==='none'&&group.labels.every(size=>size>=13)), `${tag}: footer remains a flat directory with readable navigation`, data.footerPresentation);
                 if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);
                 if (!fixture.footer_only) {
