@@ -25,6 +25,26 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
+        // Use the actual emitted head seed while only the component stylesheet
+        // is withheld. Both stages must keep desktop controls compact and
+        // centered; phone controls must remain in document flow.
+        const deferredHtml = rendered.stdout.replace(/<link\b[^>]*href="\/assets\/css\/lunara-home-carousels\.css"[^>]*>/, '');
+        for (const width of [390,900,901,1440]) {
+            const page = await fixture(browser, { viewport:{width,height:1000}, reducedMotion:'no-preference' }, deferredHtml);
+            await page.waitForSelector('.lunara-home-curated-hero.is-initialized');
+            const toggleGeometry = () => page.locator('.lunara-home-curated-hero').evaluate(root=>{
+                const toggle=root.querySelector('.lunara-home-carousel-toggle'),r=root.getBoundingClientRect(),b=toggle.getBoundingClientRect(),track=root.querySelector('.splide__track').getBoundingClientRect();
+                return {position:getComputedStyle(toggle).position,width:b.width,height:b.height,axisDelta:Math.abs(b.left+b.width/2-r.left-r.width/2),bottomGap:r.bottom-b.bottom,top:b.top,trackBottom:track.bottom};
+            });
+            const initial = await toggleGeometry();
+            if(width>900)assert(initial.position==='absolute'&&initial.axisDelta<=1&&Math.abs(initial.bottomGap-64)<=1&&initial.width>0&&initial.width<160, `${width}px synchronous seed centers a compact out-of-flow toggle: ${JSON.stringify(initial)}`);
+            else assert(initial.position==='static',`${width}px desktop seed must not position the phone/tablet toggle: ${JSON.stringify(initial)}`);
+            await page.addStyleTag({url:'https://carousel.test/assets/css/lunara-home-carousels.css'});
+            const final = await toggleGeometry();
+            if(width>900)assert(final.position==='absolute'&&final.axisDelta<=1&&Math.abs(final.bottomGap-64)<=1&&final.width>=44&&final.width<160&&final.height>=44,`${width}px stylesheet delivery preserves compact centered desktop controls: ${JSON.stringify(final)}`);
+            else assert(final.position==='static'&&final.axisDelta<=1&&final.top>=final.trackBottom&&final.width>=44&&final.height>=44,`${width}px stylesheet delivery keeps centered controls in flow below the story: ${JSON.stringify(final)}`);
+            await page.close();
+        }
         for (const [width, columns] of [[1440,3], [820,2], [390,1]]) {
             const page = await fixture(browser, { viewport: { width, height: 1000 } });
             await page.waitForSelector('[data-lunara-journal-carousel].is-initialized');

@@ -95,8 +95,28 @@ img_assert( false === strpos( $other, 'srcset=' ) && false !== strpos( $other, '
 // ---- First-paint seeds ---------------------------------------------------------------------------
 $GLOBALS['img_route'] = array( 'front' => true );
 ob_start(); lunara_output_home_hero_geometry_css(); $seed = ob_get_clean();
-img_assert( false !== strpos( $seed, '@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}' ) && false !== strpos( $seed, '.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;' ) && false !== strpos( $seed, '.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;right:24px;bottom:16px;z-index:5}}' ), 'Splide-inserted hero controls and the toggle start out of flow on desktop.' );
-img_assert( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/assets/css/lunara-home-carousels.css' ), '.lunara-home-curated-hero .lunara-home-carousel-toggle { position: absolute; right: 24px; bottom: 16px; z-index: 5; }' ) && 1 === preg_match( '/@media \(max-width: 900px\)[^@]*\.lunara-home-curated-hero \.lunara-hero-arrows \{\s*position: static;/s', file_get_contents( dirname( __DIR__ ) . '/assets/css/lunara-home-carousels.css' ) ), 'The seed matches the desktop toggle and stays off the phone grid, where controls are in flow.' );
+$seed_document = new DOMDocument();
+$seed_document->loadHTML( $seed, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+$seed_style = $seed_document->getElementById( 'lunara-home-hero-geometry-css' );
+img_assert( $seed_style instanceof DOMElement, 'The homepage emits the synchronous hero style through its public head callback.' );
+$seed_css = $seed_style->textContent;
+img_assert( 1 === preg_match( '/@media\s*\(min-width:\s*901px\)\s*\{(.*)\}\s*$/s', $seed_css, $desktop_seed ), 'Control positioning is scoped to the desktop media query.' );
+$seed_rules = array();
+preg_match_all( '/([^{}]+)\{([^{}]+)\}/', $desktop_seed[1], $matches, PREG_SET_ORDER );
+foreach ( $matches as $match ) {
+	$properties = array();
+	foreach ( explode( ';', $match[2] ) as $declaration ) {
+		$pair = explode( ':', $declaration, 2 );
+		if ( count( $pair ) === 2 ) { $properties[ trim( $pair[0] ) ] = trim( $pair[1] ); }
+	}
+	$seed_rules[ trim( $match[1] ) ] = $properties;
+}
+foreach ( array( '.lunara-cinematic-hero-carousel .lunara-hero-arrows', '.lunara-cinematic-hero-carousel .lunara-hero-pagination', '.lunara-home-curated-hero .lunara-home-carousel-toggle' ) as $selector ) {
+	img_assert( 'absolute' === ( $seed_rules[ $selector ]['position'] ?? '' ), 'Desktop control stays out of document flow: ' . $selector );
+}
+$toggle_seed = $seed_rules['.lunara-home-curated-hero .lunara-home-carousel-toggle'];
+img_assert( '50%' === $toggle_seed['left'] && 'auto' === $toggle_seed['right'] && '64px' === $toggle_seed['bottom'] && 'translateX(-50%)' === $toggle_seed['transform'], 'The emitted desktop toggle is centered without a stretching opposite inset.' );
+img_assert( false === strpos( preg_replace( '/@media.*$/s', '', $seed_css ), 'lunara-home-carousel-toggle' ), 'The synchronous seed leaves phone toggle positioning to its in-flow layout.' );
 img_assert( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/style.css' ), ".lunara-cinematic-hero {\n    /* Single tunable hero height — contained, never full-screen. */\n    --lunara-hero-height: clamp(360px, 54vh, 600px);\n    position: relative;" ), 'The seed restates the hero root position the final stylesheet already sets.' );
 ob_start(); lunara_output_entity_geometry_css(); img_assert( '' === ob_get_clean(), 'The dossier seed stays off the homepage.' );
 foreach ( array( 'movie', 'person' ) as $type ) {

@@ -20,7 +20,7 @@
 .lunara-home-carousel-toggle:focus-visible,
 .lunara-home-journal-carousel button:focus-visible,
 .lunara-home-news-card a:focus-visible { outline: 2px solid #e0c481; outline-offset: 3px; }
-.lunara-home-curated-hero .lunara-home-carousel-toggle { position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%); z-index: 5; }
+.lunara-home-curated-hero .lunara-home-carousel-toggle { position: absolute; left: 50%; right: auto; bottom: 64px; transform: translateX(-50%); z-index: 5; }
 .lunara-home-curated-hero:not(.is-initialized) .lunara-home-carousel-toggle,
 .lunara-home-journal-carousel:not(.is-initialized) .lunara-home-carousel-toggle { display: none; }
 .lunara-home-curated-hero .lunara-hero-pagination { left: 90px; right: 90px; flex-wrap: wrap; }

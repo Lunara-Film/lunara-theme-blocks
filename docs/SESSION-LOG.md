@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-12 — Home initial-layout symmetry correction
+
+- **Shipped:** Theme 3.2.108 candidate follow-up only. Required CI 38321068673 caught the old right-anchored Home carousel toggle in the synchronous geometry seed. Its canonical desktop CSS and seed now agree on a compact centered control; the phone control remains in normal flow. The affected existing browser gate measures initial and final geometry, and the PHP check inspects emitted output instead of pinning source text.
+- **Live:** unchanged. Ledger 2.8.25 complete CI 38320967124 passed at `69066db`. The earlier Theme failure is preserved; its replacement exact-commit CI result belongs in draft PR #231 and the local symmetry report.
+- **Holding:** Codex owns the combined candidate. This correction addresses a concrete failure; no whole-site audit, unrelated capture set or closed performance cohort is repeated. Existing budgets, tolerances and exclusions remain intact.
+- **Next:** require passing CI on the corrected Theme commit, then Dalton reviews the combined desktop/phone gallery before the established plugin-before-Theme release sequence and versioned public acceptance.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. Local gallery/browser evidence is not production acceptance. No main merge, deployment, production setting change or cache clear occurred.
+
 ## 2026-10-12 — Centered editorial and Oscars composition
 
 - **Shipped:** candidates only: Theme 3.2.108 and Ledger 2.8.25 center page identities, headings, artwork and reading columns; remove the unused Review side rail; balance partial card rows; center shared navigation/footer and standalone actions. Existing article, record, artwork and settings ownership remains intact. The Explorer no-JavaScript Apply action received a final measured correction after visual review. Existing drafts Theme #231 and Ledger #55 carry this continuation.

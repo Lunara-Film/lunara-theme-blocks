@@ -530,10 +530,10 @@ function lunara_output_home_hero_geometry_css() {
     // Splide inserts the arrows and pagination at mount, beside the Play/Pause
     // toggle. On desktop their positioning lives only in deferred CSS, so until it
     // arrived they sat in normal flow and pushed the page down (measured CLS 0.98).
-    // Take them out of flow here; the later stylesheets set the same properties and
-    // refine the offsets. Phones (900px and below) deliberately place the controls
+    // Match the centered desktop toggle without retaining a legacy right inset.
+    // Phones (900px and below) deliberately place the controls
     // in the grid's flow, so the seed leaves them alone there.
-    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;left:0;right:0;bottom:28px;z-index:4;margin:0;padding:0}.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;right:24px;bottom:16px;z-index:5}}</style>';
+    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;left:0;right:0;bottom:28px;z-index:4;margin:0;padding:0}.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;left:50%;right:auto;bottom:64px;transform:translateX(-50%);z-index:5}}</style>';
 }
 add_action( 'wp_head', 'lunara_output_home_hero_geometry_css', 2 );
 
