@@ -68,6 +68,8 @@
 
 #primary.lunara-journal-archive-page > .lunara-journal-archive-slot-hero {
     align-content: center !important;
+    justify-items: center !important;
+    text-align: center;
     background: none !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -115,6 +117,7 @@
 
 #primary.lunara-journal-archive-page > .lunara-journal-archive-slot-deskbar {
     align-items: center !important;
+    justify-content: center !important;
     background: none !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -165,6 +168,7 @@
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-filters {
     align-items: center !important;
+    justify-content: center !important;
     background: none !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -304,8 +308,10 @@
     font-family: var(--lunara-font-body, "Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", "Palatino Linotype", serif) !important;
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     max-width: 64ch !important;
+    width: 100% !important;
+    text-align: center;
 }
 
 #primary.lunara-journal-archive-page .lunara-archive-sort {
@@ -313,7 +319,7 @@
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 10px !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
     background: none !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -407,6 +413,7 @@
 }
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-title {
+    text-align: center;
     max-width: 100% !important;
     overflow-wrap: anywhere !important;
     text-wrap: pretty;
@@ -435,6 +442,7 @@
 
 #primary.lunara-journal-archive-page .lunara-journal-card-provenance {
     align-items: center !important;
+    justify-content: center !important;
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 6px !important;
@@ -563,6 +571,8 @@
 }
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-retention-head {
+    align-items: center !important;
+    text-align: center;
     display: flex !important;
     flex-direction: column !important;
     gap: 8px !important;
@@ -607,6 +617,7 @@
 }
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-retention-kicker {
+    text-align: center;
     color: rgba(224, 196, 129, 0.9) !important;
     font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
     font-size: 0.8125rem !important;
@@ -617,6 +628,7 @@
 }
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-retention-card-link > .lunara-journal-archive-retention-title {
+    text-align: center;
     color: rgba(255, 243, 212, 0.98) !important;
     font-family: var(--lunara-font-display, "Tiempos Headline", "Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", serif) !important;
     font-size: clamp(1rem, 1.35vw, 1.18rem) !important;
@@ -692,6 +704,8 @@
 }
 
 #primary.lunara-journal-archive-page .lunara-journal-archive-gallery-head {
+    justify-items: center !important;
+    text-align: center;
     display: grid !important;
     gap: 7px !important;
     min-width: 0 !important;
@@ -776,6 +790,7 @@
 
 #primary.lunara-journal-archive-page > .lunara-journal-archive-slot-pagination {
     align-items: center !important;
+    justify-content: center !important;
     display: flex !important;
     flex-wrap: wrap !important;
     font-family: var(--lunara-font-body, "Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", "Palatino Linotype", serif) !important;
@@ -811,21 +826,30 @@
     text-decoration: none !important;
 }
 
-/* The newest edition has a lead and two supporting stories. Older/filter
-   results keep the uniform index; missing artwork keeps its editorial place. */
+/* Center incomplete rows without changing source order or stretching a
+   solitary story. The newest edition places its lead on the central axis. */
+@media (min-width: 641px) {
+    #primary.lunara-journal-archive-page > .lunara-journal-archive-slot-grid > .lunara-journal-archive-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1 !important;
+        width: calc((100% - var(--lunara-journal-archive-grid-gap, 24px)) / 2) !important;
+        justify-self: center;
+    }
+}
 @media (min-width: 981px) {
     #primary.lunara-journal-archive-page > .is-editorial-edition {
-        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-
-        & > .lunara-journal-archive-card {
-            grid-column: span 3 !important;
+        & > .lunara-journal-archive-card:last-child:nth-child(odd) {
+            grid-column: auto !important;
+            width: 100% !important;
         }
-        & > .lunara-journal-archive-card:nth-child(-n + 3) {
-            grid-column: span 2 !important;
+        & > .lunara-journal-archive-card:last-child:nth-child(even) {
+            grid-column: 1 / -1 !important;
+            width: calc((100% - var(--lunara-journal-archive-grid-gap, 24px)) / 2) !important;
+            justify-self: center;
         }
         & > .lunara-journal-archive-card.is-lead {
-            grid-column: span 4 !important;
-            grid-row: span 2 !important;
+            grid-column: 1 / -1 !important;
+            max-width: 860px !important;
+            justify-self: center;
         }
         & > .is-lead .lunara-review-grid-title {
             font-size: calc(var(--lunara-journal-archive-lead-title, 1.72rem) * 1.6) !important;
@@ -837,18 +861,10 @@
             max-height: none !important;
             overflow: visible !important;
             max-width: 58ch;
+            margin-inline: auto !important;
         }
         & > .is-lead .lunara-review-grid-footer {
             margin: 12px 0 0 !important;
-        }
-        & > .has-media:nth-child(n + 4) .lunara-review-grid-link {
-            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) !important;
-            grid-template-rows: auto !important;
-            gap: 20px;
-            align-items: start;
-        }
-        & > :nth-child(n + 4) .lunara-review-grid-copy {
-            padding: 0 0 24px !important;
         }
     }
 }
@@ -859,7 +875,7 @@
     }
 
     #primary.lunara-journal-archive-page .lunara-archive-sort {
-        justify-content: flex-start !important;
+        justify-content: center !important;
     }
 
     #primary.lunara-journal-archive-page > .lunara-journal-archive-slot-grid {
@@ -991,6 +1007,8 @@
 #primary.lunara-journal-archive-page .lunara-journal-card-labels {
     align-content: start !important;
     align-items: start !important;
+    justify-content: center !important;
+    text-align: center;
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 8px !important;

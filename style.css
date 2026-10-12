@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.107
+Version: 3.2.108
 Template: blocksy
 Requires at least: 6.0
 Tested up to: 6.4
@@ -1699,14 +1699,16 @@ h1, h2, h3, h4, h5, h6,
 
 .lunara-home-section-head {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 18px;
     margin-bottom: 20px;
 }
 
 .lunara-home-section-title {
-    margin: 0;
+    margin: 0 auto;
     color: var(--lunara-gold) !important;
     font-size: clamp(1.7rem, 3vw, 2.3rem);
     line-height: 1.05;
@@ -2146,7 +2148,8 @@ footer.site-footer .lunara-footer-copyright {
 
 .lunara-footer-nav-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    text-align: center;
     gap: 32px;
 }
 
@@ -2161,6 +2164,7 @@ footer.site-footer .lunara-footer-copyright {
 }
 
 .lunara-footer-nav-col ul {
+    justify-items: center;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -2171,6 +2175,7 @@ footer.site-footer .lunara-footer-copyright {
 .lunara-footer-nav-col a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     min-height: 44px !important;
     max-width: 100%;
     overflow-wrap: anywhere;
@@ -2207,7 +2212,9 @@ footer.site-footer .lunara-footer-copyright {
 
 .lunara-footer-utility {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
     align-items: center;
     padding-top: 24px;
     border-top: 1px solid var(--lunara-border);
@@ -2230,12 +2237,7 @@ footer.site-footer .lunara-footer-copyright {
     gap: 16px;
 }
 
-/* Footer responsive */
-@media (max-width: 900px) {
-    .lunara-footer-nav-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+/* Three balanced directory columns become one centered phone stack. */
 
 @media (max-width: 640px) {
     .lunara-site-footer {
@@ -3795,10 +3797,11 @@ footer.site-footer .lunara-footer-copyright {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 88px;
     height: 1px;
-    background: linear-gradient(90deg, rgba(201,169,97,.42), rgba(201,169,97,.08));
+    background: rgba(201,169,97,.3);
 }
 
 .lunara-review-single-content .lunara-review-visual--body {
@@ -5008,7 +5011,7 @@ footer.site-footer .lunara-footer-copyright {
 }
 
 .lunara-review-related .lunara-home-section-head {
-    align-items: start;
+    align-items: center;
     position: relative;
     z-index: 1;
 }
@@ -5141,7 +5144,7 @@ footer.site-footer .lunara-footer-copyright {
 @media (max-width: 640px) {
     .lunara-home-section-head {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .lunara-ledger-grid,
@@ -5805,11 +5808,11 @@ footer.site-footer .lunara-footer-copyright {
     color: var(--lunara-gold-light);
 }
 .lunara-home-section-head.is-with-summary {
-    align-items: flex-start;
+    align-items: center;
 }
 .lunara-home-section-summary {
     max-width: 760px;
-    margin: 12px 0 0;
+    margin: 12px auto 0;
     color: #FAFBFC;
     font-size: 1rem;
     line-height: 1.72;
@@ -6198,7 +6201,7 @@ footer.site-footer .lunara-footer-copyright {
     gap: 24px;
 }
 .lunara-dispatch-single .lunara-editorial-related .lunara-home-section-head {
-    align-items: end;
+    align-items: center;
 }
 .lunara-dispatch-rail-excerpt {
     font-size: .95rem;
@@ -8794,12 +8797,14 @@ body.single-review .lunara-review-single-content blockquote {
 
 .lunara-home-section-head,
 .lunara-home-section-head.is-with-summary {
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 6px;
 }
 
 .lunara-home-section-head > div:first-child {
     display: grid;
+    justify-items: center;
+    min-width: 0;
     gap: 10px;
 }
 
@@ -9806,7 +9811,7 @@ body.single-review .lunara-review-single-content blockquote {
 
 .lunara-footer-utility {
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 14px 18px;
 }
 
@@ -9817,7 +9822,7 @@ body.single-review .lunara-review-single-content blockquote {
 }
 
 .lunara-footer-copyright::before {
-    content: "";
+    content: none;
     width: 8px;
     height: 8px;
     border-radius: 999px;
@@ -10016,28 +10021,9 @@ div[class*="likes-widget"],
     padding-top: 24px;
 }
 
-.lunara-front-page .lunara-home-section + .lunara-home-section::before {
-    content: "\25C6";
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(201,169,97,.4);
-    font-size: 0.8125rem;
-    line-height: 1;
-    z-index: 2;
-}
-
+.lunara-front-page .lunara-home-section + .lunara-home-section::before,
 .lunara-front-page .lunara-home-section + .lunara-home-section::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(280px, 40%);
-    height: 1px;
-    background: transparent;
-    z-index: 1;
+    content: none;
 }
 
 /* ─── Oscars portal: tighter section spacing, no separators, no image fade ─── */
@@ -12184,7 +12170,7 @@ body.lunara-panel-open::after {
 
 @media (max-width: 900px) {
     .lunara-hero-carousel-section .lunara-home-section-head {
-        align-items: flex-start;
+        align-items: center;
         gap: 14px;
     }
 
@@ -14794,7 +14780,7 @@ body.post-type-archive-review .lunara-archive-page .lunara-reveal {
 
 body.home .lunara-home-section-head {
     width: 100%;
-    align-items: end;
+    align-items: center;
     gap: 18px;
 }
 
@@ -14939,7 +14925,7 @@ body.home .lunara-journal-home-card-excerpt {
     }
 
     body.home .lunara-home-section-head {
-        align-items: start;
+        align-items: center;
     }
 
     body.home .lunara-latest-reviews-section .lunara-review-grid,

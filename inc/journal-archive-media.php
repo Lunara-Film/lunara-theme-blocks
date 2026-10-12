@@ -65,12 +65,7 @@ if ( ! function_exists( 'lunara_journal_archive_card_image_sizes' ) ) {
 
 		$content = 'min(100vw, 1180px) - clamp(40px, 8vw, 80px)';
 		$regular = sprintf( 'calc((%s - %dpx) / 2)', $content, $gap );
-		$desktop = 'lead' === $slot
-			? sprintf( 'calc((%s - %dpx) / 3 * 2 + %dpx)', $content, 2 * $gap, $gap )
-			: ( 'supporting' === $slot ? sprintf( 'calc((%s - %dpx) / 3)', $content, 2 * $gap ) : $regular );
-		if ( 'index' === $slot ) {
-			$desktop = sprintf( 'calc(((%s - %dpx) / 2 - 20px) / 3)', $content, $gap );
-		}
+		$desktop = 'lead' === $slot ? sprintf( 'min(calc(%s), 860px)', $content ) : $regular;
 		return sprintf( '(max-width: 640px) calc(100vw - 40px), (max-width: 768px) calc((100vw - %dpx) / 2), (max-width: 980px) %s, %s', 40 + $gap, $regular, $desktop );
 	}
 }

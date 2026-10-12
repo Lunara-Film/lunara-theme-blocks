@@ -36,8 +36,21 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
                 titles: Array.from(document.querySelectorAll('[data-lunara-journal-carousel] .lunara-home-news-copy h3')).map(el => el.scrollWidth <= el.clientWidth + 1)
             }));
             assert(metrics.visible === columns, `${width}px should display ${columns} news cards: ${JSON.stringify(metrics)}`);
+            const sectionAxes = await page.locator('.lunara-home-section-head').evaluateAll(heads => heads.flatMap(head => {
+                const axis = head.getBoundingClientRect().left + head.getBoundingClientRect().width / 2;
+                return [...head.querySelectorAll('.lunara-home-section-title,.lunara-section-link')].map(node => {
+                    const box = node.getBoundingClientRect(); return { text:node.textContent.trim(), delta:Math.abs(box.left+box.width/2-axis) };
+                });
+            }));
+            assert(sectionAxes.length > 0 && sectionAxes.every(item=>item.delta<=1), `${width}px actual carousel section titles/actions share the centered header axis: ${JSON.stringify(sectionAxes)}`);
             assert(metrics.scroll <= metrics.width + 1 && metrics.titles.every(Boolean), `${width}px must not overflow or clip long headlines.`);
             assert(metrics.cards.every(card => Math.abs(card.height - metrics.cards[0].height) < 2), `${width}px news cards must have consistent heights.`);
+            const centered = await page.evaluate(() => {
+                const hero=document.querySelector('.lunara-home-curated-hero .is-active'),title=hero.querySelector('.lunara-cinematic-hero-title'),a=hero.getBoundingClientRect(),b=title.getBoundingClientRect();
+                const journal=document.querySelector('[data-lunara-journal-carousel]'),p=journal.querySelector('.splide__pagination'),r=journal.getBoundingClientRect(),q=p.getBoundingClientRect();
+                return {hero:Math.abs(a.x+a.width/2-b.x-b.width/2),titleAlign:getComputedStyle(title).textAlign,pagination:Math.abs(r.x+r.width/2-q.x-q.width/2)};
+            });
+            assert(centered.hero<=1&&centered.titleAlign==='center'&&centered.pagination<=1,`${width}px hero title and Journal navigation must share their composition axis: ${JSON.stringify(centered)}`);
             const arrowDirection = await page.evaluate(() => ['.lunara-hero-arrow-prev svg','.lunara-hero-arrow-next svg'].map(selector => {
                 const transform = getComputedStyle(document.querySelector(selector)).transform;
                 const matrix = transform === 'none' ? new DOMMatrix() : new DOMMatrix(transform);
@@ -180,6 +193,22 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
         const singleReviews=await fixture(browser,{viewport:{width:390,height:1000}},singleReviewsHtml);
         assert(await singleReviews.locator('[data-lunara-reviews-carousel] article:visible').count()===1&&await singleReviews.locator('[data-lunara-reviews-carousel] button:visible').count()===0,'One Review is a static readable card without navigation.');
         await singleReviews.close();
+        for (const [count, javaScriptEnabled] of [[1,true],[2,true],[5,false]]) {
+            const partialHtml = rendered.stdout.replace(/<section\b[^>]*lunara-home-curated-journal[\s\S]*?<\/section>/, section => {
+                let seen = 0;
+                return section.replace(/<li\b[\s\S]*?<\/li>/g, slide => seen++ < count ? slide : '');
+            });
+            const partial = await fixture(browser, { viewport:{width:1440,height:1000}, javaScriptEnabled }, partialHtml);
+            const balance = await partial.evaluate(() => {
+                const root = document.querySelector('[data-lunara-journal-carousel]');
+                const bounds = root.getBoundingClientRect();
+                const cards = [...root.querySelectorAll('.splide__slide')].map(node => node.getBoundingClientRect());
+                const last = cards.at(-1), row = cards.filter(box => Math.abs(box.top-last.top)<1);
+                return { count:cards.length, delta:Math.abs((row[0].left+last.right)/2-(bounds.left+bounds.right)/2), overflow:document.documentElement.scrollWidth-innerWidth };
+            });
+            assert(balance.count===count && balance.delta<=1 && balance.overflow<=1, `Partial Journal rows remain centered with all ${count} stories (${javaScriptEnabled?'runtime':'no JavaScript'}): ${JSON.stringify(balance)}`);
+            await partial.close();
+        }
         const reduced = await fixture(browser, { viewport: { width: 390, height: 1000 }, reducedMotion: 'reduce' });
         assert(await reduced.locator('.splide__toggle:visible').count() === 0, 'Reduced motion must disable automatic playback controls.');
         assert(await reduced.locator('.lunara-home-curated-hero .is-active').count() >= 1, 'Reduced motion must leave readable hero content.');

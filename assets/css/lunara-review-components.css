@@ -44,6 +44,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     }
 
     .lunara-pair-cards-head {
+        text-align: center;
         margin: 0 0 clamp(18px, 2.4vw, 26px);
         padding: 0 0 14px;
         border-bottom: 1px solid rgba(201, 169, 97, 0.2);
@@ -97,7 +98,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         align-items: stretch;
     }
 
-    @media (min-width: 880px) {
+    @media (min-width: 681px) {
         .lunara-pair-cards-grid[data-count="3"] {
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
@@ -187,6 +188,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     }
 
     .lunara-pair-card-role {
+        text-align: center;
         margin: 0;
         color: var(--lunara-gold, #c9a961);
         font-family: var(--lunara-label-font, "Bebas Neue", "Arial Narrow", sans-serif);
@@ -198,6 +200,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     }
 
     .lunara-pair-card-title {
+        text-align: center;
         margin: 0;
         font-family: var(--lunara-body-font, Georgia, serif);
         font-size: clamp(1.2rem, 1.65vw, 1.5rem);
@@ -234,6 +237,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     }
 
     .lunara-pair-card-chips {
+        justify-content: center;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -341,6 +345,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         .lunara-pair-card-poster {
             aspect-ratio: 2 / 3;
             width: min(100%, 220px);
+            margin-inline: auto;
             height: auto;
             align-self: start;
         }
@@ -383,11 +388,11 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pairing-desk-backdrop{background-position:var(--lunara-method-x,50%) var(--lunara-method-y,26%);background-size:var(--lunara-method-fit,cover);background-repeat:no-repeat;filter:saturate(.9);inset:-4%;position:absolute;transform:scale(var(--lunara-method-zoom,1));z-index:0}
 .lunara-pairing-desk-overlay{background:linear-gradient(180deg,rgba(5,12,21,.88),rgba(7,16,27,.8) 42%,rgba(4,10,18,.95));inset:0;position:absolute;z-index:1}
 .lunara-pairing-desk-inner{position:relative;z-index:2}
-.lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,max-content) minmax(280px,42ch);justify-content:start;gap:14px clamp(38px,5vw,72px);align-items:end;margin-bottom:18px}
+.lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:14px;align-items:center;margin-bottom:18px;text-align:center}
 .lunara-pairing-desk-claim{display:inline-block;margin:0 0 12px;padding:6px 13px;border:0;background:transparent;color:#e8d9b0;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:.85rem;letter-spacing:.32em;text-transform:uppercase}
-.lunara-pairing-desk-head .lunara-home-section-title{margin-bottom:0;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
-.lunara-pairing-desk-thesis{margin:16px 0 0;max-width:24ch;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-display,"Tiempos Headline",serif);font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.25;text-wrap:balance}
-.lunara-pairing-desk-intro{display:grid;gap:10px;align-content:end;padding-bottom:4px}
+.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
+.lunara-pairing-desk-thesis{margin:16px auto 0;max-width:24ch;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-display,"Tiempos Headline",serif);font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.25;text-wrap:balance}
+.lunara-pairing-desk-intro{display:grid;max-width:56ch;margin-inline:auto;gap:10px;align-content:end;padding-bottom:4px}
 .lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:.97rem;line-height:1.6;text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .lunara-pairing-desk-source{margin:0;color:rgba(244,239,227,.74);font-size:.88rem}
 .lunara-pairing-desk-source a{color:var(--lunara-gold-light,#eadbb3);text-decoration:none;border-bottom:1px solid rgba(201,169,97,.4);transition:color .2s ease, border-color .2s ease}
@@ -460,51 +465,35 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 /* Phones: the card text was squeezed to ~100px. The Customizer's Additional CSS
    pads the body 28px a side at every width, and `body.single-review article p`
    inflates the role label to 18px, so "Counter-Program" broke into four lines.
-   Selectors outrank the Customizer rule (0,3,3) without editing it. The poster
-   sits beside the role and title; the note and chips take the full card width. */
+   Selectors outrank the Customizer rule (0,3,3) without editing it. The poster,
+   role and title now share a center; the full-width note keeps its reading alignment. */
 @media (max-width: 560px) {
     html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card {
-        grid-template-columns: 84px minmax(0, 1fr);
-        column-gap: 14px;
-        row-gap: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
         padding: 20px 0;
         align-items: start;
     }
 
     html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-body {
-        display: contents;
-        padding: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 18px 0 0;
     }
 
     html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-poster {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        width: 84px;
+        width: min(100%, 220px);
+        margin-inline: auto;
         border-radius: 0;
         overflow: hidden;
     }
 
     html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-role {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: end;
         margin: 0 0 6px;
         font-size: 0.8125rem;
         letter-spacing: 0;
         line-height: 1.4;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-title {
-        grid-column: 2;
-        grid-row: 2;
-        align-self: start;
-        margin: 0;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note,
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-chips,
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-watch {
-        grid-column: 1 / -1;
     }
 
     html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note {

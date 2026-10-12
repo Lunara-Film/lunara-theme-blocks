@@ -328,6 +328,20 @@ body.single-review .lunara-review-single-meta > span::after {
     }
 
 /* lunara-review-reader-spine-css */
+    body.single-review .lunara-review-single-hero-inner {
+        margin-inline: auto !important;
+        justify-items: center !important;
+        text-align: center !important;
+    }
+
+    body.single-review .lunara-review-single-excerpt {
+        margin-inline: auto !important;
+    }
+
+    body.single-review .lunara-review-single-meta {
+        justify-content: center !important;
+    }
+
     body.single-review .lunara-review-single-body {
         margin-inline: auto !important;
         background: transparent !important;
@@ -341,8 +355,29 @@ body.single-review .lunara-review-single-meta > span::after {
     }
 
     body.single-review .lunara-review-single-content {
+        order: 0 !important;
         margin-inline: auto !important;
         max-width: 70ch !important;
+    }
+
+    body.single-review .lunara-review-single-content h2,
+    body.single-review .lunara-review-single-content h3 {
+        text-align: center !important;
+    }
+
+    body.single-review .lunara-review-single-body-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.single-review .lunara-review-single-rail {
+        order: 1 !important;
+        width: min(100%, 70ch) !important;
+        margin-inline: auto !important;
+    }
+
+    body.single-review .lunara-review-single-rail-sticky {
+        position: static !important;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)) !important;
     }
 
     body.single-review .lunara-review-single-content h2,
@@ -409,7 +444,7 @@ body.single-review .lunara-review-single-content blockquote {
 
         body.single-review .lunara-review-single-body-grid {
             display: grid !important;
-            grid-template-columns: minmax(0, 820px) minmax(220px, 270px) !important;
+            grid-template-columns: minmax(0, 1fr) !important;
             justify-content: center !important;
             gap: clamp(30px, 3.2vw, 48px) !important;
         }
@@ -432,7 +467,7 @@ body.single-review .lunara-review-single-content blockquote {
         }
 
         body.single-review .lunara-review-single-rail {
-            max-width: 270px !important;
+            max-width: 70ch !important;
         }
 
         body.single-review .lunara-review-single-rail-sticky {
@@ -637,7 +672,7 @@ body.single-review .lunara-review-single-content blockquote {
 
     @media (min-width: 1040px) {
         body.single-review .lunara-review-single-body-grid {
-            grid-template-columns: minmax(0, 720px) minmax(220px, 270px) !important;
+            grid-template-columns: minmax(0, 1fr) !important;
             justify-content: center !important;
             gap: clamp(34px, 4vw, 64px) !important;
         }
@@ -869,7 +904,7 @@ body.single-review .lunara-review-related {
         }
 
         body.single-review .lunara-review-single-rail {
-            display: none !important;
+            display: block !important;
         }
 
         body.single-review .lunara-review-single-rail-sticky {

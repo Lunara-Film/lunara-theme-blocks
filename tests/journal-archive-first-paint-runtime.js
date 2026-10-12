@@ -478,7 +478,18 @@ async function assertEditionGeometry(browser) {
                 const leadUnclipped = excerpt.scrollHeight <= excerpt.clientHeight + 1 && excerptStyle.maxHeight === 'none';
                 const slotWidth = slot => {
                     // Split only at top-level commas; min()/clamp() have commas too.
-                    const alternatives = sizes[slot].split(/, (?=\(|calc)/);
+                    const alternatives = [];
+                    let depth = 0, start = 0;
+                    for (let i = 0; i < sizes[slot].length; i++) {
+                        const character = sizes[slot][i];
+                        if (character === '(') depth++;
+                        if (character === ')') depth--;
+                        if (character === ',' && depth === 0) {
+                            alternatives.push(sizes[slot].slice(start, i).trim());
+                            start = i + 1;
+                        }
+                    }
+                    alternatives.push(sizes[slot].slice(start).trim());
                     const selected = alternatives.find(value => !value.startsWith('(max-width:') || matchMedia(value.slice(0, value.indexOf(')') + 1)).matches);
                     const cssWidth = selected.replace(/^\(max-width:[^)]+\) /, '');
                     const probe = document.createElement('div');
@@ -488,12 +499,19 @@ async function assertEditionGeometry(browser) {
                     probe.remove();
                     return width;
                 };
-                return { rects, leadUnclipped, deltas: mediaWidths.map((width, index) => width === null ? 0 : Math.abs(width - slotWidth(index === 0 ? 'lead' : index < 3 ? 'supporting' : 'index'))) };
+                const box = grid.getBoundingClientRect();
+                const axis = box.x + box.width / 2;
+                const controls = ['.lunara-archive-hero-title','.lunara-journal-archive-slot-deskbar','.lunara-archive-sort','.lunara-journal-archive-slot-pagination'].map(selector => {
+                    const node=document.querySelector(selector),r=node.getBoundingClientRect();return {selector,delta:Math.abs(r.x+r.width/2-axis)};
+                });
+                return { rects, axis, controls, leadUnclipped, deltas: mediaWidths.map((width, index) => width === null ? 0 : Math.abs(width - slotWidth(index === 0 ? 'lead' : index < 3 ? 'supporting' : 'index'))) };
             }, headCss.sizes);
             if (geometry.deltas.some(delta => delta > 1)) throw new Error(`Image slot mismatch at ${width}/${density}: ${JSON.stringify(geometry)}`);
+            if(geometry.controls.some(item=>item.delta>1))throw new Error(`Journal identity/control groups must share the page axis: ${JSON.stringify(geometry)}`);
             if (width > 980) {
                 const [lead, second, third, fourth] = geometry.rects;
-                if (!geometry.leadUnclipped || lead.width < second.width * 1.9 || Math.abs(lead.y - second.y) > 1 || Math.abs(second.x - third.x) > 1 || third.y <= second.y || fourth.y < lead.y + lead.height - 1) throw new Error(`Edition hierarchy failed: ${JSON.stringify(geometry)}`);
+                const last=geometry.rects.at(-1),center=r=>r.x+r.width/2;
+                if (!geometry.leadUnclipped || lead.width <= second.width || Math.abs(center(lead)-geometry.axis)>1 || Math.abs(second.y-third.y)>1 || Math.abs((second.x+third.right)/2-geometry.axis)>1 || second.y < lead.bottom-1 || fourth.y < second.bottom-1 || Math.abs(center(last)-geometry.axis)>1) throw new Error(`Centered edition hierarchy and incomplete row failed: ${JSON.stringify(geometry)}`);
             }
             await testPage.context.close();
             checks++;

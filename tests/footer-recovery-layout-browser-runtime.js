@@ -66,6 +66,12 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                                 outside:[...node.querySelectorAll('input:not([type=hidden]),button')].filter(visible).map(child=>({selector:label(child),...rect(child)})).filter(child=>child.left<left-1||child.right>right+1)};
                         }),
                         footerBox:rect(document.querySelector('.lunara-site-footer')),
+                        footerGeometry:{
+                            frame:rect(document.querySelector('.lunara-footer-inner')),
+                            nav:rect(document.querySelector('.lunara-footer-nav-grid')),
+                            columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),links:[...node.querySelectorAll('a')].map(rect)})),
+                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-copyright,.lunara-footer-legal')].filter(visible).map(rect)
+                        },
                     };
                 });
                 const tag=`${name}@${width}`;
@@ -75,6 +81,11 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 check(data.controls.length>0&&data.controls.every(item=>item.height>=43.9&&item.width>=43.9), `${tag}: every public link, input and button has a44px target`, data.controls.filter(item=>item.height<43.9||item.width<43.9));
                 check(JSON.stringify(data.columns)===JSON.stringify(fixture.expected_columns), `${tag}: exact zero/one/twelve or inherited footer lists`, data.columns);
                 check(data.footerPresentation.every(group=>group.shadow==='none'&&group.background==='none'&&group.labels.every(size=>size>=13)), `${tag}: footer remains a flat directory with readable navigation`, data.footerPresentation);
+                const centered = (box,center) => Math.abs((box.left+box.right)/2-center)<=1;
+                const geometry=data.footerGeometry;
+                check(centered(geometry.frame,width/2)&&centered(geometry.nav,width/2)&&geometry.closing.every(box=>centered(box,width/2)), `${tag}: shared footer frame, brand and closing groups share the page center`, geometry);
+                check(geometry.columns.every(column=>column.links.every(link=>centered(link,(column.box.left+column.box.right)/2))), `${tag}: each footer link is centered in its directory column`, geometry.columns);
+                check(width<=640 ? geometry.columns.every(column=>centered(column.box,width/2)) : Math.abs(geometry.columns[0].box.left-(width-geometry.columns[2].box.right))<=1&&Math.abs((geometry.columns[0].box.width)-(geometry.columns[2].box.width))<=1&&centered(geometry.columns[1].box,width/2), `${tag}: directory columns have symmetric gutters and a centered final phone stack`, geometry.columns);
                 if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);
                 if (!fixture.footer_only) {

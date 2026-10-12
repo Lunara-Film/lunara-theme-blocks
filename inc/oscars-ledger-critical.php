@@ -18,10 +18,10 @@
  *      changes there it must change here in the same commit.
  *   2. lunara_oscars_ledger_critical_css() — a compact structural seed that
  *      reserves the plugin's own geometry (container width, hub header grid,
- *      hub/winner-circle grid columns, entity/ceremony hero columns) before a
+ *      hub/winner-circle grid columns, entity/ceremony hero stacks) before a
  *      deferred plugin aggregate settles. Every metric is copied from the
  *      plugin's stylesheets (academy-awards-table.css, ceremony-dossier.css);
- *      nothing here is invented, and the plugin files remain untouched.
+ *      the seed follows the current canonical component owners.
  *
  * It also owns the ledger label-face marker: a body class the overlay
  * stylesheet keys its licensed Tiempos label rules on, resolved from the same
@@ -227,7 +227,7 @@ if ( ! function_exists( 'lunara_oscars_ledger_critical_css' ) ) {
 	 * Reserves only what the deferred stylesheets would otherwise leave
 	 * unpainted: container width/padding, the hub header grid, the
 	 * hub/winner-circle/crossroads/profile grid columns, and the entity and
-	 * ceremony hero two-column shells. The shell owns page framing and the hub
+	 * ceremony centered identity stacks. The shell owns page framing and the hub
 	 * header; the Ledger owns profile and ceremony composition. This seed mirrors
 	 * those owners rather than reinstating the retired shell layout overrides.
 	 * Grid columns and gaps consume the `--lunara-oscars-dossier-*` variables
@@ -242,22 +242,25 @@ if ( ! function_exists( 'lunara_oscars_ledger_critical_css' ) ) {
 	function lunara_oscars_ledger_critical_css() {
 		$css = <<<'CSS'
 body.aat-shell-page .aat-container{box-sizing:border-box;margin-left:auto;margin-right:auto;max-width:min(1200px,calc(100vw - 36px));padding:clamp(22px,3vw,42px)}
-body.aat-shell-page .aat-hub-header{align-items:end;display:grid;gap:clamp(18px,3vw,36px);grid-template-columns:minmax(0,1fr) auto;margin-bottom:clamp(28px,4vw,48px);padding:clamp(20px,2.8vw,32px);border-bottom:1px solid rgba(201,169,97,.2);text-align:center}
+body.aat-shell-page .aat-hub-header{align-items:center;justify-items:center;display:grid;gap:clamp(18px,3vw,36px);grid-template-columns:minmax(0,1fr);margin-bottom:clamp(28px,4vw,48px);padding:clamp(20px,2.8vw,32px);border-bottom:1px solid rgba(201,169,97,.2);text-align:center}
 body.aat-shell-page .aat-hub-header .aat-hub-subtitle{max-width:62ch;margin:0 auto}
-body.aat-shell-page .aat-hub-grid,
 body.aat-shell-page .aat-crossroads-grid,
 body.aat-shell-page .aat-profile-grid{display:grid;gap:calc(18px * var(--lunara-oscars-dossier-density-scale,1));grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--lunara-oscars-dossier-card-min,240px)),1fr))}
-body.aat-shell-page .aat-winner-circle-grid{display:grid;gap:calc(18px * var(--lunara-oscars-dossier-density-scale,1));grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--lunara-oscars-dossier-card-min,290px)),1fr))}
+body.aat-shell-page .aat-hub-grid,
+body.aat-shell-page .aat-winner-circle-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(18px * var(--lunara-oscars-dossier-density-scale,1));grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--lunara-oscars-dossier-card-min,290px)),1fr))}
+body.aat-shell-page .aat-hub-grid>* ,body.aat-shell-page .aat-winner-circle-grid>*{flex:0 1 var(--lunara-oscars-dossier-card-min,280px);max-width:100%;box-sizing:border-box}
 body.aat-shell-page .aat-hub-grid{margin-top:18px}
 body.aat-shell-page .aat-hub-page-index-grid{margin-top:0}
 body.aat-shell-page .aat-profile-file{display:grid;gap:var(--lunara-oscars-dossier-section-gap,clamp(28px,4vw,48px));min-width:0}
-body.aat-shell-page .aat-entity-hero{align-items:start;display:grid;gap:clamp(20px,3vw,36px);grid-template-columns:minmax(150px,210px) minmax(0,1fr);margin:0;padding:0}
+body.aat-shell-page .aat-entity-hero{align-items:start;display:grid;gap:clamp(20px,3vw,36px);grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;margin:0;padding:0}
 body.aat-shell-page .aat-entity-hero.is-meta-only,
 body.aat-shell-page .aat-entity-hero.is-no-poster{grid-template-columns:minmax(0,1fr)}
 body.aat-shell-page .aat-profile-file .aat-stats-bar.aat-entity-stats,
 body.aat-shell-page .aat-ceremony-dossier .aat-stats-bar.aat-entity-stats{display:none}
 body.aat-shell-page .aat-ceremony-dossier{display:grid;gap:var(--lunara-oscars-dossier-section-gap,28px);min-width:0}
-body.aat-shell-page .aat-ceremony-dossier-hero{align-items:start;display:grid;gap:clamp(22px,4vw,48px);grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);padding:8px 0 0}
+body.aat-shell-page .aat-dossier-hero,
+body.aat-shell-page .aat-ceremony-dossier-hero{align-items:start;display:grid;gap:clamp(22px,4vw,48px);grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;padding:8px 0 0}
+body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap{margin-inline:auto}
 @media (max-width:980px){
 body.aat-shell-page .aat-ceremony-dossier-hero{grid-template-columns:minmax(0,1fr)}
 }
@@ -270,7 +273,9 @@ body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap{margin-inline:auto
 body.aat-shell-page .aat-profile-file .aat-entity-hero{padding:16px 0}
 }
 @media (max-width:640px){
+body.aat-shell-page .aat-category-dossier,
 body.aat-shell-page .aat-ceremony-dossier{box-sizing:border-box;padding-inline:8px}
+body.aat-shell-page .aat-dossier-hero,
 body.aat-shell-page .aat-ceremony-dossier-hero{padding:0}
 }
 @media (max-width:560px){

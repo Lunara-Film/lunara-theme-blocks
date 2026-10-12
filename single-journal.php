@@ -617,8 +617,6 @@ if ( have_posts() ) :
 								<span class="lunara-journal-adjacent-title"><?php echo esc_html( wp_strip_all_tags( get_the_title( $journal_neighbour ) ) ); ?></span>
 								<span class="lunara-journal-adjacent-date"><?php echo esc_html( get_the_date( 'F j, Y', $journal_neighbour ) ); ?></span>
 							</a>
-						<?php else : ?>
-							<span class="lunara-journal-adjacent-spacer" aria-hidden="true"></span>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</nav>

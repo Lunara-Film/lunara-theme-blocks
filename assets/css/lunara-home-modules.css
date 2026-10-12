@@ -650,12 +650,12 @@ body.home .lunara-journal-home-card:nth-child(4) .lunara-journal-home-card-link{
 body.home .lunara-journal-home-card:nth-child(4) .lunara-journal-home-card-media{min-height:100%!important;aspect-ratio:auto!important;}
 body.home .lunara-oscar-picks-section{background:transparent;}
 /* Forecast entries are compact dossiers: category, selection, then the evidence. */
-body.home .lunara-oscar-picks-section .lunara-oscar-picks-track{grid-auto-columns:clamp(280px,24vw,340px)!important;gap:var(--lunara-home-oscar-picks-gap)!important;}
+body.home .lunara-oscar-picks-section .lunara-oscar-picks-track{grid-auto-columns:calc((100% - 2 * var(--lunara-home-oscar-picks-gap)) / 3)!important;gap:var(--lunara-home-oscar-picks-gap)!important;}
 body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-link{min-height:0!important;}
 body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-media{border-radius:0!important;}
-body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-copy{gap:8px!important;padding:14px 0 16px!important;min-width:0!important;}
+body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-copy{gap:8px!important;padding:14px 0 16px!important;min-width:0!important;text-align:center;}
 body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-title{display:block!important;min-height:0!important;max-height:none!important;overflow:visible!important;overflow-wrap:anywhere;hyphens:none;font-size:1.25rem!important;line-height:1.25!important;}
-body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-rationale{display:block;overflow:visible;font-size:1rem;line-height:1.5;color:var(--lunara-text,#fafbfc);}
+body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-rationale{display:block;overflow:visible;font-size:1rem;line-height:1.5;color:var(--lunara-text,#fafbfc);text-align:left;}
 body.home .lunara-oscar-picks-section .lunara-oscar-pick-card.is-cinematic-pending{opacity:1!important;transform:none!important;}
 body.home .lunara-oscar-facts-section{position:relative;overflow:hidden!important;background:transparent;}
 body.home .lunara-oscar-facts-section .lunara-home-section-head{width:100%;max-width:none;margin:0 auto clamp(14px,2vw,22px)!important;padding:clamp(16px,2.2vw,24px) clamp(16px,2.4vw,28px);border:0;border-radius:0;background:transparent;box-shadow:none;}

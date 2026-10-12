@@ -107,6 +107,10 @@ function lunara_get_review_image_profile( $classes ) {
     return array( 'width' => $poster ? 1000 : 1920, 'height' => $poster ? 1500 : 1080, 'sizes' => $poster ? '420px' : '100vw' );
 }
 
+function lunara_get_review_imdb_title_id() { return 'with-rail' === $GLOBALS['article_case']['scenario'] ? 'tt0100001' : ''; }
+function lunara_get_oscar_ledger_counts() { return array( 'nominations' => 3, 'wins' => 1 ); }
+function lunara_render_oscar_ledger_pill() { return '<a class="lunara-oscar-ledger" href="https://example.test/oscars/title/tt0100001/">3 nominations, 1 win</a>'; }
+
 // Extract a real named function, respecting braces inside quoted strings.
 function article_fixture_function( $file, $name ) {
     $source = file_get_contents( $file );
@@ -139,7 +143,7 @@ function lunara_site_studio_preview_state_safe( $surface, $state ) { return 'jou
 article_fixture_function( $root . '/inc/site-studio-preview.php', 'lunara_site_studio_preview_install_state' );
 $fixtures = array();
 foreach ( array( 'review', 'journal' ) as $type ) {
-    $scenarios = 'journal' === $type ? array( 'normal', 'long-title', 'missing', 'framed-small', 'framed-large' ) : array( 'normal', 'long-title', 'missing' );
+    $scenarios = 'journal' === $type ? array( 'normal', 'long-title', 'missing', 'framed-small', 'framed-large' ) : array( 'normal', 'long-title', 'missing', 'with-rail' );
     foreach ( $scenarios as $scenario ) {
         $article_case = array( 'type' => $type, 'scenario' => $scenario, 'title' => 'The films we carry out of the theater', 'art' => 'review' === $type ? 'poster' : 'landscape' );
         $article_mods = array();

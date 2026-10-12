@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-12 — Centered editorial and Oscars composition
+
+- **Shipped:** candidates only: Theme 3.2.108 and Ledger 2.8.25 center page identities, headings, artwork and reading columns; remove the unused Review side rail; balance partial card rows; center shared navigation/footer and standalone actions. Existing article, record, artwork and settings ownership remains intact. The Explorer no-JavaScript Apply action received a final measured correction after visual review. Existing drafts Theme #231 and Ledger #55 carry this continuation.
+- **Live:** unchanged. No main merge, production setting change, cache clear or deployment. Candidate source and required CI receipts are recorded against exact commits in the draft PRs and local symmetry report.
+- **Holding:** Codex owns final integration and release. DESIGN.md now requires centered axes, equal gutters and balanced partial rows. Existing runtime tests measure these properties; unchanged first-paint tolerances and critical-CSS budgets remain enforced. Final required CI runs at the source freeze; earlier and corrected capture receipts remain separate.
+- **Next:** Dalton reviews the combined desktop/phone gallery at `implementation/symmetry-finish/index.html` in the existing remediation artifact. Then follow the already established plugin-before-Theme release sequence and verify the actual WordPress deployment. Theme still requires his WordPress.com deploy click.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 provenance remain open. Local composition images use sample records; Home/Journal archive use captured public film imagery, while reading/Oscars fixtures include explicitly marked geometry artwork. No whole-site detector or performance-cohort rerun was added. The closed timing cohort proves no speed gain.
+
 ## 2026-10-11 — Winner badge contrast integration correction
 
 - **Shipped:** Theme 3.2.107 candidate follow-up: remove `.aat-winner-badge` from the shell's forced gold-ink group and regenerate the non-portal shell. Final visual review found 1.327:1 contrast on filled gold profile badges; component-owned dark ink now remains authoritative. Ledger 2.8.24 is unchanged at `02e97e0`.

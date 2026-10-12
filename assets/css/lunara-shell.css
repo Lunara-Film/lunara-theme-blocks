@@ -1795,12 +1795,14 @@ body.aat-shell-page .aat-entity-page a:not(.aat-btn-primary):hover {
 body.aat-shell-page .aat-hub-header,
 body.aat-shell-page .aat-entity-header {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    align-items: end !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: center !important;
     gap: clamp(18px, 3vw, 36px) !important;
     margin-bottom: clamp(28px, 4vw, 48px) !important;
     padding-bottom: clamp(18px, 2vw, 28px) !important;
     border-bottom: 1px solid rgba(201, 169, 97, 0.2) !important;
+    justify-items: center;
+    text-align: center;
 }
 
 body.aat-shell-page .aat-hub-title,
@@ -1825,6 +1827,7 @@ body.aat-shell-page .aat-winner-circle-actions {
     align-items: center !important;
     flex-wrap: wrap !important;
     gap: 10px !important;
+    justify-content: center;
 }
 
 body.aat-shell-page .aat-btn,
@@ -1854,10 +1857,12 @@ body.aat-shell-page .aat-hub-chip-stack {
 body.aat-shell-page .aat-hub-grid,
 body.aat-shell-page .aat-winner-circle-grid,
 body.aat-shell-page .aat-best-picture-grid {
-    display: grid !important;
+    display: flex !important;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
     gap: clamp(16px, 2vw, 26px) !important;
     align-items: stretch !important;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 body.aat-shell-page .aat-winner-circle-grid.is-hero-latest,
@@ -2000,7 +2005,7 @@ body.aat-shell-page .aat-hub-spotlight-body {
     }
 
     body.aat-shell-page .aat-hub-actions {
-        justify-content: flex-start !important;
+        justify-content: center !important;
     }
 }
 

@@ -6,6 +6,12 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Composition
 
+- Center each page frame, identity/title group, reading column and section heading
+  on a shared axis with equal outer gutters. Card rows wrap symmetrically; a
+  partial last row is centered. Do not reserve an empty side rail or split a
+  masthead into unequal columns. Group actions beneath the centered heading.
+  Keep long prose and tabular records readable within those centered frames.
+  Check actual box centers at phone and desktop sizes, including odd card counts.
 - Use one clear heading per section. Do not precede it with a second label that
   repeats its meaning. Preserve a saved editorial label when it adds information.
 - Echo, Counter and Context identify three different critical relationships.
@@ -14,9 +20,9 @@ and restrained gold. This contract applies to the existing visitor features.
 - Journal leads with headlines; dates, visual credits and useful taxonomy remain
   readable supporting information. Entries without artwork are intentional text
   compositions, not failed image placeholders.
-  The newest main archive edition has one lead and two supporting stories, then
-  a quieter thumbnail index on desktop. Alternate sorts, taxonomy results and
-  later pages stay uniform; phone order remains the source reading order.
+  The newest main archive edition has one centered lead followed by a balanced
+  two-column story index on desktop. Alternate sorts, taxonomy results and later
+  pages stay uniform; phone order remains the source reading order.
   Responsive image hints and synchronous route geometry must change with layout.
 - Oscar records retain category, film/person, status, evidence and destinations.
   Status has words as well as color. Long names and complete records remain usable.

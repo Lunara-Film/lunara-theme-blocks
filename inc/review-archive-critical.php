@@ -120,11 +120,11 @@ CSS;
 CSS;
 
         $pairing = <<<'CSS'
-& .lunara-pairing-desk-head{align-items:end!important;display:grid!important;gap:14px clamp(38px,5vw,72px)!important;grid-template-columns:minmax(0,max-content) minmax(280px,42ch)!important;justify-content:start!important;margin-bottom:18px!important}
-& .lunara-pairing-desk-intro{align-content:end!important;display:grid!important;gap:10px!important;padding-bottom:4px!important}
-& .lunara-pairing-desk-thesis{font-family:var(--h)!important;font-size:clamp(1.3rem,2.4vw,1.8rem)!important;line-height:1.25!important;margin:16px 0 0!important;max-width:24ch!important;text-wrap:balance!important}
+& .lunara-pairing-desk-head{align-items:center!important;display:grid!important;gap:14px!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center!important;margin-bottom:18px!important;text-align:center!important}
+& .lunara-pairing-desk-intro{max-width:56ch!important;margin-inline:auto!important;align-content:end!important;display:grid!important;gap:10px!important;padding-bottom:4px!important}
+& .lunara-pairing-desk-thesis{font-family:var(--h)!important;font-size:clamp(1.3rem,2.4vw,1.8rem)!important;line-height:1.25!important;margin:16px auto 0!important;max-width:24ch!important;text-wrap:balance!important}
 & .lunara-pairing-desk-source{font-size:.88rem!important;margin:0!important}
-& .lunara-pairing-desk-head .lunara-home-section-title{font-size:clamp(1.7rem,3vw,2.3rem)!important;letter-spacing:-.02em!important;line-height:.98!important;margin:0!important;max-width:14ch!important}
+& .lunara-pairing-desk-head .lunara-home-section-title{font-size:clamp(1.7rem,3vw,2.3rem)!important;letter-spacing:-.02em!important;line-height:.98!important;margin:0 auto!important;max-width:14ch!important}
 & .lunara-pairing-desk-copy{font-size:.97rem!important;line-height:1.6!important;margin:0!important}
 & .lunara-pair-cards{border:0!important;box-sizing:border-box!important;margin:0 auto!important;max-width:min(100%,1040px)!important;padding:24px 0!important}
 & .lunara-pair-cards-grid{align-items:stretch!important;display:grid!important;gap:clamp(24px,3vw,40px)!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,236px),1fr))!important}
@@ -132,16 +132,16 @@ CSS;
 & .lunara-pair-card-poster{aspect-ratio:2/3!important;overflow:hidden!important;position:relative!important}
 & .lunara-pair-card-poster img{display:block!important;height:100%!important;object-fit:cover!important;width:100%!important}
 & .lunara-pair-card-body{display:flex!important;flex:1!important;flex-direction:column!important;gap:9px!important;padding:20px 0 0!important}
-& .lunara-pair-card-role{font-family:var(--lunara-font-label,"Tiempos Text","Segoe UI",Arial,sans-serif)!important;font-size:.8125rem!important;font-weight:700!important;letter-spacing:normal!important;line-height:1.4!important;margin:0!important;text-transform:none!important}
-& .lunara-pair-card-title{font-family:var(--b)!important;font-size:clamp(1.2rem,1.65vw,1.5rem)!important;font-weight:400!important;line-height:1.16!important;margin:0!important}
+& .lunara-pair-card-role{text-align:center!important;font-family:var(--lunara-font-label,"Tiempos Text","Segoe UI",Arial,sans-serif)!important;font-size:.8125rem!important;font-weight:700!important;letter-spacing:normal!important;line-height:1.4!important;margin:0!important;text-transform:none!important}
+& .lunara-pair-card-title{text-align:center!important;font-family:var(--b)!important;font-size:clamp(1.2rem,1.65vw,1.5rem)!important;font-weight:400!important;line-height:1.16!important;margin:0!important}
 & .lunara-pair-card-title-link{-webkit-line-clamp:unset!important;display:block!important;margin-top:-8px!important;overflow:visible!important;overflow-wrap:anywhere!important;padding-top:8px!important;text-decoration:none!important}
 & .lunara-pair-card-year{font-size:.86em!important}
 & .lunara-pair-card-note{font-family:var(--b)!important;font-size:1rem!important;line-height:1.65!important;margin:0!important;text-wrap:pretty!important}
-& .lunara-pair-card-chips{align-items:center!important;display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin-top:auto!important;padding-top:12px!important}
+& .lunara-pair-card-chips{justify-content:center!important;align-items:center!important;display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin-top:auto!important;padding-top:12px!important}
 & .lunara-pair-card-chip{align-items:center!important;border:0!important;display:inline-flex!important;font-size:.8125rem!important;gap:5px!important;line-height:1!important;padding:6px 12px!important}
-@media(min-width:880px){& .lunara-pair-cards-grid[data-count="3"]{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
-@media(max-width:900px){& .lunara-pairing-desk-head{grid-template-columns:minmax(0,1fr)!important}& .lunara-pairing-desk-intro{align-content:start!important;padding-bottom:0!important}}
-@media(max-width:680px){& .lunara-pair-cards{padding:24px 0!important}& .lunara-pair-cards-grid{gap:12px!important;grid-template-columns:minmax(0,1fr)!important}& .lunara-pair-card{align-items:start!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important}& .lunara-pair-card-poster{align-self:start!important;height:auto!important;width:min(100%,220px)!important}& .lunara-pair-card-chips{margin-top:8px!important}& .lunara-pair-card-body{padding:18px 0 0!important}}
+@media(min-width:681px){& .lunara-pair-cards-grid[data-count="3"]{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:900px){& .lunara-pairing-desk-intro{align-content:start!important;padding-bottom:0!important}}
+@media(max-width:680px){& .lunara-pair-cards{padding:24px 0!important}& .lunara-pair-cards-grid{gap:12px!important;grid-template-columns:minmax(0,1fr)!important}& .lunara-pair-card{align-items:start!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important}& .lunara-pair-card-poster{margin-inline:auto!important;align-self:start!important;height:auto!important;width:min(100%,220px)!important}& .lunara-pair-card-chips{margin-top:8px!important}& .lunara-pair-card-body{padding:18px 0 0!important}}
 @media(max-width:640px){& .lunara-pairing-desk-head .lunara-home-section-title{font-size:clamp(1.25rem,5vw,1.75rem)!important;line-height:1.15!important}}
 CSS;
 

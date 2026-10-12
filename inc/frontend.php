@@ -5152,6 +5152,8 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-related-reviews-grid.aat-related-treatment-feature-strip .aat-related-review-card:first-child {
             display: grid !important;
             grid-column: span 2;
+            flex-basis: calc(2 * var(--lunara-oscars-related-review-min) + 20px);
+            max-width: 100%;
             grid-template-columns: minmax(240px, .95fr) minmax(0, 1fr);
         }
 
