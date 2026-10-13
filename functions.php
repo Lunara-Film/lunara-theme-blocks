@@ -15370,7 +15370,7 @@ if ( ! function_exists( 'lunara_add_hero_feature_meta_box' ) ) {
 /**
  * Pairing Desk — homepage showcase for the signature Pair It With module.
  *
- * Renders the three pairings (Echo / Counter / Context)
+ * Renders the three pairings (Theme Echo / Counter Program / Career Context)
  * from the newest review that has any pairing filled, framed with an
  * explainer so first-time visitors immediately see how Lunara differs from
  * algorithmic "more like this" rails. Reuses the debrief module's own card
@@ -15414,7 +15414,7 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 			: array(
 				'kicker' => 'The Lunara Method',
 				'title'  => 'Every review ends with three more films.',
-				'copy'   => 'An Echo, a Counter, and a Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.',
+				'copy'   => 'Theme Echo, Counter Program, and Career Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.',
 			);
 		$kicker = function_exists( 'lunara_theme_mod_text' )
 			? lunara_theme_mod_text( 'lunara_home_pairing_desk_kicker', $copy_defaults['kicker'] )

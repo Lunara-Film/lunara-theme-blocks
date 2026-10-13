@@ -14,9 +14,12 @@ and restrained gold. This contract applies to the existing visitor features.
   Check actual box centers at phone and desktop sizes, including odd card counts.
 - Use one clear heading per section. Do not precede it with a second label that
   repeats its meaning. Preserve a saved editorial label when it adds information.
-- Echo, Counter and Context identify three different critical relationships.
-  Keep their full arguments and film links. Present them as editorial columns
-  that stack on phones, with no painted container inside another painted container.
+- Always display the full pairing titles: Theme Echo, Counter Program and Career
+  Context. They identify three different critical relationships; never shorten
+  their visible titles to Echo, Counter or Context, including on phones. Allow
+  natural wrapping without truncating the labels. Keep their full arguments and
+  film links. Present them as editorial columns that stack on phones, with no
+  painted container inside another painted container.
 - Journal leads with headlines; dates, visual credits and useful taxonomy remain
   readable supporting information. Entries without artwork are intentional text
   compositions, not failed image placeholders.
@@ -51,6 +54,14 @@ and restrained gold. This contract applies to the existing visitor features.
 - Reduced motion and failed/no JavaScript preserve content and navigation.
 
 ## Ownership and delivery
+
+Treat each correction as a complete replacement across its active consumers.
+Trace the owning source, shared renderers, defaults, saved-content variants,
+editor controls and preview builders. Remove superseded visible wording,
+redundant active output and competing definitions as part of the fix. Give each
+shared behavior a clear owner. Keep necessary legacy-input compatibility at the
+read boundary; it must not reintroduce old public wording. Refresh only affected
+previews and checks, followed by required CI on the final commit.
 
 Edit the source that owns a property. Do not add another catch-all override to
 the end of `style.css`. Read the PHP enqueue/emission path before editing: Studio

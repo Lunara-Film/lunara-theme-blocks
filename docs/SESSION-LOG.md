@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-12 — Full Debrief pairing titles
+
+- **Shipped:** Theme 3.2.109 candidate only. Restore Theme Echo, Counter Program and Career Context throughout active public pairing renderers, shared Home copy, the Debrief explainer and corresponding Theme editor labels. Curated blocks expand recognized saved short or hyphenated role aliases while preserving custom labels. Existing role identifiers, relationships, legacy imports, notes and film destinations remain compatible. DESIGN.md now prohibits shortening or truncating these visible titles and requires every correction to cover active consumers and retire superseded public wording or duplicate active output.
+- **Live:** unchanged. The prior centered candidate passed complete Theme CI 38321668007 at `d9be89d`; Ledger 2.8.25 remains unchanged with passing CI 38320967124 at `69066db`. This copy correction requires its own final Theme CI receipt in draft PR #231.
+- **Holding:** Codex owns final integration. Update only affected Home, Review and Debrief preview captures; preserve earlier receipts. Relevant existing renderer and phone/desktop geometry checks cover the longer names without a new whole-site scan or performance cohort.
+- **Next:** finish the affected checks, require CI on the final Theme commit, and continue Dalton's combined visual review before the established plugin-before-Theme release sequence.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. No production content/settings, caches, main merge or deployment changed.
+
 ## 2026-10-12 — Home initial-layout symmetry correction
 
 - **Shipped:** Theme 3.2.108 candidate follow-up only. Required CI 38321068673 caught the old right-anchored Home carousel toggle in the synchronous geometry seed. Its canonical desktop CSS and seed now agree on a compact centered control; the phone control remains in normal flow. The affected existing browser gate measures initial and final geometry, and the PHP check inspects emitted output instead of pinning source text.

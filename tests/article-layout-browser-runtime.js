@@ -14,6 +14,16 @@ const pairFixtures = JSON.parse(execFileSync('php', ['-r', `ob_start();require '
 let assertions = 0;
 const assert = (condition, message, value) => { assertions++; if (!condition) throw new Error(message + (value ? '\n' + JSON.stringify(value, null, 2) : '')); };
 const metrics = [];
+const expectedRoleNames = ['Theme Echo', 'Counter Program', 'Career Context'];
+// Inspect the rendered glyph ranges, not CSS source or a shortened string fixture.
+const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAll(elements => elements.map(el => {
+    const box=el.getBoundingClientRect(), style=getComputedStyle(el), range=document.createRange();range.selectNodeContents(el);
+    const ranges=[...range.getClientRects()], clips=[];
+    for(let ancestor=el;ancestor&&ancestor!==document.body;ancestor=ancestor.parentElement){const css=getComputedStyle(ancestor);if(['hidden','clip'].includes(css.overflowX)||['hidden','clip'].includes(css.overflowY)){const r=ancestor.getBoundingClientRect();clips.push({left:r.left,right:r.right,top:r.top,bottom:r.bottom,x:['hidden','clip'].includes(css.overflowX),y:['hidden','clip'].includes(css.overflowY)});}}
+    const parent=el.closest('.lunara-pair-card,.lunara-debrief-move') || el.parentElement;
+    const parentBox=parent.getBoundingClientRect();
+    return {text:el.textContent.trim().replace(/\s+/g,' '),visible:box.width>0&&box.height>0&&style.visibility!=='hidden'&&Number(style.opacity)>0,clamp:style.webkitLineClamp,align:style.textAlign,fontSize:parseFloat(style.fontSize),centerDelta:Math.abs(box.left+box.width/2-parentBox.left-parentBox.width/2),fits:ranges.length>0&&ranges.every(r=>r.left>=box.left-1&&r.right<=box.right+1&&clips.every(clip=>(!clip.x||(r.left>=clip.left-1&&r.right<=clip.right+1))&&(!clip.y||(r.top>=clip.top-1&&r.bottom<=clip.bottom+1))))&&el.scrollWidth<=el.clientWidth+1};
+}));
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
@@ -108,6 +118,8 @@ const metrics = [];
                     const bounds=card.getBoundingClientRect(), poster=card.querySelector('.lunara-pair-card-poster').getBoundingClientRect(), copy=note.getBoundingClientRect(), range=document.createRange();range.selectNodeContents(note);
                     return {left:bounds.left,right:bounds.right,top:bounds.top,posterCenter:poster.left+poster.width/2,cardCenter:bounds.left+bounds.width/2,titleAlign:getComputedStyle(card.querySelector('.lunara-pair-card-title')).textAlign,noteSize:parseFloat(getComputedStyle(note).fontSize),noteWidth:copy.width,clamped:getComputedStyle(title).webkitLineClamp,textVisible:[...range.getClientRects()].every(r=>r.bottom<=copy.bottom+1&&r.right<=copy.right+1),hasLink:!!card.querySelector('a[href]')};
                 }));
+                const roles = await fullHeadingMetrics(page, '.lunara-pair-card-role');
+                assert(roles.length===3 && roles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='center'&&role.centerDelta<=1&&role.fontSize>=13), `Pairings ${index}@${width}: complete role names remain visible, unclipped and centered`, roles);
                 assert(pairs.length===3 && pairs.every(card=>card.left>=19&&card.right<=width-19&&card.noteSize>=16&&card.textVisible&&card.hasLink&&card.clamped==='none'), `Pairings ${index}@${width}: all three complete arguments and links remain readable`, pairs);
                 assert(Math.abs(pairs[0].left - (width-pairs[pairs.length-1].right))<=1 && pairs.every(card=>Math.abs(card.posterCenter-card.cardCenter)<=1&&card.titleAlign==='center'), `Pairings ${index}@${width}: balanced outer gutters and centered artwork/headings`, pairs);
                 if(width===320) assert(pairs.every(card=>card.noteWidth>=width-42)&&pairs[1].top>pairs[0].top, `Pairings ${index}@${width}: phones stack full-width arguments`, pairs);
@@ -118,6 +130,10 @@ const metrics = [];
             await method.route('**/*', route => route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#183441"/></svg>'}));
             await method.setContent(`<style>body{margin:0}</style><style>${sharedCss}\n${debriefCss}</style>${debriefMethod}`, {waitUntil:'load'});
             const composition=await method.evaluate(()=>({width:document.documentElement.scrollWidth,centers:[...document.querySelectorAll('.lunara-debrief-page,.lunara-debrief-title,.lunara-debrief-thesis,.lunara-debrief-section-title,.lunara-debrief-why-body,.lunara-debrief-words-body,.lunara-debrief-moves-list,.lunara-debrief-orbit-slide,.lunara-debrief-recent-list,.lunara-debrief-next')].map(el=>({selector:el.className,center:el.getBoundingClientRect().left+el.getBoundingClientRect().width/2})),headingAlign:[...document.querySelectorAll('.lunara-debrief-title,.lunara-debrief-section-title')].map(el=>getComputedStyle(el).textAlign),moves:[...document.querySelectorAll('.lunara-debrief-move')].map(el=>({top:el.getBoundingClientRect().top,width:el.getBoundingClientRect().width,font:parseFloat(getComputedStyle(el.querySelector('.lunara-debrief-move-copy')).fontSize)})),title:document.querySelector('.lunara-debrief-title').textContent}));
+            const methodRoles = await fullHeadingMetrics(method, '.lunara-debrief-move-name');
+            assert(methodRoles.length===3&&methodRoles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='center'&&role.centerDelta<=1), `Method@${width}: full relationship headings remain visible, unclipped and centered`, methodRoles);
+            const methodTitle = await fullHeadingMetrics(method, '.lunara-debrief-title');
+            assert(methodTitle.length===1&&methodTitle[0].visible&&methodTitle[0].fits&&methodTitle[0].clamp==='none', `Method@${width}: the entire main heading remains visible`, methodTitle);
             assert(composition.width<=width+1&&composition.moves.length===3&&composition.moves.every(move=>move.font>=16)&&composition.title.length>0, `Method@${width}: all relationships and headline remain readable without JS`, composition);
             assert(composition.centers.every(item=>Math.abs(item.center-width/2)<=1)&&composition.headingAlign.every(align=>align==='center'), `Method@${width}: headings, reading and relationship groups share one center`, composition);
             if(width===1440) assert(composition.moves.every(move=>Math.abs(move.top-composition.moves[0].top)<1), 'Method uses three aligned editorial columns on desktop', composition);
