@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-12 — Keep route delivery checks specific to their asset owner
+
+- **Shipped:** Theme 3.2.109 candidate test follow-up only. The expanded actual-Review fixture now emits real Review Studio styles, exposing an old Journal delivery assertion that incorrectly required all Review authority output to be empty. Check the absence of Journal assets on Reviews while retaining positive Review authority coverage. Website source and captured geometry are unchanged.
+- **Live:** unchanged. Required CI 38327112665 at `b32c201` failed on that existing Journal delivery assertion; preserve the failure and require replacement CI on this final follow-up commit. Nothing was merged or deployed.
+- **Holding:** the permanent Review layout and full pairing-title changes remain in draft PR #231. Focused geometry passed 321 assertions, the shared-template consumer passed 83 checks, and the exact old Additional CSS caused 0px measured geometry change in the 390px/1440px transition check. Final capture/source/CI receipts belong to the local combined gallery report and PR.
+- **Next:** require the corrected route-delivery check and complete final CI, then continue the combined visual review and established release sequence. Deploy the Theme before retiring the precisely preserved September 21 Customizer block.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. No test exclusion, tolerance or budget was widened. The production Customizer block remains in place until release.
+
 ## 2026-10-12 — Absorb the Review Customizer layout patch
 
 - **Shipped:** Theme 3.2.109 candidate follow-up only. The supplied September 21 Additional CSS patch is replaced by the owning Review styles: centered 760px reading frame, navigation below the article, a single header separator, and 860px pairing rows with full role names and complete arguments. The late Review Studio emitter must no longer restore a side rail. Retire the obsolete phone rule that existed only to out-rank Additional CSS.
