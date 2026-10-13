@@ -18,8 +18,13 @@ and restrained gold. This contract applies to the existing visitor features.
   Context. They identify three different critical relationships; never shorten
   their visible titles to Echo, Counter or Context, including on phones. Allow
   natural wrapping without truncating the labels. Keep their full arguments and
-  film links. Present them as editorial columns that stack on phones, with no
-  painted container inside another painted container.
+  film links. Home and archive summaries use editorial columns. A full Review
+  gives each pairing its own row: poster beside the complete argument, stacking
+  at 640px and below. Neither layout uses a painted container inside another.
+- Single Reviews own a centered 760px reading frame and below-article navigation.
+  Pairing rows use a centered 860px frame. Route CSS owns that geometry; late
+  Studio output may change supported presentation choices without restoring a
+  side rail. Additional CSS must not be required to hold this layout together.
 - Journal leads with headlines; dates, visual credits and useful taxonomy remain
   readable supporting information. Entries without artwork are intentional text
   compositions, not failed image placeholders.
@@ -74,6 +79,7 @@ variables, Customizer output and first-paint styles can win over a static file.
 | Adopted Home carousel presentation | `inc/home-carousels.php`, `assets/css/lunara-home-carousels.css` |
 | Home Method/forecast and legacy sections | Live renderers in `functions.php`, `assets/css/lunara-home-modules.css`, `inc/debrief.php` |
 | Shared film arguments and review components | `inc/debrief.php`, `assets/css/lunara-review-components.css` |
+| Single Review geometry and saved presentation | `assets/css/lunara-review-single.css`, Review Studio emitter in `inc/frontend.php` |
 | Journal archive | `archive-journal.php`, `inc/journal-archive-studio.php`, `assets/css/lunara-journal-archive.css`, `inc/journal-archive-critical.php` |
 | Footer and shared public inline output | `inc/frontend.php`, `assets/css/lunara-public-guardrails.css` |
 | Menu and search | `inc/header-command.php`, `inc/live-search.php`, scoped public CSS |

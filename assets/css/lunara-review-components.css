@@ -458,49 +458,6 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     .lunara-review-share-link { transition: none; }
 }
 
-/* ------------------------------------------------------------
-   3.2.96 — Pair It With on single reviews
-   ------------------------------------------------------------ */
-
-/* Phones: the card text was squeezed to ~100px. The Customizer's Additional CSS
-   pads the body 28px a side at every width, and `body.single-review article p`
-   inflates the role label to 18px, so "Counter-Program" broke into four lines.
-   Selectors outrank the Customizer rule (0,3,3) without editing it. The poster,
-   role and title now share a center; the full-width note keeps its reading alignment. */
-@media (max-width: 560px) {
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0;
-        padding: 20px 0;
-        align-items: start;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-body {
-        display: flex;
-        flex-direction: column;
-        padding: 18px 0 0;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-poster {
-        width: min(100%, 220px);
-        margin-inline: auto;
-        border-radius: 0;
-        overflow: hidden;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-role {
-        margin: 0 0 6px;
-        font-size: 0.8125rem;
-        letter-spacing: 0;
-        line-height: 1.4;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note {
-        margin: 14px 0 0;
-    }
-}
-
 /* The thread: a gold line drawn from "Pair It With" through the three films as
    the reader arrives (assets/js/lunara-pair-thread.js). Absent without the
    script; drawn complete under reduced motion. */

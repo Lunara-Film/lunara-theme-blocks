@@ -4402,20 +4402,10 @@ function lunara_output_review_single_studio_css() {
     $debrief_poster_width = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_single_debrief_poster_width', 300, 220, 360 );
     $related_count        = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_related_count', 4, 2, 6 );
 
-    $body_gap_map = array(
-        'compact'   => 28,
-        'editorial' => 40,
-        'feature'   => 56,
-    );
     $hero_max_map = array(
         'standard'       => 980,
         'poster-forward' => 760,
         'wide-forward'   => 1180,
-    );
-    $rail_width_map = array(
-        'minimal'          => 240,
-        'balanced'         => 286,
-        'metadata-forward' => 334,
     );
     $pairing_gap_map = array(
         'compact'   => 14,
@@ -4433,9 +4423,7 @@ function lunara_output_review_single_studio_css() {
         'feature'   => 4,
     );
 
-    $body_gap              = $body_gap_map[ $density ];
     $hero_max              = $hero_max_map[ $hero_scale ];
-    $rail_width            = $rail_width_map[ $rail_mode ];
     $pairing_gap           = $pairing_gap_map[ $pairing_density ];
     $related_card_min      = $related_card_min_map[ $density ];
     $related_excerpt_clamp = $related_excerpt_clamp_map[ $density ];
@@ -4453,13 +4441,12 @@ function lunara_output_review_single_studio_css() {
     if ( $related_count <= 3 ) {
         $related_card_min = max( $related_card_min, 212 );
     }
+    // Reading-frame and rail geometry live in lunara-review-single.css.
     ?>
     <style id="lunara-review-single-studio-css">
     body.single-review .lunara-review-single-page {
         --lunara-review-single-section-gap: <?php echo absint( $section_gap ); ?>px;
-        --lunara-review-single-body-gap: <?php echo absint( $body_gap ); ?>px;
         --lunara-review-single-hero-max: <?php echo absint( $hero_max ); ?>px;
-        --lunara-review-single-rail-width: <?php echo absint( $rail_width ); ?>px;
         --lunara-review-single-debrief-poster-width: <?php echo absint( $debrief_poster_width ); ?>px;
         --lunara-review-single-pairing-gap: <?php echo absint( $pairing_gap ); ?>px;
         --lunara-review-single-related-card-min: <?php echo absint( $related_card_min ); ?>px;
@@ -4470,32 +4457,13 @@ function lunara_output_review_single_studio_css() {
         overflow-x: clip !important;
     }
 
-    body.single-review .lunara-review-single-hero {
-        margin-bottom: var(--lunara-review-single-section-gap) !important;
-    }
-
     body.single-review .lunara-review-single-body {
         margin-top: 0 !important;
         margin-bottom: var(--lunara-review-single-section-gap) !important;
     }
 
-    body.single-review .lunara-review-single-body-grid {
-        gap: var(--lunara-review-single-body-gap) !important;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, var(--lunara-review-single-rail-width)) !important;
-    }
-
     body.single-review .lunara-review-single-content {
         min-width: 0 !important;
-    }
-
-    body.single-review .lunara-review-single-rail {
-        width: min(100%, var(--lunara-review-single-rail-width)) !important;
-        max-width: var(--lunara-review-single-rail-width) !important;
-        min-width: 0 !important;
-    }
-
-    body.single-review .lunara-review-single-rail-sticky {
-        gap: clamp(12px, 1.4vw, 18px) !important;
     }
 
     body.single-review .lunara-review-single-cinematic-hero {
@@ -4603,16 +4571,6 @@ function lunara_output_review_single_studio_css() {
     <?php endif; ?>
 
     @media (max-width: 900px) {
-        body.single-review .lunara-review-single-body-grid {
-            display: block !important;
-        }
-
-        body.single-review .lunara-review-single-rail {
-            width: min(100%, 720px) !important;
-            max-width: 720px !important;
-            margin: clamp(24px, 6vw, 44px) auto 0 !important;
-        }
-
         body.single-review .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: minmax(0, 1fr) !important;
         }
@@ -4621,7 +4579,6 @@ function lunara_output_review_single_studio_css() {
     @media (max-width: 520px) {
         body.single-review .lunara-review-single-page {
             --lunara-review-single-section-gap: min(<?php echo absint( $section_gap ); ?>px, 42px);
-            --lunara-review-single-body-gap: min(<?php echo absint( $body_gap ); ?>px, 28px);
         }
 
         body.single-review .lunara-review-single-debrief-poster-shell {

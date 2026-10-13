@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-12 — Absorb the Review Customizer layout patch
+
+- **Shipped:** Theme 3.2.109 candidate follow-up only. The supplied September 21 Additional CSS patch is replaced by the owning Review styles: centered 760px reading frame, navigation below the article, a single header separator, and 860px pairing rows with full role names and complete arguments. The late Review Studio emitter must no longer restore a side rail. Retire the obsolete phone rule that existed only to out-rank Additional CSS.
+- **Live:** unchanged. Do not remove the saved Customizer block before the new Theme is deployed. Preserve its full saved CSS, remove only the named Review block at the release step, and retain every unrelated rule. The local retirement artifact records the observed public CSS and exact removal proposal when available.
+- **Holding:** Codex owns source integration, relevant actual-template browser coverage including late Studio emission with Additional CSS absent, and the Review-only gallery refresh. The full-title CI run 38325875400 at `ec3117b` was canceled because this user-requested source correction superseded it; require complete CI on the final candidate instead.
+- **Next:** finish the targeted checks and final required CI, present the combined visual result, then release in the established plugin-before-Theme order and retire the saved patch during versioned public acceptance. See `docs/REVIEW-LAYOUT-OWNERSHIP.md` for the exact boundary.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. Local fixtures do not establish the production dataset or deployed result. No main merge, production write, cache clear or deployment occurred.
+
 ## 2026-10-12 — Full Debrief pairing titles
 
 - **Shipped:** Theme 3.2.109 candidate only. Restore Theme Echo, Counter Program and Career Context throughout active public pairing renderers, shared Home copy, the Debrief explainer and corresponding Theme editor labels. Curated blocks expand recognized saved short or hyphenated role aliases while preserving custom labels. Existing role identifiers, relationships, legacy imports, notes and film destinations remain compatible. DESIGN.md now prohibits shortening or truncating these visible titles and requires every correction to cover active consumers and retire superseded public wording or duplicate active output.
