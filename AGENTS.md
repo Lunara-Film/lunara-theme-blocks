@@ -54,6 +54,9 @@ so in one line at the top of the PR.
 - In the theme, `inc/` is live; `functions.php` carries dead
   `function_exists()` duplicates. Confirm which definition runs before editing.
 - Two surfaces that render the same data get checked together.
+- Square structural corners are the publication-wide standard, including new
+  pages and native blocks. Follow DESIGN.md and docs/PUBLIC-GEOMETRY.md; update
+  owning rules and keep the public geometry policy/browser checks passing.
 - Read-only probes against production. No staging writes.
 
 ## Frozen

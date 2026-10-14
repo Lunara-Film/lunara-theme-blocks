@@ -70,6 +70,7 @@ require_once $lunara_inc . 'oscars-hero-preload.php'; // 3.2.102: hero backdrop 
 // Layer 7 — Frontend output (footer, nav, search, content filters, animations).
 require_once $lunara_inc . 'blocks.php';
 require_once $lunara_inc . 'block-migration.php';
+require_once $lunara_inc . 'public-geometry.php'; // Publication-wide block and saved-content geometry.
 require_once $lunara_inc . 'review-archive-critical.php';
 require_once $lunara_inc . 'journal-archive-critical.php';
 require_once $lunara_inc . 'oscars-portal-critical.php';

@@ -50,6 +50,13 @@ and restrained gold. This contract applies to the existing visitor features.
   The third-party carousel loading ring remains a functional progress indicator.
 - Verify rendered corners alongside existing browser layout and keyboard tests.
   A CSS edit alone does not prove that saved settings or critical CSS agree.
+- This is the site-wide standard, including generic pages, ordinary posts,
+  taxonomy/author/date/search results and future content, not a set of selected
+  gallery layouts. `theme.json` and the base scaffold own native block defaults;
+  `inc/public-geometry.php` adapts legacy inline corners and Site Editor values
+  at read time without changing saved articles or other visual settings. Public
+  CSS policy checks discover new stylesheets automatically in Theme and Ledger.
+  See `docs/PUBLIC-GEOMETRY.md` for the complete ownership and coverage map.
 - Ground: `#0a1520`; reading text: near-white; accent: `#c9a961` or `#e0c481`.
   Saved valid color choices must keep their intended semantics and contrast.
 - Tiempos Headline carries editorial headings; Tiempos Text carries reading.

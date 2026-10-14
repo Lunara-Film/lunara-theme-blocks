@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-14 — Make square geometry a publication-wide default
+
+- **Shipped:** Theme 3.2.111 candidate extends the existing source-level geometry changes to native WordPress blocks, generic pages and saved content. Removed the rounded image style and per-block radius control; global styles and inline corners adapt at render time without rewriting stored posts. Added automatic public-CSS policy checks in Theme and Ledger and the route/owner coverage map in docs/PUBLIC-GEOMETRY.md.
+- **Live:** unchanged; no deployment, settings writes or cache changes. Previous Theme candidate a121674 and Ledger 2363378 passed their complete CI runs before this extension.
+- **Holding:** Theme PR #231 and Ledger PR #56 remain the candidates. Focused content checks passed with the real WordPress 6.8.3 HTML API and the portable CI seam; 15 route/viewport browser cases and 26 public stylesheet policy checks passed. Required full CI applies to the new commits.
+- **Next:** finish final CI, then continue the already-established release process. This is the standard for the complete public website and future components, not a new gallery-only design approval cycle.
+- **Found, not fixed:** private administrative UI is not public page output. Original HQ02/JQ25 extension attribution remains open. Native WordPress/production acceptance and retiring the preserved Review Additional CSS still occur at the explicit deployment gate.
+
 ## 2026-10-14 — Square public geometry across Theme and Ledger
 
 - **Shipped:** prepared Theme 3.2.110 and Ledger 2.8.26 candidates. Replaced rounded public frames/controls in their owning styles and late emitters; retired the surface-radius control and media rounded toggle, preserving stored values and media choices. Regenerated the non-portal shell. DESIGN records the square-default contract and explicit meaningful-circle exceptions.
