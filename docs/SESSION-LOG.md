@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-14 — Square public geometry across Theme and Ledger
+
+- **Shipped:** prepared Theme 3.2.110 and Ledger 2.8.26 candidates. Replaced rounded public frames/controls in their owning styles and late emitters; retired the surface-radius control and media rounded toggle, preserving stored values and media choices. Regenerated the non-portal shell. DESIGN records the square-default contract and explicit meaningful-circle exceptions.
+- **Live:** unchanged. Dalton has disabled auto-deploy for all release repositories; merge and deployment are separate gates. No production writes or cache clears. Updated these two repositories' stale deployment instructions.
+- **Holding:** Theme continues PR #231 on top of #230; Ledger follows merged #55 on codex/sharp-editorial-geometry. New local sharp-edges gallery contains 12 page views at phone and desktop widths, rendered from current component/template fixtures. Some fixtures use sample artwork/data; they are not deployed WordPress acceptance.
+- **Next:** finish required CI on the exact candidate commits, review the refreshed gallery, then explicit plugin-before-Theme release authorization. Computed-corner assertions now accompany existing layout, no-JS, responsive and keyboard tests; saved radius and media attributes have a runtime regression test.
+- **Found, not fixed:** original HQ02/JQ25 extension attribution remains unresolved. Loading-ring and meaningful brand/relationship circles are intentional. Existing Additional CSS retirement and production acceptance remain part of the deployment gate; no speed improvement is claimed.
+
+
 ## 2026-10-12 — Keep route delivery checks specific to their asset owner
 
 - **Shipped:** Theme 3.2.109 candidate test follow-up only. The expanded actual-Review fixture now emits real Review Studio styles, exposing an old Journal delivery assertion that incorrectly required all Review authority output to be empty. Check the absence of Journal assets on Reviews while retaining positive Review authority coverage. Website source and captured geometry are unchanged.

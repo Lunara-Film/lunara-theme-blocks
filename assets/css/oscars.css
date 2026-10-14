@@ -622,7 +622,7 @@ table.aat-datatable thead th.aat-col-control {
 .aat-imdb-link:focus-visible {
     outline: 2px solid var(--aat-gold);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .aat-imdb-pills {
@@ -674,7 +674,7 @@ table.aat-datatable thead th.aat-col-control {
 .dataTables_wrapper .dataTables_filter input {
     background: var(--aat-dark-gray);
     border: 2px solid rgba(201, 169, 97, 0.3);
-    border-radius: 6px;
+    border-radius: 0;
     color: var(--aat-white);
     padding: 8px 12px;
     margin: 0 8px;
@@ -689,7 +689,7 @@ table.aat-datatable thead th.aat-col-control {
     background: transparent !important;
     border: 1px solid rgba(201, 169, 97, 0.3) !important;
     color: var(--aat-light-gray) !important;
-    border-radius: 6px;
+    border-radius: 0;
     margin: 0 3px;
     transition: var(--aat-transition);
 }
@@ -721,7 +721,7 @@ table.aat-datatable thead th.aat-col-control {
     background: transparent !important;
     border: 2px solid var(--aat-gold) !important;
     color: var(--aat-gold) !important;
-    border-radius: 6px;
+    border-radius: 0;
     padding: 10px 20px;
     font-weight: 600;
     transition: var(--aat-transition);
@@ -756,7 +756,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
     width: 20px;
     margin-top: -10px;
     border: 1px solid rgba(201, 169, 97, 0.6);
-    border-radius: 999px;
+    border-radius: 0;
     box-shadow: 0 0 0 2px rgba(10, 21, 32, 0.6);
     background-color: rgba(201, 169, 97, 0.12);
     color: var(--aat-gold);
@@ -777,7 +777,7 @@ table.dataTable > tbody > tr.child ul.dtr-details {
     width: 100%;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(201, 169, 97, 0.25);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 12px 14px;
     margin: 10px 0;
 }
@@ -1004,7 +1004,7 @@ table.dataTable > tbody > tr.child ul.dtr-details .dtr-data {
     transform: translate(-50%, -50%) !important;
     padding: 14px 18px;
     width: auto;
-    border-radius: 10px;
+    border-radius: 0;
     background: rgba(10, 21, 32, 0.92);
     border: 1px solid rgba(201, 169, 97, 0.35);
     color: var(--aat-gold) !important;

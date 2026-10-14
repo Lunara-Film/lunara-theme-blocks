@@ -1,3 +1,4 @@
+const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 // Real public templates and active CSS; no frontend JavaScript or network dependency.
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
@@ -31,6 +32,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 let document = fixture.html.replace('</head>', `<meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}.screen-reader-text{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0}</style><style>${css}</style>${fixture.authority}</head>`).replace('<body>', `<body class="${fixture.body_class}">`);
                 if (fixture.native_size) document = document.replace(/<input\b(?=[^>]*\btype="search")/g, `<input size="${fixture.native_size}"`);
                 await page.setContent(document, { waitUntil: 'load' });
+                await assertSquareSurfaces(page, `Footer/recovery ${name} ${width}`);
                 const data = await page.evaluate(() => {
                     const rect = node => { const r=node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
                     const label = node => node.tagName.toLowerCase() + (node.className ? '.' + String(node.className).trim().replace(/\s+/g,'.') : '');

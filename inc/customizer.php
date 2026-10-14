@@ -590,14 +590,6 @@ function lunara_customize_register( $wp_customize ) {
             'attrs'    => array( 'min' => 12, 'max' => 96, 'step' => 1 ),
         ),
         array(
-            'setting'  => 'lunara_surface_radius',
-            'default'  => 28,
-            'label'    => __( 'Card Corner Radius (px)', 'lunara-film' ),
-            'type'     => 'range',
-            'sanitize' => 'absint',
-            'attrs'    => array( 'min' => 0, 'max' => 48, 'step' => 1 ),
-        ),
-        array(
             'setting'  => 'lunara_body_font_size',
             'default'  => 17,
             'label'    => __( 'Body Font Size (px)', 'lunara-film' ),
@@ -2843,7 +2835,7 @@ function lunara_output_runtime_customizer_css() {
     $border_color     = sanitize_hex_color( get_theme_mod( 'lunara_border_color', '#c9a961' ) ) ?: '#c9a961';
     $shell_max        = max( 960, min( 1800, absint( get_theme_mod( 'lunara_shell_content_width', 1360 ) ) ) );
     $shell_pad        = max( 12, min( 96, absint( get_theme_mod( 'lunara_shell_side_padding', 28 ) ) ) );
-    $surface_radius   = max( 0, min( 48, absint( get_theme_mod( 'lunara_surface_radius', 28 ) ) ) );
+    $surface_radius = 0; // Saved radius is retired; public geometry is square.
     $body_size        = max( 14, min( 24, absint( get_theme_mod( 'lunara_body_font_size', 17 ) ) ) );
     $body_line_height = max( 1.3, min( 2.2, (float) get_theme_mod( 'lunara_body_line_height', 1.7 ) ) );
     $section_title    = max( 24, min( 64, absint( get_theme_mod( 'lunara_section_title_size', 34 ) ) ) );
@@ -3036,7 +3028,7 @@ function lunara_output_runtime_customizer_css() {
     $dropdown_width      = absint( get_theme_mod( 'lunara_dropdown_width', 220 ) );
     $dropdown_pad        = absint( get_theme_mod( 'lunara_dropdown_padding', 10 ) );
 
-    $css .= '.lunara-nav .sub-menu{background:' . $dropdown_bg . ';border:1px solid ' . $dropdown_border . ';border-radius:8px;min-width:' . $dropdown_width . 'px;padding:' . $dropdown_pad . 'px 0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}';
+    $css .= '.lunara-nav .sub-menu{background:' . $dropdown_bg . ';border:1px solid ' . $dropdown_border . ';border-radius:0;min-width:' . $dropdown_width . 'px;padding:' . $dropdown_pad . 'px 0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}';
     $css .= '.lunara-nav .sub-menu li a{color:' . $dropdown_text . ';padding:8px 18px;display:block;font-size:0.9em;}';
     $css .= '.lunara-nav .sub-menu li a:hover{color:' . $dropdown_hover_text . ';background:' . $dropdown_hover_bg . ';}';
 

@@ -198,7 +198,7 @@
     align-items: center !important;
     background: rgba(12, 27, 45, 0.84) !important;
     border: 1px solid rgba(224, 196, 129, 0.24) !important;
-    border-radius: 8px !important;
+    border-radius: 0 !important;
     color: rgba(233, 240, 247, 0.88) !important;
     display: inline-flex !important;
     box-sizing: border-box !important;
@@ -812,7 +812,7 @@
     align-items: center !important;
     background: rgba(15, 29, 46, 0.84) !important;
     border: 1px solid rgba(201, 169, 97, 0.24) !important;
-    border-radius: 8px !important;
+    border-radius: 0 !important;
     box-sizing: border-box !important;
     display: inline-flex !important;
     font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;

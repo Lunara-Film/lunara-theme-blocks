@@ -1,3 +1,4 @@
+const assertSquareSurfaces = require('./tools/assert-square-surfaces.cjs');
 'use strict';
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -16,6 +17,7 @@ const fixture = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-nav
             const page = await context.newPage();
             await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#09151e;color:#f4efe3}main{padding:20px}</style>${fixture.css}</head><body class="lunara-header-takeover">${fixture.html}<main><h1>A complete article headline</h1><p>Readable content below the shared header.</p></main>${scripts?'<script>'+fs.readFileSync(path.join(root,'assets/js/lunara-header.js'),'utf8')+'</script>':''}</body></html>`);
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true,`No overflow ${width}, JS ${scripts}`); ++checks;
+            await assertSquareSurfaces(page, `Header ${width}, JS ${scripts}`);
             const composition = await page.evaluate(() => {
                 const box = selector => { const r=document.querySelector(selector).getBoundingClientRect(); return {left:r.left,right:r.right,center:(r.left+r.right)/2,width:r.width}; };
                 return {width:innerWidth,brand:box('.lunara-header-brand'),nav:box('.lunara-header-nav'),search:box('.lunara-header-search'),menu:box('.lunara-header-burger')};
@@ -43,6 +45,7 @@ const fixture = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-nav
                 await page.locator('#lunara-offcanvas').waitFor({state:'visible'});
                 assert.equal(await opener.getAttribute('aria-expanded'),'true'); ++checks;
                 assert.equal(await page.locator('.lunara-offcanvas-nav a').count(),4); ++checks;
+                await assertSquareSurfaces(page, `Open menu ${width}`);
                 const closer=page.locator('.lunara-offcanvas-close');
                 for(const control of [opener,closer]) {const target=await control.boundingBox();assert.ok(target.width>=44&&target.height>=44,'Navigation touch target');++checks;}
                 await closer.focus(); await page.keyboard.press('Shift+Tab');

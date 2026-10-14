@@ -40,6 +40,16 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Surfaces and type
 
+- Public frames and controls have square corners in every responsive and
+  interaction state: artwork, cards, menus, dialogs, buttons, inputs, filters,
+  badges and pagination. Update each owning declaration and late PHP emitter;
+  do not append a global radius override. Saved legacy surface-radius and media
+  rounded attributes cannot restore curves. Their obsolete editor controls retire
+  without deleting stored content. The Lunara brand seal, its crescent mark and
+  relationship-diagram nodes/arcs retain their meaningful circular geometry.
+  The third-party carousel loading ring remains a functional progress indicator.
+- Verify rendered corners alongside existing browser layout and keyboard tests.
+  A CSS edit alone does not prove that saved settings or critical CSS agree.
 - Ground: `#0a1520`; reading text: near-white; accent: `#c9a961` or `#e0c481`.
   Saved valid color choices must keep their intended semantics and contrast.
 - Tiempos Headline carries editorial headings; Tiempos Text carries reading.

@@ -1,3 +1,4 @@
+const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{execFileSync}=require('node:child_process'),{chromium}=require('playwright-core');
 const root=path.resolve(__dirname,'..');
@@ -34,12 +35,13 @@ async function waitClosed(page){await page.waitForFunction(()=>document.querySel
    const page=await context.newPage();page.setDefaultTimeout(6000);await install(page);
    const opener=page.locator('.lunara-header-search'),second=page.locator('#second-trigger'),input=page.locator('#lunara-search-overlay-input'),close=page.locator('.lunara-search-overlay-close'),overlay=page.locator('#lunara-search-overlay');
    await opener.focus();await page.keyboard.press('Enter');await waitOpen(page);
+   await assertSquareSurfaces(page, 'Open and focused search');
    check(await active(input),'Opening focuses the real Search input');
    const lastSuggestion=page.locator('.lunara-search-suggestion').last();
    await page.keyboard.press('Shift+Tab');check(await active(lastSuggestion),'Shift+Tab wraps to the current final suggestion');
    await page.keyboard.press('Tab');check(await active(input),'Tab wraps from the final suggestion to input');
    await page.keyboard.press('Tab');check(await active(close),'Ordinary forward Tab order stays native');
-   await input.fill('Lunara');await page.waitForSelector('.lunara-search-hit--more');
+   await input.fill('Lunara');await page.waitForSelector('.lunara-search-hit--more'); await assertSquareSurfaces(page, 'Search results');
    check(await input.inputValue()==='Lunara','Typing remains unchanged while results refresh');
    await page.locator('.lunara-search-hit--more').focus();await page.keyboard.press('Tab');check(await active(input),'New result and More links participate in forward containment');
    await page.keyboard.press('Shift+Tab');check(await active(page.locator('.lunara-search-hit--more')),'Current dynamic More link is the reverse boundary');

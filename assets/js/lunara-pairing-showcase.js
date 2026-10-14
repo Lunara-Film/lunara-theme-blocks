@@ -257,7 +257,7 @@
 
 		var cardBox = {
 			border: '1px solid rgba(128,128,128,0.25)',
-			borderRadius: '6px',
+			borderRadius: '0',
 			padding: '10px',
 			marginBottom: '12px'
 		};
@@ -343,7 +343,7 @@
 							render: function ( o ) {
 								return el( 'div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
 									posterId && posterCache[ posterId ]
-										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '3px' } } )
+										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '0' } } )
 										: null,
 									el( Button, { variant: 'secondary', size: 'small', onClick: o.open },
 										posterId ? __( 'Replace poster', 'lunara-film' ) : __( 'Poster override (optional)', 'lunara-film' ) ),

@@ -109,7 +109,7 @@
 
 body.lunara-oscars-portal-page .lunara-oscars-board {
     border: 1px solid rgba(201, 169, 97, 0.2);
-    border-radius: 22px;
+    border-radius: 0;
     background:
         linear-gradient(180deg, rgba(16, 28, 43, 0.94), rgba(7, 15, 26, 0.96));
     box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
@@ -147,7 +147,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-row {
     aspect-ratio: 2 / 3;
     padding: clamp(10px, .9vw, 16px);
     border: 1px solid rgba(201, 169, 97, 0.16);
-    border-radius: 14px;
+    border-radius: 0;
     background: linear-gradient(180deg, rgba(20, 40, 60, 0.7), rgba(7, 15, 26, 0.98));
     min-width: 0;
     overflow: hidden;
@@ -261,7 +261,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-status {
     align-items: center;
     padding: 3px 8px;
     border: 1px solid rgba(237, 210, 150, 0.4);
-    border-radius: 999px;
+    border-radius: 0;
     background: rgba(7, 15, 26, 0.72);
     color: #e0c481;
     font-size: clamp(0.8125rem, .2vw + 0.8125rem, 0.8125rem);
@@ -397,7 +397,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-actions a {
-        border-radius: 999px !important;
+        border-radius: 0 !important;
         font-size: clamp(.84rem, .3vw + 0.8125rem, 1.05rem) !important;
         line-height: 1.15 !important;
         min-height: 38px !important;
@@ -411,7 +411,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-stat {
-        border-radius: 15px !important;
+        border-radius: 0 !important;
         gap: 5px !important;
         min-width: 0 !important;
         padding: 12px 12px 11px !important;
@@ -505,7 +505,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
-        border-radius: 16px !important;
+        border-radius: 0 !important;
         max-height: 350px !important;
     }
 
@@ -571,7 +571,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
 
     body.lunara-oscars-portal-page .lunara-oscars-research-shell {
         border: 1px solid rgba(201, 169, 97, .24) !important;
-        border-radius: 0 0 18px 18px !important;
+        border-radius: 0 !important;
         border-top: 0 !important;
         overflow: hidden !important;
     }
@@ -592,7 +592,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
 
     body.lunara-oscars-portal-page .lunara-ledger-carousel-wrap {
         border: 1px solid rgba(201, 169, 97, .14) !important;
-        border-radius: 18px !important;
+        border-radius: 0 !important;
         overflow: hidden !important;
         padding: 12px !important;
     }
@@ -850,7 +850,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
         }
 
         body.lunara-oscars-portal-page .lunara-oscars-research-shell {
-            border-radius: 16px !important;
+            border-radius: 0 !important;
             border-top: 1px solid rgba(201, 169, 97, .24) !important;
             margin-top: 12px !important;
         }
@@ -891,7 +891,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
         }
 
         body.lunara-oscars-portal-page .lunara-oscars-portal-stat {
-            border-radius: 12px !important;
+            border-radius: 0 !important;
             padding: 10px !important;
         }
 
@@ -1366,7 +1366,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
     justify-content: center !important;
     margin: auto 18px 18px !important;
     padding: 5px 8px !important;
-    border-radius: 3px !important;
+    border-radius: 0 !important;
 }
 #primary#primary.lunara-oscars-portal .aat-filmography-title {
     padding: 18px !important;
@@ -1582,7 +1582,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-hero .lunara-oscars-portal-
         height: min(58vw, 300px);
         z-index: 0;
         pointer-events: none;
-        border-radius: inherit;
+        border-radius: 0;
         background-image:
             linear-gradient(180deg, rgba(7,16,27,.5) 0%, rgba(7,16,27,.66) 45%, rgba(7,16,27,.92) 80%, #07101b 100%),
             var(--lunara-oscars-hero-backdrop, none);

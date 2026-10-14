@@ -1,3 +1,4 @@
+const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -20,6 +21,7 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
         return route.fulfill({ contentType: type, body: fs.readFileSync(file) });
     });
     await page.goto('https://carousel.test/');
+    await assertSquareSurfaces(page, "Home carousel fixture");
     return page;
 }
 (async () => {

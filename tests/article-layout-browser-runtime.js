@@ -1,3 +1,4 @@
+const assertSquareSurfaces = require('./tools/assert-square-surfaces.cjs');
 'use strict';
 /* Real Review/Journal template geometry; JavaScript is disabled throughout. */
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
@@ -118,6 +119,7 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                     fs.mkdirSync(process.env.LUNARA_ARTICLE_ARTIFACT_DIR, { recursive: true });
                     await page.screenshot({ path: path.join(process.env.LUNARA_ARTICLE_ARTIFACT_DIR, label.replace('@', '-') + '.png'), fullPage: true });
                 }
+                await assertSquareSurfaces(page, label);
                 metrics.push({ case: label, contentWidth: data.content.width, titleHeight: data.title.height, titleSize: data.titleSize, hero: data.hero, paragraphSize: data.paragraphSize });
                 await page.close();
             }
@@ -153,6 +155,7 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                         return {box:rect(card),body:rect(body),poster:rect(poster),padding:[style.paddingTop,style.paddingRight,style.paddingBottom,style.paddingLeft].map(parseFloat),noteSize:parseFloat(getComputedStyle(note).fontSize),noteText:note.textContent.trim(),titleClamp:getComputedStyle(title).webkitLineClamp,noteClamp:getComputedStyle(note).webkitLineClamp,textVisible:[...range.getClientRects()].every(r=>r.bottom<=copy.bottom+1&&r.right<=copy.right+1&&r.left>=copy.left-1),hasLink:!!card.querySelector('a[href]'),imageFit:img?getComputedStyle(img).objectFit:null,fallback:!!poster.querySelector('.lunara-pair-card-plate')};
                     })};
                 });
+                await assertSquareSurfaces(page, `Pairings ${index}@${width}`);
                 const pairs=pairing.cards, roles=await fullHeadingMetrics(page,'.lunara-pair-card-role');
                 assert(roles.length===3&&roles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='center'&&role.centerDelta<=1&&role.fontSize>=13), `Pairings ${index}@${width}: full role names remain visible and centered within the argument lane`, roles);
                 assert(pairing.width<=width+1&&Math.abs(pairing.section.left+pairing.section.width/2-width/2)<=1&&Math.abs(pairing.section.width-Math.min(860,pairing.availableWidth))<=1&&pairing.columns.trim().split(/\s+/).length===1&&pairing.gap===20, `Pairings ${index}@${width}: centered860px section contains one column of rows with20px gaps`, pairing);
@@ -167,6 +170,7 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
             const method=await browser.newPage({viewport:{width,height:1000},javaScriptEnabled:false});
             await method.route('**/*', route => route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#183441"/></svg>'}));
             await method.setContent(`<style>body{margin:0}</style><style>${sharedCss}\n${debriefCss}</style>${debriefMethod}`, {waitUntil:'load'});
+            await assertSquareSurfaces(method, `Debrief ${width}`);
             const composition=await method.evaluate(()=>({width:document.documentElement.scrollWidth,centers:[...document.querySelectorAll('.lunara-debrief-page,.lunara-debrief-title,.lunara-debrief-thesis,.lunara-debrief-section-title,.lunara-debrief-why-body,.lunara-debrief-words-body,.lunara-debrief-moves-list,.lunara-debrief-orbit-slide,.lunara-debrief-recent-list,.lunara-debrief-next')].map(el=>({selector:el.className,center:el.getBoundingClientRect().left+el.getBoundingClientRect().width/2})),headingAlign:[...document.querySelectorAll('.lunara-debrief-title,.lunara-debrief-section-title')].map(el=>getComputedStyle(el).textAlign),moves:[...document.querySelectorAll('.lunara-debrief-move')].map(el=>({top:el.getBoundingClientRect().top,width:el.getBoundingClientRect().width,font:parseFloat(getComputedStyle(el.querySelector('.lunara-debrief-move-copy')).fontSize)})),title:document.querySelector('.lunara-debrief-title').textContent}));
             const methodRoles = await fullHeadingMetrics(method, '.lunara-debrief-move-name');
             assert(methodRoles.length===3&&methodRoles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='center'&&role.centerDelta<=1), `Method@${width}: full relationship headings remain visible, unclipped and centered`, methodRoles);

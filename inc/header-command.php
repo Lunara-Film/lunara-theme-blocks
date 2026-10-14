@@ -382,7 +382,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-header-search {
 			display: inline-grid; place-items: center; flex: 0 0 44px;
 			width: 44px; height: 44px; padding: 0; cursor: pointer; text-decoration: none;
-			border: 1px solid rgba(201,169,97,.32); border-radius: 999px;
+			border: 1px solid rgba(201,169,97,.32); border-radius: 0;
 			background: rgba(7,15,24,.58); color: rgba(224,196,129,.92);
 			box-shadow: inset 0 0 0 1px rgba(255,255,255,.015);
 			transition: color .18s ease, border-color .18s ease, background-color .18s ease, transform .18s ease, box-shadow .18s ease;
@@ -405,7 +405,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		}
 		.lunara-header-burger {
 			position: relative; width: 44px; height: 44px; cursor: pointer;
-			border: 1px solid rgba(201,169,97,.3); border-radius: 999px;
+			border: 1px solid rgba(201,169,97,.3); border-radius: 0;
 			background: rgba(244,239,227,.05);
 		}
 		.lunara-header-burger span, .lunara-header-burger span::before, .lunara-header-burger span::after {
@@ -480,7 +480,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-offcanvas.is-open .lunara-offcanvas-panel { transform: none; }
 		.lunara-offcanvas-close {
 			position: absolute; top: 22px; right: 26px; width: 44px; height: 44px;
-			cursor: pointer; border: 1px solid rgba(201,169,97,.32); border-radius: 999px;
+			cursor: pointer; border: 1px solid rgba(201,169,97,.32); border-radius: 0;
 			background: transparent; color: rgba(224,196,129,.92); font-size: 1.3rem; line-height: 1;
 		}
 		.lunara-offcanvas-kicker {
