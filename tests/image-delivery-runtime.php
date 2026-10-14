@@ -124,13 +124,11 @@ foreach ( array( 'movie', 'person' ) as $type ) {
 	ob_start(); lunara_output_entity_geometry_css(); $entity = ob_get_clean();
 	img_assert( false !== strpos( $entity, '<style id="lunara-entity-geometry-css">' ) && false !== strpos( $entity, '.lunara-entity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr))' ), 'The dossier seed prints on ' . $type . ' pages.' );
 }
-// Every seeded declaration must match style.css, so the seed never changes the settled layout.
-$style = preg_replace( '/\s+/', '', file_get_contents( dirname( __DIR__ ) . '/style.css' ) );
-foreach ( array( '.lunara-entity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:clamp(14px,2vw,22px);margin-top:14px;}', '.lunara-entity-hero-inner{position:relative;z-index:2;display:flex;gap:clamp(22px,3.4vw,44px);align-items:flex-end;padding:clamp(28px,4.4vw,56px);}', '.lunara-entity-hero-poster{flex:00clamp(160px,18vw,250px);aspect-ratio:2/3;overflow:hidden;', '.lunara-entity-hero-poster{flex-basis:auto;width:min(58vw,220px);}', '.lunara-entity-body>*+*{margin-top:clamp(28px,4vw,44px);}', '.lunara-entity-awards{padding:clamp(20px,3vw,32px);border:1pxsolidrgba(201,169,97,0.24);border-radius:16px;', '.lunara-entity-award{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px14px;padding:10px4px;', '.lunara-entity-award-state{margin-left:auto;padding:3px10px;' ) as $rule ) {
-	img_assert( false !== strpos( $style, $rule ), 'style.css still carries the seeded rule ' . substr( $rule, 0, 40 ) );
-}
+// Seed/final geometry is compared in the browser, not pinned to CSS text.
 $GLOBALS['img_route'] = array( 'type' => 'journal' );
 ob_start(); lunara_output_entity_geometry_css(); img_assert( '' === ob_get_clean(), 'The dossier seed stays off other singular routes.' );
 img_assert( in_array( 'lunara-entity-geometry-css', lunara_rocket_preserve_front_door_css( array() ), true ) && in_array( 'lunara-home-hero-geometry-css', lunara_rocket_preserve_front_door_css( array() ), true ), 'Both seeds are excluded from used-CSS rewriting.' );
+
+if ( in_array( '--entity-seed', $argv ?? array(), true ) ) { echo $entity; exit; }
 
 echo "Image delivery runtime passed: {$checks} checks.\n";
