@@ -6,19 +6,19 @@
    ============================================================ */
 .lunara-debrief-page,
 .lunara-debrief-page * { box-sizing: border-box; }
-.lunara-debrief-page { display: grid; gap: clamp(40px, 6vw, 76px); width: min(100%, 1120px); margin: 0 auto; padding: clamp(18px, 3vw, 34px) clamp(16px, 3vw, 28px) clamp(48px, 6vw, 80px); }
-.lunara-debrief-kicker { margin: 0 0 10px; color: var(--lunara-gold, #c9a961); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0; text-transform: none; }
-.lunara-debrief-section-title { margin: 0 0 clamp(18px, 2.6vw, 28px); max-width: 30ch; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(1.4rem, 2.8vw, 2.1rem); line-height: 1.18; text-wrap: balance; }
+.lunara-debrief-page { display: grid; gap: clamp(40px, 6vw, 76px); width: min(100%, 1120px); margin: 0 auto; padding: clamp(18px, 3vw, 34px) clamp(20px, 3vw, 28px) clamp(48px, 6vw, 80px); }
+.lunara-debrief-kicker { margin: 0 0 10px; text-align: center; color: var(--lunara-gold, #c9a961); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0; text-transform: none; }
+.lunara-debrief-section-title { margin: 0 auto clamp(18px, 2.6vw, 28px); text-align: center; max-width: 30ch; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(1.4rem, 2.8vw, 2.1rem); line-height: 1.18; text-wrap: balance; }
 .lunara-debrief-section-title a { color: var(--lunara-gold-light, #e0c481); text-decoration: none; border-bottom: 1px solid rgba(201, 169, 97, 0.45); }
 
 /* Hero */
-.lunara-debrief-hero { position: relative; overflow: hidden; border: 0 !important; border-radius: 0 !important; background: linear-gradient(160deg, var(--lunara-bg-secondary, #0f1d2e), var(--lunara-bg-primary, #0a1520)); box-shadow: none !important; }
+.lunara-debrief-hero { position: relative; overflow: hidden; border: 0 !important; border-radius: 0 !important; background: var(--lunara-bg-primary, #0a1520); box-shadow: none !important; }
 .lunara-debrief-hero-backdrop { position: absolute; inset: -4%; background-position: center 30%; background-size: cover; filter: saturate(0.9); }
 .lunara-debrief-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7, 15, 26, 0.94) 0%, rgba(7, 15, 26, 0.55) 55%, rgba(7, 15, 26, 0.3) 100%); }
 .lunara-debrief-hero-inner { position: relative; z-index: 2; padding: clamp(30px, 6vw, 64px) clamp(20px, 4vw, 48px); }
-.lunara-debrief-title { margin: 0 0 14px; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-signature, serif); font-size: clamp(2.2rem, 5.4vw, 3.6rem); line-height: 1.06; }
-.lunara-debrief-thesis { margin: 0; max-width: 56ch; color: rgba(244, 239, 227, 0.86); font-family: var(--lunara-font-body, Georgia, serif); font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.6; text-wrap: pretty; }
-.lunara-debrief-stats { display: flex; flex-wrap: wrap; gap: 12px clamp(20px, 4vw, 44px); margin: clamp(22px, 3vw, 32px) 0 0; padding: clamp(16px, 2vw, 20px) 0 0; border-top: 1px solid rgba(201, 169, 97, 0.22); }
+.lunara-debrief-title { margin: 0 auto 14px; text-align: center; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-signature, serif); max-width: 18ch; font-size: clamp(2.5rem, 5.4vw, 4.4rem); line-height: 1.08; text-wrap: balance; }
+.lunara-debrief-thesis { margin: 0 auto; text-align: center; max-width: 56ch; color: rgba(244, 239, 227, 0.86); font-family: var(--lunara-font-body, Georgia, serif); font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.6; text-wrap: pretty; }
+.lunara-debrief-stats { display: flex; justify-content: center; text-align: center; flex-wrap: wrap; gap: 12px clamp(20px, 4vw, 44px); margin: clamp(22px, 3vw, 32px) 0 0; padding: clamp(16px, 2vw, 20px) 0 0; border-top: 1px solid rgba(201, 169, 97, 0.22); }
 .lunara-debrief-stats div { display: grid; gap: 2px; }
 .lunara-debrief-stats dt { color: rgba(244, 239, 227, 0.62); font-family: var(--lunara-font-label, sans-serif); font-size: .875rem !important; letter-spacing: 0 !important; text-transform: none !important; line-height: 1.4 !important; }
 .lunara-debrief-stats dd { margin: 0; color: var(--lunara-gold-light, #e0c481); font-family: var(--lunara-font-display, serif); font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -27,16 +27,16 @@
 }
 
 /* The three moves */
-.lunara-debrief-moves-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; counter-reset: lunara-debrief-move; }
+.lunara-debrief-moves-list { display: grid; gap: clamp(24px, 3vw, 40px); margin: 0; padding: 0; list-style: none; counter-reset: lunara-debrief-move; }
 @media (min-width: 821px) { .lunara-debrief-moves-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.lunara-debrief-move { display: grid; align-content: start; gap: 10px; padding: clamp(18px, 2.4vw, 26px); border: 0; border-top: 1px solid rgba(201,169,97,.28); border-radius: 0; background: transparent; counter-increment: lunara-debrief-move; }
+.lunara-debrief-move { display: grid; align-content: start; gap: 10px; padding: 22px 0 0; border: 0; border-top: 1px solid rgba(201,169,97,.28); border-radius: 0; background: transparent; counter-increment: lunara-debrief-move; }
 .lunara-debrief-move--counter { border-top-color: #b8664f; }
 .lunara-debrief-move--career { border-top-color: #7f9bb8; }
-.lunara-debrief-move-name { margin: 0; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(1.24rem, 2vw, 1.5rem); line-height: 1.2; }
+.lunara-debrief-move-name { margin: 0; text-align: center; color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(1.24rem, 2vw, 1.5rem); line-height: 1.2; }
 .lunara-debrief-move-name::before { content: none !important; display: block; margin-bottom: 6px; color: rgba(201, 169, 97, 0.75); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0.24em; }
-.lunara-debrief-move-question { margin: 0; color: var(--lunara-gold-light, #e0c481); font-family: var(--lunara-font-body, Georgia, serif); font-size: 1rem; font-style: italic; line-height: 1.45; }
-.lunara-debrief-move-copy { margin: 0; color: rgba(244, 239, 227, 0.82); font-family: var(--lunara-font-body, Georgia, serif); font-size: 0.96rem; line-height: 1.6; }
-.lunara-debrief-move-not { margin: 4px 0 0; padding-top: 10px; border-top: 1px dashed rgba(201, 169, 97, 0.22); color: rgba(244, 239, 227, 0.6); font-family: var(--lunara-font-body, Georgia, serif); font-size: 0.86rem; line-height: 1.5; }
+.lunara-debrief-move-question { margin: 0; text-align: center; color: var(--lunara-gold-light, #e0c481); font-family: var(--lunara-font-body, Georgia, serif); font-size: 1rem; font-style: italic; line-height: 1.45; }
+.lunara-debrief-move-copy { margin: 0; color: rgba(244, 239, 227, 0.82); font-family: var(--lunara-font-body, Georgia, serif); font-size: 1rem; line-height: 1.7; }
+.lunara-debrief-move-not { margin: 4px 0 0; padding-top: 10px; border-top: 1px solid rgba(201, 169, 97, 0.16); color: rgba(244, 239, 227, 0.6); font-family: var(--lunara-font-body, Georgia, serif); font-size: 0.86rem; line-height: 1.5; }
 
 /* Why three + editor seat */
 .lunara-debrief-why,
@@ -44,7 +44,7 @@
 .lunara-debrief-specimen,
 .lunara-debrief-recent { border-top: 1px solid rgba(201, 169, 97, 0.2); padding-top: clamp(26px, 4vw, 44px); }
 .lunara-debrief-why-body,
-.lunara-debrief-words-body { display: grid; gap: 1em; max-width: 64ch; color: rgba(244, 239, 227, 0.88); font-family: var(--lunara-font-body, Georgia, serif); font-size: clamp(1rem, 1.3vw, 1.14rem); line-height: 1.7; }
+.lunara-debrief-words-body { display: grid; margin-inline: auto; gap: 1em; max-width: 64ch; color: rgba(244, 239, 227, 0.88); font-family: var(--lunara-font-body, Georgia, serif); font-size: clamp(1rem, 1.3vw, 1.14rem); line-height: 1.7; }
 .lunara-debrief-why-body p,
 .lunara-debrief-words-body > * { margin: 0; }
 .lunara-debrief-words-body a { color: var(--lunara-gold-light, #e0c481); }
@@ -68,19 +68,19 @@
 .lunara-debrief-orbit-node--counter { grid-area: counter; --orbit-accent: var(--orbit-counter); }
 .lunara-debrief-orbit-node--career { grid-area: career; --orbit-accent: var(--orbit-career); }
 .lunara-debrief-orbit-poster { position: relative; display: block; width: 100%; aspect-ratio: 2 / 3; border-radius: 0 !important; background: rgba(7, 15, 26, 0.9); box-shadow: none !important; }
-.lunara-debrief-orbit-poster img { display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+.lunara-debrief-orbit-poster img { display: block; width: 100%; height: 100%; border-radius: 0; object-fit: cover; }
 .lunara-debrief-orbit-node--center .lunara-debrief-orbit-poster { box-shadow: none !important; border-radius: 0 !important; }
-.lunara-debrief-orbit-halo { position: absolute; inset: -14px; z-index: -1; border: 1px solid rgba(201, 169, 97, 0.35); border-radius: 18px; opacity: 0; display: none !important; }
+.lunara-debrief-orbit-halo { position: absolute; inset: -14px; z-index: -1; border: 1px solid rgba(201, 169, 97, 0.35); border-radius: 0; opacity: 0; display: none !important; }
 .lunara-debrief-orbit-plate { display: grid; place-content: center; gap: 10px; height: 100%; padding: 12px; color: rgba(244, 239, 227, 0.86); font-family: var(--lunara-font-display, serif); font-size: 0.86rem; line-height: 1.25; text-align: center; }
 .lunara-debrief-orbit-plate-mark { justify-self: center; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset -6px 0 0 0 var(--orbit-accent, var(--orbit-gold)); }
-.lunara-debrief-orbit-caption { position: relative; display: grid; gap: 3px; padding: 4px 10px 5px; border-radius: 8px; background: rgba(8, 17, 28, 0.82); }
+.lunara-debrief-orbit-caption { position: relative; display: grid; gap: 3px; padding: 8px 0 0; border-radius: 0; background: transparent; }
 .lunara-debrief-orbit-role { color: var(--orbit-accent, var(--orbit-gold)); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0; text-transform: none; }
-.lunara-debrief-orbit-title { color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(0.86rem, 1.4vw, 1rem); line-height: 1.25; }
+.lunara-debrief-orbit-title { color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.25; }
 .lunara-debrief-orbit-node--center .lunara-debrief-orbit-title { font-size: clamp(1.02rem, 2vw, 1.3rem); }
-.lunara-debrief-orbit-year { color: rgba(244, 239, 227, 0.56); font-size: 0.86em; }
+.lunara-debrief-orbit-year { color: rgba(244, 239, 227, 0.56); font-size: 0.875rem; }
 a.lunara-debrief-orbit-node:hover .lunara-debrief-orbit-title,
 a.lunara-debrief-orbit-node:focus-visible .lunara-debrief-orbit-title { color: var(--lunara-gold-light, #e0c481); }
-a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold); outline-offset: 6px; border-radius: 12px; }
+a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold); outline-offset: 6px; border-radius: 0; }
 
 /* From 760px the Debrief is a true triangle: Theme Echo upper left, Counter-Program
    upper right, Career Context below, the film at the centre. --s scales the geometry. */
@@ -102,7 +102,7 @@ a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold)
 .lunara-debrief-orbit-lines { position: absolute; inset: 0; z-index: 0; pointer-events: none; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit-line { position: absolute; display: none; height: 2px; margin-top: -1px; transform-origin: 0 50%; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit-slide.is-laid-out .lunara-debrief-orbit-line { display: block; box-shadow: none !important; filter: none !important; }
-.lunara-debrief-orbit-line i { position: relative; display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, rgba(201, 169, 97, 0.95), var(--orbit-accent, rgba(201, 169, 97, 0.5))); transform-origin: 0 50%; box-shadow: none !important; filter: none !important; }
+.lunara-debrief-orbit-line i { position: relative; display: block; height: 100%; border-radius: 0; background: linear-gradient(90deg, rgba(201, 169, 97, 0.95), var(--orbit-accent, rgba(201, 169, 97, 0.5))); transform-origin: 0 50%; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit-line--theme { --orbit-accent: var(--orbit-theme); box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit-line--counter { --orbit-accent: var(--orbit-counter); box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit-line--career { --orbit-accent: var(--orbit-career); box-shadow: none !important; filter: none !important; }
@@ -126,7 +126,7 @@ a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold)
 
 /* After the draw: a halo breathes around the film, signals travel outward, pairings drift. */
 .lunara-debrief-orbit.is-animated .is-drawn .lunara-debrief-orbit-halo { animation: lunara-orbit-halo 3.6s ease-out 0.2s infinite; display: none !important; }
-.lunara-debrief-orbit-line--spoke i::after { content: ""; position: absolute; top: -2px; left: 0; width: 34px; height: 6px; border-radius: 6px; background: transparent; opacity: 0; box-shadow: none !important; filter: none !important; }
+.lunara-debrief-orbit-line--spoke i::after { content: ""; position: absolute; top: -2px; left: 0; width: 34px; height: 6px; border-radius: 0; background: transparent; opacity: 0; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit.is-animated .is-drawn .lunara-debrief-orbit-line--spoke i::after { animation: lunara-orbit-signal 2.8s ease-in-out 2.4s infinite; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit.is-animated .is-drawn .lunara-debrief-orbit-line--counter i::after { animation-delay: 3.1s; box-shadow: none !important; filter: none !important; }
 .lunara-debrief-orbit.is-animated .is-drawn .lunara-debrief-orbit-line--career i::after { animation-delay: 3.8s; box-shadow: none !important; filter: none !important; }
@@ -141,22 +141,22 @@ a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold)
 @keyframes lunara-orbit-float { from { transform: translateY(-4px); } to { transform: translateY(4px); } }
 
 /* Controls */
-.lunara-debrief-orbit-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 16px; }
+.lunara-debrief-orbit-controls { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 16px; }
 .lunara-debrief-orbit-controls[hidden] { display: none; }
-.lunara-debrief-orbit-toggle { min-height: 44px !important; padding: 6px 14px; border: 1px solid rgba(201, 169, 97, 0.4); border-radius: 999px; background: transparent; color: var(--lunara-gold-light, #e0c481); font-family: var(--lunara-font-label, sans-serif); font-size: .875rem !important; letter-spacing: 0 !important; text-transform: none !important; cursor: pointer; }
+.lunara-debrief-orbit-toggle { min-height: 44px !important; padding: 6px 14px; border: 1px solid rgba(201, 169, 97, 0.4); border-radius: 0; background: transparent; color: var(--lunara-gold-light, #e0c481); font-family: var(--lunara-font-label, sans-serif); font-size: .875rem !important; letter-spacing: 0 !important; text-transform: none !important; cursor: pointer; }
 .lunara-debrief-orbit-toggle:hover,
 .lunara-debrief-orbit-toggle:focus-visible { border-color: var(--orbit-gold); background: rgba(201, 169, 97, 0.1); }
 .lunara-debrief-orbit-toggle-play,
 .lunara-debrief-orbit-toggle[aria-pressed="true"] .lunara-debrief-orbit-toggle-pause { display: none; }
 .lunara-debrief-orbit-toggle[aria-pressed="true"] .lunara-debrief-orbit-toggle-play { display: inline; }
-.lunara-debrief-orbit-tabs { display: flex; flex: 1 1 200px; gap: 8px; }
-.lunara-debrief-orbit-tab { position: relative; flex: 1 1 0; max-width: 72px; min-height: 24px; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.lunara-debrief-orbit-tab::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 3px; background: rgba(244, 239, 227, 0.18); }
-.lunara-debrief-orbit-tab-fill { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 3px; background: var(--orbit-gold); transform: scaleX(0); transform-origin: 0 50%; }
+.lunara-debrief-orbit-tabs { display: flex; justify-content: center; flex: 0 1 280px; gap: 8px; }
+.lunara-debrief-orbit-tab { position: relative; flex: 1 1 0; max-width: 72px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.lunara-debrief-orbit-tab::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 0; background: rgba(244, 239, 227, 0.18); }
+.lunara-debrief-orbit-tab-fill { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 0; background: var(--orbit-gold); transform: scaleX(0); transform-origin: 0 50%; }
 .lunara-debrief-orbit-tab[aria-current="true"] .lunara-debrief-orbit-tab-fill { transform: scaleX(var(--orbit-progress, 1)); }
 .lunara-debrief-orbit-tab:hover::before,
 .lunara-debrief-orbit-tab:focus-visible::before { background: rgba(244, 239, 227, 0.4); }
-.lunara-debrief-orbit-tab:focus-visible { outline: 2px solid var(--orbit-gold); outline-offset: 2px; border-radius: 4px; }
+.lunara-debrief-orbit-tab:focus-visible { outline: 2px solid var(--orbit-gold); outline-offset: 2px; border-radius: 0; }
 
 @media (prefers-reduced-motion: reduce) {
 	.lunara-debrief-orbit.is-ready .lunara-debrief-orbit-slide { transition: none; }
@@ -166,13 +166,13 @@ a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold)
 
 /* Recent debriefs */
 .lunara-debrief-recent-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
-.lunara-debrief-recent-item { display: grid; gap: 10px; padding: 16px 0; border-bottom: 1px solid rgba(201, 169, 97, 0.14); }
-@media (min-width: 821px) { .lunara-debrief-recent-item { grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr); gap: 24px; align-items: baseline; } }
+.lunara-debrief-recent-item { display: grid; justify-items: center; text-align: center; gap: 10px; padding: 16px 0; border-bottom: 1px solid rgba(201, 169, 97, 0.14); }
+
 .lunara-debrief-recent-review { color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: 1.06rem; line-height: 1.3; text-decoration: none; }
 .lunara-debrief-recent-review:hover,
 .lunara-debrief-recent-review:focus-visible { color: var(--lunara-gold-light, #e0c481); }
-.lunara-debrief-recent-pairs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.lunara-debrief-recent-pair { display: inline-flex; align-items: baseline; gap: 8px; max-width: 100%; padding: 4px 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; color: rgba(244, 239, 227, 0.86); font-family: var(--lunara-font-body, Georgia, serif); font-size: 0.9rem; }
+.lunara-debrief-recent-pairs { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.lunara-debrief-recent-pair { display: inline-flex; align-items: baseline; gap: 8px; max-width: 100%; padding: 4px 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; color: rgba(244, 239, 227, 0.86); font-family: var(--lunara-font-body, Georgia, serif); font-size: 1rem; line-height: 1.5; }
 .lunara-debrief-recent-pair a { color: inherit; text-decoration: none; }
 .lunara-debrief-recent-pair a:hover,
 .lunara-debrief-recent-pair a:focus-visible { color: var(--lunara-gold-light, #e0c481); }
@@ -181,9 +181,9 @@ a.lunara-debrief-orbit-node:focus-visible { outline: 2px solid var(--orbit-gold)
 .lunara-debrief-recent-pair--career .lunara-debrief-recent-role { color: #9fb7cf; }
 
 /* Keep going */
-.lunara-debrief-next { display: flex; flex-wrap: wrap; gap: 14px 40px; border-top: 1px solid rgba(201, 169, 97, 0.2); padding-top: clamp(26px, 4vw, 44px); }
+.lunara-debrief-next { display: flex; justify-content: center; text-align: center; flex-wrap: wrap; gap: 14px 40px; border-top: 1px solid rgba(201, 169, 97, 0.2); padding-top: clamp(26px, 4vw, 44px); }
 .lunara-debrief-next-link { display: inline-flex; flex-direction: column; gap: 6px; text-decoration: none; }
-.lunara-debrief-next-link em { font-style: normal; color: var(--lunara-gold, #c9a961); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0.24em; text-transform: uppercase; }
+.lunara-debrief-next-link em { font-style: normal; color: var(--lunara-gold, #c9a961); font-family: var(--lunara-font-label, sans-serif); font-size: 0.8125rem; letter-spacing: 0; text-transform: none; }
 .lunara-debrief-next-link span { color: var(--lunara-text, #fafbfc); font-family: var(--lunara-font-display, serif); font-size: 1.14rem; border-bottom: 1px solid rgba(201, 169, 97, 0.45); }
 .lunara-debrief-next-link:hover span,
 .lunara-debrief-next-link:focus-visible span { color: var(--lunara-gold-light, #e0c481); }

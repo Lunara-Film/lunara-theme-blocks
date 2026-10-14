@@ -14,7 +14,7 @@ body .lunara-journal-home-deskbar {
 				margin: 18px 0 22px !important;
 				padding: 12px 14px !important;
 				border: 1px solid rgba(224,196,129,.16) !important;
-				border-radius: 8px !important;
+				border-radius: 0 !important;
 				background: rgba(9,20,34,.72) !important;
 				color: rgba(233,240,247,.86) !important;
 			}
@@ -56,7 +56,7 @@ body .lunara-journal-home-deskbar {
 				min-height: 38px !important;
 				padding: 9px 14px !important;
 				border: 1px solid rgba(224,196,129,.24) !important;
-				border-radius: 8px !important;
+				border-radius: 0 !important;
 				background: rgba(12,27,45,.84) !important;
 				color: rgba(233,240,247,.88) !important;
 				font-size: 0.8125rem !important;
@@ -324,11 +324,8 @@ body.home .lunara-journal-home-grid,
         .aat-entity-hero,
 .aat-entity-main,
 .aat-hub-hero,
-.aat-hub-grid,
-.aat-filmography-grid,
 .aat-records-grid,
 .aat-timeline,
-.aat-winner-circle-grid,
 .aat-metrics-grid,
 .aat-highlight-grid {
             display: grid !important;
@@ -452,30 +449,6 @@ body.home .lunara-journal-home-grid,
         .aat-container img {
             height: auto !important;
             max-width: 100% !important;
-        }
-
-        .aat-stats-bar.aat-entity-stats {
-            display: grid !important;
-            gap: 10px !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            justify-content: stretch !important;
-            margin: 20px 0 30px !important;
-        }
-
-        .aat-stats-bar.aat-entity-stats .aat-stat {
-            align-content: start !important;
-            display: grid !important;
-            gap: 4px !important;
-            min-width: 0 !important;
-            padding: 13px 14px !important;
-            text-align: left !important;
-        }
-
-        .aat-stats-bar.aat-entity-stats .aat-stat-number,
-        .aat-stats-bar.aat-entity-stats .aat-stat-label {
-            display: block !important;
-            min-width: 0 !important;
-            overflow-wrap: anywhere !important;
         }
 
         .aat-decade-nav,
@@ -741,7 +714,7 @@ body.single-review .lunara-full-spoiler-warning {
         margin: 0 0 clamp(22px, 3vw, 34px) !important;
         padding: clamp(18px, 2.8vw, 30px) !important;
         border: 1px solid rgba(224, 196, 129, 0.48) !important;
-        border-radius: 16px !important;
+        border-radius: 0 !important;
         background:
             linear-gradient(90deg, rgba(224, 196, 129, 0.2), transparent 36%),
             linear-gradient(135deg, rgba(18, 29, 42, 0.98), rgba(7, 17, 29, 0.98) 62%, rgba(24, 14, 14, 0.93)) !important;
@@ -792,7 +765,7 @@ body.single-review .lunara-full-spoiler-warning {
         max-width: 100% !important;
         padding: 11px 18px !important;
         border: 1px solid rgba(224, 196, 129, 0.58) !important;
-        border-radius: 999px !important;
+        border-radius: 0 !important;
         background: rgba(224, 196, 129, 0.12) !important;
         color: rgba(244, 216, 143, 0.98) !important;
         font-family: var(--lunara-body-font, inherit) !important;
@@ -829,7 +802,7 @@ body.single-review .lunara-full-spoiler-warning {
         max-width: 100% !important;
         padding: 12px 18px !important;
         border: 1px solid rgba(244, 216, 143, 0.82) !important;
-        border-radius: 999px !important;
+        border-radius: 0 !important;
         background: linear-gradient(135deg, rgba(244, 216, 143, 0.98), rgba(171, 126, 47, 0.96)) !important;
         color: rgba(8, 17, 29, 0.98) !important;
         cursor: pointer !important;
@@ -900,7 +873,7 @@ body.single-review .lunara-full-spoiler-warning {
         max-width: calc(100% - 24px) !important;
         padding: 5px 9px !important;
         border: 1px solid rgba(244, 216, 143, 0.58) !important;
-        border-radius: 999px !important;
+        border-radius: 0 !important;
         background: rgba(5, 14, 25, 0.84) !important;
         color: rgba(244, 216, 143, 0.98) !important;
         font-family: var(--lunara-body-font, inherit) !important;
@@ -917,7 +890,7 @@ body.single-review .lunara-full-spoiler-warning {
             grid-template-columns: minmax(0, 1fr) !important;
             align-items: stretch !important;
             padding: 16px !important;
-            border-radius: 13px !important;
+            border-radius: 0 !important;
         }
 
         body.single-review .lunara-full-spoiler-warning-link {
@@ -993,7 +966,7 @@ body.home .lunara-latest-reviews-section .lunara-review-grid {
         }
 
 /* Phase 1C: cacheable public footer and trailer badge */
-.ct-footer,footer.site-footer:not(.lunara-site-footer){display:none!important;}#header .menu-item-27569 .ct-menu-badge{display:none!important;}.lunara-site-footer{position:relative;overflow:hidden;margin-top:clamp(76px,8vw,120px);padding:clamp(48px,6vw,86px) 0 54px;background:var(--lunara-bg-primary, #0a1520) !important;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text,#FAFBFC);}.lunara-footer-inner{max-width:min(100%,1360px);margin:0 auto;padding-inline:var(--lunara-shell-pad,28px);display:grid;gap:48px;}.lunara-footer-brand{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}.lunara-footer-logo{max-height:var(--lunara-logo-max,64px);width:auto;}.lunara-footer-tagline{max-width:48ch;margin:0;color:var(--lunara-text-muted,#A8A8B8);font-size:.98rem;line-height:1.55;}.lunara-footer-nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;}.lunara-footer-nav-col{padding:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;background-image: none !important;box-shadow: none !important;}.lunara-footer-col-heading{margin:0 0 16px;color:var(--lunara-gold,#c9a961);font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;line-height: 1.4 !important;}.lunara-footer-nav-col ul,.lunara-site-footer .menu{list-style:none!important;margin:0!important;padding:0!important;display:grid!important;gap:10px!important;}.lunara-footer-nav-col li,.lunara-site-footer .menu li{list-style:none!important;margin:0!important;padding:0!important;}.lunara-site-footer .menu a{display:inline-flex!important;align-items:center;min-height:44px !important;padding:8px 0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--lunara-text,#FAFBFC)!important;font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;text-decoration:none!important;box-shadow: none !important;min-inline-size: 44px !important;}.lunara-footer-nav-col a{display:inline-flex!important;align-items:center;min-height:44px !important;padding:8px 0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--lunara-text,#FAFBFC)!important;font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;text-decoration:none!important;transform: none !important;box-shadow: none !important;min-inline-size: 44px !important;}.lunara-site-footer .menu a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;background: transparent !important;border: 0 !important;border-radius: 0 !important;padding: 8px 0 !important;font-size: .875rem !important;letter-spacing: 0 !important;text-transform: none !important;min-height: 44px !important;box-shadow: none !important;}.lunara-footer-nav-col a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;background: transparent !important;border: 0 !important;border-radius: 0 !important;padding: 8px 0 !important;min-height: 44px !important;font-size: .875rem !important;letter-spacing: 0 !important;text-transform: none !important;transform: none !important;box-shadow: none !important;}.lunara-footer-utility{display:flex;justify-content:space-between;gap:14px 18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text-muted,#A8A8B8);font-size:0.8125rem;}.lunara-footer-utility a{color:var(--lunara-text-muted,#A8A8B8)!important;text-decoration:none!important;}@media(max-width:900px){.lunara-footer-nav-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}@media(max-width:640px){.lunara-footer-nav-grid{grid-template-columns:1fr;}.lunara-footer-utility{justify-content:center;text-align:center;}}
+.ct-footer,footer.site-footer:not(.lunara-site-footer){display:none!important;}#header .menu-item-27569 .ct-menu-badge{display:none!important;}.lunara-site-footer{position:relative;overflow:hidden;margin-top:clamp(76px,8vw,120px);padding:clamp(48px,6vw,86px) 0 54px;background:var(--lunara-bg-primary, #0a1520) !important;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text,#FAFBFC);}.lunara-footer-inner{max-width:min(100%,1360px);margin:0 auto;padding-inline:var(--lunara-shell-pad,28px);display:grid;gap:48px;}.lunara-footer-brand{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}.lunara-footer-logo{max-height:var(--lunara-logo-max,64px);width:auto;}.lunara-footer-tagline{max-width:48ch;margin:0;color:var(--lunara-text-muted,#A8A8B8);font-size:.98rem;line-height:1.55;}.lunara-footer-nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;text-align:center;}.lunara-footer-nav-col{padding:0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;background-image: none !important;box-shadow: none !important;}.lunara-footer-col-heading{margin:0 0 16px;color:var(--lunara-gold,#c9a961);font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;line-height: 1.4 !important;}.lunara-footer-nav-col ul,.lunara-site-footer .menu{list-style:none!important;margin:0!important;padding:0!important;display:grid!important;justify-items:center;gap:10px!important;}.lunara-footer-nav-col li,.lunara-site-footer .menu li{list-style:none!important;margin:0!important;padding:0!important;}.lunara-site-footer .menu a{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px !important;padding:8px 0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--lunara-text,#FAFBFC)!important;font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;text-decoration:none!important;box-shadow: none !important;min-inline-size: 44px !important;}.lunara-footer-nav-col a{display:inline-flex!important;align-items:center;justify-content:center;min-height:44px !important;padding:8px 0 !important;border:0 !important;border-radius:0 !important;background:transparent !important;color:var(--lunara-text,#FAFBFC)!important;font-size:.875rem !important;letter-spacing:0 !important;text-transform:none !important;text-decoration:none!important;transform: none !important;box-shadow: none !important;min-inline-size: 44px !important;}.lunara-site-footer .menu a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;background: transparent !important;border: 0 !important;border-radius: 0 !important;padding: 8px 0 !important;font-size: .875rem !important;letter-spacing: 0 !important;text-transform: none !important;min-height: 44px !important;box-shadow: none !important;}.lunara-footer-nav-col a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;background: transparent !important;border: 0 !important;border-radius: 0 !important;padding: 8px 0 !important;min-height: 44px !important;font-size: .875rem !important;letter-spacing: 0 !important;text-transform: none !important;transform: none !important;box-shadow: none !important;}.lunara-footer-utility{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px 18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text-muted,#A8A8B8);font-size:0.8125rem;}.lunara-footer-utility a{color:var(--lunara-text-muted,#A8A8B8)!important;text-decoration:none!important;}@media(max-width:640px){.lunara-footer-nav-grid{grid-template-columns:1fr;}.lunara-footer-utility{justify-content:center;text-align:center;}}
 
 .lunara-trailer-card-badge {
 				display: inline-flex !important;

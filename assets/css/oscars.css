@@ -622,7 +622,7 @@ table.aat-datatable thead th.aat-col-control {
 .aat-imdb-link:focus-visible {
     outline: 2px solid var(--aat-gold);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .aat-imdb-pills {
@@ -674,7 +674,7 @@ table.aat-datatable thead th.aat-col-control {
 .dataTables_wrapper .dataTables_filter input {
     background: var(--aat-dark-gray);
     border: 2px solid rgba(201, 169, 97, 0.3);
-    border-radius: 6px;
+    border-radius: 0;
     color: var(--aat-white);
     padding: 8px 12px;
     margin: 0 8px;
@@ -689,7 +689,7 @@ table.aat-datatable thead th.aat-col-control {
     background: transparent !important;
     border: 1px solid rgba(201, 169, 97, 0.3) !important;
     color: var(--aat-light-gray) !important;
-    border-radius: 6px;
+    border-radius: 0;
     margin: 0 3px;
     transition: var(--aat-transition);
 }
@@ -721,7 +721,7 @@ table.aat-datatable thead th.aat-col-control {
     background: transparent !important;
     border: 2px solid var(--aat-gold) !important;
     color: var(--aat-gold) !important;
-    border-radius: 6px;
+    border-radius: 0;
     padding: 10px 20px;
     font-weight: 600;
     transition: var(--aat-transition);
@@ -756,7 +756,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
     width: 20px;
     margin-top: -10px;
     border: 1px solid rgba(201, 169, 97, 0.6);
-    border-radius: 999px;
+    border-radius: 0;
     box-shadow: 0 0 0 2px rgba(10, 21, 32, 0.6);
     background-color: rgba(201, 169, 97, 0.12);
     color: var(--aat-gold);
@@ -777,7 +777,7 @@ table.dataTable > tbody > tr.child ul.dtr-details {
     width: 100%;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(201, 169, 97, 0.25);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 12px 14px;
     margin: 10px 0;
 }
@@ -1004,7 +1004,7 @@ table.dataTable > tbody > tr.child ul.dtr-details .dtr-data {
     transform: translate(-50%, -50%) !important;
     padding: 14px 18px;
     width: auto;
-    border-radius: 10px;
+    border-radius: 0;
     background: rgba(10, 21, 32, 0.92);
     border: 1px solid rgba(201, 169, 97, 0.35);
     color: var(--aat-gold) !important;
@@ -1383,180 +1383,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before
     opacity: 0.9;
 }
 
-/* Poster image in entity pages (used when no review exists) */
-.aat-entity-poster {
-    display: block;
-    max-width: 240px;
-    width: 100%;
-    height: auto;
-}
-
-.aat-entity-poster-wrap {
-    flex: 0 0 240px;
-    max-width: 240px;
-}
-
-@media (max-width: 700px) {
-    .aat-entity-poster-wrap {
-        flex: 0 0 100%;
-        max-width: 320px;
-    }
-}
-
-
-/* =============================
-   Rich Entity Page Enhancements
-   ============================= */
-.aat-breadcrumbs {
-    margin: 0 0 18px;
-    color: var(--aat-light-gray);
-    opacity: 0.88;
-}
-.aat-breadcrumbs a {
-    color: var(--aat-gold-light);
-    text-decoration: none;
-}
-.aat-breadcrumbs a:hover {
-    color: var(--aat-gold);
-}
-.aat-entity-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
-    gap: 28px;
-    align-items: center;
-    margin-bottom: 26px;
-}
-.aat-entity-poster-wrap {
-    max-width: 280px;
-}
-.aat-entity-poster-wrap img,
-.aat-entity-poster {
-    width: 100%;
-    height: auto;
-}
-.aat-entity-kicker {
-    color: var(--aat-gold-light);
-    margin-bottom: 10px;
-}
-.aat-entity-page .aat-entity-title {
-    margin: 0 0 8px;
-    color: var(--aat-white);
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    text-wrap: balance;
-}
-.aat-entity-summary {
-    max-width: 72ch;
-    color: var(--aat-light-gray);
-    opacity: .95;
-    margin: 18px 0 0;
-}
-.aat-entity-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 18px;
-}
-.aat-entity-stats {
-    margin-top: 0;
-    margin-bottom: 34px;
-}
-.aat-section-head {
-    margin-bottom: 16px;
-}
-.aat-section-description {
-    margin: 0;
-    color: var(--aat-light-gray);
-    opacity: .85;
-}
-.aat-timeline-list {
-    display: grid;
-    gap: 18px;
-}
-.aat-timeline-card {
-    padding: 22px;
-}
-.aat-timeline-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    padding-bottom: 14px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(201,169,97,.16);
-}
-.aat-timeline-ceremony {
-    color: var(--aat-gold);
-    font-weight: 700;
-}
-.aat-timeline-year {
-    color: var(--aat-gold-light);
-}
-.aat-timeline-body {
-    display: grid;
-    gap: 14px;
-}
-.aat-history-item {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) auto;
-    gap: 16px;
-    align-items: start;
-    padding: 16px;
-}
-.aat-history-detail {
-    display: grid;
-    gap: 8px;
-    margin-top: 10px;
-}
-.aat-history-line {
-    color: var(--aat-light-gray);
-}
-.aat-history-line .aat-entity-link {
-    color: var(--aat-gold);
-    font-weight: 700;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    text-decoration-color: rgba(201,169,97,.55);
-}
-.aat-history-line .aat-entity-link:hover {
-    color: var(--aat-gold-light);
-    text-decoration-color: rgba(224,196,129,.8);
-}
-.aat-history-line-muted {
-    color: rgba(255,255,255,.72);
-    font-style: italic;
-}
-.aat-history-status {
-    display: flex;
-    align-items: start;
-}
-.aat-history-category .aat-category-pill {
-    margin-bottom: 0;
-}
-@media (max-width: 900px) {
-    .aat-entity-hero {
-        grid-template-columns: 1fr;
-    }
-    .aat-entity-poster-wrap {
-        max-width: 220px;
-    }
-}
-@media (max-width: 720px) {
-    .aat-history-item {
-        grid-template-columns: 1fr;
-    }
-    .aat-timeline-meta {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-/* Phase 1 enrichment */
-.aat-entity-meta-line{display:flex;flex-wrap:wrap;gap:10px 16px;margin:10px 0 14px;color:#d9d0bb}.aat-entity-meta-line span+span:before{content:'•';margin-right:14px;color:rgba(201,169,97,.7)}
-.aat-entity-overview{max-width:72ch;color:#efe8d6;margin-top:10px}
-.aat-filmography-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:24px}.aat-filmography-card{overflow:hidden}.aat-filmography-link{display:block;color:inherit;text-decoration:none}.aat-filmography-poster-wrap{aspect-ratio:2/3;overflow:hidden}.aat-filmography-poster,.aat-filmography-poster-wrap img{width:100%;height:100%;object-fit:cover;display:block}.aat-filmography-poster-placeholder{display:grid;place-items:center;width:100%;height:100%;padding:18px;text-align:center;color:#d7ceb8}.aat-filmography-title{padding:14px 14px 2px;margin:0}.aat-filmography-meta{padding:0 14px 14px;margin:0;color:#b9ad92}
-
+/* Entity composition and history are owned by the Ledger plugin. */
 
 /* Rich fallback states so Oscar pages never feel empty */
 .aat-entity-hero.is-no-poster {

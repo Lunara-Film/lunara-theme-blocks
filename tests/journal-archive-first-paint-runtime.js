@@ -124,11 +124,11 @@ function laneMarkup(slug, scenario) {
     }
     if (slug === 'grid') {
         const card = (index, media) => {
-            const visualLead = index === 0 && !scenario.paged && !scenario.taxonomy;
+            const visualLead = index === 0 && !scenario.paged && !scenario.taxonomy && !scenario.sorted;
             const hasMedia = media && !(index === 0 && scenario.undersizedLead);
             return `<article class="lunara-review-grid-card lunara-journal-archive-card${visualLead ? ' is-lead' : ''}${hasMedia ? ' has-media' : ' is-text-brief'}"><a class="lunara-review-grid-link" href="#">${hasMedia ? `<div class="lunara-review-grid-poster-wrap"><img class="lunara-review-grid-poster" src="${imageData}" width="1920" height="1080" loading="${visualLead ? 'eager' : 'lazy'}" fetchpriority="${visualLead ? 'high' : 'auto'}" alt="Wide editorial still"></div>` : ''}<div class="lunara-review-grid-copy"><p class="lunara-review-grid-kicker">${visualLead ? 'Lead file' : 'From the desk'}</p><p class="lunara-dispatch-type lunara-journal-archive-card-type">Industry Dispatch</p><div class="lunara-journal-card-provenance"><span class="lunara-journal-card-provenance-pill">Original reporting</span></div><h3 class="lunara-review-grid-title">Lanterns Is Doing Something Stranger Than DC Usually Gets Away With</h3><p class="lunara-review-grid-excerpt">A specific reported argument gives the archive card enough editorial density to exercise its real line rhythm.</p><div class="lunara-review-grid-footer lunara-journal-archive-card-footer"><span class="lunara-review-grid-meta">August 15, 2026</span><span class="lunara-review-grid-updated">Updated today</span><span class="lunara-journal-archive-card-cta">Read file</span></div></div></a></article>`;
         };
-        return `<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid">${card(0, true)}${card(1, true)}${card(2, false)}${card(3, true)}${card(4, true)}${card(5, false)}${card(6, true)}${card(7, true)}</section>`;
+        return `<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid${!scenario.paged && !scenario.taxonomy && !scenario.sorted && (scenario.cardCount ?? 8) >= 3 ? ' is-editorial-edition' : ''}">${Array.from({ length: scenario.cardCount ?? 8 }, (_, index) => card(index, index % 3 !== 2)).join('')}</section>`;
     }
     if (slug === 'retention') {
         const media = scenario.retentionMedia ? `<span class="lunara-journal-archive-retention-media" style="--lunara-retention-focus-x:31%;--lunara-retention-focus-y:67%"><img src="${imageData}" width="1920" height="1080" alt="Retention still"></span>` : '';
@@ -450,13 +450,86 @@ async function assertStructure(page, scenario) {
     if (expectedGallery && (Math.abs(result.galleryRatio - 16 / 9) > 0.02 || result.galleryFill > 1 || result.galleryObjectPosition !== '31% 67%' || !result.galleryIntrinsic)) {
         throw new Error(`Gallery media geometry failed: ${JSON.stringify(result)}`);
     }
-    const expectsVisualLead = !scenario.paged && !scenario.taxonomy && !(scenario.hidden || []).includes('grid');
+    const expectsVisualLead = !scenario.paged && !scenario.taxonomy && !scenario.sorted && !(scenario.hidden || []).includes('grid');
     if (expectsVisualLead && (result.leadImageOpacity !== '1' || result.leadImageTransitionDuration !== '0s' || result.leadImageLoadedClass !== false)) {
         throw new Error(`The page-one Journal lead must paint without waiting for the shared image-reveal runtime: ${JSON.stringify(result)}`);
     }
     if (!expectsVisualLead && result.leadImageOpacity !== null) {
         throw new Error('Paged and taxonomy archives must not expose a visual-lead image override.');
     }
+}
+
+async function assertEditionGeometry(browser) {
+    let checks = 0;
+    for (const density of ['compact', 'editorial', 'showcase']) {
+        const headCss = renderHeadCss({ density });
+        for (const width of [390, 640, 641, 768, 900, 980, 981, 1440]) {
+            const testPage = await openTestPage(browser, width);
+            const page = testPage.page;
+            await page.setContent(documentHtml({ order: defaultOrder }, headCss), { waitUntil: 'load' });
+            const geometry = await page.evaluate((sizes) => {
+                const grid = document.querySelector('.lunara-journal-archive-slot-grid');
+                const cards = [...grid.children];
+                const rects = cards.map(card => card.getBoundingClientRect().toJSON());
+                const mediaWidths = cards.map(card => card.querySelector('.lunara-review-grid-poster-wrap')?.getBoundingClientRect().width ?? null);
+                const excerpt = cards[0].querySelector('.lunara-review-grid-excerpt');
+                excerpt.textContent = 'Extraordinary filmmakers reconsider storytelling alongside uncompromising collaborators. '.repeat(12);
+                const excerptStyle = getComputedStyle(excerpt);
+                const leadUnclipped = excerpt.scrollHeight <= excerpt.clientHeight + 1 && excerptStyle.maxHeight === 'none';
+                const slotWidth = slot => {
+                    // Split only at top-level commas; min()/clamp() have commas too.
+                    const alternatives = [];
+                    let depth = 0, start = 0;
+                    for (let i = 0; i < sizes[slot].length; i++) {
+                        const character = sizes[slot][i];
+                        if (character === '(') depth++;
+                        if (character === ')') depth--;
+                        if (character === ',' && depth === 0) {
+                            alternatives.push(sizes[slot].slice(start, i).trim());
+                            start = i + 1;
+                        }
+                    }
+                    alternatives.push(sizes[slot].slice(start).trim());
+                    const selected = alternatives.find(value => !value.startsWith('(max-width:') || matchMedia(value.slice(0, value.indexOf(')') + 1)).matches);
+                    const cssWidth = selected.replace(/^\(max-width:[^)]+\) /, '');
+                    const probe = document.createElement('div');
+                    probe.style.cssText = `position:absolute;width:${cssWidth}`;
+                    document.body.append(probe);
+                    const width = probe.getBoundingClientRect().width;
+                    probe.remove();
+                    return width;
+                };
+                const box = grid.getBoundingClientRect();
+                const axis = box.x + box.width / 2;
+                const controls = ['.lunara-archive-hero-title','.lunara-journal-archive-slot-deskbar','.lunara-archive-sort','.lunara-journal-archive-slot-pagination'].map(selector => {
+                    const node=document.querySelector(selector),r=node.getBoundingClientRect();return {selector,delta:Math.abs(r.x+r.width/2-axis)};
+                });
+                return { rects, axis, controls, leadUnclipped, deltas: mediaWidths.map((width, index) => width === null ? 0 : Math.abs(width - slotWidth(index === 0 ? 'lead' : index < 3 ? 'supporting' : 'index'))) };
+            }, headCss.sizes);
+            if (geometry.deltas.some(delta => delta > 1)) throw new Error(`Image slot mismatch at ${width}/${density}: ${JSON.stringify(geometry)}`);
+            if(geometry.controls.some(item=>item.delta>1))throw new Error(`Journal identity/control groups must share the page axis: ${JSON.stringify(geometry)}`);
+            if (width > 980) {
+                const [lead, second, third, fourth] = geometry.rects;
+                const last=geometry.rects.at(-1),center=r=>r.x+r.width/2;
+                if (!geometry.leadUnclipped || lead.width <= second.width || Math.abs(center(lead)-geometry.axis)>1 || Math.abs(second.y-third.y)>1 || Math.abs((second.x+third.right)/2-geometry.axis)>1 || second.y < lead.bottom-1 || fourth.y < second.bottom-1 || Math.abs(center(last)-geometry.axis)>1) throw new Error(`Centered edition hierarchy and incomplete row failed: ${JSON.stringify(geometry)}`);
+            }
+            await testPage.context.close();
+            checks++;
+        }
+    }
+    // Small archives, alternate order and missing lead art must remain usable.
+    for (const scenario of [{ cardCount: 1 }, { cardCount: 2 }, { sorted: true }, { paged: true }, { taxonomy: true }, { undersizedLead: true }]) {
+        const testPage = await openTestPage(browser, 1440);
+        await testPage.page.setContent(documentHtml({ order: defaultOrder, ...scenario }, renderHeadCss({})), { waitUntil: 'load' });
+        const state = await testPage.page.evaluate(() => {
+            const cards = [...document.querySelectorAll('.lunara-journal-archive-card')];
+            return { widths: cards.map(card => card.getBoundingClientRect().width), overflow: document.documentElement.scrollWidth - innerWidth, visibleTitles: cards.every(card => card.querySelector('.lunara-review-grid-title').getBoundingClientRect().height > 0) };
+        });
+        if (state.overflow > 1 || !state.visibleTitles || (!scenario.undersizedLead && state.widths.some(width => Math.abs(width - state.widths[0]) > 1))) throw new Error(`Uniform/small/missing-art archive failed: ${JSON.stringify({ scenario, state })}`);
+        await testPage.context.close();
+        checks++;
+    }
+    return checks;
 }
 
 async function openTestPage(browser, width, height = 900) {
@@ -698,6 +771,7 @@ async function assertMediaFailureBehavior(browser, headCss) {
 
 async function assertCardScopeBehavior(browser, headCss) {
     for (const scenario of [
+        { name: 'sorted', sorted: true, order: defaultOrder, gallery: false, retentionMedia: false },
         { name: 'paged', paged: true, order: defaultOrder, gallery: false, retentionMedia: false },
         { name: 'taxonomy', taxonomy: true, order: defaultOrder, gallery: false, retentionMedia: false },
     ]) {
@@ -809,6 +883,7 @@ async function assertLocalClsCohort(browser, headCss) {
     const results = [];
     let localClsCohort;
     let labelFontCohort;
+    let editionChecks;
     try {
         for (const [scenarioName, scenario] of Object.entries(scenarios)) {
             for (const width of scenarioName === 'default' ? [320, 390, 540, 768, 1440] : [390, 768, 1440]) {
@@ -851,6 +926,7 @@ async function assertLocalClsCohort(browser, headCss) {
         }
         await assertMediaFailureBehavior(browser, headCss);
         await assertCardScopeBehavior(browser, headCss);
+        editionChecks = await assertEditionGeometry(browser);
         localClsCohort = await assertLocalClsCohort(browser, headCss);
         labelFontCohort = await assertLicensedLabelFontCohorts(browser, headCss);
     } finally {
@@ -859,7 +935,7 @@ async function assertLocalClsCohort(browser, headCss) {
     const candidateBase = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: themeRoot, encoding: 'utf8' }).trim();
     const candidateIndexTree = execFileSync('git', ['write-tree'], { cwd: themeRoot, encoding: 'utf8' }).trim();
     const candidateDiff = execFileSync('git', ['-c', 'core.autocrlf=false', '-c', 'core.safecrlf=false', 'diff', '--binary', 'HEAD'], { cwd: themeRoot });
-    const report = { capturedAt: new Date().toISOString(), browserVersion, candidateBase, candidateIndexTree, candidateDiffHash: crypto.createHash('sha256').update(candidateDiff).digest('hex'), fixtureBytes, fixtureHash, aggregateBytes: 847152, aggregateHash: '6670f9bc1f11eb7c082e7c43e3f2ec66a2472d5131f3e3a935eb691415cfaeae', compressedAggregateBytes: staleAggregate.compressedBytes, compressedAggregateHash: staleAggregate.compressedHash, routeBytes, routeHash, criticalModuleHash, variablesHash: crypto.createHash('sha256').update(headCss.variables, 'utf8').digest('hex'), seedHash: crypto.createHash('sha256').update(headCss.seed, 'utf8').digest('hex'), headBytes, exactAggregate: staleAggregate.exact, localClsCohort, labelFontCohort, results };
+    const report = { capturedAt: new Date().toISOString(), browserVersion, candidateBase, candidateIndexTree, candidateDiffHash: crypto.createHash('sha256').update(candidateDiff).digest('hex'), fixtureBytes, fixtureHash, aggregateBytes: 847152, aggregateHash: '6670f9bc1f11eb7c082e7c43e3f2ec66a2472d5131f3e3a935eb691415cfaeae', compressedAggregateBytes: staleAggregate.compressedBytes, compressedAggregateHash: staleAggregate.compressedHash, routeBytes, routeHash, criticalModuleHash, variablesHash: crypto.createHash('sha256').update(headCss.variables, 'utf8').digest('hex'), seedHash: crypto.createHash('sha256').update(headCss.seed, 'utf8').digest('hex'), headBytes, editionChecks, exactAggregate: staleAggregate.exact, localClsCohort, labelFontCohort, results };
     const serialized = JSON.stringify(report, null, 2) + '\n';
     if (process.env.LUNARA_JOURNAL_EVIDENCE_OUT) fs.writeFileSync(path.resolve(process.env.LUNARA_JOURNAL_EVIDENCE_OUT), serialized);
     process.stdout.write(serialized);

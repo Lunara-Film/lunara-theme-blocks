@@ -530,10 +530,10 @@ function lunara_output_home_hero_geometry_css() {
     // Splide inserts the arrows and pagination at mount, beside the Play/Pause
     // toggle. On desktop their positioning lives only in deferred CSS, so until it
     // arrived they sat in normal flow and pushed the page down (measured CLS 0.98).
-    // Take them out of flow here; the later stylesheets set the same properties and
-    // refine the offsets. Phones (900px and below) deliberately place the controls
+    // Match the centered desktop toggle without retaining a legacy right inset.
+    // Phones (900px and below) deliberately place the controls
     // in the grid's flow, so the seed leaves them alone there.
-    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;left:0;right:0;bottom:28px;z-index:4;margin:0;padding:0}.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;right:24px;bottom:16px;z-index:5}}</style>';
+    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;left:0;right:0;bottom:28px;z-index:4;margin:0;padding:0}.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;left:50%;right:auto;bottom:64px;transform:translateX(-50%);z-index:5}}</style>';
 }
 add_action( 'wp_head', 'lunara_output_home_hero_geometry_css', 2 );
 
@@ -552,7 +552,7 @@ function lunara_output_entity_geometry_css() {
         return;
     }
 
-    echo '<style id="lunara-entity-geometry-css">.lunara-entity-hero{position:relative;overflow:hidden;margin:28px 0 34px}.lunara-entity-hero-backdrop{position:absolute;inset:-4%}.lunara-entity-hero-overlay{position:absolute;inset:0}.lunara-entity-hero-inner{position:relative;z-index:2;display:flex;gap:clamp(22px,3.4vw,44px);align-items:flex-end;padding:clamp(28px,4.4vw,56px)}.lunara-entity-hero-poster{flex:0 0 clamp(160px,18vw,250px);aspect-ratio:2/3;overflow:hidden}.lunara-entity-hero-poster img,.lunara-entity-card-poster img{display:block;width:100%;height:100%;object-fit:cover}.lunara-entity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:clamp(14px,2vw,22px);margin-top:14px}.lunara-entity-card-poster{aspect-ratio:2/3;overflow:hidden}.lunara-entity-body>*+*{margin-top:clamp(28px,4vw,44px)}.lunara-entity-awards{padding:clamp(20px,3vw,32px);border:1px solid rgba(201,169,97,.24);border-radius:16px}.lunara-entity-awards-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}.lunara-entity-awards-tally{margin:0}.lunara-entity-award-list{margin:0;padding:0;list-style:none}.lunara-entity-award{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:10px 4px}.lunara-entity-award-year{min-width:52px}.lunara-entity-award-state{margin-left:auto;padding:3px 10px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase}@media (max-width:760px){.lunara-entity-hero-inner{flex-direction:column;align-items:flex-start}.lunara-entity-hero-poster{flex-basis:auto;width:min(58vw,220px)}.lunara-entity-award-state{margin-left:0}}</style>';
+    echo '<style id="lunara-entity-geometry-css">.lunara-entity-hero{position:relative;overflow:hidden;margin:28px 0 34px}.lunara-entity-hero-backdrop{position:absolute;inset:-4%}.lunara-entity-hero-overlay{position:absolute;inset:0}.lunara-entity-hero-inner{position:relative;z-index:2;display:flex;gap:clamp(22px,3.4vw,44px);align-items:flex-end;padding:clamp(28px,4.4vw,56px)}.lunara-entity-hero-poster{flex:0 0 clamp(160px,18vw,250px);aspect-ratio:2/3;overflow:hidden}.lunara-entity-hero-poster img,.lunara-entity-card-poster img{display:block;width:100%;height:100%;object-fit:cover}.lunara-entity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:clamp(14px,2vw,22px);margin-top:14px}.lunara-entity-card-poster{aspect-ratio:2/3;overflow:hidden}.lunara-entity-body>*+*{margin-top:clamp(28px,4vw,44px)}.lunara-entity-awards{padding:clamp(20px,3vw,32px);border:1px solid rgba(201,169,97,.24);border-radius:0}.lunara-entity-awards-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}.lunara-entity-awards-tally{margin:0}.lunara-entity-award-list{margin:0;padding:0;list-style:none}.lunara-entity-award{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:10px 4px}.lunara-entity-award-year{min-width:52px}.lunara-entity-award-state{margin-left:auto;padding:3px 10px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase}@media (max-width:760px){.lunara-entity-hero-inner{flex-direction:column;align-items:flex-start}.lunara-entity-hero-poster{flex-basis:auto;width:min(58vw,220px)}.lunara-entity-award-state{margin-left:0}}</style>';
 }
 add_action( 'wp_head', 'lunara_output_entity_geometry_css', 2 );
 
@@ -1281,7 +1281,34 @@ function lunara_output_oscars_ledger_critical_css() {
 add_action( 'wp_head', 'lunara_output_oscars_ledger_critical_css', 7 );
 
 /**
- * The canonical Home renderer does not consume block or theme.json markup.
+ * Only the known section renderers can safely omit block/global CSS.
+ * Hybrid Home composition may also contain core, synced or third-party blocks.
+ */
+function lunara_home_can_trim_block_styles() {
+    if ( ! is_front_page() || is_preview() || is_customize_preview() || ! empty( $GLOBALS['lunara_site_studio_preview_context'] ) ) {
+        return false;
+    }
+    if ( ! function_exists( 'lunara_home_uses_block_composition' ) || ! lunara_home_uses_block_composition() ) {
+        return true; // The legacy registry renders only owned sections.
+    }
+    if ( ! function_exists( 'parse_blocks' ) || ! function_exists( 'lunara_home_section_block_map' ) ) {
+        return false;
+    }
+    $owned = array_values( lunara_home_section_block_map() );
+    $blocks = parse_blocks( lunara_home_front_page_content( lunara_home_front_page_id() ) );
+    foreach ( $blocks as $block ) {
+        if ( empty( $block['blockName'] ) && '' === trim( isset( $block['innerHTML'] ) ? $block['innerHTML'] : '' ) ) {
+            continue;
+        }
+        if ( ! in_array( $block['blockName'], $owned, true ) || ! empty( $block['innerBlocks'] ) ) {
+            return false; // Unknown output retains its styles; no recursive guess.
+        }
+    }
+    return true;
+}
+
+/**
+ * The canonical Home section renderers do not consume theme.json markup.
  *
  * WordPress core prints the full global stylesheet through actions in both
  * the header and footer, so dequeueing the handle alone cannot prevent the
@@ -1289,7 +1316,7 @@ add_action( 'wp_head', 'lunara_output_oscars_ledger_critical_css', 7 );
  * mobile pixel comparisons confirmed this stylesheet has no visual effect.
  */
 function lunara_disable_unused_home_global_styles() {
-    if ( ! is_front_page() ) {
+    if ( ! lunara_home_can_trim_block_styles() ) {
         return;
     }
 
@@ -1304,7 +1331,7 @@ add_action( 'wp', 'lunara_disable_unused_home_global_styles', 0 );
  * these unused styles were removed, so keep them off this route only.
  */
 function lunara_trim_unused_home_styles() {
-    if ( ! is_front_page() ) {
+    if ( ! lunara_home_can_trim_block_styles() ) {
         return;
     }
 
@@ -4243,10 +4270,10 @@ if ( ! function_exists( 'lunara_render_newsletter_signup' ) ) {
             .lunara-newsletter-heading{margin:0;color:var(--lunara-gold,#c9a961);font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.12;}
             .lunara-newsletter-blurb{margin:0 auto;max-width:52ch;color:rgba(223,228,234,.86);font-size:clamp(.95rem,1vw,1.05rem);line-height:1.6;}
             .lunara-newsletter-form{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px;}
-            .lunara-newsletter-input{flex:1 1 280px;min-width:0;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.5);border-radius:3px;background:#0a1520;color:var(--lunara-text,#fafbfc);font-size:1rem;}
+            .lunara-newsletter-input{flex:1 1 280px;min-width:0;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.5);border-radius:0;background:#0a1520;color:var(--lunara-text,#fafbfc);font-size:1rem;}
             .lunara-newsletter-input::placeholder{color:#bac4ce;}
             .lunara-newsletter-input:focus{outline:none;border-color:rgba(224,196,129,.8);box-shadow:0 0 0 3px rgba(201,169,97,.18);}
-            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:3px;background:#e0c481;color:#0a1525;font-family:var(--lunara-font-label,serif);font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;transition:background-color .16s ease;}
+            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:0;background:#e0c481;color:#0a1525;font-family:var(--lunara-font-label,serif);font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;transition:background-color .16s ease;}
             .lunara-newsletter-submit:hover{background:#c9a961;}
             .lunara-newsletter-submit:focus-visible{outline:2px solid #fafbfc;outline-offset:3px;}
             .lunara-newsletter-fineprint{margin:0;color:#bac4ce;font-size:.8125rem;}
@@ -4375,20 +4402,10 @@ function lunara_output_review_single_studio_css() {
     $debrief_poster_width = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_single_debrief_poster_width', 300, 220, 360 );
     $related_count        = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_related_count', 4, 2, 6 );
 
-    $body_gap_map = array(
-        'compact'   => 28,
-        'editorial' => 40,
-        'feature'   => 56,
-    );
     $hero_max_map = array(
         'standard'       => 980,
         'poster-forward' => 760,
         'wide-forward'   => 1180,
-    );
-    $rail_width_map = array(
-        'minimal'          => 240,
-        'balanced'         => 286,
-        'metadata-forward' => 334,
     );
     $pairing_gap_map = array(
         'compact'   => 14,
@@ -4406,9 +4423,7 @@ function lunara_output_review_single_studio_css() {
         'feature'   => 4,
     );
 
-    $body_gap              = $body_gap_map[ $density ];
     $hero_max              = $hero_max_map[ $hero_scale ];
-    $rail_width            = $rail_width_map[ $rail_mode ];
     $pairing_gap           = $pairing_gap_map[ $pairing_density ];
     $related_card_min      = $related_card_min_map[ $density ];
     $related_excerpt_clamp = $related_excerpt_clamp_map[ $density ];
@@ -4426,13 +4441,12 @@ function lunara_output_review_single_studio_css() {
     if ( $related_count <= 3 ) {
         $related_card_min = max( $related_card_min, 212 );
     }
+    // Reading-frame and rail geometry live in lunara-review-single.css.
     ?>
     <style id="lunara-review-single-studio-css">
     body.single-review .lunara-review-single-page {
         --lunara-review-single-section-gap: <?php echo absint( $section_gap ); ?>px;
-        --lunara-review-single-body-gap: <?php echo absint( $body_gap ); ?>px;
         --lunara-review-single-hero-max: <?php echo absint( $hero_max ); ?>px;
-        --lunara-review-single-rail-width: <?php echo absint( $rail_width ); ?>px;
         --lunara-review-single-debrief-poster-width: <?php echo absint( $debrief_poster_width ); ?>px;
         --lunara-review-single-pairing-gap: <?php echo absint( $pairing_gap ); ?>px;
         --lunara-review-single-related-card-min: <?php echo absint( $related_card_min ); ?>px;
@@ -4443,32 +4457,13 @@ function lunara_output_review_single_studio_css() {
         overflow-x: clip !important;
     }
 
-    body.single-review .lunara-review-single-hero {
-        margin-bottom: var(--lunara-review-single-section-gap) !important;
-    }
-
     body.single-review .lunara-review-single-body {
         margin-top: 0 !important;
         margin-bottom: var(--lunara-review-single-section-gap) !important;
     }
 
-    body.single-review .lunara-review-single-body-grid {
-        gap: var(--lunara-review-single-body-gap) !important;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, var(--lunara-review-single-rail-width)) !important;
-    }
-
     body.single-review .lunara-review-single-content {
         min-width: 0 !important;
-    }
-
-    body.single-review .lunara-review-single-rail {
-        width: min(100%, var(--lunara-review-single-rail-width)) !important;
-        max-width: var(--lunara-review-single-rail-width) !important;
-        min-width: 0 !important;
-    }
-
-    body.single-review .lunara-review-single-rail-sticky {
-        gap: clamp(12px, 1.4vw, 18px) !important;
     }
 
     body.single-review .lunara-review-single-cinematic-hero {
@@ -4576,16 +4571,6 @@ function lunara_output_review_single_studio_css() {
     <?php endif; ?>
 
     @media (max-width: 900px) {
-        body.single-review .lunara-review-single-body-grid {
-            display: block !important;
-        }
-
-        body.single-review .lunara-review-single-rail {
-            width: min(100%, 720px) !important;
-            max-width: 720px !important;
-            margin: clamp(24px, 6vw, 44px) auto 0 !important;
-        }
-
         body.single-review .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: minmax(0, 1fr) !important;
         }
@@ -4594,7 +4579,6 @@ function lunara_output_review_single_studio_css() {
     @media (max-width: 520px) {
         body.single-review .lunara-review-single-page {
             --lunara-review-single-section-gap: min(<?php echo absint( $section_gap ); ?>px, 42px);
-            --lunara-review-single-body-gap: min(<?php echo absint( $body_gap ); ?>px, 28px);
         }
 
         body.single-review .lunara-review-single-debrief-poster-shell {
@@ -5072,7 +5056,7 @@ function lunara_output_oscars_dossier_studio_css() {
         max-width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
         overflow: hidden !important;
         width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
-        background: linear-gradient(180deg, rgba(8, 20, 32, .94), rgba(5, 12, 21, .98)) !important;
+        background: var(--aat-black, #0a1520) !important;
     }
 
     body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap img,
@@ -5115,14 +5099,9 @@ function lunara_output_oscars_dossier_studio_css() {
         gap: 14px !important;
     }
 
-    body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-card,
-    body.aat-shell-page .aat-related-review-card.aat-related-treatment-compact-rail {
-        border-radius: 16px !important;
-    }
-
     body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-body {
         gap: 9px !important;
-        padding: 15px !important;
+        padding: 12px 0 0 !important;
     }
 
     @media (min-width: 860px) {
@@ -5130,6 +5109,8 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-related-reviews-grid.aat-related-treatment-feature-strip .aat-related-review-card:first-child {
             display: grid !important;
             grid-column: span 2;
+            flex-basis: calc(2 * var(--lunara-oscars-related-review-min) + 20px);
+            max-width: 100%;
             grid-template-columns: minmax(240px, .95fr) minmax(0, 1fr);
         }
 
@@ -5170,10 +5151,19 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-person,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-company {
-            flex-basis: min(100%, 260px) !important;
+            flex-basis: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
             max-height: min(var(--lunara-oscars-profile-media-height), 420px) !important;
-            max-width: min(100%, 260px) !important;
-            width: min(100%, 260px) !important;
+            max-width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
+            width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
+        }
+    }
+    @media (max-width: 540px) {
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap,
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-person,
+        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-company {
+            flex-basis: auto !important;
+            max-width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
+            width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
         }
     }
     </style>

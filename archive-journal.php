@@ -183,8 +183,9 @@ $journal_section_markup['toolbar'] = ob_get_clean();
 
 ob_start();
 if ( ! empty( $journal_archive_posts ) ) :
+	$editorial_edition = count( $journal_archive_posts ) >= 3 && lunara_journal_archive_card_is_visual_lead( 1 );
 	?>
-	<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid" data-lunara-site-studio-section="grid">
+	<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid<?php echo $editorial_edition ? ' is-editorial-edition' : ''; ?>" data-lunara-site-studio-section="grid">
 		<?php
 		$journal_card_index = 0;
 		foreach ( $journal_archive_posts as $journal_archive_post ) :
@@ -204,7 +205,8 @@ if ( ! empty( $journal_archive_posts ) ) :
 				if ( '' === $media_alt ) {
 					$media_alt = get_the_title( $pid );
 				}
-				$media_attributes = lunara_journal_archive_card_image_attributes( $is_visual_lead, $media_alt );
+				$media_slot       = $editorial_edition && $journal_card_index <= 3 ? ( $is_visual_lead ? 'lead' : 'supporting' ) : ( $editorial_edition ? 'index' : 'regular' );
+				$media_attributes = lunara_journal_archive_card_image_attributes( $is_visual_lead, $media_alt, $media_slot );
 				$media_markup     = lunara_journal_archive_card_image_markup( $featured_id, $media_attributes );
 			}
 			$has_media = '' !== trim( (string) $media_markup );

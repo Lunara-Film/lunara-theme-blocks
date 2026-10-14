@@ -291,7 +291,7 @@ if ( have_posts() ) :
                         if ( $show_ledger_card || $dossier_movie_id > 0 ) :
                         ?>
                         <aside class="lunara-review-single-rail" aria-label="<?php esc_attr_e( 'Review details', 'lunara-film' ); ?>">
-                            <div class="lunara-review-single-rail-sticky">
+                            <div class="lunara-review-single-rail-sticky<?php echo $show_ledger_card && $dossier_movie_id > 0 ? ' has-two-records' : ''; ?>">
                                 <?php if ( $show_ledger_card ) : ?>
                                     <div class="lunara-journal-rail-card lunara-review-single-ledger-card">
                                         <p class="lunara-home-section-kicker"><?php esc_html_e( 'Oscar Ledger', 'lunara-film' ); ?></p>

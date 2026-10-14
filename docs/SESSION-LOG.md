@@ -25,6 +25,103 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-14 — Make square geometry a publication-wide default
+
+- **Shipped:** Theme 3.2.111 candidate extends the existing source-level geometry changes to native WordPress blocks, generic pages and saved content. Removed the rounded image style and per-block radius control; global styles and inline corners adapt at render time without rewriting stored posts. Added automatic public-CSS policy checks in Theme and Ledger and the route/owner coverage map in docs/PUBLIC-GEOMETRY.md.
+- **Live:** unchanged; no deployment, settings writes or cache changes. Previous Theme candidate a121674 and Ledger 2363378 passed their complete CI runs before this extension.
+- **Holding:** Theme PR #231 and Ledger PR #56 remain the candidates. Focused content checks passed with the real WordPress 6.8.3 HTML API and the portable CI seam; 15 route/viewport browser cases and 26 public stylesheet policy checks passed. Required full CI applies to the new commits.
+- **Next:** finish final CI, then continue the already-established release process. This is the standard for the complete public website and future components, not a new gallery-only design approval cycle.
+- **Found, not fixed:** private administrative UI is not public page output. Original HQ02/JQ25 extension attribution remains open. Native WordPress/production acceptance and retiring the preserved Review Additional CSS still occur at the explicit deployment gate.
+
+## 2026-10-14 — Square public geometry across Theme and Ledger
+
+- **Shipped:** prepared Theme 3.2.110 and Ledger 2.8.26 candidates. Replaced rounded public frames/controls in their owning styles and late emitters; retired the surface-radius control and media rounded toggle, preserving stored values and media choices. Regenerated the non-portal shell. DESIGN records the square-default contract and explicit meaningful-circle exceptions.
+- **Live:** unchanged. Dalton has disabled auto-deploy for all release repositories; merge and deployment are separate gates. No production writes or cache clears. Updated these two repositories' stale deployment instructions.
+- **Holding:** Theme continues PR #231 on top of #230; Ledger follows merged #55 on codex/sharp-editorial-geometry. New local sharp-edges gallery contains 12 page views at phone and desktop widths, rendered from current component/template fixtures. Some fixtures use sample artwork/data; they are not deployed WordPress acceptance.
+- **Next:** finish required CI on the exact candidate commits, review the refreshed gallery, then explicit plugin-before-Theme release authorization. Computed-corner assertions now accompany existing layout, no-JS, responsive and keyboard tests; saved radius and media attributes have a runtime regression test.
+- **Found, not fixed:** original HQ02/JQ25 extension attribution remains unresolved. Loading-ring and meaningful brand/relationship circles are intentional. Existing Additional CSS retirement and production acceptance remain part of the deployment gate; no speed improvement is claimed.
+
+
+## 2026-10-12 — Keep route delivery checks specific to their asset owner
+
+- **Shipped:** Theme 3.2.109 candidate test follow-up only. The expanded actual-Review fixture now emits real Review Studio styles, exposing an old Journal delivery assertion that incorrectly required all Review authority output to be empty. Check the absence of Journal assets on Reviews while retaining positive Review authority coverage. Website source and captured geometry are unchanged.
+- **Live:** unchanged. Required CI 38327112665 at `b32c201` failed on that existing Journal delivery assertion; preserve the failure and require replacement CI on this final follow-up commit. Nothing was merged or deployed.
+- **Holding:** the permanent Review layout and full pairing-title changes remain in draft PR #231. Focused geometry passed 321 assertions, the shared-template consumer passed 83 checks, and the exact old Additional CSS caused 0px measured geometry change in the 390px/1440px transition check. Final capture/source/CI receipts belong to the local combined gallery report and PR.
+- **Next:** require the corrected route-delivery check and complete final CI, then continue the combined visual review and established release sequence. Deploy the Theme before retiring the precisely preserved September 21 Customizer block.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. No test exclusion, tolerance or budget was widened. The production Customizer block remains in place until release.
+
+## 2026-10-12 — Absorb the Review Customizer layout patch
+
+- **Shipped:** Theme 3.2.109 candidate follow-up only. The supplied September 21 Additional CSS patch is replaced by the owning Review styles: centered 760px reading frame, navigation below the article, a single header separator, and 860px pairing rows with full role names and complete arguments. The late Review Studio emitter must no longer restore a side rail. Retire the obsolete phone rule that existed only to out-rank Additional CSS.
+- **Live:** unchanged. Do not remove the saved Customizer block before the new Theme is deployed. Preserve its full saved CSS, remove only the named Review block at the release step, and retain every unrelated rule. The local retirement artifact records the observed public CSS and exact removal proposal when available.
+- **Holding:** Codex owns source integration, relevant actual-template browser coverage including late Studio emission with Additional CSS absent, and the Review-only gallery refresh. The full-title CI run 38325875400 at `ec3117b` was canceled because this user-requested source correction superseded it; require complete CI on the final candidate instead.
+- **Next:** finish the targeted checks and final required CI, present the combined visual result, then release in the established plugin-before-Theme order and retire the saved patch during versioned public acceptance. See `docs/REVIEW-LAYOUT-OWNERSHIP.md` for the exact boundary.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. Local fixtures do not establish the production dataset or deployed result. No main merge, production write, cache clear or deployment occurred.
+
+## 2026-10-12 — Full Debrief pairing titles
+
+- **Shipped:** Theme 3.2.109 candidate only. Restore Theme Echo, Counter Program and Career Context throughout active public pairing renderers, shared Home copy, the Debrief explainer and corresponding Theme editor labels. Curated blocks expand recognized saved short or hyphenated role aliases while preserving custom labels. Existing role identifiers, relationships, legacy imports, notes and film destinations remain compatible. DESIGN.md now prohibits shortening or truncating these visible titles and requires every correction to cover active consumers and retire superseded public wording or duplicate active output.
+- **Live:** unchanged. The prior centered candidate passed complete Theme CI 38321668007 at `d9be89d`; Ledger 2.8.25 remains unchanged with passing CI 38320967124 at `69066db`. This copy correction requires its own final Theme CI receipt in draft PR #231.
+- **Holding:** Codex owns final integration. Update only affected Home, Review and Debrief preview captures; preserve earlier receipts. Relevant existing renderer and phone/desktop geometry checks cover the longer names without a new whole-site scan or performance cohort.
+- **Next:** finish the affected checks, require CI on the final Theme commit, and continue Dalton's combined visual review before the established plugin-before-Theme release sequence.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. No production content/settings, caches, main merge or deployment changed.
+
+## 2026-10-12 — Home initial-layout symmetry correction
+
+- **Shipped:** Theme 3.2.108 candidate follow-up only. Required CI 38321068673 caught the old right-anchored Home carousel toggle in the synchronous geometry seed. Its canonical desktop CSS and seed now agree on a compact centered control; the phone control remains in normal flow. The affected existing browser gate measures initial and final geometry, and the PHP check inspects emitted output instead of pinning source text.
+- **Live:** unchanged. Ledger 2.8.25 complete CI 38320967124 passed at `69066db`. The earlier Theme failure is preserved; its replacement exact-commit CI result belongs in draft PR #231 and the local symmetry report.
+- **Holding:** Codex owns the combined candidate. This correction addresses a concrete failure; no whole-site audit, unrelated capture set or closed performance cohort is repeated. Existing budgets, tolerances and exclusions remain intact.
+- **Next:** require passing CI on the corrected Theme commit, then Dalton reviews the combined desktop/phone gallery before the established plugin-before-Theme release sequence and versioned public acceptance.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 attribution remain open. Local gallery/browser evidence is not production acceptance. No main merge, deployment, production setting change or cache clear occurred.
+
+## 2026-10-12 — Centered editorial and Oscars composition
+
+- **Shipped:** candidates only: Theme 3.2.108 and Ledger 2.8.25 center page identities, headings, artwork and reading columns; remove the unused Review side rail; balance partial card rows; center shared navigation/footer and standalone actions. Existing article, record, artwork and settings ownership remains intact. The Explorer no-JavaScript Apply action received a final measured correction after visual review. Existing drafts Theme #231 and Ledger #55 carry this continuation.
+- **Live:** unchanged. No main merge, production setting change, cache clear or deployment. Candidate source and required CI receipts are recorded against exact commits in the draft PRs and local symmetry report.
+- **Holding:** Codex owns final integration and release. DESIGN.md now requires centered axes, equal gutters and balanced partial rows. Existing runtime tests measure these properties; unchanged first-paint tolerances and critical-CSS budgets remain enforced. Final required CI runs at the source freeze; earlier and corrected capture receipts remain separate.
+- **Next:** Dalton reviews the combined desktop/phone gallery at `implementation/symmetry-finish/index.html` in the existing remediation artifact. Then follow the already established plugin-before-Theme release sequence and verify the actual WordPress deployment. Theme still requires his WordPress.com deploy click.
+- **Found, not fixed:** full WordPress/deployed acceptance and original HQ02/JQ25 provenance remain open. Local composition images use sample records; Home/Journal archive use captured public film imagery, while reading/Oscars fixtures include explicitly marked geometry artwork. No whole-site detector or performance-cohort rerun was added. The closed timing cohort proves no speed gain.
+
+## 2026-10-11 — Winner badge contrast integration correction
+
+- **Shipped:** Theme 3.2.107 candidate follow-up: remove `.aat-winner-badge` from the shell's forced gold-ink group and regenerate the non-portal shell. Final visual review found 1.327:1 contrast on filled gold profile badges; component-owned dark ink now remains authoritative. Ledger 2.8.24 is unchanged at `02e97e0`.
+- **Live:** unchanged. Ledger complete CI38161978681 passed. Theme's earlier3be9863 run is superseded by this concrete contrast correction; final exact-commit CI and affected renderer receipts are tracked in the existing draft PR and integration report.
+- **Holding:** Codex final integration. The enduring Theme emitter regression now includes badge ink/fill contrast; the focused renderer check covers profile, category and ceremony badge variants. No whole-site or performance recheck is added.
+- **Next:** complete affected contrast confirmation, push this follow-up to existing draft PR231 and require CI on that exact commit; then Dalton reviews the combined gallery before the approved plugin-before-Theme release sequence.
+- **Found, not fixed:** original HQ02/JQ25 attribution and full WordPress/deployed acceptance remain open as recorded in the preceding checkpoint. No production or extension change occurred.
+
+## 2026-10-11 — Frozen Claude Ledger handoff integrated with the Theme
+
+- **Shipped:** candidates only: Ledger 2.8.24 includes Claude's exact frozen `8522933`/`eecdd18` commits plus integration `02e97e0`; Theme 3.2.107 resolves shell/Studio/Ledger ownership, saved media caps, first-paint geometry, residual shimmer and duplicate aggregate-band display. Category spans no longer imply retirement; no-JavaScript table links retain their filters. Existing drafts #55/#231 remain the release candidates; no main merge or deployment.
+- **Live:** unchanged. Theme 3.2.106 did pass complete CI at `9c7d03f` (38152535299), superseding the preceding entry's pending status. New integration CI is tracked separately at its exact pushed commits in the PRs and this chat's `implementation/oscars-integration/REPORT.md`.
+- **Holding:** Codex owns final integration; Claude's worktree remains frozen and untouched. The bounded combined renderer gate covers seven families, phone/desktop, saved and missing media, actual early/late styles and licensed-font visual captures. Concrete first-pass failures receive affected reruns only; required repository CI follows final source freeze. Local fixtures remain distinct from full WordPress acceptance.
+- **Next:** complete the combined receipts and exact-commit CI, then Dalton reviews the gallery and approves release. Preserve Foundation-before-Dispatch, Ledger-before-Theme and editorial-base-before-runtime order. Theme needs its WordPress.com deploy click. Perform one versioned public acceptance pass after release; do not repeat the whole-site scan or closed timing cohort.
+- **Found, not fixed:** HQ02's exact clipped child and JQ25's curve producer remain unattributed; the original158-instance dispositions are unchanged. Full WordPress/DataTables, upstream caches, host transport and deployed speed need public acceptance. Optional Swup remains disabled; the earlier timing cohort establishes no speed gain. No production settings, data or extensions were changed.
+
+## 2026-10-11 — Reviews initial-layout correction and preview evidence
+
+- **Shipped:** local follow-up to Theme 3.2.106, still an unmerged candidate. Required CI run 38151302323 at `a63611b` exposed a real mismatch between the Reviews archive's synchronous pairing rules and the finished shared component. `inc/review-archive-critical.php` now mirrors the component's gaps, padding, readable type, full titles and phone layout. The affected 36-case first-paint gate and PHP syntax pass; the seed is 12,111 bytes against its unchanged 12,288-byte budget. Existing tests, tolerances and budgets are unchanged.
+- **Live:** unchanged. The failure supersedes the preceding checkpoint's pending status; the corrected candidate requires a new passing CI run at its pushed commit.
+- **Holding:** Claude Code still owns Ledger source at reserved base `fdcef1b`; its frozen handoff is absent at this checkpoint. Final combined integration and Dalton's release approval remain separate gates.
+- **Next:** push this correction to existing draft PR #231 and record its exact CI result in the review artifact and PR. Then review Claude's exact frozen commit and run the combined affected checks. No whole-site scan or repeated timing cohort is required.
+- **Found, not fixed:** original HQ02/JQ25 provenance remains open. The closed 18-navigation timing cohort does not establish a speed improvement: Home's preview omitted an existing synchronous sizing rule, and Review's local font paths returned 404 in both revisions. Their frozen inputs remain intact. Separate reading/Method visual captures now confirm HTTP 200 and loaded Tiempos faces; Home's visual builder is being corrected at its own source. Local fixtures cannot establish full WordPress or deployed performance acceptance.
+
+## 2026-10-11 — Concurrent Theme editorial finish; Ledger reserved for Claude Code
+
+- **Shipped:** local Theme 3.2.106 candidate on `codex/bespoke-runtime` for existing PR #231: distinct Home story/forecast hierarchy; Journal lead and thumbnail index with matching first-paint/media delivery; readable, unframed Review/Journal and complete Debrief arguments. No merge or deployment. Final receipts are in this chat's `implementation/theme-editorial-finish` artifact.
+- **Live:** unchanged. Prior architecture candidate CI completed successfully in all four affected repositories; this corrects the preceding checkpoint's pending-CI status. The new Theme finishing delta requires its own final CI result.
+- **Holding:** Codex owns the Theme, its shared log/finding register and final integration. Claude Code exclusively owns Ledger presentation in `C:\Users\silve\Local\Projects\lunara-concurrent\claude-oscars-editorial`, starting `fdcef1bbb57a1b8a0946528a91d4fcb049ea241b`. Codex has not edited Ledger source during this assignment. Claude's frozen `claude-oscars-artifacts/HANDOFF.md` is the integration gate; no handoff was present at this checkpoint.
+- **Next:** finish candidate visual/performance evidence and required Theme CI. Read Claude's frozen handoff, review and integrate its exact commit, resolve Theme-owned interfaces, and run only the combined affected checks. Dalton reviews one result; existing plugin-before-Theme release order and manual Theme deployment apply.
+- **Found, not fixed:** original HQ02 clipped child and JQ25 eight-curve path remain unattributed. The focused follow-up found no PNG DOM metadata and could not initialize original browser-context access; extensions/settings were unchanged. Local component previews and controlled fixture timings cannot establish deployed WordPress, licensed-font, CDN or transport acceptance. The original finding register remains authoritative; no repeat whole-site scan occurred.
+
+## 2026-10-11 — Bespoke architecture integration candidate
+
+- **Shipped:** review candidates only: Theme 3.2.105 and Ledger 2.8.23 on `codex/bespoke-runtime`, Foundation 1.4.1 (PR #27), Dispatch 3.4.1 (PR #16). Shared lifecycle/disposal, bounded Explorer snapshots, semantic automation ingestion, safe Home stylesheet trimming, immediately readable hero text. The Theme/Ledger follow-ups stack on editorial PRs #230/#54. No merges or deployment.
+- **Live:** unchanged by this task. Four anonymous browser reads confirmed existing native prefetch plus unaudited Jetpack/Blocksy/inline scripts. Native navigation remains the production default; optional Swup is disabled and incurs no default bundle download. Foundation's native WordPress PHP matrix and Dispatch CI are green at integration.
+- **Holding:** required Theme CI and final Ledger CI for the integrated candidates. Ledger's first CI exposed the ceremony source-size budget after lifecycle adaptation; the owner is correcting that bounded failure. Full module ownership, effort and release gates are in `docs/BESPOKE-RUNTIME.md`; final receipts remain with the chat's architecture-review artifact.
+- **Next:** finish the candidate CI failures only, then Dalton reviews the PR set. Foundation precedes Dispatch; Ledger precedes Theme; merge the visual bases before their runtime follow-ups. The Theme requires its WordPress.com deploy click. Run one versioned public acceptance pass after release.
+- **Found, not fixed:** third-party/inline page-swap lifecycle and Stats contracts block enabling Swup; native navigation preserves them. Host JSON/CORS/compression/performance still need deployed evidence. Expired Explorer JSON is collected, but old generation directory/lock metadata remains. Original two unattributed overlay locations and external extension findings retain their existing dispositions; no new detector sweep or production content migration occurred.
+
 ## 2026-10-11 — Editorial presentation remediation candidate
 
 - **Shipped:** review candidates only: Ledger 2.8.22 (PR #54) and Theme 3.2.104 (PR #230) on `codex/editorial-remediation`; shared ornamental surfaces retired, metadata/links readable, all story/forecast records preserved, archive first-paint and saved configuration guarded. Nothing merged or deployed.

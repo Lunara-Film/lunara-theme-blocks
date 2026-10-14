@@ -11,8 +11,8 @@ in every Lunara repo. Read it, then the top entry of `docs/SESSION-LOG.md` in
    `grok/…`). Never commit to `main`.
 2. Open a PR. Its description is the changelog: what changed, why, and what you
    measured. CI runs the tests on the PR; red cannot merge.
-3. Dalton merges. **Merge = live.** Plugin repos auto-deploy from `main`. The
-   theme deploys from `main` through WordPress.com (see Status).
+3. Dalton merges. Auto-deploy is off for the Theme and plugins by his decision.
+   Merge is not deployment; retain a separate reviewed deployment gate.
 4. Rollback is GitHub's **Revert** button on the merged PR, then merge. There
    are no rollback branches to maintain.
 5. Close the session with one short entry at the top of `docs/SESSION-LOG.md`
@@ -54,6 +54,9 @@ so in one line at the top of the PR.
 - In the theme, `inc/` is live; `functions.php` carries dead
   `function_exists()` duplicates. Confirm which definition runs before editing.
 - Two surfaces that render the same data get checked together.
+- Square structural corners are the publication-wide standard, including new
+  pages and native blocks. Follow DESIGN.md and docs/PUBLIC-GEOMETRY.md; update
+  owning rules and keep the public geometry policy/browser checks passing.
 - Read-only probes against production. No staging writes.
 
 ## Frozen
@@ -66,9 +69,8 @@ doc "What Done Looks Like".
 
 ## Status (keep these lines true)
 
-- Theme auto-deploy: **off**. Dalton turns it on in WordPress.com → Settings →
-  Repositories once theme CI has been green on `main`. Until then a theme
-  merge needs his deploy click.
+- Theme and plugin auto-deploy: **off**. Deployment requires a separate explicit
+  release instruction; do not turn auto-deploy back on as part of a code fix.
 - CI: theme `.github/workflows/ci.yml`; every plugin `.github/workflows/lint.yml`.
 - The watch: a scheduled check of the PHP log, `/wp-json/lunara-ledger/v1/status`
   and Lighthouse that messages Dalton only on a regression. Not built yet.

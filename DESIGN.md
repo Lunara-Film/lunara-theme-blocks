@@ -6,14 +6,32 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Composition
 
+- Center each page frame, identity/title group, reading column and section heading
+  on a shared axis with equal outer gutters. Card rows wrap symmetrically; a
+  partial last row is centered. Do not reserve an empty side rail or split a
+  masthead into unequal columns. Group actions beneath the centered heading.
+  Keep long prose and tabular records readable within those centered frames.
+  Check actual box centers at phone and desktop sizes, including odd card counts.
 - Use one clear heading per section. Do not precede it with a second label that
   repeats its meaning. Preserve a saved editorial label when it adds information.
-- Echo, Counter and Context identify three different critical relationships.
-  Keep their full arguments and film links. Present them as editorial columns
-  that stack on phones, with no painted container inside another painted container.
+- Always display the full pairing titles: Theme Echo, Counter Program and Career
+  Context. They identify three different critical relationships; never shorten
+  their visible titles to Echo, Counter or Context, including on phones. Allow
+  natural wrapping without truncating the labels. Keep their full arguments and
+  film links. Home and archive summaries use editorial columns. A full Review
+  gives each pairing its own row: poster beside the complete argument, stacking
+  at 640px and below. Neither layout uses a painted container inside another.
+- Single Reviews own a centered 760px reading frame and below-article navigation.
+  Pairing rows use a centered 860px frame. Route CSS owns that geometry; late
+  Studio output may change supported presentation choices without restoring a
+  side rail. Additional CSS must not be required to hold this layout together.
 - Journal leads with headlines; dates, visual credits and useful taxonomy remain
   readable supporting information. Entries without artwork are intentional text
   compositions, not failed image placeholders.
+  The newest main archive edition has one centered lead followed by a balanced
+  two-column story index on desktop. Alternate sorts, taxonomy results and later
+  pages stay uniform; phone order remains the source reading order.
+  Responsive image hints and synchronous route geometry must change with layout.
 - Oscar records retain category, film/person, status, evidence and destinations.
   Status has words as well as color. Long names and complete records remain usable.
 - Use whitespace, image proportions, typography and restrained separators for
@@ -22,6 +40,23 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Surfaces and type
 
+- Public frames and controls have square corners in every responsive and
+  interaction state: artwork, cards, menus, dialogs, buttons, inputs, filters,
+  badges and pagination. Update each owning declaration and late PHP emitter;
+  do not append a global radius override. Saved legacy surface-radius and media
+  rounded attributes cannot restore curves. Their obsolete editor controls retire
+  without deleting stored content. The Lunara brand seal, its crescent mark and
+  relationship-diagram nodes/arcs retain their meaningful circular geometry.
+  The third-party carousel loading ring remains a functional progress indicator.
+- Verify rendered corners alongside existing browser layout and keyboard tests.
+  A CSS edit alone does not prove that saved settings or critical CSS agree.
+- This is the site-wide standard, including generic pages, ordinary posts,
+  taxonomy/author/date/search results and future content, not a set of selected
+  gallery layouts. `theme.json` and the base scaffold own native block defaults;
+  `inc/public-geometry.php` adapts legacy inline corners and Site Editor values
+  at read time without changing saved articles or other visual settings. Public
+  CSS policy checks discover new stylesheets automatically in Theme and Ledger.
+  See `docs/PUBLIC-GEOMETRY.md` for the complete ownership and coverage map.
 - Ground: `#0a1520`; reading text: near-white; accent: `#c9a961` or `#e0c481`.
   Saved valid color choices must keep their intended semantics and contrast.
 - Tiempos Headline carries editorial headings; Tiempos Text carries reading.
@@ -42,6 +77,14 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Ownership and delivery
 
+Treat each correction as a complete replacement across its active consumers.
+Trace the owning source, shared renderers, defaults, saved-content variants,
+editor controls and preview builders. Remove superseded visible wording,
+redundant active output and competing definitions as part of the fix. Give each
+shared behavior a clear owner. Keep necessary legacy-input compatibility at the
+read boundary; it must not reintroduce old public wording. Refresh only affected
+previews and checks, followed by required CI on the final commit.
+
 Edit the source that owns a property. Do not add another catch-all override to
 the end of `style.css`. Read the PHP enqueue/emission path before editing: Studio
 variables, Customizer output and first-paint styles can win over a static file.
@@ -53,10 +96,17 @@ variables, Customizer output and first-paint styles can win over a static file.
 | Adopted Home carousel presentation | `inc/home-carousels.php`, `assets/css/lunara-home-carousels.css` |
 | Home Method/forecast and legacy sections | Live renderers in `functions.php`, `assets/css/lunara-home-modules.css`, `inc/debrief.php` |
 | Shared film arguments and review components | `inc/debrief.php`, `assets/css/lunara-review-components.css` |
+| Single Review geometry and saved presentation | `assets/css/lunara-review-single.css`, Review Studio emitter in `inc/frontend.php` |
 | Journal archive | `archive-journal.php`, `inc/journal-archive-studio.php`, `assets/css/lunara-journal-archive.css`, `inc/journal-archive-critical.php` |
 | Footer and shared public inline output | `inc/frontend.php`, `assets/css/lunara-public-guardrails.css` |
 | Menu and search | `inc/header-command.php`, `inc/live-search.php`, scoped public CSS |
 | Oscar records and explorer | Ledger plugin templates and public CSS; theme `assets/css/oscars.css` owns integration only |
+
+The Oscars shell owns page framing and shared controls; it must not restate the
+Ledger's profile, record-row, filmography or ceremony composition. Dossier Studio
+owns saved media fit, focal point, aspect, responsive size limits and density.
+Verify those late-emitted choices together with the real Ledger styles and the
+early structural seed. Standalone plugin fixtures cannot prove that cascade.
 
 `inc/` normally supplies the live function before guarded duplicates in
 `functions.php`, but Home forecast/Method and Journal provenance have live

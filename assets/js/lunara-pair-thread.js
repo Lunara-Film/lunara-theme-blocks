@@ -14,7 +14,7 @@
 ( function () {
 	'use strict';
 
-	var reduced = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+	function reducedMotion() { return window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches; }
 	var ROLES = [ 'theme', 'counter', 'career' ];
 
 	function roleOf( card ) {
@@ -32,8 +32,10 @@
 		return node;
 	}
 
-	function Thread( section ) {
+	function Thread( section, scope ) {
 		this.section = section;
+		this.scope = scope;
+		this.disposed = false;
 		this.head = section.querySelector( '.lunara-pair-cards-head' );
 		this.grid = section.querySelector( '.lunara-pair-cards-grid' );
 		this.cards = Array.prototype.slice.call( section.querySelectorAll( '.lunara-pair-card' ) );
@@ -67,23 +69,24 @@
 
 		this.section.insertBefore( this.root, this.section.firstChild );
 		this.section.classList.add( 'has-pair-thread' );
-		if ( ! reduced ) {
+		if ( ! reducedMotion() ) {
 			this.section.classList.add( 'is-thread-animated' );
 		}
 
 		this.layout();
 
 		var schedule = function () { self.schedule(); };
-		window.addEventListener( 'scroll', schedule, { passive: true } );
-		window.addEventListener( 'resize', function () { self.layout(); } );
+		this.scope.on( window, 'scroll', schedule, { passive: true } );
+		this.scope.on( window, 'resize', function () { self.layout(); } );
 		if ( 'ResizeObserver' in window ) {
 			// Spoiler reveals, late posters and font swaps all move the cards.
-			new ResizeObserver( function () { self.layout(); } ).observe( this.grid );
+			this.scope.observe( new ResizeObserver( function () { self.layout(); } ) ).observe( this.grid );
 		}
 	};
 
 	/** Measure the cards and place the line, nodes and ticks. */
 	Thread.prototype.layout = function () {
+		if ( this.disposed ) return;
 		var box = this.section.getBoundingClientRect();
 		var gridBox = this.grid.getBoundingClientRect();
 		if ( ! box.width || ! gridBox.height ) {
@@ -147,10 +150,10 @@
 
 	Thread.prototype.schedule = function () {
 		var self = this;
-		if ( this.frame || this.reach >= 1 ) {
+		if ( this.disposed || this.frame || this.reach >= 1 ) {
 			return;
 		}
-		this.frame = window.requestAnimationFrame( function () {
+		this.frame = this.scope.frame( function () {
 			self.frame = 0;
 			self.update();
 		} );
@@ -158,11 +161,11 @@
 
 	/** Advance the thread to the reader's position. */
 	Thread.prototype.update = function () {
-		if ( ! this.geometry ) {
+		if ( this.disposed || ! this.geometry ) {
 			return;
 		}
 		var progress = 1;
-		if ( ! reduced ) {
+		if ( ! reducedMotion() ) {
 			var box = this.section.getBoundingClientRect();
 			var target = window.innerHeight * 0.72;
 			if ( this.geometry.vertical ) {
@@ -184,16 +187,37 @@
 		} );
 	};
 
-	function boot() {
-		document.querySelectorAll( '.lunara-review-single-debrief-section .lunara-pair-cards' ).forEach( function ( section ) {
+	Thread.prototype.destroy = function () {
+		this.disposed = true;
+		window.cancelAnimationFrame( this.frame );
+		if ( this.root ) this.root.remove();
+		this.section.classList.remove( 'has-pair-thread', 'is-thread-animated' );
+		this.cards.forEach( function ( card ) { card.classList.remove( 'is-thread-reached' ); } );
+		delete this.section.lunaraPairThread;
+	};
+
+	function mount( pageRoot, scope ) {
+		scope = scope || {
+			on: function ( target, type, fn, options ) { target.addEventListener( type, fn, options ); },
+			frame: window.requestAnimationFrame.bind( window ), observe: function ( observer ) { return observer; }, cleanup: function () {}
+		};
+		var selector = '.lunara-review-single-debrief-section .lunara-pair-cards';
+		var sections = Array.prototype.slice.call( pageRoot.querySelectorAll( selector ) );
+		if ( pageRoot.matches && pageRoot.matches( selector ) ) sections.unshift( pageRoot );
+		sections.forEach( function ( section ) {
 			if ( ! section.lunaraPairThread ) {
-				section.lunaraPairThread = new Thread( section );
+				section.lunaraPairThread = new Thread( section, scope );
+				var thread = section.lunaraPairThread;
+				scope.cleanup( function () { thread.destroy(); } );
 			}
 		} );
 	}
 
-	if ( 'loading' === document.readyState ) {
-		document.addEventListener( 'DOMContentLoaded', boot );
+	function boot() { mount( document ); }
+	if ( window.LunaraApp && window.LunaraApp.register ) {
+		window.LunaraApp.register( 'pair-thread', mount );
+	} else if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', boot, { once: true } );
 	} else {
 		boot();
 	}

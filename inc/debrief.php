@@ -99,21 +99,21 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
             .lunara-meta-section h4 { margin: 0 0 15px; color: #c9a961; }
             .lunara-meta-row { display: flex; gap: 20px; }
             .lunara-meta-row .lunara-meta-field { flex: 1; }
-            .lunara-pair-preview { margin-top: 18px; border: 1px solid #d8c38a; border-radius: 10px; background: #071523; overflow: hidden; color: #f7f1dd; }
+            .lunara-pair-preview { margin-top: 18px; border: 1px solid #d8c38a; border-radius: 0; background: #071523; overflow: hidden; color: #f7f1dd; }
             .lunara-pair-preview-head { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-bottom: 1px solid rgba(216, 195, 138, 0.28); background: rgba(216, 195, 138, 0.08); }
             .lunara-pair-preview-head strong { color: #e4c875; text-transform: uppercase; letter-spacing: .08em; }
             .lunara-pair-preview-head span { color: #b8c3cf; font-size: 12px; }
             .lunara-pair-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 14px; }
-            .lunara-pair-preview-card { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-height: 122px; padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(255,255,255,.045); }
+            .lunara-pair-preview-card { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-height: 122px; padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 0; background: rgba(255,255,255,.045); }
             .lunara-pair-preview-card.is-warning { border-color: rgba(214, 126, 70, .85); }
             .lunara-pair-preview-card.is-empty { opacity: .72; }
-            .lunara-pair-preview-media { width: 74px; aspect-ratio: 2 / 3; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: #8f9aa7; font-size: 11px; text-align: center; }
+            .lunara-pair-preview-media { width: 74px; aspect-ratio: 2 / 3; border-radius: 0; overflow: hidden; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: #8f9aa7; font-size: 11px; text-align: center; }
             .lunara-pair-preview-thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
             .lunara-pair-preview-role { margin: 0 0 4px; color: #e4c875; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
             .lunara-pair-preview-title { margin: 0 0 5px; color: #fff; font-size: 14px; line-height: 1.25; }
             .lunara-pair-preview-note { margin: 0 0 8px; color: #c8d0d8; font-size: 12px; line-height: 1.35; }
             .lunara-pair-preview-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
-            .lunara-pair-preview-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 7px; border: 1px solid rgba(228, 200, 117, .42); border-radius: 999px; color: #f2d986; font-size: 11px; line-height: 1.2; text-decoration: none; }
+            .lunara-pair-preview-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 7px; border: 1px solid rgba(228, 200, 117, .42); border-radius: 0; color: #f2d986; font-size: 11px; line-height: 1.2; text-decoration: none; }
             .lunara-pair-preview-chip.is-muted { border-color: rgba(255,255,255,.18); color: #aeb8c4; }
             .lunara-pair-preview-warnings { margin: 8px 0 0; padding-left: 16px; color: #ffb07b; font-size: 12px; }
             .lunara-pair-preview-warnings li { margin: 0 0 4px; }
@@ -208,19 +208,19 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
             <h4>PAIR IT WITH</h4>
 
             <div class="lunara-meta-field">
-                <label for="lunara_theme_echo">Echo</label>
+                <label for="lunara_theme_echo">Theme Echo</label>
                 <input type="text" id="lunara_theme_echo" name="lunara_theme_echo" value="<?php echo esc_attr( $theme_echo ); ?>" placeholder="Film that shares thematic DNA">
                 <p class="description">Tip: for clickable internal + IMDb links, you can append <code>| tt1234567</code> or paste a full IMDb URL anywhere in the line. No punctuation is required after the IMDb ID before your note.</p>
             </div>
 
             <div class="lunara-meta-field">
-                <label for="lunara_counter_program">Counter</label>
+                <label for="lunara_counter_program">Counter Program</label>
                 <input type="text" id="lunara_counter_program" name="lunara_counter_program" value="<?php echo esc_attr( $counter ); ?>" placeholder="Film that offers opposing perspective">
                 <p class="description">Tip: optionally add <code>| tt1234567</code> (or an IMDb URL) to enable direct links. No punctuation is required after the IMDb ID before your note.</p>
             </div>
 
             <div class="lunara-meta-field">
-                <label for="lunara_career_context">Context (Optional)</label>
+                <label for="lunara_career_context">Career Context (Optional)</label>
                 <input type="text" id="lunara_career_context" name="lunara_career_context" value="<?php echo esc_attr( $craft ); ?>" placeholder="Film that clarifies this artist's career or creative trajectory">
                 <p class="description">Tip: optionally add <code>| tt1234567</code> (or an IMDb URL) to enable direct links. No punctuation is required after the IMDb ID before your note.</p>
             </div>
@@ -230,9 +230,9 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
                 echo lunara_render_pair_it_with_admin_preview(
                     $post->ID,
                     array(
-                        'Echo'      => $theme_echo,
-                        'Counter' => $counter,
-                        'Context'  => $craft,
+                        'Theme Echo'     => $theme_echo,
+                        'Counter Program' => $counter,
+                        'Career Context' => $craft,
                     )
                 );
             }
@@ -290,11 +290,11 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
  *   <!-- "Title" (2026) — tt12345678 -->          → IMDb ID, Year
  *   Score: ⭐⭐⭐                                   → Score
  *   Where to Watch: Theatrical / Digital           → Where to Watch
- *   Echo: <em>Title</em> (YYYY) tt... — ...        → Echo pairing
- *   Counter: <em>Title</em> ...                    → Counter pairing
- *   Context: <em>Title</em> ...                    → Context pairing
- *   (The pre-3.2.96 headings Theme Echo, Counter-Program, Career Context and
- *   Craft Mirror are still read, so older drafts keep importing.)
+ *   Theme Echo: <em>Title</em> (YYYY) tt... — ...  → Theme Echo pairing
+ *   Counter Program: <em>Title</em> ...           → Counter Program pairing
+ *   Career Context: <em>Title</em> ...            → Career Context pairing
+ *   (The shortened Echo, Counter, Context and historical Counter-Program
+ *   and Craft Mirror headings are still read, so older drafts keep importing.)
  *   <!-- Director: Name / Runtime: 135 min / Studio: Name -->  → Detail fields
  *
  * Only fills EMPTY fields — never overwrites manually entered data.
@@ -405,17 +405,17 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
         $fill( $post_id, '_lunara_where', $value );
     }
 
-    // 5) Pair It With — Echo (formerly Theme Echo)
+    // 5) Pair It With — Theme Echo (also accepts the shortened Echo heading)
     if ( preg_match( '/Theme\s+Echo:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Echo:\s*(.+)/', $content, $m ) ) {
         $fill( $post_id, '_lunara_theme_echo', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     }
 
-    // 6) Pair It With — Counter (formerly Counter-Program)
+    // 6) Pair It With — Counter Program (also accepts Counter-Program and Counter)
     if ( preg_match( '/Counter[\-\s]Program:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Counter:\s*(.+)/', $content, $m ) ) {
         $fill( $post_id, '_lunara_counter_program', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     }
 
-    // 7) Pair It With — Context (formerly Career Context, or Craft Mirror)
+    // 7) Pair It With — Career Context (also accepts Context and Craft Mirror)
     if ( preg_match( '/Career\s+Context:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Context:\s*(.+)/', $content, $m ) ) {
         $fill( $post_id, '_lunara_career_context', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     } elseif ( preg_match( '/Craft\s+Mirror:\s*(.+)/i', $content, $m ) ) {
@@ -1343,19 +1343,19 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             array(
                 'slug'     => 'theme',
                 'relation' => 'theme_echo',
-                'label'    => __( 'Echo', 'lunara-film' ),
+                'label'    => __( 'Theme Echo', 'lunara-film' ),
                 'value'    => get_post_meta( $post_id, '_lunara_theme_echo', true ),
             ),
             array(
                 'slug'     => 'counter',
                 'relation' => 'counter_program',
-                'label'    => __( 'Counter', 'lunara-film' ),
+                'label'    => __( 'Counter Program', 'lunara-film' ),
                 'value'    => get_post_meta( $post_id, '_lunara_counter_program', true ),
             ),
             array(
                 'slug'     => 'career',
                 'relation' => 'career_context',
-                'label'    => __( 'Context', 'lunara-film' ),
+                'label'    => __( 'Career Context', 'lunara-film' ),
                 'value'    => lunara_get_career_context_meta( $post_id ),
             ),
         );
@@ -1722,15 +1722,15 @@ function lunara_debrief_shortcode( $atts ) {
                 <li class="lunara-debrief-pair-header">Pair It With</li>
 
                 <?php if ( $theme_echo ) : ?>
-                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--theme"><strong class="lunara-debrief-pair-type">Echo</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $theme_echo ); ?></span></li>
+                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--theme"><strong class="lunara-debrief-pair-type">Theme Echo</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $theme_echo ); ?></span></li>
                 <?php endif; ?>
 
                 <?php if ( $counter ) : ?>
-                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--counter"><strong class="lunara-debrief-pair-type">Counter</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $counter ); ?></span></li>
+                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--counter"><strong class="lunara-debrief-pair-type">Counter Program</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $counter ); ?></span></li>
                 <?php endif; ?>
 
                 <?php if ( $craft ) : ?>
-                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--career"><strong class="lunara-debrief-pair-type">Context</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $craft ); ?></span></li>
+                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--career"><strong class="lunara-debrief-pair-type">Career Context</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $craft ); ?></span></li>
                 <?php endif; ?>
             <?php endif; ?>
         </ul>

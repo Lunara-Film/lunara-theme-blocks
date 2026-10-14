@@ -9,7 +9,7 @@
 (function () {
 	'use strict';
 
-	var root, panel, opener, lastFocus = null;
+	var root, panel, opener, lastFocus = null, openingFrame = null, closingTimer = null;
 
 	function focusables() {
 		return panel.querySelectorAll('a[href], button:not([disabled])');
@@ -18,23 +18,30 @@
 	function openNav() {
 		if (!root) { return; }
 		lastFocus = document.activeElement;
+		window.clearTimeout(closingTimer);
 		root.hidden = false;
 		document.body.classList.add('lunara-nav-open');
 		if (opener) { opener.setAttribute('aria-expanded', 'true'); }
-		window.requestAnimationFrame(function () {
+		openingFrame = window.requestAnimationFrame(function () {
+			openingFrame = null;
+			if (root.hidden) return;
 			root.classList.add('is-open');
 			var f = focusables();
 			if (f.length) { f[0].focus(); }
 		});
 	}
 
-	function closeNav() {
+	function closeNav(immediate) {
 		if (!root || root.hidden) { return; }
+		window.cancelAnimationFrame(openingFrame);
+		window.clearTimeout(closingTimer);
 		root.classList.remove('is-open');
 		document.body.classList.remove('lunara-nav-open');
 		if (opener) { opener.setAttribute('aria-expanded', 'false'); }
-		window.setTimeout(function () { root.hidden = true; }, 300);
-		if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
+		if (immediate === true) { root.hidden = true; }
+		else { closingTimer = window.setTimeout(function () { root.hidden = true; }, 300); }
+		if (immediate !== true && lastFocus && lastFocus.isConnected && lastFocus.focus) { lastFocus.focus(); }
+		lastFocus = null;
 	}
 
 	function trapTab(event) {
@@ -67,6 +74,7 @@
 		root   = document.getElementById('lunara-offcanvas');
 		opener = document.querySelector('[data-lunara-nav-open]');
 		if (!root || !opener) { return; }
+		window.addEventListener('lunara:page:teardown', function () { closeNav(true); });
 		panel = root.querySelector('.lunara-offcanvas-panel') || root;
 
 		opener.addEventListener('click', openNav);

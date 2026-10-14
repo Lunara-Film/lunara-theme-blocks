@@ -1,3 +1,14 @@
+(function () {
+    'use strict';
+    function mount(pageRoot, scope) {
+        pageRoot = pageRoot || document;
+        // Standalone documents keep their native page-unload lifecycle.
+        scope = scope || {
+            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
+            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
+            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
+            cleanup: function () {}
+        };
 /**
  * Lunara Splide Pilot.
  *
@@ -36,6 +47,9 @@
 			track.querySelectorAll('.lunara-oscar-fact-card')
 		);
 		if (slides.length < 2) return;
+		var original = [root, track].concat(slides).map(function (node) {
+			return { node: node, attributes: Array.prototype.map.call(node.attributes, function (attribute) { return [attribute.name, attribute.value]; }) };
+		});
 
 		root.classList.add('splide', 'lunara-splide-pending');
 		root.setAttribute('data-lunara-splide-pilot-active', 'pending');
@@ -66,7 +80,24 @@
 		var interval = numberAttr(root, 'data-lunara-splide-autoplay', 6500);
 		var heightFrame = 0;
 
-		var splide = new window.Splide(root, {
+		var splide = null;
+		var restored = false;
+		function restore() {
+			if (restored) return;
+			restored = true;
+			try { if (splide) splide.destroy(true); } catch (ignored) { /* Restore native markup even after a partial mount. */ }
+			list.querySelectorAll('.splide__slide--clone').forEach(function (clone) { clone.remove(); });
+			while (list.firstChild) track.insertBefore(list.firstChild, list);
+			list.remove();
+			original.forEach(function (entry) {
+				Array.prototype.slice.call(entry.node.attributes).forEach(function (attribute) { entry.node.removeAttribute(attribute.name); });
+				entry.attributes.forEach(function (attribute) { entry.node.setAttribute(attribute[0], attribute[1]); });
+			});
+			delete root.lunaraSplidePilot;
+		}
+		scope.cleanup(restore);
+		try {
+		splide = new window.Splide(root, {
 			type: 'loop',
 			perPage: 1,
 			perMove: 1,
@@ -98,11 +129,13 @@
 		}
 
 		function syncHeight() {
+			if (restored) return;
 			if (heightFrame) {
 				window.cancelAnimationFrame(heightFrame);
 			}
 
-			heightFrame = window.requestAnimationFrame(function () {
+			heightFrame = scope.frame(function () {
+				if (restored) return;
 				var current = activeIndex(splide.index, slides.length);
 				var activeSlide = slides[current];
 				var height = activeSlide ? Math.ceil(activeSlide.getBoundingClientRect().height) : 0;
@@ -115,6 +148,7 @@
 		}
 
 		function syncState() {
+			if (restored) return;
 			var current = activeIndex(splide.index, slides.length);
 			var previous = activeIndex(current - 1, slides.length);
 			var next = activeIndex(current + 1, slides.length);
@@ -164,16 +198,17 @@
 		slides.forEach(function (slide) {
 			Array.prototype.slice.call(slide.querySelectorAll('img')).forEach(function (image) {
 				if (!image.complete) {
-					image.addEventListener('load', syncHeight, { once: true });
-					image.addEventListener('error', syncHeight, { once: true });
+					scope.on(image, 'load', syncHeight, { once: true });
+					scope.on(image, 'error', syncHeight, { once: true });
 				}
 			});
 		});
 
-		window.addEventListener('resize', syncHeight);
+		scope.on(window, 'resize', syncHeight);
 
 		dots.forEach(function (dot, index) {
-			dot.addEventListener('click', function (event) {
+			scope.on(dot, 'click', function (event) {
+				if (restored) return;
 				event.preventDefault();
 				splide.go(index);
 			});
@@ -197,12 +232,10 @@
 			root.removeAttribute('data-lunara-splide-pilot-active');
 		});
 
-		try {
 			splide.mount();
 			root.lunaraSplidePilot = splide;
 		} catch (error) {
-			root.classList.remove('lunara-splide-pending');
-			root.setAttribute('data-lunara-splide-pilot-active', 'failed');
+			restore();
 			if (window.console && window.console.warn) {
 				window.console.warn('Lunara Splide pilot failed to initialize.', error);
 			}
@@ -210,13 +243,13 @@
 	}
 
 	function boot() {
-		document.querySelectorAll('[data-lunara-splide-pilot]').forEach(function (root) {
+		pageRoot.querySelectorAll('[data-lunara-splide-pilot]').forEach(function (root) {
 			if (!('IntersectionObserver' in window)) {
 				initPilot(root);
 				return;
 			}
 
-			var observer = new IntersectionObserver(function (entries) {
+			var observer = scope.observe(new IntersectionObserver(function (entries) {
 				if (!entries.some(function (entry) { return entry.isIntersecting; })) {
 					return;
 				}
@@ -225,15 +258,19 @@
 				initPilot(root);
 			}, {
 				rootMargin: '800px 0px'
-			});
+			}));
 
 			observer.observe(root);
 		});
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', boot);
-	} else {
-		boot();
-	}
+	boot();
 })();
+
+    }
+    if (window.LunaraApp && window.LunaraApp.register) {
+        window.LunaraApp.register('splide-pilot', mount);
+    } else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
+    } else { mount(); }
+}());

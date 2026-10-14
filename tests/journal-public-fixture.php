@@ -57,9 +57,9 @@ function lunara_get_editorial_archive_sort() { return $GLOBALS['jp_sort'] ?? 'da
 function lunara_get_dispatch_type_label( $id ) { return 7 === $id ? 'Trailer' : 'Journal'; }
 function lunara_post_has_trailer( $id ) { return 7 === $id; }
 function lunara_journal_archive_studio_get_public_config() { return $GLOBALS['jp_config']; }
-function lunara_journal_archive_card_is_visual_lead( $index ) { return 1 === $index; }
-function lunara_journal_archive_card_image_attributes( $lead, $alt ) { return array( 'alt' => $alt ); }
+function is_paged() { return ! empty( $GLOBALS['jp_paged'] ); }
 function lunara_journal_archive_card_image_markup( $id, $attrs ) { return ! empty( $GLOBALS['jp_failed_media'] ) ? '' : '<img src="/tests/fixtures/home-carousel-landscape.svg" width="1280" height="800" alt="' . esc_attr( $attrs['alt'] ) . '">'; }
+require dirname( __DIR__ ) . '/inc/journal-archive-media.php';
 function lunara_get_journal_visual_context( $id ) { return array( 'has_provenance' => in_array( $id, array( 1, 2, 3, 4, 6 ), true ), 'source_label' => 6 === $id ? 'Deadline' : 'Dark Horizons', 'has_carousel' => false ); }
 function lunara_site_studio_footer_navigation_resolved_columns() {
     $columns = array( 'editorial' => array( 'Home' => '/', 'Reviews' => '/reviews/', 'Journal' => '/journal/', 'About' => '/about/', 'Editorial Policy' => '/editorial-policy/' ), 'oscars' => array( 'Oscars' => '/oscars/', 'Categories' => '/oscars/categories/', 'Ceremonies' => '/oscars/ceremonies/', 'Full Ledger' => '/oscars/ledger/' ), 'utility' => array( 'Search' => '/search/', 'Contact' => '/contact/', 'RSS Feed' => '/feed/' ) );

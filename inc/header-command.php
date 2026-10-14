@@ -255,8 +255,8 @@ if ( ! function_exists( 'lunara_render_header_command' ) ) {
 		<noscript><style>
 			body.lunara-header-takeover { padding-top: 0 !important; }
 			.lunara-header { position: static !important; }
-			.lunara-header-inner { height: auto !important; min-height: 68px; flex-wrap: wrap; padding-top: 12px; padding-bottom: 12px; }
-			.lunara-header-nav { display: flex !important; flex-basis: 100%; flex-wrap: wrap; order: 3; gap: 8px 20px; margin-left: 0; }
+			.lunara-header-inner { height: auto !important; min-height: 68px; padding-top: 12px; padding-bottom: 12px; }
+			.lunara-header-nav { display: flex !important; grid-column: 1 / -1; grid-row: 2; justify-content: center; flex-wrap: wrap; gap: 8px 20px; margin-left: 0; }
 			.lunara-header-burger { display: none !important; }
 		</style></noscript>
 		<?php
@@ -335,18 +335,18 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			border-bottom: 1px solid rgba(201,169,97,.24);
 		}
 		.lunara-header-inner {
-			display: flex; align-items: center; gap: 26px;
+			display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 26px;
 			max-width: var(--lunara-shell-max, 1360px); height: 88px;
 			margin: 0 auto; padding: 0 var(--lunara-shell-pad, 28px);
 		}
 		.lunara-header-brand {
 			display: inline-flex; align-items: center; gap: 7px;
-			flex: 0 0 auto; min-width: clamp(205px, 16vw, 260px);
+			justify-self: start; grid-column: 1; grid-row: 1; min-width: 0; max-width: 100%;
 			overflow: hidden; text-decoration: none;
 		}
 		.lunara-header-logo {
 			display: block; width: clamp(205px, 16vw, 248px); height: 64px;
-			max-width: none; object-fit: cover; object-position: center;
+			max-width: 100%; object-fit: cover; object-position: center;
 		}
 		.lunara-header-brand-word {
 			color: var(--lunara-gold, #c9a961);
@@ -358,7 +358,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			font-family: var(--lunara-font-label, sans-serif);
 			font-size: .875rem; letter-spacing: 0; text-transform: none;
 		}
-		.lunara-header-nav { display: flex; align-items: center; gap: 22px; margin-left: 8px; }
+		.lunara-header-nav { display: flex; align-items: center; justify-content: center; gap: 22px; grid-column: 2; grid-row: 1; }
 		.lunara-header-nav ul, .lunara-header-nav li,
 		.lunara-offcanvas-nav ul, .lunara-offcanvas-nav li {
 			list-style: none; margin: 0; padding: 0; display: block;
@@ -378,11 +378,11 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-header-nav a[aria-current], .lunara-offcanvas-nav a[aria-current] {
 			color: var(--lunara-gold-light, #e0c481); text-decoration: underline; text-underline-offset: .35em;
 		}
-		.lunara-header-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+		.lunara-header-actions { display: flex; align-items: center; gap: 12px; justify-self: end; grid-column: 3; grid-row: 1; }
 		.lunara-header-search {
 			display: inline-grid; place-items: center; flex: 0 0 44px;
 			width: 44px; height: 44px; padding: 0; cursor: pointer; text-decoration: none;
-			border: 1px solid rgba(201,169,97,.32); border-radius: 999px;
+			border: 1px solid rgba(201,169,97,.32); border-radius: 0;
 			background: rgba(7,15,24,.58); color: rgba(224,196,129,.92);
 			box-shadow: inset 0 0 0 1px rgba(255,255,255,.015);
 			transition: color .18s ease, border-color .18s ease, background-color .18s ease, transform .18s ease, box-shadow .18s ease;
@@ -405,7 +405,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		}
 		.lunara-header-burger {
 			position: relative; width: 44px; height: 44px; cursor: pointer;
-			border: 1px solid rgba(201,169,97,.3); border-radius: 999px;
+			border: 1px solid rgba(201,169,97,.3); border-radius: 0;
 			background: rgba(244,239,227,.05);
 		}
 		.lunara-header-burger span, .lunara-header-burger span::before, .lunara-header-burger span::after {
@@ -418,8 +418,11 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		@media (max-width: 1020px) {
 			.lunara-header-nav { display: none; }
 			body.lunara-header-takeover { padding-top: 68px; }
-			.lunara-header-inner { height: 68px; gap: 14px; }
-			.lunara-header-brand { min-width: 134px; }
+			.lunara-header-inner { grid-template-columns: 44px minmax(0, 1fr) 44px; height: 68px; gap: 14px; }
+			.lunara-header-brand { grid-column: 2; justify-self: center; }
+			.lunara-header-actions { display: contents; }
+			.lunara-header-search { grid-column: 1; grid-row: 1; }
+			.lunara-header-burger { grid-column: 3; grid-row: 1; }
 			.lunara-header-logo { width: 134px; height: 48px; }
 
 			/* --- Mobile fix (2026-10): plain header + no colour bleed ------
@@ -464,7 +467,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-offcanvas-panel {
 			position: absolute; top: 0; right: 0; bottom: 0;
 			width: min(420px, 92vw); padding: 84px 40px 40px;
-			display: flex; flex-direction: column;
+			display: flex; flex-direction: column; text-align: center;
 			background:
 
 				linear-gradient(200deg, rgba(15,29,46,.97), rgba(6,13,21,.99));
@@ -477,7 +480,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-offcanvas.is-open .lunara-offcanvas-panel { transform: none; }
 		.lunara-offcanvas-close {
 			position: absolute; top: 22px; right: 26px; width: 44px; height: 44px;
-			cursor: pointer; border: 1px solid rgba(201,169,97,.32); border-radius: 999px;
+			cursor: pointer; border: 1px solid rgba(201,169,97,.32); border-radius: 0;
 			background: transparent; color: rgba(224,196,129,.92); font-size: 1.3rem; line-height: 1;
 		}
 		.lunara-offcanvas-kicker {

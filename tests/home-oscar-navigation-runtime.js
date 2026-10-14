@@ -34,6 +34,13 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
             });
             await page.goto('https://oscar-rail.test/');
             const track = page.locator('[data-lunara-carousel-track]');
+            const opening = await track.evaluate(el=>{const r=el.getBoundingClientRect(),cards=[...el.children].map(n=>n.getBoundingClientRect()),visible=cards.filter(c=>c.left>=r.left-1&&c.right<=r.right+1);return{count:visible.length,left:visible[0].left-r.left,right:r.right-visible.at(-1).right};});
+            check(opening.count===(width===1440?3:1)&&Math.abs(opening.left-opening.right)<=2,`${width}/${reducedMotion}: forecast opening must have complete columns and equal gutters: ${JSON.stringify(opening)}`);
+            const headerAxes = await page.locator('.lunara-home-section-head').evaluateAll(heads=>heads.flatMap(head=>{
+                const r=head.getBoundingClientRect(),axis=r.left+r.width/2;
+                return [...head.querySelectorAll('.lunara-home-section-title,.lunara-home-section-summary,.lunara-section-link')].map(node=>{const box=node.getBoundingClientRect();return{text:node.textContent.trim(),delta:Math.abs(box.left+box.width/2-axis)};});
+            }));
+            check(headerAxes.length>0&&headerAxes.every(item=>item.delta<=1),`${width}/${reducedMotion}: Forecast heading, summary and action share the page axis: ${JSON.stringify(headerAxes)}`);
             const next = page.locator('[data-lunara-carousel-next]');
             const prev = page.locator('[data-lunara-carousel-prev]');
             const toggle = page.locator('[data-lunara-carousel-toggle]');

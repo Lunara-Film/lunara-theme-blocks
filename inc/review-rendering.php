@@ -321,7 +321,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
             gap: 4px !important;
             padding: 11px 12px !important;
             border: 1px solid rgba(201,169,97,.28) !important;
-            border-radius: 8px !important;
+            border-radius: 0!important;
             background: linear-gradient(180deg, rgba(15,29,46,.94), rgba(10,21,32,.98)) !important;
             color: #FAFBFC !important;
             letter-spacing: 0 !important;
