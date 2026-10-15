@@ -12,11 +12,12 @@ function check(ok, message) { checks++; if (!ok) throw Error(message); }
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
         for (const width of [390, 1440]) {
+          for (const pace of [12000, 18000]) {
             const page = await browser.newPage({ viewport: { width, height: 1000 } });
             await page.clock.install();
             await page.route('https://fallback.test/**', route => {
                 const url = new URL(route.request().url());
-                if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/assets/css/lunara-home-modules.css"></head><body class="home"><main id="main">${markup}</main><script src="/assets/js/lunara-page-lifecycle.js"></script><script src="/assets/js/lunara-carousel.js"></script></body></html>` });
+                if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head><meta name="lunara-slider-interval" content="${pace}"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/assets/css/lunara-home-modules.css"></head><body class="home"><main id="main">${markup}</main><script src="/assets/js/lunara-page-lifecycle.js"></script><script src="/assets/js/lunara-carousel.js"></script></body></html>` });
                 const file = path.resolve(root, '.' + url.pathname);
                 return file.startsWith(root + path.sep) && fs.existsSync(file) ? route.fulfill({ contentType: file.endsWith('.js') ? 'text/javascript' : 'text/css', body: fs.readFileSync(file) }) : route.fulfill({ status: 404, body: '' });
             });
@@ -24,11 +25,13 @@ function check(ok, message) { checks++; if (!ok) throw Error(message); }
             await page.waitForSelector('[data-lunara-carousel-ready]');
             const facts = page.locator('.lunara-oscar-facts-carousel');
             const active = () => facts.locator('.lunara-carousel-slide.active').getAttribute('data-lunara-oscar-item-id');
-            const interval = Number(await facts.getAttribute('data-autoplay'));
+            const interval = pace;
             const toggle = facts.locator('.splide__toggle');
             check(await facts.locator('.lunara-carousel-dot,.splide__pagination').count() === 0, 'Fallback has no markers.');
             const initial = await active();
-            await page.clock.runFor(interval + 50);
+            await page.clock.runFor(interval - 100);
+            check(await active() === initial, 'Shared pace gives the full reading interval.');
+            await page.clock.runFor(150);
             check(await active() !== initial, 'Autoplay advances the actual fallback slide.');
             await toggle.dispatchEvent('click');
             const paused = await active();
@@ -53,6 +56,7 @@ function check(ok, message) { checks++; if (!ok) throw Error(message); }
             await facts.locator('[data-lunara-slide-next]').dispatchEvent('click');
             check(await active() === reduced, 'Outgoing fallback controls are detached.');
             await page.close();
+          }
         }
         console.log(`Fallback playback: ${checks} checks passed against real PHP markup.`);
     } finally { await browser.close(); }

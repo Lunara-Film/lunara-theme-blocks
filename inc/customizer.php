@@ -2281,24 +2281,10 @@ function lunara_customize_register( $wp_customize ) {
         'title'       => __( 'Counts & Timing', 'lunara-film' ),
         'panel'       => 'lunara_homepage_panel',
         'priority'    => 25,
-        'description' => __( 'Control carousel speed and how many items each homepage section shows.', 'lunara-film' ),
+        'description' => __( 'Control how many items each homepage section shows. Set the shared slider pace in Site Studio → Global Design → Slider reading time.', 'lunara-film' ),
     ) );
 
     $homepage_count_controls = array(
-        'lunara_home_hero_autoplay' => array(
-            'label'   => __( 'Hero Carousel Speed (ms)', 'lunara-film' ),
-            'default' => 4000,
-            'min'     => 2000,
-            'max'     => 10000,
-            'step'    => 500,
-        ),
-        'lunara_home_lore_autoplay' => array(
-            'label'   => __( 'Oscar Lore Carousel Speed (ms)', 'lunara-film' ),
-            'default' => 7600,
-            'min'     => 3000,
-            'max'     => 15000,
-            'step'    => 500,
-        ),
         'lunara_home_featured_count' => array(
             'label'   => __( 'Featured Reviews Count', 'lunara-film' ),
             'default' => 8,
@@ -2774,10 +2760,10 @@ function lunara_customize_register( $wp_customize ) {
     $wp_customize->add_control(
         'lunara_oscars_rotating_winners_autoplay',
         array(
-            'label'       => __( 'Rotating Winners Autoplay (ms)', 'lunara-film' ),
+            'label'       => __( 'Rotating Winners Autoplay (legacy)', 'lunara-film' ),
             'section'     => 'lunara_oscars_portal_options',
             'type'        => 'range',
-            'description' => __( 'Set to 0 to keep the carousel manual. Higher values auto-scroll the cards on desktop.', 'lunara-film' ),
+            'description' => __( '0 keeps manual navigation. Positive values use Site Studio → Global Design → Slider reading time.', 'lunara-film' ),
             'input_attrs' => array(
                 'min'  => 0,
                 'max'  => 12000,

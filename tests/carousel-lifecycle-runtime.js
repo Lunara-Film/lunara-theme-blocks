@@ -33,12 +33,12 @@ function fixture(kind, options = {}) {
     section.querySelector = selector => ({['['+prefix+'-track]']:track,['['+prefix+'-toggle]']:toggle,['['+prefix+'-prev]']:prev,['['+prefix+'-next]']:next})[selector] || null;
     section.querySelectorAll = () => dots;
     section.contains = el => [section,track,toggle,prev,next,...items,...dots].includes(el);
-    const document = Object.assign(node(),{readyState:'complete',hidden:!!options.hidden,activeElement:null,querySelectorAll:()=>[section]});
+    const document = Object.assign(node(),{readyState:'complete',hidden:!!options.hidden,activeElement:null,querySelector:selector=>selector==='meta[name="lunara-slider-interval"]'?{content:String(options.pace??12000)}:null,querySelectorAll:()=>[section]});
     const motion = Object.assign(node(),{matches:!!options.reduced});
     const timers = new Map(), tasks = []; let sequence = 0;
     const window = {
         innerWidth:390, matchMedia:()=>motion, getComputedStyle:()=>({columnGap:'16px'}),
-        setInterval(fn) { timers.set(++sequence,fn); return sequence; },
+        setInterval(fn,ms) { window.lastInterval=ms; timers.set(++sequence,fn); return sequence; },
         clearInterval(id) { timers.delete(id); },
         setTimeout(fn) { tasks.push(fn); },
         requestAnimationFrame(fn) { fn(); return 1; }, cancelAnimationFrame() {},
@@ -46,7 +46,7 @@ function fixture(kind, options = {}) {
     const context = vm.createContext({window,document,console});
     vm.runInContext(fs.readFileSync(path.join(__dirname,'../assets/js',dynamic?'lunara-dynamic-rails.js':'lunara-scroll-carousel.js'),'utf8'),context);
     if (!dynamic) document.emit('DOMContentLoaded');
-    return {section,track,toggle,prev,next,document,timers,motion,
+    return {section,track,toggle,prev,next,document,timers,motion,window,
         flush() { while(tasks.length) tasks.shift()(); },
         tick() { for(const callback of [...timers.values()]) callback(); },
         reduce(value) { motion.matches=value; motion.emit('change',{matches:value}); },
@@ -57,6 +57,8 @@ for (const kind of ['dynamic','scroll']) {
     const f=fixture(kind);
     const active=(expected,label)=>check(f.timers.size===expected,`${kind}: ${label} (timers ${f.timers.size})`);
     active(1,'initial rotation');
+    check(f.window.lastInterval===12000,`${kind}: shared default overrides legacy timing`);
+    const slower=fixture(kind,{pace:18000});check(slower.window.lastInterval===18000,`${kind}: custom shared pace reaches the real timer`);
     f.tick(); check(f.track.scrollLeft>0,`${kind}: autoplay advances the actual track`);
     f.section.emit('pointerenter',{pointerType:'mouse'}); active(0,'hover pauses');
     f.focus(f.next); f.section.emit('pointerleave',{pointerType:'mouse'}); active(0,'hover exit cannot override focus');

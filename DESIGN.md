@@ -74,6 +74,20 @@ and links to the owning Review editor. This does not alter pairing content.
 - The footer uses compact wrapping directory rows, not tall navigation towers.
   Keep every saved link, readable group labels, 44px targets and symmetric rows.
 
+## Slider reading pace
+
+- Every enabled public slider uses one shared reading interval: 12 seconds by
+  default. Site Studio → Global Design → Slider reading time owns the setting,
+  in whole seconds from 8 to 30. Preview, Apply, Discard and History use the
+  canonical Global Design option and the normal private-preview path.
+- Existing per-slider autoplay on/off choices remain effective. Legacy positive
+  interval values only indicate autoplay is enabled; they cannot override the
+  shared pace. Retired timing controls must not return in new editors.
+- Keep explicit Pause/Play, pointer/focus pause, reduced-motion opt-out and
+  manual arrows/swipe. Pause remains in effect until the visitor resumes it.
+- Render the shared head metadata synchronously, before any carousel mounts.
+  Theme owns this contract for plugin-provided or older saved slider markup.
+
 ## Surfaces and type
 
 - Public frames and controls have square corners in every responsive and

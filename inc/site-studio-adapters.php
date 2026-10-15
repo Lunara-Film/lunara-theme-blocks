@@ -575,14 +575,15 @@ if ( ! function_exists( 'lunara_site_studio_global_design_state_schema' ) ) {
 		return array(
 			'colors' => array_fill_keys( array_keys( lunara_design_token_color_specs() ), $item ),
 			'fonts'  => array_fill_keys( array_keys( lunara_design_token_font_role_specs() ), $item ),
+			'slider_seconds' => true,
 		);
 	}
 }
 if ( ! function_exists( 'lunara_site_studio_global_design_build_state' ) ) {
-	function lunara_site_studio_global_design_build_state( $colors, $fonts ) {
+	function lunara_site_studio_global_design_build_state( $colors, $fonts, $slider_seconds = 12 ) {
 		$colors = is_array( $colors ) ? $colors : array();
 		$fonts = is_array( $fonts ) ? $fonts : array();
-		$state = array( 'colors' => array(), 'fonts' => array() );
+		$state = array( 'colors' => array(), 'fonts' => array(), 'slider_seconds' => is_int( $slider_seconds ) && $slider_seconds >= 8 && $slider_seconds <= 30 ? $slider_seconds : 12 );
 		foreach ( lunara_design_token_color_specs() as $key => $spec ) {
 			$effective = lunara_design_token_effective_color( $key, $colors );
 			$state['colors'][ $key ] = array(
@@ -607,7 +608,8 @@ if ( ! function_exists( 'lunara_site_studio_global_design_read_state' ) ) {
 		$tokens = is_array( $tokens ) ? $tokens : array();
 		return lunara_site_studio_global_design_build_state(
 			isset( $tokens['colors'] ) && is_array( $tokens['colors'] ) ? $tokens['colors'] : array(),
-			isset( $tokens['fonts'] ) && is_array( $tokens['fonts'] ) ? $tokens['fonts'] : array()
+			isset( $tokens['fonts'] ) && is_array( $tokens['fonts'] ) ? $tokens['fonts'] : array(),
+			isset( $tokens['slider_seconds'] ) ? $tokens['slider_seconds'] : 12
 		);
 	}
 }
@@ -635,7 +637,9 @@ if ( ! function_exists( 'lunara_site_studio_global_design_validate_state' ) ) {
 			if ( ! isset( $choices[ $value ] ) ) { $fields[ 'font_' . $role ] = __( 'Choose a supported typeface.', 'lunara-film' ); } else { $fonts[ $role ] = $value; }
 		}
 		if ( $fields ) { return new WP_Error( 'site_studio_global_invalid', __( 'Review the invalid Global Design fields.', 'lunara-film' ), array( 'fields' => $fields ) ); }
-		return lunara_site_studio_global_design_build_state( $colors, $fonts );
+		$seconds = array_key_exists( 'slider_seconds', $candidate ) ? $candidate['slider_seconds'] : ( function_exists( 'lunara_slider_interval' ) ? (int) ( lunara_slider_interval() / 1000 ) : 12 );
+		if ( ! is_int( $seconds ) || $seconds < 8 || $seconds > 30 ) { return new WP_Error( 'site_studio_global_invalid', __( 'Choose 8–30 whole seconds.', 'lunara-film' ), array( 'fields' => array( 'slider_seconds' => __( 'Choose 8–30 whole seconds.', 'lunara-film' ) ) ) ); }
+		return lunara_site_studio_global_design_build_state( $colors, $fonts, $seconds );
 	}
 }
 if ( ! function_exists( 'lunara_site_studio_global_design_save_state' ) ) {
@@ -647,7 +651,8 @@ if ( ! function_exists( 'lunara_site_studio_global_design_save_state' ) ) {
 		foreach ( $validated['colors'] as $key => $item ) { if ( null !== $item['override'] ) { $colors[ $key ] = $item['override']; } }
 		foreach ( $validated['fonts'] as $key => $item ) { if ( null !== $item['override'] ) { $fonts[ $key ] = $item['override']; } }
 		$value = array( 'colors' => $colors, 'fonts' => $fonts );
-		$desired = empty( $colors ) && empty( $fonts ) ? array( 'present' => false, 'value' => null, 'autoload' => null ) : array( 'present' => true, 'value' => $value, 'autoload' => false );
+		if ( 12 !== $validated['slider_seconds'] ) { $value['slider_seconds'] = $validated['slider_seconds']; }
+		$desired = empty( $colors ) && empty( $fonts ) && 12 === $validated['slider_seconds'] ? array( 'present' => false, 'value' => null, 'autoload' => null ) : array( 'present' => true, 'value' => $value, 'autoload' => false );
 		if ( ! lunara_site_studio_apply_option_snapshot( 'lunara_design_tokens', $desired ) ) {
 			if ( ! lunara_site_studio_apply_option_snapshot( 'lunara_design_tokens', $before ) ) { return new WP_Error( 'site_studio_global_rollback_failed', __( 'Global Design could not be restored safely.', 'lunara-film' ) ); }
 			return new WP_Error( 'site_studio_global_write_failed', __( 'Global Design could not be saved.', 'lunara-film' ) );
@@ -657,7 +662,7 @@ if ( ! function_exists( 'lunara_site_studio_global_design_save_state' ) ) {
 			if ( ! lunara_site_studio_apply_option_snapshot( 'lunara_design_tokens', $before ) ) { return new WP_Error( 'site_studio_global_rollback_failed', __( 'Global Design could not be restored safely.', 'lunara-film' ) ); }
 			return $revision_id;
 		}
-		return array( 'state' => lunara_site_studio_global_design_read_state(), 'changed_sections' => array( 'colors', 'typography' ), 'revision_id' => $revision_id, 'timestamp' => current_time( 'mysql' ) );
+		return array( 'state' => lunara_site_studio_global_design_read_state(), 'changed_sections' => array( 'colors', 'typography', 'slider_seconds' ), 'revision_id' => $revision_id, 'timestamp' => current_time( 'mysql' ) );
 	}
 }
 if ( ! function_exists( 'lunara_site_studio_valid_global_revision_config' ) ) {
@@ -665,7 +670,8 @@ if ( ! function_exists( 'lunara_site_studio_valid_global_revision_config' ) ) {
 		if ( ! is_array( $config ) || array( 'option' ) !== array_keys( $config ) || ! is_array( $config['option'] ) || array( 'present', 'value', 'autoload' ) !== array_keys( $config['option'] ) || ! is_bool( $config['option']['present'] ) ) { return false; }
 		$option = $config['option'];
 		if ( ! $option['present'] ) { return null === $option['value'] && null === $option['autoload']; }
-		if ( ! is_bool( $option['autoload'] ) || ! is_array( $option['value'] ) || array_diff( array_keys( $option['value'] ), array( 'colors', 'fonts' ) ) ) { return false; }
+		if ( ! is_bool( $option['autoload'] ) || ! is_array( $option['value'] ) || array_diff( array_keys( $option['value'] ), array( 'colors', 'fonts', 'slider_seconds' ) ) ) { return false; }
+		if ( isset( $option['value']['slider_seconds'] ) && ( ! is_int( $option['value']['slider_seconds'] ) || $option['value']['slider_seconds'] < 8 || $option['value']['slider_seconds'] > 30 ) ) { return false; }
 		$colors = isset( $option['value']['colors'] ) ? $option['value']['colors'] : array();
 		$fonts = isset( $option['value']['fonts'] ) ? $option['value']['fonts'] : array();
 		if ( ! is_array( $colors ) || ! is_array( $fonts ) || array_diff( array_keys( $colors ), array_keys( lunara_design_token_color_specs() ) ) || array_diff( array_keys( $fonts ), array_keys( lunara_design_token_font_role_specs() ) ) ) { return false; }

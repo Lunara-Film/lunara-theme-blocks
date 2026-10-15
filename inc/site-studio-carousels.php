@@ -213,7 +213,7 @@ function lunara_site_studio_render_carousel_inspector( $surface, $state, $revisi
 		<label>Mode <select data-carousel-field="mode"><option value="auto">Automatic — six newest</option><option value="manual">Manual selection</option></select></label>
 		<label>Section heading <input data-carousel-field="heading" maxlength="160" type="text"></label>
 		<label><input data-carousel-field="autoplay" type="checkbox"> Autoplay</label>
-		<label>Interval (seconds) <input data-carousel-field="interval" type="number" min="3" max="30"></label>
+		<input data-carousel-field="interval" type="hidden"><p>Automatic sliders use the shared reading time in <a data-workspace-navigation href="<?php echo esc_url( admin_url( 'admin.php?page=lunara-site-studio&surface=global-design' ) ); ?>">Global Design → Slider reading time</a>.</p>
 		<?php if ( 'hero' === $kind ) : ?><label>Overlay strength <input data-carousel-field="overlay" type="range" min="20" max="100"></label><?php endif; ?>
 		<div data-carousel-automatic></div>
 		<div data-carousel-manual>

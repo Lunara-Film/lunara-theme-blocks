@@ -915,13 +915,13 @@ function lunara_control_desk_homepage_number_specs() {
             'note'    => __( 'Minimum card height for the homepage Oscar Picks rail.', 'lunara-film' ),
         ),
         'lunara_home_oscar_picks_autoplay_interval' => array(
-            'label'   => __( 'Oscar Picks autoplay interval', 'lunara-film' ),
+            'label'   => __( 'Oscar Picks autoplay (legacy)', 'lunara-film' ),
             'default' => 6500,
             'min'     => 0,
             'max'     => 12000,
             'step'    => 250,
             'unit'    => 'ms',
-            'note'    => __( 'Set to 0 to stop automatic motion while keeping manual controls.', 'lunara-film' ),
+            'note'    => __( '0 keeps manual navigation. Any positive value enables autoplay at Site Studio → Global Design → Slider reading time; this legacy value no longer sets the pace.', 'lunara-film' ),
         ),
     );
 }

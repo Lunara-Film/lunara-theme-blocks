@@ -112,7 +112,7 @@ check(!restricted.some(node=>node.type==='a'),'An author without layout capabili
    await rows.first().getByLabel('Image fit',{exact:true}).selectOption('full');
    check(await rows.first().getByLabel('Zoom',{exact:true}).isDisabled(),'Full image fit disables irrelevant crop controls');
    await rows.first().getByLabel('Image fit',{exact:true}).selectOption('cover');
-   await page.locator('[data-carousel-field="interval"]').fill('11');
+   check(await page.locator('a[href*="surface=global-design"]').isVisible(),'Reading time is adjusted in the shared Global Design owner');
    previewBarrier=barrier(); await page.locator('[data-action="preview"]').click();
    await page.waitForFunction(()=>document.querySelector('.lunara-site-studio-inspector').getAttribute('aria-busy')==='true');
    check(await rows.first().getByLabel('Headline',{exact:true}).isDisabled() && await page.locator('[data-action="save"]').isDisabled(),'Shared request freezes carousel fields and Apply');
@@ -130,7 +130,7 @@ check(!restricted.some(node=>node.type==='a'),'An author without layout capabili
    failure=true;await page.locator('[data-action="save"]').click();await page.waitForFunction(()=>document.querySelector('[data-workspace-status]').textContent.includes('Simulated'));
    check(await rows.first().getByLabel('Headline',{exact:true}).inputValue()==='Override headline revised','Failed save preserves candidate');
    failure=false;await page.locator('[data-action="save"]').click();await page.waitForFunction(()=>document.querySelector('[data-lunara-site-studio]').dataset.workspaceState==='live-saved');
-   check(submitted.slides.map(slide=>slide.post_id).join(',')==='20,10' && submitted.slides[0].image_id===42 && submitted.slides[0].focal_x===55 && submitted.slides[0].headline==='Override headline revised' && submitted.interval===11,'Apply submits ordered independent presentation');
+   check(submitted.slides.map(slide=>slide.post_id).join(',')==='20,10' && submitted.slides[0].image_id===42 && submitted.slides[0].focal_x===55 && submitted.slides[0].headline==='Override headline revised' && submitted.interval===7,'Apply submits ordered independent presentation');
    check(!(await page.locator('[data-carousel-adoption-notice]').isVisible()),'Apply removes migration notice');
    await page.reload();await page.waitForSelector('[data-lunara-site-studio-ready="true"]');await rows.first().locator('summary').click();
    check(await rows.first().getByLabel('Headline',{exact:true}).inputValue()==='Override headline revised','Saved settings survive reload');

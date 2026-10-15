@@ -279,14 +279,7 @@
 							checked: !! attributes.autoplay,
 							onChange: set( 'autoplay' )
 						} ),
-						'carousel' === display && !! attributes.autoplay && el( RangeControl, {
-							label: __( 'Autoplay speed (ms)', 'lunara-film' ),
-							value: attributes.autoplaySpeed,
-							min: 1500,
-							max: 20000,
-							step: 500,
-							onChange: set( 'autoplaySpeed' )
-						} ),
+						'carousel' === display && el( 'p', {}, __( 'Reading time is shared across the site. Change it in Lunara Site Studio → Global Design → Slider reading time.', 'lunara-film' ) ),
 						'slider' === display && el( ToggleControl, {
 							label: __( 'Show arrows', 'lunara-film' ),
 							checked: !! attributes.showArrows,

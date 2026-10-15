@@ -34,6 +34,8 @@
 			var userPaused = !enabled;
 			var toggle = root.querySelector('.splide__toggle');
 			var interval = parseInt(root.getAttribute('data-lunara-carousel-interval'), 10) || 7000;
+			var sharedPace = document.querySelector('meta[name="lunara-slider-interval"]');
+			if (sharedPace && interval > 0) { interval = Math.max(8000, Math.min(30000, Number(sharedPace.content) || 12000)); }
 			var carousel = new window.Splide(root, {
 				type: 'slide', rewind: true, perPage: 3, perMove: 1, gap: '24px',
 				breakpoints: { 980: { perPage: 2, gap: '18px' }, 640: { perPage: 1, gap: '14px' } },

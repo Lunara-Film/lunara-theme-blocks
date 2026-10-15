@@ -202,7 +202,7 @@ function lunara_site_studio_render_home_oscars_inspector( $surface, $state, $rev
 	lunara_site_studio_render_details_open( 'fine-tune', 'Layout', false, array( 'oscar-' . $kind ) );
 	foreach ( $spec['presentation'] as $key => $def ) {
 		if ( 'autoplay_interval' === $key ) {
-			echo '<label class="lunara-site-studio-field">Time between advances (seconds; 0 pauses)<input type="number" min="0" max="12" step="0.5" data-oscars-interval data-error-key="presentation.autoplay_interval" aria-describedby="lunara-oscars-interval-error" value="' . esc_attr( $state['presentation'][$key] / 1000 ) . '"><span id="lunara-oscars-interval-error" class="lunara-site-studio-error" hidden></span></label>';
+			echo '<label class="lunara-site-studio-field"><input type="checkbox" data-oscars-interval data-error-key="presentation.autoplay_interval" aria-describedby="lunara-oscars-interval-error"' . ( $state['presentation'][$key] > 0 ? ' checked' : '' ) . '> Autoplay at the shared site pace<span id="lunara-oscars-interval-error" class="lunara-site-studio-error" hidden></span></label><p>Set the reading time for all sliders in <a data-workspace-navigation href="' . esc_url( admin_url( 'admin.php?page=lunara-site-studio&surface=global-design' ) ) . '">Global Design → Slider reading time</a>.</p>';
 		} else { lunara_site_studio_render_control( 'presentation.' . $key, $state['presentation'][$key], $def, $labels[$key] ); }
 	}
 	lunara_site_studio_render_details_close();

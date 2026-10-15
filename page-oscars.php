@@ -91,6 +91,7 @@ $rotating_link_label = $oscars_winner_text( 'rotating_winners', 'link_label', 'l
 $rotating_enabled  = $oscars_portal_show( 'rotating-winners', 'lunara_oscars_rotating_winners_enabled', true );
 $rotating_count    = max( 4, min( 16, absint( isset( $oscars_rotating_winners['count'] ) ? $oscars_rotating_winners['count'] : get_theme_mod( 'lunara_oscars_rotating_winners_count', 10 ) ) ) );
 $rotating_autoplay = max( 0, min( 12000, absint( isset( $oscars_rotating_winners['autoplay_ms'] ) ? $oscars_rotating_winners['autoplay_ms'] : get_theme_mod( 'lunara_oscars_rotating_winners_autoplay', 7200 ) ) ) );
+if ( function_exists( 'lunara_slider_interval' ) ) { $rotating_autoplay = lunara_slider_interval( $rotating_autoplay ); }
 $show_hero           = $oscars_portal_show( 'hero', 'lunara_oscars_show_hero', true );
 $show_portal_links   = $oscars_portal_show( 'doors', 'lunara_oscars_show_portal_links', true );
 $show_spotlights     = $oscars_portal_show( 'spotlights', 'lunara_oscars_show_spotlights', true );
