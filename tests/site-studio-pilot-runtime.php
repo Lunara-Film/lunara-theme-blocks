@@ -330,7 +330,7 @@ lunara_pilot_assert(
 	&& 'Control the sitewide palette, typography and slider reading time.' === $global_surface['description']
 	&& array( 'brand', 'palette', 'colors', 'typography', 'fonts', 'slider', 'autoplay', 'pace' ) === $global_surface['aliases']
 	&& 'theme:global-design' === $global_surface['owner']
-	&& array( 'colors', 'typography' ) === $global_surface['sections']
+	&& array( 'slider-reading-time', 'colors', 'typography' ) === $global_surface['sections']
 	&& 'customize.php?autofocus[section]=lunara_global_design_options' === $global_surface['classic_url']
 	&& 'lunara_design_tokens_render_panel' === $global_surface['renderer'],
 	'Global Design must expose the exact additive canonical bookmark and ownership metadata.'

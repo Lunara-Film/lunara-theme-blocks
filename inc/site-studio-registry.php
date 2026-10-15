@@ -240,7 +240,7 @@ if ( ! function_exists( 'lunara_site_studio_default_surfaces' ) ) {
 				'dependency_callback' => 'lunara_site_studio_dependency_available',
 				'status_callback'     => 'lunara_site_studio_status_ready',
 				'danger_level'        => 'none',
-				'sections'            => array( 'colors', 'typography' ),
+				'sections'            => array( 'slider-reading-time', 'colors', 'typography' ),
 				'classic_url'         => 'customize.php?autofocus[section]=lunara_global_design_options',
 				'renderer'            => 'lunara_design_tokens_render_panel',
 			),
