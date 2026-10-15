@@ -3832,11 +3832,7 @@ function lunara_carousel_shortcode( $atts ) {
         <?php endforeach; ?>
         
         <?php if ( count( $images ) > 1 ) : ?>
-            <div class="lunara-carousel-dots">
-                <?php foreach ( $images as $index => $image ) : ?>
-                    <button class="lunara-carousel-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
-                <?php endforeach; ?>
-            </div>
+            <div class="lunara-slider-controls"><div class="splide__arrows"><button type="button" class="splide__arrow splide__arrow--prev lunara-hero-arrow-prev" data-lunara-slide-prev aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><button type="button" class="splide__arrow splide__arrow--next lunara-hero-arrow-next" data-lunara-slide-next aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div><button type="button" class="lunara-slider-toggle" data-lunara-slide-toggle aria-label="Pause autoplay">Pause</button></div>
         <?php endif; ?>
     </div>
     <?php
@@ -13688,9 +13684,6 @@ if ( ! function_exists( 'lunara_render_oscar_facts_carousel' ) ) {
 							<span class="lunara-oscar-facts-total"><?php echo esc_html( str_pad( (string) $fact_total, 2, '0', STR_PAD_LEFT ) ); ?></span>
 						</span>
 						<span class="lunara-oscar-facts-progress" aria-hidden="true"><span class="lunara-oscar-facts-progress-bar"></span></span>
-						<?php if ( $autoplay > 0 ) : ?>
-							<?php echo lunara_home_carousel_toggle(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>
-						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 				<div class="lunara-oscar-facts-track" role="list">
@@ -13771,11 +13764,7 @@ if ( ! function_exists( 'lunara_render_oscar_facts_carousel' ) ) {
 				<?php endwhile; wp_reset_postdata(); ?>
 				</div>
 				<?php if ( $query->post_count > 1 ) : ?>
-					<div class="lunara-oscar-facts-dots lunara-carousel-dots" aria-label="<?php esc_attr_e( 'Oscar fact slides', 'lunara-film' ); ?>">
-						<?php for ( $dot_index = 0; $dot_index < (int) $query->post_count; $dot_index++ ) : ?>
-							<button class="lunara-carousel-dot <?php echo 0 === $dot_index ? 'active' : ''; ?>" type="button" aria-label="<?php echo esc_attr( sprintf( __( 'Show Oscar fact %d', 'lunara-film' ), $dot_index + 1 ) ); ?>"></button>
-						<?php endfor; ?>
-					</div>
+					<div class="lunara-slider-controls"><div class="splide__arrows"><button type="button" class="splide__arrow splide__arrow--prev lunara-hero-arrow-prev" data-lunara-slide-prev aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><button type="button" class="splide__arrow splide__arrow--next lunara-hero-arrow-next" data-lunara-slide-next aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div><?php if ( $autoplay > 0 ) { echo lunara_home_carousel_toggle(); } ?></div>
 				<?php endif; ?>
 			</div>
 		</section>
@@ -15575,6 +15564,7 @@ if ( ! function_exists( 'lunara_render_cinematic_hero_carousel' ) ) {
 					<?php foreach ( $slides as $slide_index => $slide_data ) { echo lunara_render_cinematic_hero_slide( $slide_data, $slide_index, $first_image_is_lcp ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					} ?>
 				</ul></div>
+				<?php if ( ! $is_static ) { echo lunara_home_carousel_controls(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
 			</section>
 			<?php
 			$hero_html = (string) ob_get_clean();

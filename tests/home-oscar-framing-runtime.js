@@ -117,7 +117,7 @@ function near(actual, expected, message, tolerance = 1.1) { check(Math.abs(actua
         }
         // Mount the real generic fallback (Splide ownership has its own gate).
         // Progressive enhancement must hide only the inactive Facts once ready,
-        // retaining working dot/keyboard navigation and Pick arrow navigation.
+        // retaining working arrow/keyboard navigation and Pick arrow navigation.
         for (const width of [390, 1440]) for (const overrides of [false, true]) {
             const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
             page.setDefaultTimeout(8000);
@@ -128,12 +128,12 @@ function near(actual, expected, message, tolerance = 1.1) { check(Math.abs(actua
             await page.waitForFunction(() => document.querySelector('.lunara-oscar-facts-carousel').hasAttribute('data-lunara-carousel-ready'));
             check(await facts.locator('.lunara-oscar-fact-card.active').count() === 1, `${label}: exactly one Fact is active after initialization.`);
             check(await facts.locator('[data-lunara-oscar-item-id="102"]').evaluate(el => getComputedStyle(el).visibility === 'hidden'), `${label}: inactive Facts must be hidden after the controller is ready.`);
-            try { await facts.locator('.lunara-carousel-dot').nth(1).click(); }
+            try { await facts.locator('[data-lunara-slide-next]').click(); }
             catch (error) {
-                const geometry = await facts.evaluate(el => [el,el.querySelector('.lunara-oscar-facts-track'),el.querySelector('.active.lunara-oscar-fact-card'),el.querySelector('.active .lunara-oscar-fact-card-link'),el.querySelector('.active .lunara-oscar-fact-card-text'),el.querySelector('.active .lunara-oscar-fact-card-foot'),el.querySelector('.lunara-oscar-facts-dots')].map(node => ({class:node.className,rect:node.getBoundingClientRect().toJSON(),position:getComputedStyle(node).position,height:getComputedStyle(node).height,grid:getComputedStyle(node).gridTemplateRows})));
-                throw new Error(`${label}: Fact dots must remain clickable. ${JSON.stringify(geometry)}\n${error.message}`);
+                const geometry = await facts.evaluate(el => [el,el.querySelector('.lunara-oscar-facts-track'),el.querySelector('.active.lunara-oscar-fact-card'),el.querySelector('.active .lunara-oscar-fact-card-link'),el.querySelector('.active .lunara-oscar-fact-card-text'),el.querySelector('.active .lunara-oscar-fact-card-foot'),el.querySelector('.lunara-slider-controls')].map(node => ({class:node.className,rect:node.getBoundingClientRect().toJSON(),position:getComputedStyle(node).position,height:getComputedStyle(node).height,grid:getComputedStyle(node).gridTemplateRows})));
+                throw new Error(`${label}: Fact arrows must remain clickable. ${JSON.stringify(geometry)}\n${error.message}`);
             }
-            check(await facts.locator('[data-lunara-oscar-item-id="102"]').evaluate(el => el.classList.contains('active') && getComputedStyle(el).visibility === 'visible'), `${label}: a dot must reveal the selected Fact.`);
+            check(await facts.locator('[data-lunara-oscar-item-id="102"]').evaluate(el => el.classList.contains('active') && getComputedStyle(el).visibility === 'visible'), `${label}: Next must reveal the following Fact.`);
             await facts.focus();
             await page.keyboard.press('ArrowRight');
             check(await facts.locator('[data-lunara-oscar-item-id="103"]').evaluate(el => el.classList.contains('active') && getComputedStyle(el).visibility === 'visible'), `${label}: keyboard navigation must reveal the next Fact.`);

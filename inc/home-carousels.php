@@ -139,7 +139,12 @@ function lunara_home_carousel_placeholder() {
 	return '<span class="lunara-home-carousel-placeholder" aria-hidden="true"><span>LUNARA FILM</span></span>';
 }
 
-/** Splide uses this same button for its accessible play/pause state. */
+/** Shared arrow and playback row for each adopted Home carousel. */
+function lunara_home_carousel_controls() {
+    return '<div class="lunara-slider-controls"><div class="splide__arrows"><button type="button" class="splide__arrow splide__arrow--prev lunara-hero-arrow-prev" data-lunara-slide-prev aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><button type="button" class="splide__arrow splide__arrow--next lunara-hero-arrow-next" data-lunara-slide-next aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div> ' . lunara_home_carousel_toggle() . '</div>';
+}
+
+/** Splide owns the accessible play/pause state of this button. */
 function lunara_home_carousel_toggle() {
 	return '<button class="splide__toggle lunara-home-carousel-toggle" type="button"><span class="splide__toggle__play">' . esc_html__( 'Play', 'lunara-film' ) . '</span><span class="splide__toggle__pause">' . esc_html__( 'Pause', 'lunara-film' ) . '</span></button>';
 }
@@ -156,7 +161,7 @@ function lunara_render_home_hero_carousel( $attrs = array() ) {
 		<div class="splide__track lunara-cinematic-hero-track"><ul class="splide__list">
 			<?php foreach ( $slides as $index => $slide ) { echo lunara_render_cinematic_hero_slide( $slide, $index, $priority ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
 		</ul></div>
-		<?php if ( count( $slides ) > 1 ) { echo lunara_home_carousel_toggle(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
+		<?php if ( count( $slides ) > 1 ) { echo lunara_home_carousel_controls(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
 	</section>
 	<?php return (string) ob_get_clean();
 }
@@ -201,7 +206,7 @@ function lunara_render_home_story_carousel( $kind ) {
 				</a></article></li>
 			<?php endforeach; ?>
 			</ul></div>
-			<?php if ( count( $slides ) > 1 ) { echo lunara_home_carousel_toggle(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
+			<?php if ( count( $slides ) > 1 ) { echo lunara_home_carousel_controls(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
 		</div>
 	</section>
 	<?php return (string) ob_get_clean();

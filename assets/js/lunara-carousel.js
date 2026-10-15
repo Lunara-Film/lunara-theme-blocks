@@ -25,7 +25,7 @@
  * HTML/CSS contract is unchanged:
  *   .lunara-carousel              — outer container; data-autoplay="ms" optional
  *   .lunara-carousel-slide        — slide; .active class drives visibility via CSS
- *   .lunara-carousel-dot          — pagination dot; .active class for current dot
+ *   [data-lunara-slide-prev/next/toggle] — shared navigation and playback
  */
 
 (function () {
@@ -33,8 +33,8 @@
 
 	var SWIPE_THRESHOLD_PX = 40;     // minimum horizontal travel for a swipe
 	var SWIPE_VERT_LIMIT_PX = 60;    // ignore if vertical travel exceeds this
-	var prefersReducedMotion = window.matchMedia &&
-		window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+	var prefersReducedMotion = motionQuery && motionQuery.matches;
 
 	function init(root) {
 		// Splide-pilot ownership handshake: the pilot script runs earlier in
@@ -57,9 +57,11 @@
 		);
 		if (!slides.length) return;
 
-		var dots = Array.prototype.slice.call(
-			root.querySelectorAll('.lunara-carousel-dot')
-		);
+		var previous = root.querySelector('[data-lunara-slide-prev]');
+        var next = root.querySelector('[data-lunara-slide-next]');
+        var toggle = root.querySelector('[data-lunara-slide-toggle], .splide__toggle');
+        var userPaused = false, hovered = false, focused = false;
+        var originalToggle = toggle ? { html: toggle.innerHTML, hidden: toggle.hidden, label: toggle.getAttribute('aria-label') } : null;
 
 		var current = 0;
 		var autoplayMs = parseInt(root.dataset.autoplay || '5000', 10);
@@ -80,13 +82,12 @@
 			slides.forEach(function (el, k) {
 				el.classList.toggle('active', k === current);
 			});
-			dots.forEach(function (el, k) {
-				el.classList.toggle('active', k === current);
-			});
+            var counter = root.querySelector('.lunara-oscar-facts-current');
+            if (counter) counter.textContent = String(current + 1).padStart(2, '0');
 		}
 
 		function startAutoplay() {
-			if (autoplayMs > 0 && slides.length > 1 && !timer && !prefersReducedMotion) {
+			if (autoplayMs > 0 && slides.length > 1 && !timer && !prefersReducedMotion && !userPaused && !hovered && !focused && !touchActive && !document.hidden) {
 				timer = scope.interval(function () { show(current + 1); }, autoplayMs);
 			}
 		}
@@ -104,21 +105,37 @@
 			root.setAttribute('aria-roledescription', 'carousel');
 		}
 
-		// Dot navigation
-		dots.forEach(function (el, k) {
-			scope.on(el, 'click', function () {
-				show(k);
-				stopAutoplay(); startAutoplay(); // reset cadence after manual nav
-			});
-		});
-
-		// Pause-on-hover — but ONLY for actual mouse pointers.
+        function move(delta) { show(current + delta); stopAutoplay(); startAutoplay(); }
+        if (previous) scope.on(previous, 'click', function () { move(-1); });
+        if (next) scope.on(next, 'click', function () { move(1); });
+        function playbackLabel() {
+            if (!toggle) return;
+            toggle.hidden = autoplayMs <= 0 || slides.length < 2 || prefersReducedMotion;
+            toggle.textContent = userPaused ? 'Play' : 'Pause';
+            toggle.setAttribute('aria-label', userPaused ? 'Start autoplay' : 'Pause autoplay');
+        }
+        if (toggle) scope.on(toggle, 'click', function () {
+            userPaused = !userPaused;
+            if (!userPaused) { focused = false; hovered = false; }
+            stopAutoplay(); startAutoplay(); playbackLabel();
+        });
+        playbackLabel();
+        if (motionQuery && motionQuery.addEventListener) scope.on(motionQuery, 'change', function (event) {
+            prefersReducedMotion = event.matches;
+            stopAutoplay(); startAutoplay(); playbackLabel();
+        });
+        scope.on(root, 'focusin', function () { focused = true; stopAutoplay(); });
+        scope.on(root, 'focusout', function (event) {
+            focused = root.contains(event.relatedTarget);
+            if (!focused) startAutoplay();
+        });
+        // Pause-on-hover — but ONLY for actual mouse pointers.
 		// pointerenter/leave with pointerType === 'mouse' avoids the mobile-tap trap.
 		scope.on(root, 'pointerenter', function (e) {
-			if (e.pointerType === 'mouse') stopAutoplay();
+			if (e.pointerType === 'mouse') { hovered = true; stopAutoplay(); }
 		});
 		scope.on(root, 'pointerleave', function (e) {
-			if (e.pointerType === 'mouse') startAutoplay();
+			if (e.pointerType === 'mouse') { hovered = false; startAutoplay(); }
 		});
 
 		// Touch swipe gestures
@@ -128,11 +145,13 @@
 			touchStartX = e.touches[0].clientX;
 			touchStartY = e.touches[0].clientY;
 			touchActive = true;
+            stopAutoplay();
 		}, { passive: true });
 
 		scope.on(root, 'touchend', function (e) {
 			if (!touchActive) return;
 			touchActive = false;
+            startAutoplay();
 			var t = e.changedTouches && e.changedTouches[0];
 			if (!t) return;
 			var dx = t.clientX - touchStartX;
@@ -142,6 +161,8 @@
 			show(current + (dx < 0 ? 1 : -1));
 			stopAutoplay(); startAutoplay();
 		});
+
+        scope.on(root, 'touchcancel', function () { touchActive = false; startAutoplay(); });
 
 		// Keyboard arrows (when carousel has focus)
 		scope.on(root, 'keydown', function (e) {
@@ -157,7 +178,14 @@
 		});
 
 		root.setAttribute('data-lunara-carousel-ready', 'true');
-        scope.cleanup(function () { root.removeAttribute('data-lunara-carousel-ready'); });
+        scope.cleanup(function () {
+            stopAutoplay(); root.removeAttribute('data-lunara-carousel-ready');
+            if (toggle && originalToggle) {
+                toggle.innerHTML = originalToggle.html; toggle.hidden = originalToggle.hidden;
+                if (originalToggle.label === null) toggle.removeAttribute('aria-label');
+                else toggle.setAttribute('aria-label', originalToggle.label);
+            }
+        });
 		startAutoplay();
 	}
 

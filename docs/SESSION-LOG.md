@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Consistent public slider navigation
+
+- **Shipped:** Theme 3.2.115 candidate removes remaining Home Hero/Journal/Reviews Splide pagination and PHP-rendered Oscar Facts/curated-media markers. Shared centered arrow/playback rows, 44px square targets and navy/gold control tokens replace mixed controls. Obsolete Show dots editor UI and marker CSS are retired; saved block data remains compatible.
+- **Live:** Theme 3.2.114, main `ee410b3`, was deployed and verified after PR #241. Its Forecast has no markers. This broader candidate is not yet deployed at the time of this entry; the PR release receipt records the final gate.
+- **Holding:** Current site-wide slider refinement, including generic fallback playback, reduced motion, Site Studio public renderer parity and lifecycle cleanup. Required CI and production acceptance remain pending.
+- **Next:** Complete CI, integrate the exact checked commit, manually deploy under the user's continuing release autonomy, and verify actual desktop/phone sliders.
+- **Found, not fixed:** No new blockers. Ordinary archive page-number pagination is navigation between pages and remains intact.
+
 ## 2026-10-15 — Remove Home Oscar Forecast slide markers
 
 - **Shipped:** Theme 3.2.114 candidate removes all fifteen Forecast pagination markers at their PHP renderer and deletes their unused component styling. A centered arrow/playback row remains on desktop and phone, including Site Studio previews using the same renderer.

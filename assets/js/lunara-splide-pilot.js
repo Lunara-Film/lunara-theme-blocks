@@ -71,9 +71,6 @@
 			slide.setAttribute('aria-label', String(index + 1) + ' of ' + String(slides.length));
 		});
 
-		var dots = Array.prototype.slice.call(
-			root.querySelectorAll('.lunara-carousel-dot')
-		);
 		var toggle = root.querySelector('.splide__toggle');
 		var currentCounter = root.querySelector('.lunara-oscar-facts-current');
 		var totalCounter = root.querySelector('.lunara-oscar-facts-total');
@@ -164,15 +161,6 @@
 					slide.removeAttribute('aria-current');
 				}
 			});
-			dots.forEach(function (dot, index) {
-				var active = index === current;
-				dot.classList.toggle('active', active);
-				if (active) {
-					dot.setAttribute('aria-current', 'true');
-				} else {
-					dot.removeAttribute('aria-current');
-				}
-			});
 			syncSignatureConsole(current);
 			syncHeight();
 		}
@@ -206,13 +194,6 @@
 
 		scope.on(window, 'resize', syncHeight);
 
-		dots.forEach(function (dot, index) {
-			scope.on(dot, 'click', function (event) {
-				if (restored) return;
-				event.preventDefault();
-				splide.go(index);
-			});
-		});
 
 		splide.on('mounted move moved active resized updated refreshed', syncState);
 		splide.on('mounted', function () {
