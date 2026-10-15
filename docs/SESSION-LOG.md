@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Align the seven website repositories
+
+- **Shipped:** candidate alignment only. Identical AGENTS.md now points all seven repositories to Theme design authority, explicitly exempts private editorial/admin UI, and defines manual review/merge/deploy/acceptance stages. Added repository ownership and secondary-source classification in docs/REPOSITORY-ALIGNMENT.md. AI Assistant README requires Theme-inherited public markup; no prompt/settings mutation. Dispatch 3.4.2 adds long-title wrapping plus browser-parsed CSS policy and actual block-renderer geometry fixtures in CI.
+- **Live:** unchanged; no merge, deployment, cache operation or production write. GitHub now reports Ledger #56 merged to main and Theme #231 merged into the still-open #230 branch; Theme main has not received that candidate.
+- **Holding:** new codex/repository-design-alignment branches; Theme continues from #230's current tree, the six plugin branches continue from their latest main. Dispatch focused test passed after fixing the concrete 768px long-headline overflow: five renderer variants at three widths, nine default/hover/focus cases and four deliberate mutation checks. Fixtures simulate WordPress data; they are not deployed acceptance. Required final PR CI remains to be recorded in each PR.
+- **Next:** merge the reviewed alignment PRs in dependency order, then use the separately authorized manual release path for Dispatch and pending public presentation releases. Documentation-only changes need no runtime bump or standalone deployment.
+- **Found, not fixed:** World contains legacy visual WordPress code and Engine is a standalone Streamlit UI; neither is proven connected to the current website. Their empty GitHub deployment lists cannot establish host disconnection. SQL is data-only. Preserve these repositories and verify host routing before future reuse. HQ02/JQ25 and post-deployment acceptance remain separate existing gates.
+
 ## 2026-10-14 — Make square geometry a publication-wide default
 
 - **Shipped:** Theme 3.2.111 candidate extends the existing source-level geometry changes to native WordPress blocks, generic pages and saved content. Removed the rounded image style and per-block radius control; global styles and inline corners adapt at render time without rewriting stored posts. Added automatic public-CSS policy checks in Theme and Ledger and the route/owner coverage map in docs/PUBLIC-GEOMETRY.md.
