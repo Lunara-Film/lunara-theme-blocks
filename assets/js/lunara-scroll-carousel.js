@@ -81,11 +81,13 @@
                 const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
                 const behavior = reduceMotion ? 'auto' : 'smooth';
                 // Reach the final card before wrapping on the following advance.
-                if (direction > 0 && track.scrollLeft >= maxScroll - 6) {
+                // Fractional card widths can leave a final snap only a few
+                // pixels from the boundary. Reach that boundary before wrapping.
+                if (direction > 0 && track.scrollLeft >= maxScroll - 1) {
                     track.scrollTo({ left: 0, behavior: behavior });
                     return;
                 }
-                if (direction < 0 && track.scrollLeft <= 6) {
+                if (direction < 0 && track.scrollLeft <= 1) {
                     track.scrollTo({ left: maxScroll, behavior: behavior });
                     return;
                 }
