@@ -111,10 +111,10 @@ foreach ( $matches as $match ) {
 	}
 	$seed_rules[ trim( $match[1] ) ] = $properties;
 }
-foreach ( array( '.lunara-home-curated-hero .lunara-slider-controls' ) as $selector ) {
+foreach ( array( '.lunara-cinematic-hero-carousel .lunara-slider-controls' ) as $selector ) {
 	img_assert( 'absolute' === ( $seed_rules[ $selector ]['position'] ?? '' ), 'Desktop control stays out of document flow: ' . $selector );
 }
-$toggle_seed = $seed_rules['.lunara-home-curated-hero .lunara-slider-controls'];
+$toggle_seed = $seed_rules['.lunara-cinematic-hero-carousel .lunara-slider-controls'];
 img_assert( '50%' === $toggle_seed['left'] && ! isset( $toggle_seed['right'] ) && '32px' === $toggle_seed['bottom'] && 'translateX(-50%)' === $toggle_seed['transform'], 'The emitted desktop toggle is centered without a stretching opposite inset.' );
 img_assert( false === strpos( preg_replace( '/@media.*$/s', '', $seed_css ), 'lunara-slider-controls' ), 'The synchronous seed leaves phone controls positioning to its in-flow layout.' );
 ob_start(); lunara_output_entity_geometry_css(); img_assert( '' === ob_get_clean(), 'The dossier seed stays off the homepage.' );

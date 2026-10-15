@@ -62,7 +62,7 @@ function is_admin() { return $GLOBALS['is_admin'] ?? false; }
 function is_feed() { return $GLOBALS['is_feed'] ?? false; }
 function is_front_page() { return $GLOBALS['is_front_page'] ?? true; }
 function wp_cache_get_last_changed( $group ) { return 'fixture'; }
-function lunara_hero_command_slides() { return array( array( 'title' => 'Old featured item', 'image' => '/old.jpg' ) ); }
+function lunara_hero_command_slides() { return array( array( 'title' => 'Old featured item', 'image' => '/tests/fixtures/home-carousel-art.svg' ), array( 'title' => 'Second saved hero', 'image' => '/tests/fixtures/home-carousel-art.svg' ) ); }
 function lunara_get_cinematic_hero_data() { return array( 'title' => 'Old fallback', 'image' => '/old.jpg' ); }
 function lunara_get_review_card_image_data( $id, $size, $attrs ) { $source = Lunara_Review_Image_Studio::resolve_slot( $id, 'card' ); if ( isset( $source['mode'] ) && 'off' === $source['mode'] ) { return array( 'url' => '', 'html' => '', 'has_image' => false ); } $url = $source['url'] ?? ( $GLOBALS['review_legacy_urls'][ $id ] ?? '' ); if ( isset( $source['mode'] ) && 'custom' === $source['mode'] && '' === $url ) { return array( 'url' => '', 'html' => '', 'has_image' => false ); } if ( '' === $url ) { $url = get_the_post_thumbnail_url( $id, $size ); } return array( 'url' => $url, 'html' => '', 'has_image' => '' !== $url ); }
 function lunara_get_journal_card_image_url( $id, $size ) { return $GLOBALS['journal_urls'][ $id ] ?? get_the_post_thumbnail_url( $id, $size ); }
@@ -206,7 +206,7 @@ check_delivery( $legacy_html === lunara_render_homepage_latest_reviews( $legacy_
 lunara_enqueue_homepage_editor_card_assets();
 check_delivery( false === $GLOBALS['localized_block_config']['reviewsCarouselAdopted'] && str_contains( $GLOBALS['localized_block_config']['sections']['lunara/latest-reviews']['editUrl'], 'surface=homepage-structure' ), 'Restoring option absence also re-enables the old block editing owner.' );
 
-if ( in_array( '--fixture', $argv ?? array(), true ) ) {
+if ( in_array( '--fixture', $argv ?? array(), true ) || in_array( '--legacy-fixture', $argv ?? array(), true ) ) {
 	$GLOBALS['posts'][1]->post_status = 'publish';
 	$GLOBALS['posts'][3]->post_title = 'A long headline about the current film scene that should stay readable on a small screen';
 	$fixture = array(); foreach ( array( 3,5,7,9,11,1 ) as $id ) { $fixture[] = array( 'post_id' => $id, 'image_id' => 1 === $id ? 0 : 90 ); }
@@ -215,6 +215,7 @@ if ( in_array( '--fixture', $argv ?? array(), true ) ) {
 	$review_fixture = array(); foreach ( array( 12, 10, 8, 6, 4, 2 ) as $id ) { $review_fixture[] = array( 'post_id' => $id ); if ( 12 !== $id ) { unset( $GLOBALS['review_sources'][$id]['card'] ); $GLOBALS['review_meta'][$id]['_lunara_tmdb_poster_url'] = '/tests/fixtures/home-carousel-poster.svg'; } }
 	$GLOBALS['posts'][10]->post_title = 'A very long review headline that remains readable across the entire portrait carousel on mobile';
 	configure( 'reviews', array( 'mode' => 'manual', 'slides' => $review_fixture, 'heading' => 'Latest Reviews' ) );
+	if ( in_array( '--legacy-fixture', $argv ?? array(), true ) ) { unset( $GLOBALS['options']['lunara_home_hero_carousel'] ); }
 	echo '<!doctype html><html><head>' . $hero_geometry_seed . '<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/assets/vendor/splide/splide-core.min.css"><link rel="stylesheet" href="/assets/css/lunara-home-modules.css"><link rel="stylesheet" href="/assets/css/lunara-cinematic-home.css"><link rel="stylesheet" href="/assets/css/lunara-home-carousels.css"><style>body{margin:0;background:#07111b;color:#fafbfc;font-family:Georgia,serif}main{max-width:1440px;margin:auto}.lunara-home-curated-journal{margin:60px 20px;padding:30px}.lunara-home-curated-hero{height:auto;min-height:420px}</style></head><body class="home"><main>';
 	echo lunara_render_cinematic_hero_carousel() . lunara_render_homepage_latest_reviews() . lunara_render_homepage_journal_lane();
 	echo '</main><script src="/assets/vendor/splide/splide.min.js"></script><script src="/assets/js/lunara-hero-carousel.js"></script><script src="/assets/js/lunara-home-carousels.js"></script></body></html>';

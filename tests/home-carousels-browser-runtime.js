@@ -210,6 +210,21 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             }
             await page.close();
         }
+        const legacy = spawnSync('php', [path.join(__dirname, 'home-carousels-runtime.php'), '--legacy-fixture'], { encoding: 'utf8' });
+        if (legacy.status !== 0) throw Error(legacy.stderr || legacy.stdout);
+        for (const width of [390,1440]) {
+            const page = await fixture(browser, {viewport:{width,height:1000}}, legacy.stdout);
+            const hero = page.locator('.lunara-cinematic-hero-carousel');
+            await page.waitForSelector('.lunara-cinematic-hero-carousel.is-initialized');
+            assert(await hero.locator('.splide__pagination').count() === 0, 'Legacy Hero Command also renders no markers.');
+            await hero.getByRole('button',{name:'Pause autoplay',exact:true}).click();
+            assert(await hero.getByRole('button',{name:'Start autoplay',exact:true}).isVisible(), 'Legacy Hero Command shares playback controls.');
+            const boxes = await hero.locator('.lunara-slider-controls button').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().toJSON()));
+            assert(boxes.length===3 && boxes.every(b=>b.width>=44&&b.height>=44&&b.x>=0&&b.right<=width), 'Legacy hero controls are contained 44px targets.');
+            await hero.locator('.splide__arrow--next').click();
+            await page.waitForFunction(()=>document.querySelector('.lunara-cinematic-hero-carousel .splide__slide:nth-child(2)').classList.contains('is-active'));
+            await page.close();
+        }
         const reviewNojs=await fixture(browser,{viewport:{width:390,height:1000},javaScriptEnabled:false});
         assert(await reviewNojs.locator('[data-lunara-reviews-carousel] article:visible').count()===6&&await reviewNojs.locator('[data-lunara-reviews-carousel] button:visible').count()===0,'Reviews exposes all six stories without JavaScript and no inert controls.');
         await reviewNojs.close();

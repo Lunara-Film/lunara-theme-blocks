@@ -18053,14 +18053,14 @@ html body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lun
 .lunara-slider-controls button:focus-visible { outline: 2px solid var(--lunara-slider-color, #e0c481); outline-offset: 3px; }
 .lunara-slider-controls button:disabled { opacity: .35; cursor: default; }
 .lunara-slider-controls button[hidden] { display: none; }
-.lunara-home-curated-hero:not(.is-initialized) .lunara-slider-controls,
+.lunara-cinematic-hero-carousel:not(.is-initialized) .lunara-slider-controls,
 .lunara-home-journal-carousel:not(.is-initialized) .lunara-slider-controls,
 .lunara-home-journal-carousel.is-journal-static .lunara-slider-controls,
 .lunara-home-journal-carousel.has-carousel-error .lunara-slider-controls,
 .lunara-carousel:not([data-lunara-carousel-ready]):not(.lunara-splide-ready) .lunara-slider-controls { display: none; }
 .lunara-carousel:not(.lunara-oscar-facts-carousel) .lunara-slider-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5; }
 @media (min-width: 901px) {
-    .lunara-home-curated-hero .lunara-slider-controls { position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%); z-index: 5; }
+    .lunara-cinematic-hero-carousel .lunara-slider-controls { position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%); z-index: 5; }
 }
 @media (prefers-reduced-motion: reduce) {
     .lunara-slider-controls .splide__toggle, .lunara-slider-controls .lunara-slider-toggle { display: none; }

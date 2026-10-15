@@ -533,7 +533,7 @@ function lunara_output_home_hero_geometry_css() {
     // Match the centered desktop toggle without retaining a legacy right inset.
     // Phones (900px and below) deliberately place the controls
     // in the grid's flow, so the seed leaves them alone there.
-    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-home-curated-hero .lunara-slider-controls{position:absolute;left:50%;bottom:32px;transform:translateX(-50%);z-index:5}}</style>';
+    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-slider-controls{position:absolute;left:50%;bottom:32px;transform:translateX(-50%);z-index:5}}</style>';
 }
 add_action( 'wp_head', 'lunara_output_home_hero_geometry_css', 2 );
 

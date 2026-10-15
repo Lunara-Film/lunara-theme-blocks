@@ -15564,6 +15564,7 @@ if ( ! function_exists( 'lunara_render_cinematic_hero_carousel' ) ) {
 					<?php foreach ( $slides as $slide_index => $slide_data ) { echo lunara_render_cinematic_hero_slide( $slide_data, $slide_index, $first_image_is_lcp ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					} ?>
 				</ul></div>
+				<?php if ( ! $is_static ) { echo lunara_home_carousel_controls(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ } ?>
 			</section>
 			<?php
 			$hero_html = (string) ob_get_clean();
