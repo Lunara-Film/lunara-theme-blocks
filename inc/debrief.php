@@ -619,10 +619,12 @@ if ( ! function_exists( 'lunara_get_review_permalink_by_imdb_title_id' ) ) {
                 ON pm.post_id = p.ID
             WHERE p.post_type = 'review'
               AND p.post_status = 'publish'
+              AND p.post_password = ''
               AND pm.meta_key = '_lunara_imdb_title_id'
-              AND LOWER(pm.meta_value) LIKE %s
+              AND LOWER(pm.meta_value) REGEXP %s
         ";
-        $params          = array( '%' . $wpdb->esc_like( $tt ) . '%' );
+        // Match the whole ID, including when older metadata contains an IMDb URL.
+        $params          = array( '(^|[^a-z0-9])' . $tt . '([^0-9]|$)' );
 
         if ( $exclude_post_id > 0 ) {
             $sql      .= ' AND p.ID != %d';
@@ -634,6 +636,20 @@ if ( ! function_exists( 'lunara_get_review_permalink_by_imdb_title_id' ) ) {
         $review_id = (int) $wpdb->get_var( $wpdb->prepare( $sql, $params ) );
 
         return $review_id > 0 ? (string) get_permalink( $review_id ) : '';
+    }
+}
+
+if ( ! function_exists( 'lunara_pair_review_link' ) ) {
+    /** Keep the published review destination visible beside the external sources. */
+    function lunara_pair_review_link( $data, $post_id = 0 ) {
+        $href = 'review' === ( $data['title_href_type'] ?? '' ) ? (string) ( $data['title_href'] ?? '' ) : '';
+        if ( '' === $href ) {
+            $href = lunara_get_review_permalink_by_imdb_title_id( (string) ( $data['tt'] ?? '' ), $post_id );
+        }
+        if ( '' === $href ) {
+            return '';
+        }
+        return '<a class="lunara-pair-card-chip lunara-pair-card-chip--review" href="' . esc_url( $href ) . '">' . esc_html__( 'Read Lunara Review', 'lunara-film' ) . '</a>';
     }
 }
 
@@ -1418,7 +1434,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             }
 
             // -- Chips: IMDb (always) + Oscar Ledger (only when Oscar history exists). --
-            $chips     = '';
+            $chips     = function_exists( 'lunara_pair_review_link' ) ? lunara_pair_review_link( $data, $post_id ) : '';
             $imdb_href = (string) $data['imdb_href'];
             if ( '' !== $imdb_href ) {
                 $chips .= '<a class="lunara-pair-card-chip lunara-pair-card-chip--imdb" href="' . esc_url( $imdb_href ) . '" target="_blank" rel="noopener noreferrer nofollow">IMDb</a>';

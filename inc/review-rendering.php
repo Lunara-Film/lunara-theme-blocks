@@ -3570,8 +3570,7 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
         $year_options    = $is_director_archive ? array() : lunara_get_review_archive_year_options();
 
         $lead_post       = ! empty( $posts ) ? array_shift( $posts ) : null;
-        $support_posts   = array_slice( $posts, 0, 4 );
-        $remaining_posts = array_slice( $posts, 4 );
+        $remaining_posts = $posts; // One continuous archive after the lead; no companion split.
         $has_posts       = $lead_post instanceof WP_Post;
         $classes        .= $has_posts ? ' lunara-review-archive-has-posts' : ' lunara-review-archive-is-empty';
         $sort_options    = isset( $args['sort_options'] ) && is_array( $args['sort_options'] ) ? $args['sort_options'] : lunara_get_review_archive_sort_options();
@@ -3833,56 +3832,6 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                         );
                         ?>
 
-                        <?php if ( ! empty( $support_posts ) ) : ?>
-                            <div class="lunara-review-archive-support-suite">
-                                <div class="lunara-review-archive-support-head">
-                                    <h2 class="lunara-section-title"><?php echo esc_html( $labels['support_title'] ); ?></h2>
-                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['support_kicker'] ); ?></p>
-                                </div>
-                                <div
-                                    class="lunara-review-archive-rail lunara-review-archive-dynamic-rail"
-                                    data-lunara-review-dynamic-rail
-                                    data-lunara-dynamic-rail
-                                    data-lunara-dynamic-rail-autoplay="6800"
-                                    aria-label="<?php esc_attr_e( 'Current companion review files', 'lunara-film' ); ?>"
-                                >
-                                    <?php if ( count( $support_posts ) > 1 ) : ?>
-                                        <div class="lunara-review-archive-rail-controls">
-                                            <button type="button" class="lunara-review-archive-rail-control" data-lunara-dynamic-rail-prev aria-label="<?php esc_attr_e( 'Previous companion review', 'lunara-film' ); ?>">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </button>
-                                            <button type="button" class="lunara-review-archive-rail-control" data-lunara-dynamic-rail-next aria-label="<?php esc_attr_e( 'Next companion review', 'lunara-film' ); ?>">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </button>
-                                            <button type="button" class="lunara-review-archive-rail-toggle" data-lunara-dynamic-rail-toggle aria-label="<?php esc_attr_e( 'Pause companion review rotation', 'lunara-film' ); ?>" aria-pressed="false">
-                                                <?php esc_html_e( 'Pause', 'lunara-film' ); ?>
-                                            </button>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="lunara-review-archive-rail-track" data-lunara-dynamic-rail-track tabindex="0">
-                                    <?php foreach ( $support_posts as $support_index => $support_post ) : ?>
-                                        <div class="lunara-review-archive-rail-item" data-lunara-dynamic-rail-item>
-                                            <?php echo lunara_render_review_grid_card( $support_post->ID ); ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    </div>
-                                    <?php if ( count( $support_posts ) > 1 ) : ?>
-                                        <div class="lunara-review-archive-rail-dots" aria-label="<?php esc_attr_e( 'Companion review position', 'lunara-film' ); ?>">
-                                            <?php foreach ( $support_posts as $support_index => $support_post ) : ?>
-                                                <button
-                                                    type="button"
-                                                    class="lunara-review-archive-rail-dot<?php echo 0 === $support_index ? ' is-active' : ''; ?>"
-                                                    data-lunara-dynamic-rail-dot
-                                                    data-lunara-dynamic-rail-index="<?php echo esc_attr( (string) $support_index ); ?>"
-                                                    aria-label="<?php echo esc_attr( sprintf( __( 'Go to companion review %d', 'lunara-film' ), $support_index + 1 ) ); ?>"
-                                                    <?php echo 0 === $support_index ? 'aria-current="true"' : ''; ?>
-                                                ></button>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                     <?php if ( ! empty( $remaining_posts ) ) : ?>
@@ -3904,7 +3853,6 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                             <div class="lunara-home-section-head lunara-review-archive-run-head">
                                 <div>
                                     <h2 class="lunara-section-title"><?php echo esc_html( $labels['run_title'] ); ?></h2>
-                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['run_kicker'] ); ?></p>
                                 </div>
                             </div>
                             <div class="<?php echo esc_attr( implode( ' ', $run_grid_classes ) ); ?>">

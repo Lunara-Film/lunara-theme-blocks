@@ -4,6 +4,17 @@ Lunara is a film publication and a living Oscar ledger. Its identity comes from
 specific criticism, real film imagery, the Lunara wordmark, Tiempos, midnight navy
 and restrained gold. This contract applies to the existing visitor features.
 
+## Editorial controls
+
+Lunara Site Studio is a first-class daily workspace. Public presentation changes
+must preserve its existing controls, saved settings, preview, Apply and history.
+Keep relevant content-editor destinations accessible from Studio; do not create
+competing settings stores or silently retire controls during visual refinements.
+Pairing editors show read-only published-review availability by complete IMDb
+identity. Unknown identity and failed lookup are distinct from no published
+review. Site Studio's featured-review inspector reports all three saved roles
+and links to the owning Review editor. This does not alter pairing content.
+
 ## Composition
 
 - Center each page frame, identity/title group, reading column and section heading
@@ -34,9 +45,29 @@ and restrained gold. This contract applies to the existing visitor features.
   Responsive image hints and synchronous route geometry must change with layout.
 - Oscar records retain category, film/person, status, evidence and destinations.
   Status has words as well as color. Long names and complete records remain usable.
+- Section headings use near-white ink; gold identifies links and small accents.
+  Supporting theses use reading type, not a second competing display headline.
+  Archive sorting uses a visible underline for selection, retaining full touch
+  targets and focus outlines. The Oscars portal has a centered masthead followed
+  by its supporting Best Picture record, with no decorative light shafts.
 - Use whitespace, image proportions, typography and restrained separators for
   hierarchy. Footer navigation is a publication directory, with the same links
   and saved editing ownership.
+- Section headings share `--lunara-type-section`, the display face, 600 weight
+  and 1.18 leading. Reading copy uses the body face at regular weight. Embedded
+  Ledger headings inherit those roles; do not introduce another Tiempos alias
+  or force reading copy to display weight. Preserve the Ledger navigator.
+- Home and archive Debrief columns use bounded portrait artwork, lightly ruled
+  argument columns and an attached source-link row. When a published Lunara
+  review resolves for the paired film, include `Read Lunara Review` alongside
+  IMDb in that row; do not substitute a dossier or an unrelated title match.
+  Preserve all three full
+  role names and complete arguments. Forecast image, identity and argument
+  should form one clear unit without a second painted card.
+- Reviews has one continuous index after its lead. Do not split the next four
+  records into a companion carousel or reintroduce retired companion labels.
+- The footer uses compact wrapping directory rows, not tall navigation towers.
+  Keep every saved link, readable group labels, 44px targets and symmetric rows.
 
 ## Surfaces and type
 
@@ -100,6 +131,7 @@ variables, Customizer output and first-paint styles can win over a static file.
 | Journal archive | `archive-journal.php`, `inc/journal-archive-studio.php`, `assets/css/lunara-journal-archive.css`, `inc/journal-archive-critical.php` |
 | Footer and shared public inline output | `inc/frontend.php`, `assets/css/lunara-public-guardrails.css` |
 | Menu and search | `inc/header-command.php`, `inc/live-search.php`, scoped public CSS |
+| Oscars landing page | `page-oscars.php`, `assets/css/lunara-oscars-portal.css`, `inc/oscars-portal-critical.php`; shared shell must not restore the retired split masthead |
 | Oscar records and explorer | Ledger plugin templates and public CSS; theme `assets/css/oscars.css` owns integration only |
 
 The Oscars shell owns page framing and shared controls; it must not restate the

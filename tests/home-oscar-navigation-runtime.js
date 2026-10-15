@@ -77,6 +77,8 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
                 catch (error) { throw new Error(`${width}/${reducedMotion}: Next must reach card ${index+1} before wrapping. ${JSON.stringify(geometry)} ${error.message}`); }
                 check(true, 'Next reaches the next card.');
             }
+            const reachedEnd = await track.evaluate(el => el.scrollLeft);
+            check(Math.abs(reachedEnd - geometry.max) <= 1, `${width}/${reducedMotion}: fractional final snap must reach the actual boundary before wrapping (${reachedEnd}/${geometry.max}).`);
             await next.click(); await waitOffset(0); check(true,'Next wraps only after reaching the end.');
             await prev.click(); await waitOffset(geometry.max); check(true,'Previous wraps from the first to the last page.');
             const keyboardTarget = geometry.targets.reduce((nearest,target)=>Math.abs(target-(geometry.max-geometry.step))<Math.abs(nearest-(geometry.max-geometry.step))?target:nearest,0);

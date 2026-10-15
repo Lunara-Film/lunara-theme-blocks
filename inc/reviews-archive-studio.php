@@ -2326,7 +2326,7 @@ function lunara_reviews_archive_studio_render_control_surface( $context = 'site-
 				<div class="lunara-reviews-archive-label-grid"><?php foreach ( $config['labels'] as $label_key => $label_value ) : ?>
 					<?php
 					// Keep retired opening labels in saved state and revisions, not the live form.
-					if ( in_array( $label_key, array( 'debrief_kicker', 'debrief_depth', 'debrief_visible', 'debrief_latest', 'debrief_order', 'hero_action_run', 'hero_action_oscars', 'hero_action_journal' ), true ) ) {
+					if ( in_array( $label_key, array( 'debrief_kicker', 'debrief_depth', 'debrief_visible', 'debrief_latest', 'debrief_order', 'hero_action_run', 'hero_action_oscars', 'hero_action_journal', 'support_title', 'support_kicker', 'run_kicker' ), true ) ) {
 						continue;
 					}
 					?>

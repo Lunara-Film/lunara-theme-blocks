@@ -121,6 +121,8 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 
     .lunara-pair-card-poster {
         position: relative;
+        width: min(100%, 260px);
+        margin-inline: auto;
         aspect-ratio: 2 / 3;
         overflow: hidden;
         background: #0a1520;
@@ -184,7 +186,8 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         flex: 1;
         flex-direction: column;
         gap: 9px;
-        padding: 20px 0 0;
+        padding: 20px 16px 0;
+        border-inline: 1px solid rgba(201,169,97,.16);
     }
 
     .lunara-pair-card-role {
@@ -192,9 +195,9 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         margin: 0;
         color: var(--lunara-gold, #c9a961);
         font-family: var(--lunara-label-font, "Bebas Neue", "Arial Narrow", sans-serif);
-        font-size: 0.8125rem;
-        font-weight: 700;
-        letter-spacing: 0;
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
         line-height: 1.4;
         text-transform: none;
     }
@@ -202,7 +205,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     .lunara-pair-card-title {
         text-align: center;
         margin: 0;
-        font-family: var(--lunara-body-font, Georgia, serif);
+        font-family: var(--lunara-font-display, Georgia, serif);
         font-size: clamp(1.2rem, 1.65vw, 1.5rem);
         font-weight: 400;
         line-height: 1.16;
@@ -242,17 +245,18 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         flex-wrap: wrap;
         align-items: center;
         gap: 8px;
-        /* Push the chip row to the bottom so chips stay aligned across cards
-           regardless of how long each note runs. */
+        /* A shared source rail belongs to each argument, including shorter notes. */
         margin-top: auto;
         padding-top: 12px;
+        border-top: 1px solid rgba(201,169,97,.2);
     }
 
     .lunara-pair-card-chip {
+        min-height: 44px;
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        /* Unified pill spec — matches .lunara-debrief-chip. */
+        /* Readable source link inside the argument footer. */
         padding: 6px 12px;
         border: 0;
         border-radius: 0;
@@ -356,7 +360,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         }
 
         .lunara-pair-card-body {
-            padding: 18px 0 0;
+            padding: 18px 16px 0;
         }
 
         .lunara-pairing-desk-section .lunara-pair-card::after {
@@ -390,10 +394,10 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pairing-desk-inner{position:relative;z-index:2}
 .lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:14px;align-items:center;margin-bottom:18px;text-align:center}
 .lunara-pairing-desk-claim{display:inline-block;margin:0 0 12px;padding:6px 13px;border:0;background:transparent;color:#e8d9b0;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:.85rem;letter-spacing:.32em;text-transform:uppercase}
-.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
-.lunara-pairing-desk-thesis{margin:16px auto 0;max-width:24ch;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-display,"Tiempos Headline",serif);font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.25;text-wrap:balance}
+.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:24ch;text-shadow:none;color:var(--lunara-text,#fafbfc)}
+.lunara-pairing-desk-thesis{margin:12px auto 0;max-width:56ch;color:var(--lunara-text-muted,#bac4ce);font-family:var(--lunara-font-body,"Tiempos Text",serif);font-size:1.125rem;line-height:1.5;text-wrap:balance}
 .lunara-pairing-desk-intro{display:grid;max-width:56ch;margin-inline:auto;gap:10px;align-content:end;padding-bottom:4px}
-.lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:.97rem;line-height:1.6;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:1rem;line-height:1.6;text-shadow:none}
 .lunara-pairing-desk-source{margin:0;color:rgba(244,239,227,.74);font-size:.88rem}
 .lunara-pairing-desk-source a{color:var(--lunara-gold-light,#eadbb3);text-decoration:none;border-bottom:1px solid rgba(201,169,97,.4);transition:color .2s ease, border-color .2s ease}
 .lunara-pairing-desk-source a:hover{color:#fff;border-color:rgba(225,197,126,.85)}

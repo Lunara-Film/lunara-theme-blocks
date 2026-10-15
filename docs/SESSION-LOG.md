@@ -25,6 +25,43 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Pairing review availability in the editor and Site Studio
+
+- **Shipped:** Theme 3.2.112 local draft revision for existing PR #233. Authenticated read-only availability below canonical ACF film selectors, legacy pairing inputs and curated block IMDb controls. Site Studio's Method inspector reports the three saved roles and links to the source Review editor; no duplicated settings or content writes.
+- **Live:** Unchanged; no merge, deployment, cache clear or production writes.
+- **Holding:** Existing editorial candidate remains the release vehicle. Site Studio is integral to daily editing; Dalton clarified that no separate Studio redesign was requested.
+- **Verified:** SQLite fixture executes the real review lookup SQL, checking whole-ID boundaries, draft/private/protected exclusion and source-review exclusion. PHP callbacks check nonce, edit capability, canonical/legacy reports and read-only routes. Browser tests cover selection changes, stale-response protection, failure/retry, mobile fit and Studio integration while preserving preview/Apply/history tests. Full CI pending final candidate.
+- **Next:** Review the editor addition with the public candidate; retain separate merge and deployment gates.
+- **Found, not fixed:** Full WordPress/ACF acceptance awaits the authorized release; local editor fixtures do not prove deployed behavior. No separate Studio expansion was undertaken.
+
+## 2026-10-15 — Expose paired-film Lunara reviews beside IMDb
+
+- **Shipped:** Theme 3.2.112 draft revision, PR #233. Shared card source rows now expose `Read Lunara Review` when the existing published-review resolver finds the film, or reuse the already resolved review URL. Canonical/legacy public Debrief, Home/Reviews shared cards and curated pairing blocks use the same helper; IMDb and other destinations remain.
+- **Live:** Read-only public review search only; no merge, deployment or content changes.
+- **Holding:** Candidate awaits current-head CI and visual acceptance. Home's showcased Skinamarink/Cube/2022 Backrooms pairings have no confirmed matching review in the focused public search; the 2026 Backrooms review is a different film and is not attached to the 2022 card.
+- **Verified:** Real renderer tests cover matched/unmatched destinations across three paths, internal navigation and reuse of custom review permalinks: 44 assertions. Responsive source-row fixture includes both links and retains 44px targets.
+- **Next:** Review the candidate and merge/deploy only through the existing separate gates.
+- **Found, not fixed:** No new blocker; matching continues to use the established published-review/IMDb bridge.
+
+## 2026-10-15 — Apply fifteen annotated composition corrections
+
+- **Shipped:** Theme 3.2.112 draft revision on `codex/editorial-composition-refinement`, existing PR #233. Shared section type, compact footer, tighter native Home hero, bounded Debrief posters with attached source rows, grouped forecast arguments, unframed embedded Oscars research with centered captions, and one continuous Reviews index. Approved Ledger navigator preserved. Details: `docs/EDITORIAL-ANNOTATIONS-2026-10-15.md`.
+- **Live:** No production writes, merge, deployment or cache changes this session.
+- **Holding:** Revised candidate awaits required CI and Dalton's visual review. Ledger source remains untouched. Local five-page comparison includes the public Ledger CSS omitted by the earlier gallery; it is captured content, not a WordPress deployment.
+- **Verified:** Annotation fixture 56 checks; actual Home carousel 135; real footer renderer/browser 500; Reviews renderer 171 plus provider/media coverage; Reviews first-paint scenarios under 1px and existing 12KB seed budget preserved. Full PR CI is the release gate for this exact revision.
+- **Next:** Review the revised Home, Oscars, Reviews, Journal and Debrief gallery, then decide on merge and separate manual deployment.
+- **Found, not fixed:** Existing repeated Oscars research/winner content remains; annotations remove its redundant framing, not its records. Retired companion settings retain stored values for compatibility. No claim of live acceptance from local fixtures.
+
+## 2026-10-15 — Refine the deployed editorial composition
+
+- **Shipped:** Theme 3.2.112 candidate only on `codex/editorial-composition-refinement`. Centered Oscars portal masthead and supporting film record; retired conflicting hero geometry from base/shell CSS and decorative shafts. Centered Reviews identity, quieter Journal/Reviews sorting, consistent near-white section headings, readable Method supporting text, tighter ruled Home sections, and house-type hero actions. Public square geometry and complete content remain.
+- **Live:** read-only browser inspection confirmed Home reports 3.2.111+20261015-100623. No deployment, merge, cache operation, production setting or content write in this session.
+- **Holding:** candidate visual comparison uses current public Home, Journal, Oscars, Reviews and Debrief HTML with baseline/candidate styles. These are controlled static previews; carousels expand, plugin runtime is not booted, and they are not deployed acceptance. Focused checks passed: Home carousel 135 assertions; portal composition 24 assertions at three widths with/without the real structural seed; Journal and Reviews first-paint suites; four-route containment at five widths; public CSS geometry policy and Portal Studio behavior. The Reviews suite caught and verified the repaired Method seed mismatch. Initial PR CI caught early forecast wrapping at a fractional final offset introduced by the wider Home section. Reduced the boundary tolerance to one pixel and strengthened the actual navigation assertion; all 236 navigation checks now pass. The next CI run exposed a legacy phone fixture without the canonical primary root; correcting its markup preserved all 48 backdrop assertions. Added a targeted current/critical CSS guard plus stale-payload test so retired light shafts cannot return from old optimizer CSS. Required CI is rerunning on the corrected candidate.
+- **Next:** review the five-page composition comparison, complete final candidate CI, then Dalton merges only the accepted candidate; deployment remains a separate explicit step.
+- **Found, not fixed:** the full Oscars portal repeats research entry points and winner summaries across saved sections. Content consolidation needs a separate renderer decision; no records or saved sections were removed by this presentation change. Existing HQ02/JQ25 investigations remain outside this focused correction.
+
+---
+
 ## 2026-10-15 — Align the seven website repositories
 
 - **Shipped:** candidate alignment only. Identical AGENTS.md now points all seven repositories to Theme design authority, explicitly exempts private editorial/admin UI, and defines manual review/merge/deploy/acceptance stages. Added repository ownership and secondary-source classification in docs/REPOSITORY-ALIGNMENT.md. AI Assistant README requires Theme-inherited public markup; no prompt/settings mutation. Dispatch 3.4.2 adds long-title wrapping plus browser-parsed CSS policy and actual block-renderer geometry fixtures in CI.
