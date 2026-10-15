@@ -68,10 +68,10 @@ if ( $debrief_linked_reviews && function_exists( '_prime_post_caches' ) ) {
 		<?php endif; ?>
 		<div class="lunara-debrief-hero-overlay" aria-hidden="true"></div>
 		<div class="lunara-debrief-hero-inner">
-			<?php if ( '' !== $debrief_settings['hero']['kicker'] ) : ?>
+			<h1 class="lunara-debrief-title"><?php echo esc_html( $debrief_title ); ?></h1>
+			<?php if ( '' !== $debrief_settings['hero']['kicker'] && 'A Lunara Film Signature' !== $debrief_settings['hero']['kicker'] ) : ?>
 				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['hero']['kicker'] ); ?></p>
 			<?php endif; ?>
-			<h1 class="lunara-debrief-title"><?php echo esc_html( $debrief_title ); ?></h1>
 			<?php if ( '' !== trim( $debrief_thesis ) ) : ?>
 				<p class="lunara-debrief-thesis"><?php echo esc_html( $debrief_thesis ); ?></p>
 			<?php endif; ?>
@@ -92,10 +92,10 @@ if ( $debrief_linked_reviews && function_exists( '_prime_post_caches' ) ) {
 	</section>
 
 	<section class="lunara-debrief-moves" aria-labelledby="lunara-debrief-moves-title" data-lunara-site-studio-section="moves">
-		<?php if ( '' !== $debrief_settings['moves']['kicker'] ) : ?>
+		<h2 id="lunara-debrief-moves-title" class="lunara-debrief-section-title"><?php echo esc_html( '' !== $debrief_settings['moves']['title'] ? $debrief_settings['moves']['title'] : __( 'The Three Moves', 'lunara-film' ) ); ?></h2>
+		<?php if ( '' !== $debrief_settings['moves']['kicker'] && 'The Three Moves' !== $debrief_settings['moves']['kicker'] ) : ?>
 			<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['moves']['kicker'] ); ?></p>
 		<?php endif; ?>
-		<h2 id="lunara-debrief-moves-title" class="lunara-debrief-section-title"><?php echo esc_html( '' !== $debrief_settings['moves']['title'] ? $debrief_settings['moves']['title'] : __( 'The Three Moves', 'lunara-film' ) ); ?></h2>
 		<ol class="lunara-debrief-moves-list">
 			<?php foreach ( $debrief_roles as $debrief_slug => $debrief_role ) : ?>
 				<li class="lunara-debrief-move lunara-debrief-move--<?php echo esc_attr( $debrief_slug ); ?>">
@@ -113,11 +113,11 @@ if ( $debrief_linked_reviews && function_exists( '_prime_post_caches' ) ) {
 	<?php $debrief_why_paragraphs = lunara_debrief_method_paragraphs( $debrief_settings['why']['body'] ); ?>
 	<?php if ( $debrief_settings['why']['show'] && ( $debrief_why_paragraphs || '' !== $debrief_settings['why']['title'] ) ) : ?>
 		<section class="lunara-debrief-why"<?php echo '' !== $debrief_settings['why']['title'] ? ' aria-labelledby="lunara-debrief-why-title"' : ''; ?> data-lunara-site-studio-section="why">
-			<?php if ( '' !== $debrief_settings['why']['kicker'] ) : ?>
-				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['why']['kicker'] ); ?></p>
-			<?php endif; ?>
 			<?php if ( '' !== $debrief_settings['why']['title'] ) : ?>
 				<h2 id="lunara-debrief-why-title" class="lunara-debrief-section-title"><?php echo esc_html( $debrief_settings['why']['title'] ); ?></h2>
+			<?php endif; ?>
+			<?php if ( '' !== $debrief_settings['why']['kicker'] && 'Why Three' !== $debrief_settings['why']['kicker'] ) : ?>
+				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['why']['kicker'] ); ?></p>
 			<?php endif; ?>
 			<?php if ( $debrief_why_paragraphs ) : ?>
 				<div class="lunara-debrief-why-body">
@@ -131,15 +131,15 @@ if ( $debrief_linked_reviews && function_exists( '_prime_post_caches' ) ) {
 
 	<?php if ( '' !== $debrief_orbit_html ) : ?>
 		<section class="lunara-debrief-specimen" aria-labelledby="lunara-debrief-specimen-title" data-lunara-site-studio-section="specimen">
-			<?php if ( '' !== $debrief_settings['specimen']['kicker'] ) : ?>
-				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['specimen']['kicker'] ); ?></p>
-			<?php endif; ?>
 			<h2 id="lunara-debrief-specimen-title" class="lunara-debrief-section-title">
 				<?php if ( '' !== $debrief_settings['specimen']['lead'] ) : ?>
 					<?php echo esc_html( $debrief_settings['specimen']['lead'] ); ?>
 				<?php endif; ?>
 				<a data-orbit-caption href="<?php echo esc_url( (string) get_permalink( $debrief_orbit[0]['review_id'] ) ); ?>"><?php echo esc_html( wp_strip_all_tags( (string) get_the_title( $debrief_orbit[0]['review_id'] ) ) ); ?></a>
 			</h2>
+			<?php if ( '' !== $debrief_settings['specimen']['kicker'] && 'A Debrief in the Wild' !== $debrief_settings['specimen']['kicker'] ) : ?>
+				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['specimen']['kicker'] ); ?></p>
+			<?php endif; ?>
 			<?php echo $debrief_orbit_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- renderer escapes every value. ?>
 		</section>
 	<?php endif; ?>
@@ -158,10 +158,10 @@ if ( $debrief_linked_reviews && function_exists( '_prime_post_caches' ) ) {
 
 	<?php if ( ! empty( $debrief_recent ) ) : ?>
 		<section class="lunara-debrief-recent" aria-labelledby="lunara-debrief-recent-title" data-lunara-site-studio-section="recent">
-			<?php if ( '' !== $debrief_settings['recent']['kicker'] ) : ?>
+			<h2 id="lunara-debrief-recent-title" class="lunara-debrief-section-title"><?php echo esc_html( '' !== $debrief_settings['recent']['title'] ? $debrief_settings['recent']['title'] : __( 'Recent Debriefs', 'lunara-film' ) ); ?></h2>
+			<?php if ( '' !== $debrief_settings['recent']['kicker'] && 'Recent Debriefs' !== $debrief_settings['recent']['kicker'] ) : ?>
 				<p class="lunara-debrief-kicker"><?php echo esc_html( $debrief_settings['recent']['kicker'] ); ?></p>
 			<?php endif; ?>
-			<h2 id="lunara-debrief-recent-title" class="lunara-debrief-section-title"><?php echo esc_html( '' !== $debrief_settings['recent']['title'] ? $debrief_settings['recent']['title'] : __( 'Recent Debriefs', 'lunara-film' ) ); ?></h2>
 			<ul class="lunara-debrief-recent-list">
 				<?php foreach ( $debrief_recent as $debrief_entry ) : ?>
 					<li class="lunara-debrief-recent-item">

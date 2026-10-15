@@ -30,7 +30,7 @@
 
 	// Common role labels the signature feature uses — offered as suggestions,
 	// but the field is free text so any relation works.
-	var LABEL_SUGGESTIONS = [ 'Echo', 'Counter', 'Context', 'Double Feature', 'Origin Story', 'The Antidote' ];
+	var LABEL_SUGGESTIONS = [ 'Theme Echo', 'Counter Program', 'Career Context', 'Double Feature', 'Origin Story', 'The Antidote' ];
 
 	// id → poster thumbnail cache for the override preview.
 	var posterCache = {};
@@ -257,7 +257,7 @@
 
 		var cardBox = {
 			border: '1px solid rgba(128,128,128,0.25)',
-			borderRadius: '6px',
+			borderRadius: '0',
 			padding: '10px',
 			marginBottom: '12px'
 		};
@@ -301,7 +301,7 @@
 						label: __( 'Role label', 'lunara-film' ),
 						value: pair.label || '',
 						list: 'lunara-pair-labels',
-						placeholder: __( 'e.g. Echo', 'lunara-film' ),
+						placeholder: __( 'e.g. Theme Echo', 'lunara-film' ),
 						onChange: function ( v ) { update( index, 'label', v ); }
 					} ),
 					el( TextControl, {
@@ -343,7 +343,7 @@
 							render: function ( o ) {
 								return el( 'div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
 									posterId && posterCache[ posterId ]
-										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '3px' } } )
+										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '0' } } )
 										: null,
 									el( Button, { variant: 'secondary', size: 'small', onClick: o.open },
 										posterId ? __( 'Replace poster', 'lunara-film' ) : __( 'Poster override (optional)', 'lunara-film' ) ),

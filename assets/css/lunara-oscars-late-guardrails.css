@@ -21,8 +21,6 @@
         body.aat-shell-page .aat-entity-header,
         body.aat-shell-page .aat-ceremony-marquee,
         body.aat-shell-page .aat-category-latest-winner,
-        body.aat-shell-page .aat-hub-grid,
-        body.aat-shell-page .aat-winner-circle-grid,
         body.aat-shell-page .aat-hub-metric-grid,
         body.aat-shell-page .aat-crossroads-grid,
         body.aat-shell-page .aat-crossroads-list {
@@ -56,12 +54,6 @@
             padding-right: clamp(18px, 6vw, 28px) !important;
         }
 
-        body.aat-shell-page .aat-category-latest-winner h2,
-        body.aat-shell-page .aat-ceremony-marquee h2 {
-            font-size: clamp(1.6rem, 8vw, 2.2rem) !important;
-            line-height: 1.1 !important;
-        }
-
         body.aat-shell-page .aat-hub-spotlight-card {
             align-items: center !important;
             display: grid !important;
@@ -77,20 +69,6 @@
         body.aat-shell-page .aat-hub-spotlight-media {
             max-width: 100% !important;
             min-width: 0 !important;
-        }
-
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats {
-            display: grid !important;
-            gap: 10px !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
-
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat {
-            align-content: start !important;
-            display: grid !important;
-            gap: 4px !important;
-            min-width: 0 !important;
-            text-align: left !important;
         }
 
         body.aat-shell-page .aat-decade-nav {
@@ -111,8 +89,6 @@
 
         body.aat-shell-page .aat-decade-pill-count {
             align-items: center !important;
-            background: rgba(201,169,97,.22) !important;
-            border-radius: 999px !important;
             display: inline-flex !important;
             justify-content: center !important;
             min-width: 24px !important;
@@ -124,7 +100,6 @@
             display: grid !important;
             gap: 3px !important;
             grid-template-columns: minmax(0, 1fr) !important;
-            line-height: 1.22 !important;
             min-height: 44px !important;
             min-width: 0 !important;
             padding: 10px 12px !important;
@@ -189,18 +164,10 @@
             width: 132px !important;
         }
 
-        body.aat-shell-page .aat-stats-bar.aat-entity-stats {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
-
         body.aat-shell-page .aat-hub-chip-rich,
         body.aat-shell-page .aat-winner-circle-action {
             justify-content: center !important;
             width: 100% !important;
-        }
-
-        body.aat-shell-page .aat-winner-circle-action {
-            font-size: .72rem !important;
         }
 
         body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
@@ -225,11 +192,5 @@
         body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-body {
             gap: 6px !important;
             padding: 0 0 0 4px !important;
-        }
-
-        body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-title,
-        body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-title {
-            font-size: .96rem !important;
-            line-height: 1.16 !important;
         }
     }

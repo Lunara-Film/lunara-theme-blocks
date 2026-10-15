@@ -4,6 +4,13 @@ Ideas that are not defects. Each needs three lines and Dalton's yes before any
 agent builds it; features batch into at most one release a quarter. Newest
 first.
 
+## Bespoke runtime and publishing boundaries — Dalton, 2026-10-11
+
+- Visitor gains: immediate readable editorial pages, reusable public navigation and a cached Oscars Explorer with complete server-rendered fallbacks.
+- Build cost: coordinated Theme, Ledger, Foundation and Dispatch changes; approximately 5–8 engineering days including integration and release acceptance.
+- Keep cost: owned component lifecycle, versioned cache contracts and focused behavior tests; one bounded release acceptance pass, with repeat work only for changed code or actual failures.
+- Status: authorized by Dalton's request to begin the supplied six-module architecture plan in this chat. Preserve the Impeccable editorial cleanup. Omit canvas grain, cursor effects and headline entrance delays; do not execute the attachment's illustrative SQL/schema or global sanitization hooks literally.
+
 ## Rotating-ceremonies hero on `/oscars/` — Dalton, 2026-10-08
 
 - Visitor gains: the portal opens on a different ceremony each visit instead of

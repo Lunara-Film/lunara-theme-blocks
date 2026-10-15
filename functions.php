@@ -201,13 +201,6 @@ function lunara_print_late_oscars_guardrail_styles() {
 add_action( 'wp_footer', 'lunara_print_late_oscars_guardrail_styles', 999 );
 }
 
-if ( ! function_exists( 'lunara_inject_room_tone_markup' ) ) {
-function lunara_inject_room_tone_markup() {
-    echo '<div id="lunara-grain" class="is-live" aria-hidden="true"></div><div id="lunara-vignette" aria-hidden="true"></div>';
-}
-add_action( 'wp_body_open', 'lunara_inject_room_tone_markup', 1 );
-}
-
 /**
  * One-time restoration (3.1.38): the homepage Latest Reviews section was
  * toggled off in a stored theme mod, and the Control Desk switch proved
@@ -933,14 +926,6 @@ function lunara_customize_register( $wp_customize ) {
             'type'     => 'number',
             'sanitize' => 'absint',
             'attrs'    => array( 'min' => 12, 'max' => 96, 'step' => 1 ),
-        ),
-        array(
-            'setting'  => 'lunara_surface_radius',
-            'default'  => 28,
-            'label'    => __( 'Card Corner Radius (px)', 'lunara-film' ),
-            'type'     => 'number',
-            'sanitize' => 'absint',
-            'attrs'    => array( 'min' => 0, 'max' => 48, 'step' => 1 ),
         ),
         array(
             'setting'  => 'lunara_body_font_size',
@@ -2112,7 +2097,7 @@ function lunara_output_runtime_customizer_css() {
     $border_color     = sanitize_hex_color( get_theme_mod( 'lunara_border_color', '#c9a961' ) ) ?: '#c9a961';
     $shell_max        = max( 960, min( 1800, absint( get_theme_mod( 'lunara_shell_content_width', 1360 ) ) ) );
     $shell_pad        = max( 12, min( 96, absint( get_theme_mod( 'lunara_shell_side_padding', 28 ) ) ) );
-    $surface_radius   = max( 0, min( 48, absint( get_theme_mod( 'lunara_surface_radius', 28 ) ) ) );
+    $surface_radius = 0; // Saved radius is retired; public geometry is square.
     $body_size        = max( 14, min( 24, absint( get_theme_mod( 'lunara_body_font_size', 17 ) ) ) );
     $body_line_height = max( 1.3, min( 2.2, (float) get_theme_mod( 'lunara_body_line_height', 1.7 ) ) );
     $section_title    = max( 24, min( 64, absint( get_theme_mod( 'lunara_section_title_size', 34 ) ) ) );
@@ -13705,7 +13690,7 @@ if ( ! function_exists( 'lunara_render_oscar_facts_carousel' ) ) {
 				<a class="lunara-section-link" href="<?php echo esc_url( $args['cta_url'] ); ?>"><?php echo esc_html( $args['cta_text'] ); ?></a>
 			</div>
 
-			<div class="lunara-oscar-facts-carousel lunara-carousel" data-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-splide-pilot data-lunara-splide-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-facts-total="<?php echo esc_attr( (string) $fact_total ); ?>" style="--lunara-oscar-facts-progress:<?php echo esc_attr( $fact_total > 0 ? (string) ( 100 / $fact_total ) . '%' : '0%' ); ?>;" aria-label="<?php esc_attr_e( 'Rotating Oscar facts', 'lunara-film' ); ?>">
+			<div class="lunara-oscar-facts-carousel lunara-carousel" data-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-splide-pilot data-lunara-splide-autoplay="<?php echo (int) $autoplay; ?>" data-lunara-facts-total="<?php echo esc_attr( (string) $fact_total ); ?>" style="--lunara-oscar-facts-progress:<?php echo esc_attr( $fact_total > 0 ? (string) ( 100 / $fact_total ) . '%' : '0%' ); ?>;--lunara-oscar-facts-progress-ratio:<?php echo esc_attr( $fact_total > 0 ? (string) ( 1 / $fact_total ) : '0' ); ?>;" aria-label="<?php esc_attr_e( 'Rotating Oscar facts', 'lunara-film' ); ?>">
 				<?php if ( $fact_total > 1 ) : ?>
 					<div class="lunara-oscar-facts-console" aria-label="<?php esc_attr_e( 'Oscar Facts carousel status', 'lunara-film' ); ?>">
 						<span class="lunara-oscar-facts-console-label"><?php esc_html_e( 'Oscar Ledger File', 'lunara-film' ); ?></span>
@@ -15377,7 +15362,7 @@ if ( ! function_exists( 'lunara_add_hero_feature_meta_box' ) ) {
 /**
  * Pairing Desk — homepage showcase for the signature Pair It With module.
  *
- * Renders the three pairings (Echo / Counter / Context)
+ * Renders the three pairings (Theme Echo / Counter Program / Career Context)
  * from the newest review that has any pairing filled, framed with an
  * explainer so first-time visitors immediately see how Lunara differs from
  * algorithmic "more like this" rails. Reuses the debrief module's own card
@@ -15421,7 +15406,7 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 			: array(
 				'kicker' => 'The Lunara Method',
 				'title'  => 'Every review ends with three more films.',
-				'copy'   => 'An Echo, a Counter, and a Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.',
+				'copy'   => 'Theme Echo, Counter Program, and Career Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.',
 			);
 		$kicker = function_exists( 'lunara_theme_mod_text' )
 			? lunara_theme_mod_text( 'lunara_home_pairing_desk_kicker', $copy_defaults['kicker'] )
@@ -15449,9 +15434,9 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 			<div class="lunara-pairing-desk-inner">
 				<div class="lunara-pairing-desk-head">
 					<div>
-						<p class="lunara-pairing-desk-claim"><?php esc_html_e( 'Only on Lunara', 'lunara-film' ); ?></p>
-						<p class="lunara-home-section-kicker"><?php echo esc_html( $kicker ); ?></p>
-						<h2 class="lunara-home-section-title"><?php echo esc_html( $title ); ?></h2>
+
+						<h2 class="lunara-home-section-title"><?php echo esc_html( '' !== $kicker ? $kicker : __( 'The Lunara Method', 'lunara-film' ) ); ?></h2>
+						<p class="lunara-pairing-desk-thesis"><?php echo esc_html( $title ); ?></p>
 					</div>
 					<div class="lunara-pairing-desk-intro">
 						<p class="lunara-pairing-desk-copy"><?php echo esc_html( $copy ); ?></p>

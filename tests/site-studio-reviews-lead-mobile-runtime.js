@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright-core');
 
 const themeRoot = path.resolve(__dirname, '..');
 const adminCss = fs.readFileSync(path.join(themeRoot, 'assets/css/lunara-control-desk.css'), 'utf8');
@@ -16,13 +16,12 @@ function fail(message, metrics) {
 }
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await chromium.launch({ headless: true, ...(process.env.LUNARA_BROWSER_EXECUTABLE ? { executablePath: process.env.LUNARA_BROWSER_EXECUTABLE } : { channel: 'chrome' }) });
     try {
         const viewportMetrics = [];
 
         for (const viewportWidth of [390, 375]) {
-            const page = await browser.newPage();
-            await page.setViewport({ width: viewportWidth, height: 844, deviceScaleFactor: 1 });
+            const page = await browser.newPage({ viewport: { width: viewportWidth, height: 844 }, deviceScaleFactor: 1 });
             await page.setContent(`<!doctype html>
             <html>
                 <head>

@@ -31,13 +31,12 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         box-sizing: border-box;
         margin: clamp(28px, 4vw, 46px) auto 0;
         max-width: min(100%, 1040px);
-        padding: clamp(20px, 2.8vw, 32px);
-        border: 1px solid rgba(201, 169, 97, 0.24);
-        border-radius: 18px;
+        padding: 24px 0 !important;
+        border: 0 !important;
+        border-radius: 0;
         background:
-            radial-gradient(1100px 520px at 80% -12%, rgba(201, 169, 97, 0.07), transparent 60%),
-            linear-gradient(135deg, rgba(16, 31, 49, 0.98), rgba(10, 21, 32, 0.98) 60%, rgba(13, 28, 44, 0.96));
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 26px 60px rgba(0, 0, 0, 0.28);
+            transparent !important;
+        box-shadow: none !important;
     }
 
     .lunara-pair-cards * {
@@ -45,6 +44,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     }
 
     .lunara-pair-cards-head {
+        text-align: center;
         margin: 0 0 clamp(18px, 2.4vw, 26px);
         padding: 0 0 14px;
         border-bottom: 1px solid rgba(201, 169, 97, 0.2);
@@ -53,12 +53,12 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     .lunara-pair-cards-title {
         margin: 0;
         color: var(--lunara-gold, #c9a961);
-        font-family: var(--lunara-label-font, "Bebas Neue", "Arial Narrow", sans-serif);
-        font-size: clamp(1.05rem, 2vw, 1.4rem);
+        font-family: var(--lunara-font-display, "Tiempos Headline", serif) !important;
+        font-size: clamp(1.4rem, 2vw, 1.8rem) !important;
         font-weight: 700;
-        letter-spacing: 0.18em;
-        line-height: 1;
-        text-transform: uppercase;
+        letter-spacing: 0 !important;
+        line-height: 1.2 !important;
+        text-transform: none !important;
     }
 
     .lunara-pair-cards-sub {
@@ -75,12 +75,14 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         display: inline-block;
         margin: 10px 0 0;
         color: var(--lunara-gold-light, #e0c481);
-        font-family: var(--lunara-label-font, "Bebas Neue", "Arial Narrow", sans-serif);
-        font-size: 0.72rem;
-        letter-spacing: 0.18em;
+        font-family: var(--lunara-font-body, "Tiempos Text", serif) !important;
+        font-size: 0.8125rem;
+        letter-spacing: 0 !important;
         text-decoration: none;
-        text-transform: uppercase;
+        text-transform: none !important;
         border-bottom: 1px solid rgba(201, 169, 97, 0.4);
+        min-height: 44px !important;
+        padding: 10px 0 !important;
     }
 
     .lunara-pair-cards-method:hover,
@@ -92,11 +94,11 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     .lunara-pair-cards-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 236px), 1fr));
-        gap: clamp(14px, 1.8vw, 22px);
+        gap: clamp(24px, 3vw, 40px);
         align-items: stretch;
     }
 
-    @media (min-width: 880px) {
+    @media (min-width: 681px) {
         .lunara-pair-cards-grid[data-count="3"] {
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
@@ -111,10 +113,10 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         flex-direction: column;
         min-width: 0;
         overflow: hidden;
-        border: 1px solid rgba(201, 169, 97, 0.22);
-        border-radius: 14px;
-        background: linear-gradient(180deg, #101f31, #0e1b2b);
-        box-shadow: 0 22px 46px rgba(0, 0, 0, 0.3);
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
     }
 
     .lunara-pair-card-poster {
@@ -142,8 +144,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         padding: 22px;
         text-align: center;
         background:
-            radial-gradient(90% 70% at 50% 22%, rgba(201, 169, 97, 0.08), transparent 60%),
-            linear-gradient(180deg, #0e1b2a, #0a1320);
+            transparent;
     }
 
     .lunara-pair-card-mark {
@@ -174,7 +175,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         width: 40px;
         height: 2px;
         margin: 16px auto 0;
-        background: var(--lunara-gold, #c9a961);
+        background: transparent;
         opacity: 0.85;
     }
 
@@ -183,33 +184,32 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         flex: 1;
         flex-direction: column;
         gap: 9px;
-        padding: 15px 15px 17px;
+        padding: 20px 0 0;
     }
 
     .lunara-pair-card-role {
+        text-align: center;
         margin: 0;
         color: var(--lunara-gold, #c9a961);
         font-family: var(--lunara-label-font, "Bebas Neue", "Arial Narrow", sans-serif);
-        font-size: 0.72rem;
+        font-size: 0.8125rem;
         font-weight: 700;
-        letter-spacing: 0.26em;
-        line-height: 1;
-        text-transform: uppercase;
+        letter-spacing: 0;
+        line-height: 1.4;
+        text-transform: none;
     }
 
     .lunara-pair-card-title {
+        text-align: center;
         margin: 0;
         font-family: var(--lunara-body-font, Georgia, serif);
-        font-size: clamp(1.05rem, 1.4vw, 1.22rem);
+        font-size: clamp(1.2rem, 1.65vw, 1.5rem);
         font-weight: 400;
         line-height: 1.16;
     }
 
     .lunara-pair-card-title-link {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        display: block;
         color: #fff;
         overflow-wrap: anywhere;
         text-decoration: none;
@@ -231,12 +231,13 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         margin: 0;
         color: rgba(244, 239, 227, 0.78);
         font-family: var(--lunara-body-font, Georgia, serif);
-        font-size: 0.9rem;
-        line-height: 1.5;
+        font-size: 1rem;
+        line-height: 1.65;
         text-wrap: pretty;
     }
 
     .lunara-pair-card-chips {
+        justify-content: center;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -253,27 +254,27 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         gap: 5px;
         /* Unified pill spec — matches .lunara-debrief-chip. */
         padding: 6px 12px;
-        border: 1px solid rgba(201, 169, 97, 0.28);
-        border-radius: 999px;
+        border: 0;
+        border-radius: 0;
         color: var(--lunara-gold-light, #e0c481);
         font-family: var(--lunara-label-font, "Arial Narrow", sans-serif);
-        font-size: 0.78rem;
-        letter-spacing: 0.06em;
+        font-size: 0.8125rem;
+        letter-spacing: 0;
         line-height: 1;
         text-decoration: none;
-        text-transform: uppercase;
+        text-transform: none;
     }
 
     .lunara-pair-card-chip--imdb {
-        border: 1px solid rgba(201, 169, 97, 0.4);
-        background: rgba(201, 169, 97, 0.12);
+        border: 0;
+        background: transparent;
         color: var(--lunara-gold-light, #e0c481);
         font-weight: 700;
     }
 
     .lunara-pair-card-chip--imdb:hover,
     .lunara-pair-card-chip--imdb:focus-visible {
-        background: rgba(201, 169, 97, 0.2);
+        background: transparent;
         border-color: rgba(201, 169, 97, 0.6);
     }
 
@@ -295,11 +296,11 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     .lunara-pair-card-chips .lunara-oscar-ledger-pill {
         padding: 6px 12px;
         border: 1px solid rgba(201, 169, 97, 0.5);
-        border-radius: 999px;
+        border-radius: 0;
         background: rgba(201, 169, 97, 0.1);
         color: var(--lunara-gold-light, #e0c481);
         font-family: var(--lunara-label-font, "Arial Narrow", sans-serif);
-        font-size: 0.78rem;
+        font-size: 0.8125rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         line-height: 1;
@@ -308,7 +309,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 
     .lunara-pair-card-chips .lunara-oscar-ledger-counts {
         color: rgba(244, 239, 227, 0.6);
-        font-size: 0.74rem;
+        font-size: 0.8125rem;
         line-height: 1.1;
     }
 
@@ -324,8 +325,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 
     @media (max-width: 680px) {
         .lunara-pair-cards {
-            padding: 16px;
-            border-radius: 14px;
+            padding: 24px 0 !important;
         }
 
         .lunara-pair-cards-grid,
@@ -335,30 +335,33 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
             gap: 12px;
         }
 
-        /* Compact horizontal cards on phones: a readable poster, never a thumbnail. */
+        /* Stack complete arguments below their artwork on smaller editorial columns. */
         .lunara-pair-card {
             display: grid;
-            grid-template-columns: 116px minmax(0, 1fr);
+            grid-template-columns: minmax(0, 1fr);
             align-items: start;
         }
 
         .lunara-pair-card-poster {
             aspect-ratio: 2 / 3;
+            width: min(100%, 220px);
+            margin-inline: auto;
             height: auto;
             align-self: start;
         }
 
-        /* On phones the note follows the poster column, so no bottom-pin. */
+        /* Phone arguments keep their links beside the finished reading. */
         .lunara-pair-card-chips {
             margin-top: 8px;
         }
 
         .lunara-pair-card-body {
-            padding: 13px 14px;
+            padding: 18px 0 0;
         }
 
         .lunara-pairing-desk-section .lunara-pair-card::after {
             display: none !important;
+            content: none !important;
         }
 
         .lunara-pair-card-mark {
@@ -383,22 +386,22 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 /* Pairing Desk showcase: shared by Home and the Reviews archive. */
 .lunara-pairing-desk-section{overflow:hidden;position:relative}
 .lunara-pairing-desk-backdrop{background-position:var(--lunara-method-x,50%) var(--lunara-method-y,26%);background-size:var(--lunara-method-fit,cover);background-repeat:no-repeat;filter:saturate(.9);inset:-4%;position:absolute;transform:scale(var(--lunara-method-zoom,1));z-index:0}
-.lunara-pairing-desk-overlay{background:radial-gradient(circle at 82% 8%,rgba(201,169,97,.16),transparent 34%),linear-gradient(180deg,rgba(5,12,21,.88),rgba(7,16,27,.8) 42%,rgba(4,10,18,.95));inset:0;position:absolute;z-index:1}
+.lunara-pairing-desk-overlay{background:linear-gradient(180deg,rgba(5,12,21,.88),rgba(7,16,27,.8) 42%,rgba(4,10,18,.95));inset:0;position:absolute;z-index:1}
 .lunara-pairing-desk-inner{position:relative;z-index:2}
-.lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,max-content) minmax(280px,42ch);justify-content:start;gap:14px clamp(38px,5vw,72px);align-items:end;margin-bottom:18px}
-.lunara-pairing-desk-claim{display:inline-block;margin:0 0 12px;padding:6px 13px;border:1px solid rgba(201,169,97,.5);background:rgba(7,15,26,.55);color:#e8d9b0;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:.85rem;letter-spacing:.32em;text-transform:uppercase}
-.lunara-pairing-desk-head .lunara-home-section-title{margin-bottom:0;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
-.lunara-pairing-desk-intro{display:grid;gap:10px;align-content:end;padding-bottom:4px}
+.lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:14px;align-items:center;margin-bottom:18px;text-align:center}
+.lunara-pairing-desk-claim{display:inline-block;margin:0 0 12px;padding:6px 13px;border:0;background:transparent;color:#e8d9b0;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:.85rem;letter-spacing:.32em;text-transform:uppercase}
+.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
+.lunara-pairing-desk-thesis{margin:16px auto 0;max-width:24ch;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-display,"Tiempos Headline",serif);font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.25;text-wrap:balance}
+.lunara-pairing-desk-intro{display:grid;max-width:56ch;margin-inline:auto;gap:10px;align-content:end;padding-bottom:4px}
 .lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:.97rem;line-height:1.6;text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .lunara-pairing-desk-source{margin:0;color:rgba(244,239,227,.74);font-size:.88rem}
-.lunara-pairing-desk-source a{color:var(--lunara-gold-light,#eadbb3);text-decoration:none;border-bottom:1px solid rgba(201,169,97,.4);transition:color .2s ease,border-color .2s ease}
+.lunara-pairing-desk-source a{color:var(--lunara-gold-light,#eadbb3);text-decoration:none;border-bottom:1px solid rgba(201,169,97,.4);transition:color .2s ease, border-color .2s ease}
 .lunara-pairing-desk-source a:hover{color:#fff;border-color:rgba(225,197,126,.85)}
-.lunara-pairing-desk-section .lunara-pair-cards{margin-top:0}
+.lunara-pairing-desk-section .lunara-pair-cards{margin-top:0;padding: 24px 0 !important;box-shadow: none !important;border: 0 !important;background: transparent !important}
 .lunara-pairing-desk-section .lunara-pair-cards-head{display:none}
-.lunara-pairing-desk-section .lunara-pair-cards-grid{counter-reset:lunara-pair-act}
-.lunara-pairing-desk-section .lunara-pair-card{counter-increment:lunara-pair-act;position:relative;transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease}
-.lunara-pairing-desk-section .lunara-pair-card::after{color:rgba(224,196,129,.38);content:"0" counter(lunara-pair-act);font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:3.4rem;line-height:1;pointer-events:none;position:absolute;right:14px;top:10px;text-shadow:0 2px 10px rgba(4,10,18,.85),0 0 26px rgba(4,10,18,.7);z-index:3}
-.lunara-pairing-desk-section .lunara-pair-card:hover{border-color:rgba(225,197,126,.55);box-shadow:0 22px 48px rgba(0,0,0,.45);transform:translateY(-5px)}
+.lunara-pairing-desk-section .lunara-pair-card{position:relative;transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease}
+.lunara-pairing-desk-section .lunara-pair-card::after{color:rgba(224,196,129,.38);content:none !important;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:3.4rem;line-height:1;pointer-events:none;position:absolute;right:14px;top:10px;text-shadow:0 2px 10px rgba(4,10,18,.85),0 0 26px rgba(4,10,18,.7);z-index:3}
+.lunara-pairing-desk-section .lunara-pair-card:hover{border-color:rgba(225,197,126,.55);box-shadow:none;transform:none}
 .lunara-pairing-desk-section .lunara-pair-card .lunara-pair-card-poster img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .lunara-pairing-desk-section .lunara-pair-card:hover .lunara-pair-card-poster img{transform:scale(1.06)}
 @media(prefers-reduced-motion:no-preference){
@@ -431,11 +434,11 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     min-height: 38px;
     padding: 8px 15px !important;
     border: 1px solid rgba(201, 169, 97, 0.3) !important;
-    border-radius: 999px !important;
+    border-radius: 0 !important;
     background: rgba(15, 29, 46, 0.55) !important;
     color: rgba(244, 239, 227, 0.86) !important;
     font-family: var(--lunara-font-label, sans-serif) !important;
-    font-size: 0.72rem !important;
+    font-size: 0.8125rem !important;
     letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
     text-decoration: none !important;
@@ -453,65 +456,6 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 }
 @media (prefers-reduced-motion: reduce) {
     .lunara-review-share-link { transition: none; }
-}
-
-/* ------------------------------------------------------------
-   3.2.96 — Pair It With on single reviews
-   ------------------------------------------------------------ */
-
-/* Phones: the card text was squeezed to ~100px. The Customizer's Additional CSS
-   pads the body 28px a side at every width, and `body.single-review article p`
-   inflates the role label to 18px, so "Counter-Program" broke into four lines.
-   Selectors outrank the Customizer rule (0,3,3) without editing it. The poster
-   sits beside the role and title; the note and chips take the full card width. */
-@media (max-width: 560px) {
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card {
-        grid-template-columns: 84px minmax(0, 1fr);
-        column-gap: 14px;
-        row-gap: 0;
-        padding: 14px;
-        align-items: start;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-body {
-        display: contents;
-        padding: 0;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-poster {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        width: 84px;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-role {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: end;
-        margin: 0 0 6px;
-        font-size: 0.66rem;
-        letter-spacing: 0.2em;
-        line-height: 1.3;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-title {
-        grid-column: 2;
-        grid-row: 2;
-        align-self: start;
-        margin: 0;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note,
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-chips,
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-watch {
-        grid-column: 1 / -1;
-    }
-
-    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note {
-        margin: 14px 0 0;
-    }
 }
 
 /* The thread: a gold line drawn from "Pair It With" through the three films as
@@ -537,7 +481,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pair-thread-line {
     width: 2px;
     margin-left: -1px;
-    border-radius: 2px;
+    border-radius: 0;
     background: rgba(201, 169, 97, 0.14);
 }
 
@@ -551,9 +495,9 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
     display: block;
     width: 100%;
     height: 100%;
-    border-radius: inherit;
+    border-radius: 0;
     background: linear-gradient(180deg, #e0c481, #c9a961 55%, rgba(201, 169, 97, 0.6));
-    box-shadow: 0 0 10px rgba(224, 196, 129, 0.45);
+    box-shadow: none;
     transform: scaleY(var(--pair-thread-progress, 1));
     transform-origin: 50% 0;
 }
@@ -580,7 +524,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pair-thread-origin {
     border-color: #e0c481;
     background: #c9a961;
-    box-shadow: 0 0 12px rgba(224, 196, 129, 0.6);
+    box-shadow: none;
 }
 
 .lunara-pair-thread-node--theme { --pair-accent: #c9a961; }
@@ -590,7 +534,7 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pair-thread-node.is-lit {
     border-color: var(--pair-accent);
     background: var(--pair-accent);
-    box-shadow: 0 0 0 4px rgba(10, 21, 32, 0.9), 0 0 16px var(--pair-accent);
+    box-shadow: 0 0 0 4px rgba(10, 21, 32, 0.9);
     transform: scale(1.15);
 }
 
@@ -612,19 +556,6 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pair-cards.has-pair-thread .lunara-pair-cards-grid {
     position: relative;
     z-index: 1;
-}
-
-.lunara-pair-cards.is-thread-animated .lunara-pair-card {
-    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
-}
-
-.lunara-pair-cards.is-thread-animated .lunara-pair-card:not(.is-thread-reached) {
-    opacity: 0.4;
-    transform: translateY(14px);
-}
-
-.lunara-pair-cards.has-pair-thread .lunara-pair-card.is-thread-reached {
-    box-shadow: 0 0 0 1px rgba(201, 169, 97, 0.28), 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

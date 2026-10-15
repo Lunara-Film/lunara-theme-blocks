@@ -17,7 +17,14 @@ $version = lunara_theme_asset_version( $asset['path'] );
 foreach ( $cases as $name => $case ) {
     $output = $case['authority'];
     if ( 'journal' !== $case['type'] ) {
-        journal_delivery_assert( '' === $output, "$name must not load Journal CSS." );
+        journal_delivery_assert(
+            false === strpos( $output, $asset['uri'] )
+                && false === strpos( $output, 'id="lunara-journal-single-css"' )
+                && false === strpos( $output, 'id="lunara-journal-single-guardrail-css"' ),
+            "$name must not load Journal assets or inline Journal styles."
+        );
+        journal_delivery_assert( 1 === substr_count( $output, 'id="lunara-review-single-studio-css"' ), "$name includes the actual late Review Studio styles once." );
+        journal_delivery_assert( 1 === substr_count( $output, 'id="lunara-review-pair-it-with-controls-css"' ), "$name includes the actual late Review pairing controls once." );
         continue;
     }
     journal_delivery_assert( 1 === substr_count( $output, 'rel="stylesheet"' ), "$name prints one real stylesheet link." );

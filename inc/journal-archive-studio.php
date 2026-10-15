@@ -26,7 +26,7 @@ if ( ! defined( 'LUNARA_JOURNAL_ARCHIVE_STUDIO_REVISION_LIMIT' ) ) {
 }
 
 /**
- * Complete fallback state. Defaults intentionally reproduce Theme 3.2.43.
+ * Complete fallback state. Decorative labels are optional; editorial values remain stored verbatim.
  *
  * @return array<string,mixed>
  */
@@ -34,7 +34,7 @@ function lunara_journal_archive_studio_defaults() {
 	return array(
 		'schema_version'  => 1,
 		'selection_version' => 0,
-		'kicker'         => __( 'Journal', 'lunara-film' ),
+		'kicker'         => '',
 		'title'          => __( 'Lunara Journal', 'lunara-film' ),
 		'deck'           => '',
 		'supporting_copy' => '',
@@ -74,22 +74,22 @@ function lunara_journal_archive_studio_defaults() {
 			'taxonomy_topic_kicker'   => __( 'Journal Topic', 'lunara-film' ),
 			'taxonomy_type_kicker'    => __( 'Journal Type', 'lunara-film' ),
 			'filter_all'       => __( 'All', 'lunara-film' ),
-			'toolbar_kicker'   => __( 'Desk Order', 'lunara-film' ),
-			'toolbar_title'    => __( 'Latest files from the desk', 'lunara-film' ),
+			'toolbar_kicker'   => '',
+			'toolbar_title'    => '',
 			'sort_newest'      => __( 'Newest Filed', 'lunara-film' ),
 			'sort_oldest'      => __( 'Oldest Filed', 'lunara-film' ),
 			'sort_updated'     => __( 'Recently Updated', 'lunara-film' ),
-			'lead_kicker'      => __( 'Lead file', 'lunara-film' ),
-			'card_kicker'      => __( 'From the desk', 'lunara-film' ),
+			'lead_kicker'      => '',
+			'card_kicker'      => '',
 			'card_cta'         => __( 'Read file', 'lunara-film' ),
-			'retention_kicker' => __( 'Desk Channels', 'lunara-film' ),
-			'retention_title'  => __( 'Keep the file moving', 'lunara-film' ),
+			'retention_kicker' => '',
+			'retention_title'  => __( 'Continue reading', 'lunara-film' ),
 			'pagination_prev'  => __( '← Newer', 'lunara-film' ),
 			'pagination_next'  => __( 'Older →', 'lunara-film' ),
 			'empty_copy'       => __( 'No journal entries yet. Check back soon.', 'lunara-film' ),
 		),
 		'gallery' => array(
-			'kicker' => __( 'Visual File', 'lunara-film' ),
+			'kicker' => '',
 			'title'  => __( 'From the Journal desk', 'lunara-film' ),
 			'copy'   => '',
 			'items'  => array(),
@@ -154,6 +154,11 @@ function lunara_journal_archive_studio_defaults() {
 			'media_min_height' => 220,
 		),
 	);
+}
+
+/** Optional editorial labels may be deliberately blank without repair or data loss. */
+function lunara_journal_archive_studio_optional_labels() {
+	return array( 'toolbar_kicker', 'toolbar_title', 'lead_kicker', 'card_kicker', 'retention_kicker' );
 }
 
 /**
@@ -481,7 +486,7 @@ function lunara_journal_archive_studio_get_public_config( $allow_preview = true 
 	// Preserve the historic pre-Studio rendered fallback only for the exact
 	// legacy sentinel pair. Once the existing schema marker is present, every
 	// phrase entered in the focused Studio round-trips verbatim.
-	$config['kicker'] = null === $legacy_kicker || false === $legacy_kicker || $legacy_sentinel ? __( 'Journal', 'lunara-film' ) : (string) $legacy_kicker;
+	$config['kicker'] = null === $legacy_kicker || false === $legacy_kicker || $legacy_sentinel ? $defaults['kicker'] : (string) $legacy_kicker;
 	$config['title']  = null === $legacy_title || false === $legacy_title || $legacy_sentinel ? __( 'Lunara Journal', 'lunara-film' ) : (string) $legacy_title;
 	$config['deck']   = (string) lunara_journal_archive_studio_scalar_or( get_theme_mod( 'lunara_journal_archive_copy', '' ), '' );
 
@@ -779,7 +784,7 @@ function lunara_journal_archive_studio_render_gallery( $gallery ) {
 		return '';
 	}
 	$copy = ! empty( $gallery['copy'] ) ? '<p class="lunara-journal-archive-gallery-copy">' . esc_html( $gallery['copy'] ) . '</p>' : '';
-	return '<section class="lunara-journal-archive-gallery" aria-labelledby="lunara-journal-archive-gallery-title"><header class="lunara-journal-archive-gallery-head"><p class="lunara-home-section-kicker">' . esc_html( $gallery['kicker'] ) . '</p><h3 id="lunara-journal-archive-gallery-title" class="lunara-section-title">' . esc_html( $gallery['title'] ) . '</h3>' . $copy . '</header><div class="lunara-journal-archive-gallery-grid">' . implode( '', $figures ) . '</div></section>';
+	return '<section class="lunara-journal-archive-gallery" aria-labelledby="lunara-journal-archive-gallery-title"><header class="lunara-journal-archive-gallery-head"><h2 id="lunara-journal-archive-gallery-title" class="lunara-section-title">' . esc_html( $gallery['title'] ) . '</h2>' . ( '' !== $gallery['kicker'] && 'Visual File' !== $gallery['kicker'] ? '<p class="lunara-journal-archive-gallery-copy">' . esc_html( $gallery['kicker'] ) . '</p>' : '' ) . $copy . '</header><div class="lunara-journal-archive-gallery-grid">' . implode( '', $figures ) . '</div></section>';
 }
 
 /**
@@ -955,7 +960,7 @@ function lunara_journal_archive_studio_validate_config( $raw ) {
 	$config['deck']            = lunara_journal_archive_studio_textarea( $config['deck'], 500 );
 	$config['supporting_copy'] = lunara_journal_archive_studio_textarea( $config['supporting_copy'], 700 );
 
-	if ( '' === $config['kicker'] || '' === $config['title'] ) {
+	if ( '' === $config['title'] ) {
 		return new WP_Error( 'journal_archive_identity_required' );
 	}
 
@@ -1037,7 +1042,7 @@ function lunara_journal_archive_studio_validate_config( $raw ) {
 
 	foreach ( $defaults['labels'] as $key => $fallback ) {
 		$config['labels'][ $key ] = lunara_journal_archive_studio_text( isset( $config['labels'][ $key ] ) ? $config['labels'][ $key ] : $fallback, 120 );
-		if ( '' === $config['labels'][ $key ] ) {
+		if ( '' === $config['labels'][ $key ] && ! in_array( $key, lunara_journal_archive_studio_optional_labels(), true ) ) {
 			return new WP_Error( 'journal_archive_label_required' );
 		}
 	}
@@ -1047,7 +1052,7 @@ function lunara_journal_archive_studio_validate_config( $raw ) {
 	$gallery['kicker'] = lunara_journal_archive_studio_text( $gallery['kicker'], 80 );
 	$gallery['title']  = lunara_journal_archive_studio_text( $gallery['title'], 140 );
 	$gallery['copy']   = lunara_journal_archive_studio_textarea( $gallery['copy'], 500 );
-	if ( '' === $gallery['kicker'] || '' === $gallery['title'] ) {
+	if ( '' === $gallery['title'] ) {
 		return new WP_Error( 'journal_archive_gallery_copy_required' );
 	}
 	$raw_items = isset( $raw_gallery['items'] ) && is_array( $raw_gallery['items'] ) ? array_values( $raw_gallery['items'] ) : array();
@@ -1117,7 +1122,7 @@ function lunara_journal_archive_studio_validate_config( $raw ) {
 		$card['label'] = lunara_journal_archive_studio_text( $card['label'], 80 );
 		$card['title'] = lunara_journal_archive_studio_text( $card['title'], 140 );
 		$card['copy']  = lunara_journal_archive_studio_textarea( $card['copy'], 360 );
-		if ( '' === $card['label'] || '' === $card['title'] || '' === $card['copy'] ) {
+		if ( '' === $card['title'] || '' === $card['copy'] ) {
 			return new WP_Error( 'journal_archive_retention_copy_required' );
 		}
 		$card['destination'] = sanitize_key( $card['destination'] );
@@ -1758,7 +1763,7 @@ function lunara_journal_archive_studio_store_feedback( $error_code ) {
 function lunara_journal_archive_studio_validation_message( $error_code = null ) {
 	$code = null === $error_code ? get_transient( lunara_journal_archive_studio_feedback_key() ) : $error_code;
 	$messages = array(
-		'journal_archive_identity_required'              => __( 'Add both the archive kicker and headline.', 'lunara-film' ),
+		'journal_archive_identity_required'              => __( 'Add the archive headline. The secondary label is optional.', 'lunara-film' ),
 		'journal_archive_item_count_invalid'             => __( 'Items per page must be between 4 and 24.', 'lunara-film' ),
 		'journal_archive_filter_cap_invalid'              => __( 'Each filter cap must be between 1 and 20.', 'lunara-film' ),
 		'journal_archive_lead_mode_invalid'               => __( 'Choose a supported lead mode.', 'lunara-film' ),
@@ -1769,8 +1774,8 @@ function lunara_journal_archive_studio_validation_message( $error_code = null ) 
 		'journal_archive_curated_count_invalid'           => __( 'A curated run needs 1 to 24 published files.', 'lunara-film' ),
 		'journal_archive_section_order_invalid'           => __( 'Give every section one unique position.', 'lunara-film' ),
 		'journal_archive_primary_sections_hidden'        => __( 'Keep either the Hero or Journal Grid visible.', 'lunara-film' ),
-		'journal_archive_label_required'                  => __( 'Every public-language field needs a value.', 'lunara-film' ),
-		'journal_archive_gallery_copy_required'           => __( 'The archive gallery needs both its kicker and heading.', 'lunara-film' ),
+		'journal_archive_label_required'                  => __( 'Functional labels need a value. Secondary labels may be left blank.', 'lunara-film' ),
+		'journal_archive_gallery_copy_required'           => __( 'The archive gallery needs a heading. Its secondary label is optional.', 'lunara-film' ),
 		'journal_archive_gallery_count_invalid'           => __( 'The archive gallery accepts up to twelve images.', 'lunara-film' ),
 		'journal_archive_gallery_order_invalid'           => __( 'Give every archive gallery image one unique position.', 'lunara-film' ),
 		'journal_archive_gallery_image_invalid'           => __( 'Every gallery choice must be an existing Media Library image.', 'lunara-film' ),
@@ -2235,7 +2240,7 @@ function lunara_journal_archive_studio_render_control_surface( $context = 'site-
 			<div class="lunara-control-desk-homepage-card">
 				<div class="lunara-control-desk-card-head"><div><p class="lunara-control-desk-kicker"><?php esc_html_e( 'Archive Identity', 'lunara-film' ); ?></p><h3><?php esc_html_e( 'Kicker, headline, deck, and supporting copy', 'lunara-film' ); ?></h3><p class="lunara-control-desk-subtle"><?php esc_html_e( 'These write through to the existing Editorial Archives owner; exact words are preserved.', 'lunara-film' ); ?></p></div></div>
 				<div class="lunara-control-desk-homepage-number-grid">
-					<label><span><strong><?php esc_html_e( 'Kicker', 'lunara-film' ); ?></strong></span><input type="text" maxlength="80" name="lunara_journal_archive_identity[kicker]" value="<?php echo esc_attr( $config['kicker'] ); ?>" required /></label>
+					<label><span><strong><?php esc_html_e( 'Kicker', 'lunara-film' ); ?></strong></span><input type="text" maxlength="80" name="lunara_journal_archive_identity[kicker]" value="<?php echo esc_attr( $config['kicker'] ); ?>" /></label>
 					<label><span><strong><?php esc_html_e( 'Headline', 'lunara-film' ); ?></strong></span><input type="text" maxlength="140" name="lunara_journal_archive_identity[title]" value="<?php echo esc_attr( $config['title'] ); ?>" required /></label>
 				</div>
 				<label class="lunara-journal-archive-wide-field"><span><strong><?php esc_html_e( 'Deck', 'lunara-film' ); ?></strong></span><textarea maxlength="500" rows="3" name="lunara_journal_archive_identity[deck]"><?php echo esc_textarea( $config['deck'] ); ?></textarea></label>
@@ -2305,7 +2310,7 @@ function lunara_journal_archive_studio_render_control_surface( $context = 'site-
 
 			<div class="lunara-control-desk-homepage-card">
 				<div class="lunara-control-desk-card-head"><div><p class="lunara-control-desk-kicker"><?php esc_html_e( 'Public Language', 'lunara-film' ); ?></p><h3><?php esc_html_e( 'Desk, card, retention, and pagination labels', 'lunara-film' ); ?></h3></div></div>
-				<div class="lunara-journal-archive-label-grid"><?php foreach ( $config['labels'] as $label_key => $label_value ) : ?><label><span><strong><?php echo esc_html( ucwords( str_replace( '_', ' ', $label_key ) ) ); ?></strong></span><input type="text" maxlength="120" name="lunara_journal_archive_labels[<?php echo esc_attr( $label_key ); ?>]" value="<?php echo esc_attr( $label_value ); ?>" required /></label><?php endforeach; ?></div>
+				<div class="lunara-journal-archive-label-grid"><?php foreach ( $config['labels'] as $label_key => $label_value ) : ?><label><span><strong><?php echo esc_html( ucwords( str_replace( '_', ' ', $label_key ) ) ); ?></strong></span><input type="text" maxlength="120" name="lunara_journal_archive_labels[<?php echo esc_attr( $label_key ); ?>]" value="<?php echo esc_attr( $label_value ); ?>"<?php echo in_array( $label_key, lunara_journal_archive_studio_optional_labels(), true ) ? '' : ' required'; ?> /></label><?php endforeach; ?></div>
 			</div>
 
 			<div class="lunara-control-desk-homepage-card">
@@ -2316,7 +2321,7 @@ function lunara_journal_archive_studio_render_control_surface( $context = 'site-
 						<input type="hidden" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][visible]" value="0" />
 						<label><input type="checkbox" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][visible]" value="1" <?php checked( ! empty( $card['visible'] ) ); ?> /> <strong><?php echo esc_html( sprintf( __( 'Show retention card %d', 'lunara-film' ), $index + 1 ) ); ?></strong></label>
 						<label><span><?php esc_html_e( 'Order', 'lunara-film' ); ?></span><select name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][order]"><?php for ( $card_order = 1; $card_order <= 3; $card_order++ ) : ?><option value="<?php echo esc_attr( $card_order ); ?>" <?php selected( $card['order'], $card_order ); ?>><?php echo esc_html( $card_order ); ?></option><?php endfor; ?></select></label>
-						<label><span><?php esc_html_e( 'Label', 'lunara-film' ); ?></span><input type="text" maxlength="80" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][label]" value="<?php echo esc_attr( $card['label'] ); ?>" required /></label>
+						<label><span><?php esc_html_e( 'Label', 'lunara-film' ); ?></span><input type="text" maxlength="80" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][label]" value="<?php echo esc_attr( $card['label'] ); ?>" /></label>
 						<label><span><?php esc_html_e( 'Title', 'lunara-film' ); ?></span><input type="text" maxlength="140" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][title]" value="<?php echo esc_attr( $card['title'] ); ?>" required /></label>
 						<label><span><?php esc_html_e( 'Copy', 'lunara-film' ); ?></span><textarea maxlength="360" rows="3" name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][copy]" required><?php echo esc_textarea( $card['copy'] ); ?></textarea></label>
 						<label><span><?php esc_html_e( 'Destination', 'lunara-film' ); ?></span><select name="lunara_journal_archive_retention[<?php echo esc_attr( $index ); ?>][destination]"><?php foreach ( array( 'latest' => __( 'Latest Journal file', 'lunara-film' ), 'trailer' => __( 'Trailer lane', 'lunara-film' ), 'reviews' => __( 'Reviews archive', 'lunara-film' ), 'journal' => __( 'Journal archive', 'lunara-film' ), 'custom' => __( 'Custom secure URL', 'lunara-film' ) ) as $destination => $destination_label ) : ?><option value="<?php echo esc_attr( $destination ); ?>" <?php selected( $card['destination'], $destination ); ?>><?php echo esc_html( $destination_label ); ?></option><?php endforeach; ?></select></label>
@@ -2335,7 +2340,7 @@ function lunara_journal_archive_studio_render_control_surface( $context = 'site-
 			<div class="lunara-control-desk-homepage-card" data-lunara-journal-archive-gallery-form>
 				<div class="lunara-control-desk-card-head"><div><p class="lunara-control-desk-kicker"><?php esc_html_e( 'Archive Gallery', 'lunara-film' ); ?></p><h3><?php esc_html_e( 'A bounded visual sequence after the retention cards', 'lunara-film' ); ?></h3><p class="lunara-control-desk-subtle"><?php esc_html_e( 'Choose up to twelve Media Library images, then move, replace, remove, or clear them here. An empty gallery adds nothing to the public page. Wide media should target 1920×1080; smaller legacy sources stay proportional and surface a warning.', 'lunara-film' ); ?></p></div></div>
 				<div class="lunara-control-desk-homepage-number-grid">
-					<label><span><strong><?php esc_html_e( 'Gallery kicker', 'lunara-film' ); ?></strong></span><input type="text" maxlength="80" name="lunara_journal_archive_gallery[kicker]" value="<?php echo esc_attr( $config['gallery']['kicker'] ); ?>" required /></label>
+					<label><span><strong><?php esc_html_e( 'Gallery kicker', 'lunara-film' ); ?></strong></span><input type="text" maxlength="80" name="lunara_journal_archive_gallery[kicker]" value="<?php echo esc_attr( $config['gallery']['kicker'] ); ?>" /></label>
 					<label><span><strong><?php esc_html_e( 'Gallery heading', 'lunara-film' ); ?></strong></span><input type="text" maxlength="140" name="lunara_journal_archive_gallery[title]" value="<?php echo esc_attr( $config['gallery']['title'] ); ?>" required /></label>
 				</div>
 				<label class="lunara-journal-archive-wide-field"><span><strong><?php esc_html_e( 'Gallery introduction', 'lunara-film' ); ?></strong></span><textarea maxlength="500" rows="3" name="lunara_journal_archive_gallery[copy]"><?php echo esc_textarea( $config['gallery']['copy'] ); ?></textarea></label>

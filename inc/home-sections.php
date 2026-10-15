@@ -117,8 +117,8 @@ if ( ! function_exists( 'lunara_render_homepage_latest_reviews' ) ) {
         <section class="lunara-home-section lunara-home-slot-latest-reviews lunara-latest-reviews-section" data-lunara-site-studio-section="latest-reviews" data-review-source="<?php echo esc_attr( $source ); ?>" data-lunara-carousel aria-label="<?php esc_attr_e( 'Latest Reviews', 'lunara-film' ); ?>">
             <div class="lunara-home-section-head">
                 <div>
-                    <p class="lunara-home-section-kicker"><?php echo esc_html( $kicker ); ?></p>
                     <h2 class="lunara-home-section-title"><?php echo esc_html( $heading ); ?></h2>
+                    <p class="lunara-home-section-kicker"><?php echo esc_html( $kicker ); ?></p>
                 </div>
                 <div class="lunara-home-section-head-actions">
                     <div class="lunara-poster-carousel-controls" data-lunara-carousel-controls>
@@ -171,7 +171,7 @@ if ( ! function_exists( 'lunara_render_homepage_latest_reviews' ) ) {
                                 </div>
                             <?php endif; ?>
                             <div class="lunara-review-grid-copy">
-                                <p class="lunara-review-grid-kicker"><?php esc_html_e( 'Lunara Review', 'lunara-film' ); ?></p>
+
                                 <?php if ( ! $has_card_media && $score && function_exists( 'lunara_render_stars' ) ) : ?>
                                     <span class="lunara-score-badge is-inline-score"><?php echo wp_kses_post( lunara_render_stars( $score ) ); ?></span>
                                 <?php endif; ?>

@@ -7,6 +7,7 @@
 
 define( 'ABSPATH', __DIR__ . '/' );
 
+$lunara_test_sort = 'date_desc';
 $lunara_test_is_archive = true;
 $lunara_test_is_paged   = false;
 $lunara_test_is_tax     = false;
@@ -125,6 +126,7 @@ function lunara_test_assert( $condition, $message ) {
 	}
 }
 
+function lunara_get_editorial_archive_sort() { return $GLOBALS['lunara_test_sort']; }
 function absint( $value ) { return abs( (int) $value ); }
 function esc_attr( $value ) { return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' ); }
 function esc_url( $value ) { return (string) $value; }
@@ -212,14 +214,8 @@ function lunara_test_srcset_candidates( $html ) {
 }
 
 $base_attrs = lunara_journal_archive_card_image_attributes( false, 'A useful editorial description' );
-$expected_sizes = '(max-width: 620px) calc(100vw - 34px), (max-width: 768px) calc((100vw - 56px) / 2 - 2px), (max-width: 900px) calc((92vw - 24px) / 2 - 2px), calc((min(100vw, 1180px) - clamp(32px, 8vw, 80px) - 48px) / 3 - 2px)';
-lunara_test_assert( $expected_sizes === $base_attrs['sizes'], 'The image slot must follow route columns, padding, borders, shell cap and editorial gap.' );
-foreach ( array( 'compact' => array( 48, 16, 32 ), 'showcase' => array( 62, 30, 60 ) ) as $density => $offsets ) {
-	$sizes = lunara_journal_archive_card_image_sizes( array( 'presentation' => array( 'density' => $density ) ) );
-	lunara_test_assert( false !== strpos( $sizes, sprintf( '(100vw - %dpx) / 2', $offsets[0] ) ), "{$density} tablet slots must include their configured gap." );
-	lunara_test_assert( false !== strpos( $sizes, sprintf( '(92vw - %dpx) / 2', $offsets[1] ) ), "{$density} wide-tablet slots must include fluid shell padding." );
-	lunara_test_assert( false !== strpos( $sizes, sprintf( '80px) - %dpx) / 3', $offsets[2] ) ), "{$density} desktop slots must subtract both gaps." );
-}
+$expected_sizes = '(max-width: 640px) calc(100vw - 40px), (max-width: 768px) calc((100vw - 64px) / 2), (max-width: 980px) calc((min(100vw, 1180px) - clamp(40px, 8vw, 80px) - 24px) / 2), calc((min(100vw, 1180px) - clamp(40px, 8vw, 80px) - 24px) / 2)';
+lunara_test_assert( $expected_sizes === $base_attrs['sizes'], 'The image slot must follow route columns, padding, shell cap and editorial gap.' );
 lunara_test_assert( $expected_sizes === lunara_journal_archive_card_image_sizes( array( 'presentation' => array( 'density' => array() ) ) ), 'Malformed density must use the same editorial fallback as public layout.' );
 lunara_test_assert( $expected_sizes === lunara_journal_archive_card_image_sizes( array( 'presentation' => array( 'density' => 'editorial', 'card_min_height' => 560, 'media_min_height' => 360 ) ) ), 'Minimum card and media heights must not change the image slot width.' );
 
@@ -282,6 +278,11 @@ $lunara_test_is_paged   = false;
 $lunara_test_is_tax     = false;
 lunara_test_assert( lunara_journal_archive_card_is_visual_lead( 1 ), 'The first unpaged main Journal card must remain the visual lead.' );
 lunara_test_assert( ! lunara_journal_archive_card_is_visual_lead( 2 ), 'Only one card may be the visual lead.' );
+foreach ( array( 'date_asc', 'modified_desc' ) as $sort ) {
+    $lunara_test_sort = $sort;
+    lunara_test_assert( ! lunara_journal_archive_card_is_visual_lead( 1 ), 'A sorted archive must preserve uniform results.' );
+}
+$lunara_test_sort = 'date_desc';
 $lead_attrs = lunara_journal_archive_card_image_attributes( true, 'Lead still' );
 lunara_test_assert( 'eager' === $lead_attrs['loading'] && 'high' === $lead_attrs['fetchpriority'], 'The page-one visual lead alone must be eager/high.' );
 

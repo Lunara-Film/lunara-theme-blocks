@@ -1,11 +1,22 @@
+(function () {
+    'use strict';
+    function mount(pageRoot, scope) {
+        pageRoot = pageRoot || document;
+        // Standalone documents keep their native page-unload lifecycle.
+        scope = scope || {
+            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
+            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
+            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
+            cleanup: function () {}
+        };
 /**
  * Generated from the verified inline runtime during Phase 1C.
  * Keep behavior route-gated and free of render-blocking dependencies.
  */
 
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
         const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        document.querySelectorAll('[data-lunara-carousel]').forEach(function(section) {
+        pageRoot.querySelectorAll('[data-lunara-carousel]').forEach(function(section) {
             let reduceMotion = motionQuery.matches;
             const track = section.querySelector('[data-lunara-carousel-track]');
             const prev = section.querySelector('[data-lunara-carousel-prev]');
@@ -22,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
             function amount() {
                 const card = track.children[0];
                 const styles = window.getComputedStyle(track);
-                const gap = parseInt(styles.columnGap || styles.gap || 24, 10);
+                const gap = parseFloat(styles.columnGap || styles.gap) || 0;
                 return card ? card.offsetWidth + gap : 360;
             }
             function getIndexFromOffset(scrollLeft) {
@@ -57,9 +68,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 const trackRect = track.getBoundingClientRect();
                 const cardRect = card.getBoundingClientRect();
-                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left;
+                const padding = parseFloat(window.getComputedStyle(track).scrollPaddingLeft) || 0;
+                const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left - padding;
                 track.scrollTo({
-                    left: Math.max(0, targetLeft),
+                    left: Math.min(maxScroll, Math.max(0, targetLeft)),
                     behavior: reduceMotion ? 'auto' : 'smooth'
                 });
             }
@@ -79,24 +92,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 track.scrollBy({ left: distance, behavior: behavior });
             }
             if (prev) {
-                prev.addEventListener('click', function () {
+                scope.on(prev, 'click', function () {
                     step(-1);
                 });
             }
             if (next) {
-                next.addEventListener('click', function () {
+                scope.on(next, 'click', function () {
                     step(1);
                 });
             }
             if (dots.length) {
                 dots.forEach(function(dot, index) {
-                    dot.addEventListener('click', function() {
+                    scope.on(dot, 'click', function() {
                         scrollToIndex(index);
+                    });
+                    scope.on(dot, 'focus', function() {
+                        const strip = dot.parentElement;
+                        if (!strip || strip.scrollWidth <= strip.clientWidth) {
+                            return;
+                        }
+                        // Native focus may leave a partly visible button clipped.
+                        // Reveal its full target and ring in this strip only.
+                        const stripRect = strip.getBoundingClientRect();
+                        const dotRect = dot.getBoundingClientRect();
+                        const padding = parseFloat(window.getComputedStyle(strip).scrollPaddingLeft) || 0;
+                        const left = dotRect.left - stripRect.left - padding;
+                        const right = dotRect.right - stripRect.right + padding;
+                        if (left < 0 || right > 0) {
+                            strip.scrollBy({ left: left < 0 ? left : right, behavior: 'auto' });
+                        }
                     });
                 });
             }
 
-            section.addEventListener('keydown', function(event) {
+            scope.on(section, 'keydown', function(event) {
                 if ('ArrowLeft' === event.key) {
                     event.preventDefault();
                     step(-1);
@@ -107,14 +136,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             let syncRaf = null;
-            track.addEventListener('scroll', function () {
+            scope.on(track, 'scroll', function () {
                 if (!dots.length) {
                     return;
                 }
                 if (syncRaf) {
                     window.cancelAnimationFrame(syncRaf);
                 }
-                syncRaf = window.requestAnimationFrame(function () {
+                syncRaf = scope.frame(function () {
                     syncDots();
                     syncRaf = null;
                 });
@@ -159,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     syncToggle();
                     return;
                 }
-                timer = window.setInterval(function () {
+                timer = scope.interval(function () {
                     step(1);
                 }, autoplay);
                 syncToggle();
@@ -175,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (toggle) {
-                toggle.addEventListener('click', function () {
+                scope.on(toggle, 'click', function () {
                     userPaused = !userPaused;
                     if (userPaused) {
                         stop();
@@ -190,31 +219,31 @@ document.addEventListener('DOMContentLoaded', function () {
             // section. Touch users can still swipe and autoplay resumes after
             // the gesture ends. A user pause always wins over these temporary
             // interaction pauses.
-            section.addEventListener('pointerenter', function (event) {
+            scope.on(section, 'pointerenter', function (event) {
                 if (event.pointerType === 'mouse') {
                     pointerHover = true;
                     stop();
                 }
             });
-            section.addEventListener('pointerleave', function (event) {
+            scope.on(section, 'pointerleave', function (event) {
                 if (event.pointerType === 'mouse') {
                     pointerHover = false;
                     resumeWhenAvailable();
                 }
             });
-            section.addEventListener('focusin', function () {
+            scope.on(section, 'focusin', function () {
                 focusWithin = true;
                 stop();
             });
-            section.addEventListener('focusout', function () {
-                window.setTimeout(function () {
+            scope.on(section, 'focusout', function () {
+                scope.timeout(function () {
                     if (!section.contains(document.activeElement)) {
                         focusWithin = false;
                         resumeWhenAvailable();
                     }
                 }, 0);
             });
-            track.addEventListener('touchstart', function () {
+            scope.on(track, 'touchstart', function () {
                 touchActive = true;
                 stop();
             }, { passive: true });
@@ -222,16 +251,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 touchActive = false;
                 resumeWhenAvailable();
             }
-            track.addEventListener('touchend', finishTouch, { passive: true });
-            track.addEventListener('touchcancel', finishTouch, { passive: true });
-            document.addEventListener('visibilitychange', function () {
+            scope.on(track, 'touchend', finishTouch, { passive: true });
+            scope.on(track, 'touchcancel', finishTouch, { passive: true });
+            scope.on(document, 'visibilitychange', function () {
                 if (document.hidden) {
                     stop();
                 } else {
                     resumeWhenAvailable();
                 }
             });
-            motionQuery.addEventListener('change', function (event) {
+            scope.on(motionQuery, 'change', function (event) {
                 reduceMotion = event.matches;
                 stop();
                 syncToggle();
@@ -244,4 +273,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Defer geometry reads until the rail actually scrolls or a reader
             // uses a control; this keeps below-fold carousels out of first paint.
         });
-    });
+    }());
+
+    }
+    if (window.LunaraApp && window.LunaraApp.register) {
+        window.LunaraApp.register('scroll-carousel', mount);
+    } else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
+    } else { mount(); }
+}());

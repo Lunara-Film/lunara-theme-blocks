@@ -215,6 +215,25 @@ function dm_render() {
 }
 dm_catalogue();
 $html = dm_render();
+if ( in_array( '--fixture', $argv ?? array(), true ) ) { echo $html; exit( 0 ); }
+$role_document = new DOMDocument();
+@$role_document->loadHTML( '<?xml encoding="UTF-8">' . $html );
+$role_xpath = new DOMXPath( $role_document );
+$full_role_names = array( 'Theme Echo', 'Counter Program', 'Career Context' );
+foreach ( array( 'lunara-debrief-move-name', 'lunara-debrief-orbit-role' ) as $class ) {
+    $role_names = array();
+    foreach ( $role_xpath->query( '//*[@class="' . $class . '"]' ) as $node ) {
+        if ( 'The Review' !== trim( $node->textContent ) ) { $role_names[] = trim( $node->textContent ); }
+    }
+    dm_assert( $full_role_names === $role_names, $class . ' renders the complete pairing role names in canonical order.' );
+}
+$recent_role_names = array();
+foreach ( $role_xpath->query( '//*[@class="lunara-debrief-recent-role"]' ) as $node ) { $recent_role_names[] = trim( $node->textContent ); }
+dm_assert( $full_role_names === array_values( array_unique( $recent_role_names ) ), 'Recent Debriefs use the same complete role names.' );
+$why_text = $role_xpath->query( '//*[@class="lunara-debrief-why-body"]' )->item( 0 )->textContent;
+foreach ( $full_role_names as $role_name ) {
+    dm_assert( false !== strpos( $why_text, $role_name ), 'Default Method explanation names ' . $role_name . '.' );
+}
 preg_match_all( '/data-lunara-site-studio-section="([a-z-]+)"/', $html, $markers );
 dm_assert( array( 'hero', 'moves', 'why', 'specimen', 'recent', 'next' ) === $markers[1], 'Default render shows every public section with content; the desk seat waits for page content.' );
 dm_assert( false !== strpos( $html, '<h1 class="lunara-debrief-title">Lunara Debrief</h1>' ), 'An empty heading setting falls back to the page title.' );

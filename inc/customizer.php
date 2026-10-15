@@ -590,14 +590,6 @@ function lunara_customize_register( $wp_customize ) {
             'attrs'    => array( 'min' => 12, 'max' => 96, 'step' => 1 ),
         ),
         array(
-            'setting'  => 'lunara_surface_radius',
-            'default'  => 28,
-            'label'    => __( 'Card Corner Radius (px)', 'lunara-film' ),
-            'type'     => 'range',
-            'sanitize' => 'absint',
-            'attrs'    => array( 'min' => 0, 'max' => 48, 'step' => 1 ),
-        ),
-        array(
             'setting'  => 'lunara_body_font_size',
             'default'  => 17,
             'label'    => __( 'Body Font Size (px)', 'lunara-film' ),
@@ -2843,7 +2835,7 @@ function lunara_output_runtime_customizer_css() {
     $border_color     = sanitize_hex_color( get_theme_mod( 'lunara_border_color', '#c9a961' ) ) ?: '#c9a961';
     $shell_max        = max( 960, min( 1800, absint( get_theme_mod( 'lunara_shell_content_width', 1360 ) ) ) );
     $shell_pad        = max( 12, min( 96, absint( get_theme_mod( 'lunara_shell_side_padding', 28 ) ) ) );
-    $surface_radius   = max( 0, min( 48, absint( get_theme_mod( 'lunara_surface_radius', 28 ) ) ) );
+    $surface_radius = 0; // Saved radius is retired; public geometry is square.
     $body_size        = max( 14, min( 24, absint( get_theme_mod( 'lunara_body_font_size', 17 ) ) ) );
     $body_line_height = max( 1.3, min( 2.2, (float) get_theme_mod( 'lunara_body_line_height', 1.7 ) ) );
     $section_title    = max( 24, min( 64, absint( get_theme_mod( 'lunara_section_title_size', 34 ) ) ) );
@@ -2934,18 +2926,18 @@ function lunara_output_runtime_customizer_css() {
     $css .= '--lunara-home-dispatch-rail-thumb-ratio:' . $dispatch_rail_thumb_ratio . ';';
     $css .= '}';
 
-    $css .= 'body{background-color:var(--lunara-bg-primary)!important;background-image:radial-gradient(circle at top left,var(--lunara-glow-gold),transparent 28%),radial-gradient(circle at 80% 18%,var(--lunara-glow-blue),transparent 26%),linear-gradient(180deg,var(--lunara-bg-primary) 0%,var(--lunara-bg-deep) 100%)!important;background-attachment:fixed;color:var(--lunara-text)!important;font-size:var(--lunara-body-size);line-height:var(--lunara-body-line-height);}';
+    $css .= 'body{background-color:var(--lunara-bg-primary)!important;background-image:none!important;color:var(--lunara-text)!important;font-size:var(--lunara-body-size);line-height:var(--lunara-body-line-height);}';
     $css .= '.site-content,.ct-content,.ct-container-full,.ct-page-title{background:transparent!important;}';
     $css .= '.lunara-section,.lunara-archive-page > .lunara-home-section,.lunara-editorial-single-page > .lunara-home-section,.lunara-oscars-portal > .lunara-home-section{max-width:var(--lunara-shell-max);margin-left:auto;margin-right:auto;padding-left:var(--lunara-shell-pad);padding-right:var(--lunara-shell-pad);}';
     $css .= '.lunara-home-section-title,.lunara-section-title,.lunara-home-pulse-title,.lunara-home-pulse-feature-heading,.lunara-poster-card-title,.lunara-dispatch-lead-title,.lunara-dispatch-rail-title,.lunara-home-winner-title,.lunara-home-pulse-note-title,.lunara-review-grid-title,.lunara-oscar-spotlight-text-panel h3{font-size:var(--lunara-section-title-size);}';
     $css .= '.lunara-home-hero-title{font-size:var(--lunara-hero-title-size);}';
     $css .= '.lunara-home-hero-copy{font-size:var(--lunara-hero-copy-size);line-height:var(--lunara-body-line-height);}';
-    $css .= '.lunara-home-hero-kicker,.lunara-home-section-kicker,.lunara-poster-card-kicker,.lunara-home-pulse-kicker,.lunara-dispatch-type,.lunara-home-pulse-note-kicker{font-size:var(--lunara-kicker-size);letter-spacing:var(--lunara-kicker-track);}';
+    $css .= '.lunara-home-hero-kicker,.lunara-home-section-kicker,.lunara-poster-card-kicker,.lunara-home-pulse-kicker,.lunara-dispatch-type,.lunara-home-pulse-note-kicker{font-size:max(.8125rem,var(--lunara-kicker-size));letter-spacing:0;}';
     $css .= '.lunara-home-section-summary,.lunara-poster-card-excerpt,.lunara-dispatch-lead-excerpt,.lunara-dispatch-rail-excerpt,.lunara-home-pulse-summary,.lunara-home-pulse-feature-copy,.lunara-home-pulse-note-copy,.lunara-oscar-spotlight-copy,.lunara-review-grid-meta,.lunara-poster-card-meta{font-size:var(--lunara-body-size);line-height:var(--lunara-body-line-height);}';
-    $css .= '.lunara-home-pulse-card,.lunara-poster-card,.lunara-dispatch-lead,.lunara-dispatch-rail-card,.lunara-home-winner-card,.lunara-home-pulse-note,.lunara-review-grid-card,.lunara-oscar-spotlight-pill,.lunara-home-pulse-feature-card{border-color:var(--lunara-border);border-radius:var(--lunara-surface-radius);}';
-    $css .= '.lunara-dispatch-lead,.lunara-dispatch-rail-card,.lunara-home-winner-card,.lunara-home-pulse-note,.lunara-review-grid-card,.lunara-home-pulse-feature-card{background:' . lunara_hex_to_rgba( $bg_card, 0.88 ) . ';}';
-    $css .= '.lunara-home-pulse-card{background:linear-gradient(180deg,' . lunara_hex_to_rgba( $bg_card, 0.96 ) . ',' . lunara_hex_to_rgba( $bg_primary, 0.92 ) . ');}';
-    $css .= '.lunara-home-pulse-card-top,.lunara-oscar-spotlight-layout,.lunara-home-pulse-feature-card{background:linear-gradient(135deg,' . lunara_hex_to_rgba( $bg_secondary, 0.96 ) . ',' . lunara_hex_to_rgba( $bg_primary, 0.98 ) . ');}';
+    $css .= '.lunara-home-pulse-card,.lunara-poster-card,.lunara-dispatch-lead,.lunara-dispatch-rail-card,.lunara-home-winner-card,.lunara-home-pulse-note,.lunara-review-grid-card,.lunara-oscar-spotlight-pill,.lunara-home-pulse-feature-card{border:0;border-radius:0;box-shadow:none;}';
+    $css .= '.lunara-dispatch-lead,.lunara-dispatch-rail-card,.lunara-home-winner-card,.lunara-home-pulse-note,.lunara-review-grid-card,.lunara-home-pulse-feature-card{background:transparent;}';
+    $css .= '.lunara-home-pulse-card{background:transparent;}';
+    $css .= '.lunara-home-pulse-card-top,.lunara-oscar-spotlight-layout,.lunara-home-pulse-feature-card{background:transparent;}';
 
     if ( '' !== $body_font ) {
         $css .= 'body,.lunara-front-page,.lunara-archive-page{font-family:' . $body_font . ';}';
@@ -2962,12 +2954,12 @@ function lunara_output_runtime_customizer_css() {
     $css .= '.lunara-nav .lunara-nav-list,.lunara-nav .menu{column-gap:var(--lunara-header-nav-gap);}';
     $css .= '.lunara-nav .lunara-nav-list > li > a,.lunara-nav .menu > li > a,.lunara-header button{color:' . $header_link . ';font-size:var(--lunara-header-nav-size);letter-spacing:var(--lunara-header-nav-track);text-transform:uppercase;}';
     $css .= '.lunara-nav .lunara-nav-list > li > a:hover,.lunara-nav .menu > li > a:hover,.lunara-header button:hover{color:' . $header_hover . ';}';
-    $css .= '.ct-header [data-row="middle"]{background:radial-gradient(circle at top center,rgba(201,169,97,.12),transparent 42%),linear-gradient(180deg,rgba(10,22,36,.94),rgba(4,11,20,.98));border-bottom:1px solid rgba(201,169,97,.18);box-shadow:0 14px 34px rgba(0,0,0,.18);backdrop-filter:blur(18px);}';
+    $css .= '.ct-header [data-row="middle"]{background:var(--lunara-bg-primary);border-bottom:1px solid rgba(201,169,97,.18);box-shadow:none;}';
     $css .= '.ct-header .site-branding,.ct-header .site-logo-container{background:transparent!important;border:0!important;box-shadow:none!important;}';
     $css .= '.ct-header .site-logo-container img{filter:drop-shadow(0 10px 20px rgba(0,0,0,.2));}';
     $css .= '.ct-header .ct-menu-link,.ct-header .ct-header-trigger,.ct-header .ct-toggle,.ct-header [data-id="search"] .ct-label,.ct-header [data-id="search"] .ct-icon{color:' . $accent_soft . '!important;}';
     $css .= '.ct-header .ct-menu-link:hover,.ct-header .ct-header-trigger:hover,.ct-header .ct-toggle:hover,.ct-header [data-id="search"]:hover .ct-label,.ct-header [data-id="search"]:hover .ct-icon{color:' . $text_color . '!important;}';
-    $css .= '.lunara-footer,footer.site-footer{background:linear-gradient(180deg,' . lunara_hex_to_rgba( $bg_secondary, 0.92 ) . ',' . lunara_hex_to_rgba( $bg_primary, 0.98 ) . ');border-top:1px solid ' . $border_alpha . ';}';
+    $css .= '.lunara-footer,footer.site-footer{background:' . $bg_primary . ';border-top:1px solid ' . $border_alpha . ';}';
     $css .= '.lunara-footer .lunara-container,footer.site-footer .lunara-container{max-width:var(--lunara-shell-max);padding-left:var(--lunara-shell-pad);padding-right:var(--lunara-shell-pad);}';
     $css .= '.lunara-footer a,footer.site-footer a{color:' . $text_color . ';}';
     $css .= '.lunara-footer a:hover,footer.site-footer a:hover{color:' . $accent_soft . ';}';
@@ -3036,7 +3028,7 @@ function lunara_output_runtime_customizer_css() {
     $dropdown_width      = absint( get_theme_mod( 'lunara_dropdown_width', 220 ) );
     $dropdown_pad        = absint( get_theme_mod( 'lunara_dropdown_padding', 10 ) );
 
-    $css .= '.lunara-nav .sub-menu{background:' . $dropdown_bg . ';border:1px solid ' . $dropdown_border . ';border-radius:8px;min-width:' . $dropdown_width . 'px;padding:' . $dropdown_pad . 'px 0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}';
+    $css .= '.lunara-nav .sub-menu{background:' . $dropdown_bg . ';border:1px solid ' . $dropdown_border . ';border-radius:0;min-width:' . $dropdown_width . 'px;padding:' . $dropdown_pad . 'px 0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}';
     $css .= '.lunara-nav .sub-menu li a{color:' . $dropdown_text . ';padding:8px 18px;display:block;font-size:0.9em;}';
     $css .= '.lunara-nav .sub-menu li a:hover{color:' . $dropdown_hover_text . ';background:' . $dropdown_hover_bg . ';}';
 

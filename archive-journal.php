@@ -134,8 +134,8 @@ $journal_section_markup = array();
 ob_start();
 ?>
 <header class="lunara-archive-hero lunara-journal-archive-hero lunara-journal-archive-slot-hero" data-lunara-site-studio-section="hero">
-	<p class="lunara-archive-hero-kicker"><?php echo esc_html( $kicker ); ?></p>
 	<h1 class="lunara-archive-hero-title"><?php echo esc_html( $title ); ?></h1>
+	<?php if ( '' !== trim( (string) $kicker ) && ! in_array( $kicker, array( __( 'Journal', 'lunara-film' ), __( 'The Lunara Journal', 'lunara-film' ), $title ), true ) ) : ?><p class="lunara-archive-hero-context"><?php echo esc_html( $kicker ); ?></p><?php endif; ?>
 	<?php if ( '' !== trim( (string) $copy ) ) : ?><p class="lunara-archive-hero-copy"><?php echo esc_html( $copy ); ?></p><?php endif; ?>
 </header>
 <?php
@@ -158,8 +158,8 @@ if ( ! empty( $journal_filter_groups ) ) :
 		<?php foreach ( $journal_filter_groups as $group_index => $filter_group ) : ?>
 			<nav class="lunara-journal-archive-filters" aria-label="<?php echo esc_attr( sprintf( __( 'Filter Journal by %s', 'lunara-film' ), $filter_group['label'] ) ); ?>">
 				<span class="lunara-journal-filter-label"><?php echo esc_html( $filter_group['label'] ); ?></span>
-				<?php if ( 0 === $group_index ) : ?><a class="lunara-journal-filter-pill <?php echo is_post_type_archive( 'journal' ) ? 'is-active' : ''; ?>" href="<?php echo esc_url( get_post_type_archive_link( 'journal' ) ); ?>"><?php echo esc_html( $journal_labels['filter_all'] ); ?></a><?php endif; ?>
-				<?php foreach ( $filter_group['terms'] as $term ) : ?><?php $is_active = $current_term instanceof WP_Term && $current_term->taxonomy === $term->taxonomy && $current_term->term_id === $term->term_id; ?><a class="lunara-journal-filter-pill <?php echo $is_active ? 'is-active' : ''; ?>" href="<?php echo esc_url( get_term_link( $term ) ); ?>"><?php echo esc_html( $term->name ); ?> <span class="lunara-journal-filter-count">(<?php echo intval( $term->count ); ?>)</span></a><?php endforeach; ?>
+				<?php if ( 0 === $group_index ) : ?><a class="lunara-journal-filter-pill <?php echo is_post_type_archive( 'journal' ) ? 'is-active' : ''; ?>" href="<?php echo esc_url( get_post_type_archive_link( 'journal' ) ); ?>"<?php echo is_post_type_archive( 'journal' ) ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $journal_labels['filter_all'] ); ?></a><?php endif; ?>
+				<?php foreach ( $filter_group['terms'] as $term ) : ?><?php $is_active = $current_term instanceof WP_Term && $current_term->taxonomy === $term->taxonomy && $current_term->term_id === $term->term_id; ?><a class="lunara-journal-filter-pill <?php echo $is_active ? 'is-active' : ''; ?>" href="<?php echo esc_url( get_term_link( $term ) ); ?>"<?php echo $is_active ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $term->name ); ?> <span class="lunara-journal-filter-count">(<?php echo intval( $term->count ); ?>)</span></a><?php endforeach; ?>
 			</nav>
 		<?php endforeach; ?>
 	</div>
@@ -171,8 +171,11 @@ ob_start();
 if ( ! empty( $journal_archive_posts ) && ! empty( $sort_options ) ) :
 	?>
 	<div class="lunara-editorial-archive-toolbar lunara-journal-archive-toolbar lunara-journal-archive-slot-toolbar" data-lunara-site-studio-section="toolbar">
-		<div class="lunara-home-section-head lunara-editorial-archive-toolbar-head"><div><p class="lunara-home-section-kicker"><?php echo esc_html( $journal_labels['toolbar_kicker'] ); ?></p><h2 class="lunara-section-title"><?php echo esc_html( $journal_labels['toolbar_title'] ); ?></h2><?php if ( '' !== trim( (string) $journal_config['supporting_copy'] ) ) : ?><p class="lunara-home-section-summary"><?php echo esc_html( $journal_config['supporting_copy'] ); ?></p><?php endif; ?></div></div>
-		<div class="lunara-archive-sort" aria-label="<?php esc_attr_e( 'Sort journal archive', 'lunara-film' ); ?>"><?php foreach ( $sort_options as $sort_key => $sort_label ) : ?><?php $is_active = $sort_key === $current_sort; $sort_url = 'date_desc' === $sort_key ? $sort_base_url : add_query_arg( 'sort', rawurlencode( $sort_key ), $sort_base_url ); ?><a class="lunara-archive-sort-link <?php echo $is_active ? 'is-active' : ''; ?>" href="<?php echo esc_url( $sort_url ); ?>"<?php echo $is_active ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $sort_label ); ?></a><?php endforeach; ?></div>
+		<?php foreach ( array( 'toolbar_title' => 'Latest files from the desk', 'toolbar_kicker' => 'Desk Order' ) as $label_key => $legacy_label ) : ?>
+			<?php if ( '' !== trim( (string) $journal_labels[ $label_key ] ) && $legacy_label !== $journal_labels[ $label_key ] ) : ?><p class="lunara-home-section-summary"><?php echo esc_html( $journal_labels[ $label_key ] ); ?></p><?php endif; ?>
+		<?php endforeach; ?>
+		<?php if ( '' !== trim( (string) $journal_config['supporting_copy'] ) ) : ?><p class="lunara-home-section-summary"><?php echo esc_html( $journal_config['supporting_copy'] ); ?></p><?php endif; ?>
+		<nav class="lunara-archive-sort" aria-label="<?php esc_attr_e( 'Sort journal archive', 'lunara-film' ); ?>"><?php foreach ( $sort_options as $sort_key => $sort_label ) : ?><?php $is_active = $sort_key === $current_sort; $sort_url = 'date_desc' === $sort_key ? $sort_base_url : add_query_arg( 'sort', rawurlencode( $sort_key ), $sort_base_url ); ?><a class="lunara-archive-sort-link <?php echo $is_active ? 'is-active' : ''; ?>" href="<?php echo esc_url( $sort_url ); ?>"<?php echo $is_active ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $sort_label ); ?></a><?php endforeach; ?></nav>
 	</div>
 	<?php
 endif;
@@ -180,8 +183,9 @@ $journal_section_markup['toolbar'] = ob_get_clean();
 
 ob_start();
 if ( ! empty( $journal_archive_posts ) ) :
+	$editorial_edition = count( $journal_archive_posts ) >= 3 && lunara_journal_archive_card_is_visual_lead( 1 );
 	?>
-	<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid" data-lunara-site-studio-section="grid">
+	<section class="lunara-journal-archive-grid lunara-review-grid lunara-review-archive-uniform lunara-journal-archive-slot-grid<?php echo $editorial_edition ? ' is-editorial-edition' : ''; ?>" data-lunara-site-studio-section="grid">
 		<?php
 		$journal_card_index = 0;
 		foreach ( $journal_archive_posts as $journal_archive_post ) :
@@ -201,7 +205,8 @@ if ( ! empty( $journal_archive_posts ) ) :
 				if ( '' === $media_alt ) {
 					$media_alt = get_the_title( $pid );
 				}
-				$media_attributes = lunara_journal_archive_card_image_attributes( $is_visual_lead, $media_alt );
+				$media_slot       = $editorial_edition && $journal_card_index <= 3 ? ( $is_visual_lead ? 'lead' : 'supporting' ) : ( $editorial_edition ? 'index' : 'regular' );
+				$media_attributes = lunara_journal_archive_card_image_attributes( $is_visual_lead, $media_alt, $media_slot );
 				$media_markup     = lunara_journal_archive_card_image_markup( $featured_id, $media_attributes );
 			}
 			$has_media = '' !== trim( (string) $media_markup );
@@ -215,7 +220,9 @@ if ( ! empty( $journal_archive_posts ) ) :
 							?>
 						</div>
 					<?php endif; ?>
-					<div class="lunara-review-grid-copy"><p class="lunara-review-grid-kicker"><?php echo esc_html( $entry_kicker ); ?></p><div class="lunara-journal-card-labels"><?php if ( '' !== trim( (string) $entry_type ) ) : ?><p class="lunara-dispatch-type lunara-journal-archive-card-type"><?php echo esc_html( $entry_type ); ?></p><?php endif; ?><?php if ( function_exists( 'lunara_render_journal_card_provenance' ) ) { lunara_render_journal_card_provenance( $pid, 'archive' ); } ?><?php if ( function_exists( 'lunara_render_trailer_card_badge' ) ) { echo lunara_render_trailer_card_badge( $pid, 'journal-card' ); } ?></div><h3 class="lunara-review-grid-title"><?php the_title(); ?></h3><?php if ( $entry_excerpt ) : ?><p class="lunara-review-grid-excerpt"><?php echo esc_html( $entry_excerpt ); ?></p><?php endif; ?><div class="lunara-review-grid-footer lunara-journal-archive-card-footer"><span class="lunara-review-grid-meta"><?php echo esc_html( get_the_date( 'F j, Y' ) ); ?></span><?php if ( '' !== $updated_label ) : ?><span class="lunara-review-grid-updated"><?php echo esc_html( $updated_label ); ?></span><?php endif; ?><span class="lunara-journal-archive-card-cta"><?php echo esc_html( $journal_labels['card_cta'] ); ?></span></div></div>
+					<div class="lunara-review-grid-copy"><h2 class="lunara-review-grid-title"><?php the_title(); ?></h2>
+						<?php if ( '' !== trim( (string) $entry_kicker ) && ! in_array( $entry_kicker, array( 'Lead file', 'From the desk' ), true ) ) : ?><p class="lunara-journal-card-context"><?php echo esc_html( $entry_kicker ); ?></p><?php endif; ?>
+						<div class="lunara-journal-card-labels"><?php if ( '' !== trim( (string) $entry_type ) && ! in_array( $entry_type, array( 'Journal', 'Dispatch' ), true ) ) : ?><p class="lunara-dispatch-type lunara-journal-archive-card-type"><?php echo esc_html( $entry_type ); ?></p><?php endif; ?><?php if ( function_exists( 'lunara_render_journal_card_provenance' ) ) { lunara_render_journal_card_provenance( $pid, 'archive' ); } ?><?php if ( function_exists( 'lunara_render_trailer_card_badge' ) ) { echo lunara_render_trailer_card_badge( $pid, 'journal-card' ); } ?></div><?php if ( $entry_excerpt ) : ?><p class="lunara-review-grid-excerpt"><?php echo esc_html( $entry_excerpt ); ?></p><?php endif; ?><div class="lunara-review-grid-footer lunara-journal-archive-card-footer"><span class="lunara-review-grid-meta"><?php echo esc_html( get_the_date( 'F j, Y' ) ); ?></span><?php if ( '' !== $updated_label ) : ?><span class="lunara-review-grid-updated"><?php echo esc_html( $updated_label ); ?></span><?php endif; ?><span class="lunara-journal-archive-card-cta"><?php echo esc_html( $journal_labels['card_cta'] ); ?></span></div></div>
 				</a>
 			</article>
 		<?php endforeach; wp_reset_postdata(); ?>
@@ -229,13 +236,13 @@ $journal_section_markup['grid'] = ob_get_clean();
 ob_start();
 if ( ! empty( $journal_retention_cards ) ) :
 	?>
-	<div class="lunara-journal-archive-retention-head"><p class="lunara-home-section-kicker"><?php echo esc_html( $journal_labels['retention_kicker'] ); ?></p><h2 class="lunara-section-title"><?php echo esc_html( $journal_labels['retention_title'] ); ?></h2></div>
+	<div class="lunara-journal-archive-retention-head"><h2 class="lunara-section-title"><?php echo esc_html( 'Keep the file moving' === $journal_labels['retention_title'] ? __( 'Continue reading', 'lunara-film' ) : $journal_labels['retention_title'] ); ?></h2><?php if ( '' !== trim( (string) $journal_labels['retention_kicker'] ) && 'Desk Channels' !== $journal_labels['retention_kicker'] ) : ?><p class="lunara-home-section-summary"><?php echo esc_html( $journal_labels['retention_kicker'] ); ?></p><?php endif; ?></div>
 	<div class="lunara-journal-archive-retention-grid">
 				<?php foreach ( $journal_retention_cards as $retention_card ) : $retention_url = $resolve_retention_url( $retention_card ); $retention_has_media = '' !== $retention_card['media_markup']; ?>
 					<article class="lunara-journal-archive-retention-card<?php echo $retention_has_media ? ' has-media' : ''; ?>">
 						<a class="lunara-journal-archive-retention-card-link" href="<?php echo esc_url( $retention_url ); ?>">
 							<?php if ( $retention_has_media ) : ?><span class="lunara-journal-archive-retention-media" style="--lunara-retention-focus-x:<?php echo esc_attr( $retention_card['focal_x'] ); ?>%;--lunara-retention-focus-y:<?php echo esc_attr( $retention_card['focal_y'] ); ?>%"><?php echo $retention_card['media_markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Resolved native attachment markup. ?></span><?php endif; ?>
-							<span class="lunara-journal-archive-retention-kicker"><?php echo esc_html( $retention_card['label'] ); ?></span><strong><?php echo esc_html( $retention_card['title'] ); ?></strong><span><?php echo esc_html( $retention_card['copy'] ); ?></span>
+							<h3 class="lunara-journal-archive-retention-title"><?php echo esc_html( $retention_card['title'] ); ?></h3><?php if ( '' !== $retention_card['label'] ) : ?><span class="lunara-journal-archive-retention-kicker"><?php echo esc_html( $retention_card['label'] ); ?></span><?php endif; ?><span><?php echo esc_html( $retention_card['copy'] ); ?></span>
 						</a>
 						<?php if ( $retention_has_media && ( $retention_card['image_credit'] || $retention_card['image_source'] ) ) : ?><small class="lunara-journal-archive-retention-provenance"><span><?php echo esc_html( $retention_card['image_credit'] ); ?></span><?php if ( $retention_card['image_credit'] && $retention_card['image_source'] ) : ?><span aria-hidden="true"> · </span><?php endif; ?><?php if ( $retention_card['image_source'] ) : ?><a href="<?php echo esc_url( $retention_card['image_source_url'] ); ?>" rel="noopener noreferrer"><?php echo esc_html( $retention_card['image_source'] ); ?></a><?php endif; ?></small><?php endif; ?>
 					</article>

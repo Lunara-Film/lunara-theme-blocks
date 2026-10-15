@@ -69,7 +69,12 @@ body.home .lunara-cinematic-hero-carousel {
 
 /* Oscars feature poster: fill the reserved frame. */
 .lunara-oscars-portal-feature-poster,
-.lunara-oscars-portal-feature-poster img,
+.lunara-oscars-portal-feature-poster img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+}
 .lunara-oscars-portal-feature-poster .aat-entity-poster {
     width: 100% !important;
     height: 100% !important;

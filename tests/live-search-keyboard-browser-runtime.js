@@ -1,3 +1,4 @@
+const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{execFileSync}=require('node:child_process'),{chromium}=require('playwright-core');
 const root=path.resolve(__dirname,'..');
@@ -34,12 +35,13 @@ async function waitClosed(page){await page.waitForFunction(()=>document.querySel
    const page=await context.newPage();page.setDefaultTimeout(6000);await install(page);
    const opener=page.locator('.lunara-header-search'),second=page.locator('#second-trigger'),input=page.locator('#lunara-search-overlay-input'),close=page.locator('.lunara-search-overlay-close'),overlay=page.locator('#lunara-search-overlay');
    await opener.focus();await page.keyboard.press('Enter');await waitOpen(page);
+   await assertSquareSurfaces(page, 'Open and focused search');
    check(await active(input),'Opening focuses the real Search input');
    const lastSuggestion=page.locator('.lunara-search-suggestion').last();
    await page.keyboard.press('Shift+Tab');check(await active(lastSuggestion),'Shift+Tab wraps to the current final suggestion');
    await page.keyboard.press('Tab');check(await active(input),'Tab wraps from the final suggestion to input');
    await page.keyboard.press('Tab');check(await active(close),'Ordinary forward Tab order stays native');
-   await input.fill('Lunara');await page.waitForSelector('.lunara-search-hit--more');
+   await input.fill('Lunara');await page.waitForSelector('.lunara-search-hit--more'); await assertSquareSurfaces(page, 'Search results');
    check(await input.inputValue()==='Lunara','Typing remains unchanged while results refresh');
    await page.locator('.lunara-search-hit--more').focus();await page.keyboard.press('Tab');check(await active(input),'New result and More links participate in forward containment');
    await page.keyboard.press('Shift+Tab');check(await active(page.locator('.lunara-search-hit--more')),'Current dynamic More link is the reverse boundary');
@@ -72,7 +74,13 @@ async function waitClosed(page){await page.waitForFunction(()=>document.querySel
    await input.evaluate(el=>{el.value='error';el.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForSelector('.lunara-search-overlay-empty');
    await page.keyboard.press('Shift+Tab');check(await active(close),'A removed focused result recovers inside the current dialog');
    await page.evaluate(()=>document.querySelector('#second-trigger').remove());await page.keyboard.press('Escape');await waitClosed(page);check(!(await overlay.evaluate(el=>el.contains(document.activeElement))),'A removed trigger never leaves focus in the closed dialog');
-   await opener.click();await waitOpen(page);await input.fill('single');await page.waitForSelector('.lunara-search-hit--more');await page.keyboard.press('ArrowDown');check(await page.locator('.lunara-search-hit').first().evaluate(el=>el.classList.contains('is-active')),'Input arrow-key selection is preserved');await page.keyboard.press('Enter');await page.waitForURL('**/reviews/first/');check(true,'Enter still opens the selected result');
+   await opener.click();await waitOpen(page);await input.fill('pending');
+   await page.evaluate(()=>window.dispatchEvent(new CustomEvent('lunara:page:teardown')));
+   check(await overlay.evaluate(el=>el.hidden&&el.inert),'Page teardown closes the persistent Search dialog immediately');
+   check(await input.inputValue()==='','Page teardown clears the previous query');
+   await page.evaluate(()=>{window.LUNARA_LIVE_SEARCH.suggestions=['New route'];window.dispatchEvent(new CustomEvent('lunara:page:mount'));});
+   await opener.click();await waitOpen(page);check(await page.locator('.lunara-search-suggestion').textContent()==='New route','The persistent dialog uses the incoming route configuration');
+   await input.fill('single');await page.waitForSelector('.lunara-search-hit--more');await page.keyboard.press('ArrowDown');check(await page.locator('.lunara-search-hit').first().evaluate(el=>el.classList.contains('is-active')),'Input arrow-key selection is preserved');await page.keyboard.press('Enter');await page.waitForURL('**/reviews/first/');check(true,'Enter still opens the selected result');
    await install(page);await page.locator('.lunara-header-search').click();await waitOpen(page);await page.locator('#lunara-search-overlay-input').fill('fresh');await page.keyboard.press('Enter');await page.waitForURL('**/search/?q=fresh');check(true,'Unselected Enter retains native form search');
    await context.close();
   }

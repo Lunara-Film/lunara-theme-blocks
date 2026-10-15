@@ -20,6 +20,7 @@ $lunara_inc = get_stylesheet_directory() . '/inc/';
 require_once $lunara_inc . 'setup.php';
 require_once $lunara_inc . 'surface-pass.php';
 require_once $lunara_inc . 'helpers.php';
+require_once $lunara_inc . 'navigation-runtime.php'; // Audited public assets and page lifecycle.
 require_once $lunara_inc . 'analytics-off.php'; // 3.2.97: dormant Google Analytics outputs stay off.
 require_once $lunara_inc . 'fonts.php';         // 3.2.101: the theme is the only front-end source of @font-face.
 
@@ -69,6 +70,7 @@ require_once $lunara_inc . 'oscars-hero-preload.php'; // 3.2.102: hero backdrop 
 // Layer 7 — Frontend output (footer, nav, search, content filters, animations).
 require_once $lunara_inc . 'blocks.php';
 require_once $lunara_inc . 'block-migration.php';
+require_once $lunara_inc . 'public-geometry.php'; // Publication-wide block and saved-content geometry.
 require_once $lunara_inc . 'review-archive-critical.php';
 require_once $lunara_inc . 'journal-archive-critical.php';
 require_once $lunara_inc . 'oscars-portal-critical.php';
