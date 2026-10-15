@@ -151,7 +151,9 @@
                 });
             }, { passive: true });
 
-            const autoplay = parseInt(section.getAttribute('data-lunara-carousel-autoplay') || '0', 10);
+            let autoplay = parseInt(section.getAttribute('data-lunara-carousel-autoplay') || '0', 10);
+		var sharedPace = document.querySelector('meta[name="lunara-slider-interval"]');
+		if (sharedPace && autoplay > 0) { autoplay = Math.max(8000, Math.min(30000, Number(sharedPace.content) || 12000)); }
             const allowMobileAutoplay = !!toggle;
             let timer = null;
             let userPaused = false;

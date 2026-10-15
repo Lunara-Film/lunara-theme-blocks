@@ -182,11 +182,11 @@
   }
   if (previewFrame) { previewFrame.addEventListener('load',syncFraming); if (window.MutationObserver) { new MutationObserver(syncFraming).observe(previewFrame,{attributes:true,attributeFilter:['width','height']}); } }
   var interval = root.querySelector('[data-oscars-interval]');
-  interval.addEventListener('change',function () { var value = Math.round(Number(interval.value)*1000); if (enabled() && integer(value,0,12000)) { context.getState().presentation.autoplay_interval = value; context.changed(); } else { interval.value = String(context.getState().presentation.autoplay_interval/1000); } });
+  interval.addEventListener('change',function () { var value = interval.checked ? 12000 : 0; if (enabled() && integer(value,0,12000)) { context.getState().presentation.autoplay_interval = value; context.changed(); } else { interval.checked = context.getState().presentation.autoplay_interval > 0; } });
   root.addEventListener('change',function (event) { if (event.target.matches('[data-field-path="presentation.count"]')) { Promise.resolve().then(function () { if (enabled()) { render(); } }); } });
   function render() {
    invalidate(); metadata = {}; images = {}; matches = []; lineup = []; loaded = false; loading = false; failed = false;
-   interval.value = String(context.getState().presentation.autoplay_interval/1000); draw(); fetchItems();
+   interval.checked = context.getState().presentation.autoplay_interval > 0; draw(); fetchItems();
   }
   root.querySelector('[data-oscars-search-button]').addEventListener('click',fetchItems);
   search.addEventListener('keydown',function (event) { if (event.key === 'Enter') { event.preventDefault(); fetchItems(); } });

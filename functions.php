@@ -3795,7 +3795,7 @@ function lunara_carousel_shortcode( $atts ) {
     
     ob_start();
     ?>
-    <div class="lunara-carousel" id="lunara-carousel-<?php echo esc_attr( $set_slug ); ?>" data-autoplay="5000">
+    <div class="lunara-carousel" id="lunara-carousel-<?php echo esc_attr( $set_slug ); ?>" data-autoplay="<?php echo function_exists( 'lunara_slider_interval' ) ? lunara_slider_interval() : 12000; ?>">
         <?php foreach ( $images as $index => $image ) : 
             $img_url = wp_get_attachment_image_url( $image->ID, 'full' );
             $title = $image->post_title;
@@ -13084,6 +13084,7 @@ if ( ! function_exists( 'lunara_render_oscar_picks_carousel' ) ) {
 		$args  = lunara_repair_mojibake_args( wp_parse_args( $args, $defaults ), array( 'kicker', 'heading', 'summary', 'cta_text' ) );
 		$args['count']    = max( 1, min( 16, absint( $args['count'] ) ) );
 		$args['autoplay'] = max( 0, min( 12000, absint( $args['autoplay'] ) ) );
+		if ( function_exists( 'lunara_slider_interval' ) ) { $args['autoplay'] = lunara_slider_interval( $args['autoplay'] ); }
 		$args['ceremony_year'] = max( 1929, min( 2100, absint( $args['ceremony_year'] ) ) );
 		$oscar_picks_density = sanitize_key( (string) $args['density'] );
 
@@ -13639,6 +13640,7 @@ if ( ! function_exists( 'lunara_render_oscar_facts_carousel' ) ) {
 		if ( 'manual' === $selection['mode'] && empty( $selection['ids'] ) ) { return ''; }
 		$query = lunara_get_oscar_facts( array( 'posts_per_page' => max( 1, min( 16, (int) $args['count'] ) ), 'orderby' => 'legacy' === $selection['mode'] ? 'visual_priority' : 'date', 'ordered_ids' => $selection['ids'] ) );
 		$autoplay = $query->post_count > 1 ? max( 0, min( 12000, (int) get_theme_mod( 'lunara_home_oscar_facts_autoplay_interval', 6500 ) ) ) : 0;
+		if ( function_exists( 'lunara_slider_interval' ) ) { $autoplay = lunara_slider_interval( $autoplay ); }
 
 		if ( ! $query->have_posts() ) {
 			return '';
@@ -15553,7 +15555,7 @@ if ( ! function_exists( 'lunara_render_cinematic_hero_carousel' ) ) {
 				? lunara_render_cinematic_hero( $attrs )
 				: '';
 		} else {
-			$interval = (int) apply_filters( 'lunara_hero_autoplay_interval', 6500 );
+			$interval = function_exists( 'lunara_slider_interval' ) ? lunara_slider_interval( apply_filters( 'lunara_hero_autoplay_interval', 12000 ) ) : 12000;
 			$is_static = count( $slides ) < 2;
 			$hero_classes = 'lunara-home-hero lunara-home-slot-hero lunara-cinematic-hero lunara-cinematic-hero-carousel splide';
 			if ( $is_static ) { $hero_classes .= ' is-hero-static'; }

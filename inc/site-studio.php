@@ -256,7 +256,9 @@ if ( ! function_exists( 'lunara_site_studio_render_control' ) ) {
 		$legacy = ! empty( $definition['preserve_legacy_read'] ) ? ' data-preserve-legacy-read="true"' : '';
 		$legacy_text = $legacy && isset( $definition['max_length'] ) ? $legacy . ' data-text-limit="' . esc_attr( $definition['max_length'] ) . '"' : $legacy;
 		echo '<div class="lunara-site-studio-field"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label>';
-		if ( 'select' === $definition['type'] ) {
+		if ( 'shared-autoplay' === $definition['type'] ) {
+			echo '<input type="checkbox" id="' . esc_attr( $id ) . '" data-shared-autoplay data-field-path="' . esc_attr( $path ) . '" data-value-type="integer" data-error-key="' . esc_attr( $path ) . '" aria-describedby="' . esc_attr( $help_id . ' ' . $error_id ) . '"' . ( $value > 0 ? ' checked' : '' ) . ' />';
+		} elseif ( 'select' === $definition['type'] ) {
 			echo '<select id="' . esc_attr( $id ) . '" data-field-path="' . esc_attr( $path ) . '" data-value-type="string" data-error-key="' . esc_attr( $path ) . '" aria-describedby="' . esc_attr( $help_id . ' ' . $error_id ) . '">'; foreach ( $definition['allowed'] as $choice ) { echo '<option value="' . esc_attr( $choice ) . '"' . ( $choice === $value ? ' selected' : '' ) . '>' . esc_html( lunara_site_studio_choice_label( $choice ) ) . '</option>'; } echo '</select>';
 		} elseif ( 'int' === $definition['type'] ) {
 			$scale = isset( $definition['value_scale'] ) ? max( 1, (int) $definition['value_scale'] ) : 1;
@@ -433,15 +435,15 @@ if ( ! function_exists( 'lunara_site_studio_render_oscars_portal_inspector' ) ) 
 		lunara_site_studio_render_details_open( 'winner-sections', __( 'Winner sections', 'lunara-film' ), false, array( 'winners', 'rotating-winners' ) );
 		echo '<p>' . esc_html__( 'Edit the headings and ceremony links for the two winner sections. Their order and visibility are controlled in the section list.', 'lunara-film' ) . '</p>';
 		$winner_labels = array( 'winners' => __( 'Latest winners', 'lunara-film' ), 'rotating_winners' => __( 'Rotating winners', 'lunara-film' ) );
-		$winner_field_labels = array( 'fallback_heading' => __( 'Fallback heading', 'lunara-film' ), 'link_label' => __( 'Ceremony link text', 'lunara-film' ), 'kicker' => __( 'Kicker', 'lunara-film' ), 'heading' => __( 'Heading', 'lunara-film' ), 'count' => __( 'Number of winner cards', 'lunara-film' ), 'autoplay_ms' => __( 'Time between advances (seconds)', 'lunara-film' ) );
+		$winner_field_labels = array( 'fallback_heading' => __( 'Fallback heading', 'lunara-film' ), 'link_label' => __( 'Ceremony link text', 'lunara-film' ), 'kicker' => __( 'Kicker', 'lunara-film' ), 'heading' => __( 'Heading', 'lunara-film' ), 'count' => __( 'Number of winner cards', 'lunara-film' ), 'autoplay_ms' => __( 'Autoplay at the shared site pace', 'lunara-film' ) );
 		foreach ( lunara_oscars_portal_studio_winner_specs() as $group => $fields ) {
 			lunara_site_studio_render_details_open( str_replace( '_', '-', $group ) . '-settings', $winner_labels[ $group ] );
 			if ( 'winners' === $group ) { echo '<p>' . esc_html__( 'The ceremony name normally appears as the heading. The fallback heading is used when a ceremony name is unavailable.', 'lunara-film' ) . '</p>'; }
-			else { echo '<p>' . esc_html__( 'This section rotates through ceremony winners. Automatic advancing runs only on screens wider than 900 pixels and when the visitor has not requested reduced motion.', 'lunara-film' ) . '</p>'; }
+			else { echo '<p><a data-workspace-navigation href="' . esc_url( admin_url( 'admin.php?page=lunara-site-studio&surface=global-design' ) ) . '">Global Design → Slider reading time</a></p><p>' . esc_html__( 'This section rotates through ceremony winners. Automatic advancing follows the shared reading time and respects the visitor’s reduced-motion preference.', 'lunara-film' ) . '</p>'; }
 			foreach ( $fields as $field => $spec ) {
 				$definition = 'int' === $spec['type'] ? array( 'type' => 'int', 'min' => $spec['min'], 'max' => $spec['max'] ) : array( 'type' => 'text', 'max_length' => $spec['max'], 'help' => sprintf( __( 'Leave blank to use “%s”.', 'lunara-film' ), $spec['default'] ) );
 				if ( 'count' === $field ) { $definition['help'] = __( 'Choose 4–16 cards. The default is 10; a ceremony with fewer available winners may show fewer cards.', 'lunara-film' ); }
-				if ( 'autoplay_ms' === $field ) { $definition['value_scale'] = 1000; $definition['help'] = __( 'Set 0 for manual navigation. The default is 7.2 seconds; the maximum is 12 seconds. You can enter up to three decimal places.', 'lunara-film' ); }
+				if ( 'autoplay_ms' === $field ) { $definition = array( 'type' => 'shared-autoplay', 'help' => __( 'Uses Global Design → Slider reading time. Turn off for manual navigation.', 'lunara-film' ) ); }
 				lunara_site_studio_render_control( $group . '.' . $field, $state[ $group ][ $field ], $definition, $winner_field_labels[ $field ] );
 			}
 			lunara_site_studio_render_details_close();
@@ -459,6 +461,9 @@ if ( ! function_exists( 'lunara_site_studio_render_oscars_portal_inspector' ) ) 
 
 if ( ! function_exists( 'lunara_site_studio_render_global_inspector' ) ) {
 	function lunara_site_studio_render_global_inspector( $state, $revisions, $classic_url ) {
+		lunara_site_studio_render_details_open( 'slider-pace', __( 'Slider reading time', 'lunara-film' ), true );
+		lunara_site_studio_render_control( 'slider_seconds', isset( $state['slider_seconds'] ) ? $state['slider_seconds'] : 12, array( 'type' => 'int', 'min' => 8, 'max' => 30, 'value_scale' => 1, 'help' => __( 'One pace for every automatic slider on the site. Default: 12 seconds. Choose 8–30 seconds. Manual sliders stay manual; visitors can pause at any time. Preview here, then Apply changes to use this pace everywhere.', 'lunara-film' ) ), __( 'Time to read each slide (seconds)', 'lunara-film' ) );
+		lunara_site_studio_render_details_close();
 		$color_specs = function_exists( 'lunara_design_token_color_specs' ) ? lunara_design_token_color_specs() : array(); $color_labels = array(); foreach ( array( 'gold', 'gold_light', 'bg_primary', 'bg_secondary', 'text', 'text_muted' ) as $key ) { $color_labels[ $key ] = isset( $color_specs[ $key ]['label'] ) ? $color_specs[ $key ]['label'] : ucwords( str_replace( '_', ' ', $key ) ); }
 		$font_specs = function_exists( 'lunara_design_token_font_role_specs' ) ? lunara_design_token_font_role_specs() : array(); $font_labels = array(); foreach ( array( 'body', 'display', 'signature', 'glamour', 'label' ) as $key ) { $font_labels[ $key ] = isset( $font_specs[ $key ]['label'] ) ? $font_specs[ $key ]['label'] : ucwords( $key ); }
 		lunara_site_studio_render_details_open( 'essentials', __( 'Essentials', 'lunara-film' ), true ); echo '<div tabindex="-1" data-error-key="colors" aria-describedby="lunara-global-colors-error"><span id="lunara-global-colors-error" class="lunara-site-studio-error" hidden></span></div>'; foreach ( $color_labels as $key => $label ) { $role = $state['colors'][ $key ]; $effective_id = 'lunara-effective-colors-' . sanitize_html_class( $key ); lunara_site_studio_render_field( 'colors.' . $key, $label, null === $role['override'] ? '' : $role['override'], 'text', 'color_' . $key, $effective_id ); echo '<p id="' . esc_attr( $effective_id ) . '" class="lunara-site-studio-effective" data-effective-for="colors.' . esc_attr( $key ) . '"' . ' data-source-design-tokens="' . esc_attr__( 'Site Studio override', 'lunara-film' ) . '" data-source-customizer="' . esc_attr__( 'Customizer', 'lunara-film' ) . '" data-source-shipped-default="' . esc_attr__( 'Shipped default', 'lunara-film' ) . '"' . '>' . esc_html( $role['effective'] ) . ' · ' . esc_html( 'design-tokens' === $role['source'] ? __( 'Site Studio override', 'lunara-film' ) : ( 'customizer' === $role['source'] ? __( 'Customizer', 'lunara-film' ) : __( 'Shipped default', 'lunara-film' ) ) ) . '</p>'; } lunara_site_studio_render_details_close();

@@ -366,7 +366,7 @@ if ( ! function_exists( 'lunara_media_showcase_render_carousel' ) ) {
 		lunara_media_showcase_enqueue_carousel_runtime();
 
 		$autoplay = ! isset( $attrs['autoplay'] ) || (bool) $attrs['autoplay'];
-		$speed    = isset( $attrs['autoplaySpeed'] ) ? max( 1500, min( 20000, (int) $attrs['autoplaySpeed'] ) ) : 5000;
+		$speed = function_exists( 'lunara_slider_interval' ) ? lunara_slider_interval() : 12000;
 
 		ob_start();
 		?>

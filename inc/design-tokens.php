@@ -72,6 +72,15 @@ if ( ! function_exists( 'lunara_get_design_tokens' ) ) {
 	}
 }
 
+/** Shared reading interval. A disabled carousel remains disabled. */
+function lunara_slider_interval( $requested = 1 ) {
+	if ( ! is_numeric( $requested ) || (float) $requested <= 0 ) { return 0; }
+	$tokens = lunara_get_design_tokens();
+	$seconds = isset( $tokens['slider_seconds'] ) ? $tokens['slider_seconds'] : 12;
+	if ( ! is_int( $seconds ) || $seconds < 8 || $seconds > 30 ) { $seconds = 12; }
+	return $seconds * 1000;
+}
+
 if ( ! function_exists( 'lunara_design_token_customizer_color_mods' ) ) {
 	/**
 	 * Compatibility map for the six historical Customizer settings.
@@ -193,7 +202,9 @@ if ( ! function_exists( 'lunara_design_tokens_prepare_save' ) ) {
 			}
 		}
 
-		return array( 'colors' => $colors, 'fonts' => $fonts );
+		$result = array( 'colors' => $colors, 'fonts' => $fonts );
+		if ( isset( $current['slider_seconds'] ) ) { $result['slider_seconds'] = $current['slider_seconds']; }
+		return $result;
 	}
 }
 
@@ -224,6 +235,7 @@ if ( ! function_exists( 'lunara_design_tokens_output_css' ) ) {
 			return;
 		}
 
+		echo '<meta name="lunara-slider-interval" content="' . (int) lunara_slider_interval() . '">';
 		$lines   = array();
 		$tokens  = lunara_get_design_tokens();
 		$colors  = isset( $tokens['colors'] ) && is_array( $tokens['colors'] ) ? $tokens['colors'] : array();

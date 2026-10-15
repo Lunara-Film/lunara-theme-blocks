@@ -65,6 +65,8 @@
 
 		var current = 0;
 		var autoplayMs = parseInt(root.dataset.autoplay || '5000', 10);
+		var sharedPace = document.querySelector('meta[name="lunara-slider-interval"]');
+		if (sharedPace && autoplayMs > 0) { autoplayMs = Math.max(8000, Math.min(30000, Number(sharedPace.content) || 12000)); }
 		var timer = null;
 
 		function splideOwnsRoot() {

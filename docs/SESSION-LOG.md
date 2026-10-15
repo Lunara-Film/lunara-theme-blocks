@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Shared slider reading pace in Site Studio
+
+- **Shipped:** Theme 3.2.116 candidate replaces competing public autoplay intervals with a shared 12-second default. Global Design owns a bounded 8–30-second field, private Preview, Apply, Discard and History. Per-slider off states and visitor pause/reduced-motion protections remain intact. Obsolete independent timing UI points to its shared owner.
+- **Live:** Theme 3.2.115 from main `78a40d8` was manually deployed after PR #242; all 183 checked runtime files matched. This candidate is not deployed at the time of this entry; the PR release receipt records the final gate.
+- **Holding:** Shared pace implementation and focused behavioral verification complete; required repository CI and production acceptance remain release gates.
+- **Next:** Integrate the checked commit, manually deploy under the user's continuing release autonomy, verify actual public timings and the Site Studio field. Automatic deployments remain off.
+- **Found, not fixed:** No new blockers. A fixed reading interval cannot guarantee every visitor finishes every excerpt; the retained Pause control provides unlimited reading time.
+
 ## 2026-10-15 — Consistent public slider navigation
 
 - **Shipped:** Theme 3.2.115 candidate removes remaining Home Hero/Journal/Reviews Splide pagination and PHP-rendered Oscar Facts/curated-media markers. Shared centered arrow/playback rows, 44px square targets and navy/gold control tokens replace mixed controls. Obsolete Show dots editor UI and marker CSS are retired; saved block data remains compatible.

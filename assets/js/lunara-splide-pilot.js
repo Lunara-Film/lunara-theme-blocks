@@ -75,6 +75,8 @@
 		var currentCounter = root.querySelector('.lunara-oscar-facts-current');
 		var totalCounter = root.querySelector('.lunara-oscar-facts-total');
 		var interval = numberAttr(root, 'data-lunara-splide-autoplay', 6500);
+		var sharedPace = document.querySelector('meta[name="lunara-slider-interval"]');
+		if (sharedPace && interval > 0) { interval = Math.max(8000, Math.min(30000, Number(sharedPace.content) || 12000)); }
 		var heightFrame = 0;
 
 		var splide = null;

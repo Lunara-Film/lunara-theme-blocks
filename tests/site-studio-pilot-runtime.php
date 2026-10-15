@@ -327,8 +327,8 @@ $global_surface = $surfaces['global-design'];
 lunara_pilot_assert(
 	'Global' === $global_surface['group']
 	&& 'Global Design' === $global_surface['label']
-	&& 'Control the sitewide palette and typography roles in plain language.' === $global_surface['description']
-	&& array( 'brand', 'palette', 'colors', 'typography', 'fonts' ) === $global_surface['aliases']
+	&& 'Control the sitewide palette, typography and slider reading time.' === $global_surface['description']
+	&& array( 'brand', 'palette', 'colors', 'typography', 'fonts', 'slider', 'autoplay', 'pace' ) === $global_surface['aliases']
 	&& 'theme:global-design' === $global_surface['owner']
 	&& array( 'colors', 'typography' ) === $global_surface['sections']
 	&& 'customize.php?autofocus[section]=lunara_global_design_options' === $global_surface['classic_url']
@@ -360,7 +360,7 @@ lunara_pilot_reset();
 $lunara_pilot_theme_mods['lunara_accent_color'] = '#123456';
 $global = lunara_site_studio_global_design_adapter();
 $state = $global->read_state();
-lunara_pilot_assert( array( 'colors', 'fonts' ) === array_keys( $state ) && array( 'override', 'effective', 'source' ) === array_keys( $state['colors']['gold'] ), 'Global Design public state must expose only the locked human groups and per-role fields.' );
+lunara_pilot_assert( array( 'colors', 'fonts', 'slider_seconds' ) === array_keys( $state ) && array( 'override', 'effective', 'source' ) === array_keys( $state['colors']['gold'] ), 'Global Design public state must expose only the locked human groups and per-role fields.' );
 lunara_pilot_assert( null === $state['colors']['gold']['override'] && '#123456' === $state['colors']['gold']['effective'] && 'customizer' === $state['colors']['gold']['source'], 'Global Design must expose inherited color provenance without inventing an override.' );
 $lunara_pilot_options['lunara_design_tokens'] = array( 'colors' => array( 'gold' => '#abcdef' ), 'fonts' => array( 'body' => 'georgia' ) );
 $state = $global->read_state();
@@ -388,7 +388,7 @@ $saved = $global->save_state( $clear );
 lunara_pilot_assert( ! is_wp_error( $saved ) && ! array_key_exists( 'lunara_design_tokens', $lunara_pilot_options ), 'Clearing the final Global overrides must delete the canonical option.' );
 $design_token_writes = array_values( array_filter( $lunara_pilot_option_writes, static function ( $write ) { return 'lunara_design_tokens' === $write['key']; } ) );
 lunara_pilot_assert( array_filter( $design_token_writes, static function ( $write ) { return false === $write['autoload']; } ), 'Global forward writes to lunara_design_tokens itself must request non-autoloading storage; rollback writes may restore legacy autoload.' );
-lunara_pilot_assert( array( 'colors', 'typography' ) === $saved['changed_sections'], 'Global save must report the exact canonical changed sections.' );
+lunara_pilot_assert( array( 'colors', 'typography', 'slider_seconds' ) === $saved['changed_sections'], 'Global save must report the exact canonical changed sections.' );
 $restored = $global->restore_revision( $saved['revision_id'] );
 lunara_pilot_assert( ! is_wp_error( $restored ) && '#abcdef' === $lunara_pilot_options['lunara_design_tokens']['colors']['gold'] && ! empty( $restored['safety_revision_id'] ), 'Global restore must create safety history and restore exact prior option presence.' );
 $before = lunara_pilot_option_snapshot( 'lunara_design_tokens' );

@@ -316,7 +316,7 @@ function lunara_carousel_shortcode( $atts ) {
 
     ob_start();
     ?>
-    <div class="lunara-carousel" id="lunara-carousel-<?php echo esc_attr( $set_slug ); ?>" data-autoplay="5000">
+    <div class="lunara-carousel" id="lunara-carousel-<?php echo esc_attr( $set_slug ); ?>" data-autoplay="<?php echo function_exists( 'lunara_slider_interval' ) ? lunara_slider_interval() : 12000; ?>">
         <?php foreach ( $images as $index => $image ) :
             $img_url = wp_get_attachment_image_url( $image->ID, 'full' );
             $title = $image->post_title;

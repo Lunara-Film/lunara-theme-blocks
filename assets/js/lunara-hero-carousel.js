@@ -58,6 +58,8 @@
 			if (!interval || interval < 1500) {
 				interval = 6500;
 			}
+			var sharedPace = document.querySelector('meta[name="lunara-slider-interval"]');
+			if (sharedPace) { interval = Math.max(8000, Math.min(30000, Number(sharedPace.content) || 12000)); }
 			var optedIn = root.getAttribute('data-lunara-autoplay-enabled');
 			var autoplay = optedIn === null ? !reduceMotion : optedIn === '1' && !reduceMotion;
 			var toggle = root.querySelector('.splide__toggle');
