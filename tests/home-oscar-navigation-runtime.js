@@ -50,6 +50,7 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
                 return { width: rect.width, height: rect.height, label: button.getAttribute('aria-label') || '' };
             }));
             check(controlSizes.every(size => size.width >= 44 && size.height >= 44), `${width}/${reducedMotion}: every Oscar Picks control needs a 44px target.`);
+            check(controlSizes.length === 3 && await page.locator('[data-lunara-carousel-dot], [role=tablist]').count() === 0, 'Forecast exposes only two arrows and playback, with no slide markers.');
             const initialToggleText = await toggle.textContent();
             check(initialToggleText.trim() === (reducedMotion === 'reduce' ? 'Play' : 'Pause'), `${width}/${reducedMotion}: pause/play state must reflect reduced motion (saw ${initialToggleText.trim()}).`);
             if (reducedMotion === 'reduce') {
@@ -83,16 +84,13 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
             await prev.click(); await waitOffset(geometry.max); check(true,'Previous wraps from the first to the last page.');
             const keyboardTarget = geometry.targets.reduce((nearest,target)=>Math.abs(target-(geometry.max-geometry.step))<Math.abs(nearest-(geometry.max-geometry.step))?target:nearest,0);
             await track.focus(); await page.keyboard.press('ArrowLeft'); await waitOffset(keyboardTarget); check(true,'Keyboard navigation moves back to the previous snap point.');
-            await page.locator('[data-lunara-carousel-dot]').first().click(); await waitOffset(0);
-            await page.locator('[data-lunara-carousel-dot]').last().click(); await waitOffset(geometry.max); check(true,'Dots can reach the final card.');
-            if (width===390) {
-                await page.waitForFunction(()=>[...document.querySelectorAll('[data-lunara-carousel-dot]')].at(-1).getAttribute('aria-selected')==='true');
-                check(true,'The final mobile dot reflects the visible final card.');
-            }
+            // Reset the fixture for the per-record readability pass; boundary
+            // wrapping and keyboard navigation were exercised above.
+            await track.evaluate(el => { el.scrollLeft = 0; }); await waitOffset(0);
             // Offscreen rectangles are intentional. Bring every record into
             // the viewport before judging its actual text and hit area.
             for (let index = 0; index < geometry.targets.length; index++) {
-                await page.locator('[data-lunara-carousel-dot]').nth(index).click();
+                if (index > 0 && geometry.targets[index] !== geometry.targets[index - 1]) await next.click();
                 await waitOffset(geometry.targets[index]);
                 const visible = await track.evaluate((rail, itemIndex) => {
                     const card = rail.children[itemIndex], bounds = card.getBoundingClientRect(), clip = rail.getBoundingClientRect();

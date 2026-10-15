@@ -6,6 +6,10 @@ and restrained gold. This contract applies to the existing visitor features.
 
 ## Editorial controls
 
+The Home Oscar Forecast uses a centered previous/next and playback control row.
+Do not render one pagination marker per forecast record; all records remain
+reachable through the arrows, touch scrolling and keyboard navigation.
+
 Lunara Site Studio is a first-class daily workspace. Public presentation changes
 must preserve its existing controls, saved settings, preview, Apply and history.
 Keep relevant content-editor destinations accessible from Studio; do not create
