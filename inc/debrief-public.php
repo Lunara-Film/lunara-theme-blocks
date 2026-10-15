@@ -581,7 +581,7 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
                 $title_html = '<span class="lunara-pair-card-title-link">' . $title_inner . '</span>';
             }
 
-            $chips     = '';
+            $chips     = function_exists( 'lunara_pair_review_link' ) ? lunara_pair_review_link( $data, $review_id ) : '';
             $imdb_href = (string) ( $data['imdb_href'] ?? '' );
             if ( '' !== $imdb_href ) {
                 $chips .= '<a class="lunara-pair-card-chip lunara-pair-card-chip--imdb" href="' . esc_url( $imdb_href ) . '" target="_blank" rel="noopener noreferrer nofollow">IMDb</a>';

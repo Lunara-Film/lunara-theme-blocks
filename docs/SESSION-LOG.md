@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Expose paired-film Lunara reviews beside IMDb
+
+- **Shipped:** Theme 3.2.112 draft revision, PR #233. Shared card source rows now expose `Read Lunara Review` when the existing published-review resolver finds the film, or reuse the already resolved review URL. Canonical/legacy public Debrief, Home/Reviews shared cards and curated pairing blocks use the same helper; IMDb and other destinations remain.
+- **Live:** Read-only public review search only; no merge, deployment or content changes.
+- **Holding:** Candidate awaits current-head CI and visual acceptance. Home's showcased Skinamarink/Cube/2022 Backrooms pairings have no confirmed matching review in the focused public search; the 2026 Backrooms review is a different film and is not attached to the 2022 card.
+- **Verified:** Real renderer tests cover matched/unmatched destinations across three paths, internal navigation and reuse of custom review permalinks: 44 assertions. Responsive source-row fixture includes both links and retains 44px targets.
+- **Next:** Review the candidate and merge/deploy only through the existing separate gates.
+- **Found, not fixed:** No new blocker; matching continues to use the established published-review/IMDb bridge.
+
 ## 2026-10-15 — Apply fifteen annotated composition corrections
 
 - **Shipped:** Theme 3.2.112 draft revision on `codex/editorial-composition-refinement`, existing PR #233. Shared section type, compact footer, tighter native Home hero, bounded Debrief posters with attached source rows, grouped forecast arguments, unframed embedded Oscars research with centered captions, and one continuous Reviews index. Approved Ledger navigator preserved. Details: `docs/EDITORIAL-ANNOTATIONS-2026-10-15.md`.

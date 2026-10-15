@@ -47,7 +47,10 @@ and restrained gold. This contract applies to the existing visitor features.
   Ledger headings inherit those roles; do not introduce another Tiempos alias
   or force reading copy to display weight. Preserve the Ledger navigator.
 - Home and archive Debrief columns use bounded portrait artwork, lightly ruled
-  argument columns and an attached source-link row. Preserve all three full
+  argument columns and an attached source-link row. When a published Lunara
+  review resolves for the paired film, include `Read Lunara Review` alongside
+  IMDb in that row; do not substitute a dossier or an unrelated title match.
+  Preserve all three full
   role names and complete arguments. Forecast image, identity and argument
   should form one clear unit without a second painted card.
 - Reviews has one continuous index after its lead. Do not split the next four
