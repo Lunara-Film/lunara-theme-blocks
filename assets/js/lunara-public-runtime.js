@@ -1,3 +1,14 @@
+(function () {
+    'use strict';
+    function mount(pageRoot, scope) {
+        pageRoot = pageRoot || document;
+        // Standalone documents keep their native page-unload lifecycle.
+        scope = scope || {
+            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
+            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
+            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
+            cleanup: function () {}
+        };
 /**
  * Generated from the verified inline runtime during Phase 1C.
  * Keep behavior route-gated and free of render-blocking dependencies.
@@ -5,6 +16,14 @@
 
 (function () {
             var observer = null;
+            var ownedImages = new Set();
+            scope.cleanup(function () {
+                ownedImages.forEach(function (img) {
+                    // Loaded pixels stay loaded; an interrupted lazy observation can mount again.
+                    if (img.dataset.lunaraHydratorState !== 'loaded') delete img.dataset.lunaraHydratorState;
+                });
+                ownedImages.clear();
+            });
             var imageSelector = [
                 '.lunara-review-grid-poster',
                 '.lunara-review-feature-image',
@@ -79,14 +98,15 @@
                         img.classList.add('lunara-img-loaded');
                         img.dataset.lunaraHydratorState = 'loaded';
                     };
-                    img.addEventListener('load', markLoaded, { once: true });
-                    img.addEventListener('error', markLoaded, { once: true });
-                    window.setTimeout(markLoaded, 1800);
+                    scope.on(img, 'load', markLoaded, { once: true });
+                    scope.on(img, 'error', markLoaded, { once: true });
+                    scope.timeout(markLoaded, 1800);
                 }
             }
 
             function observeImage(img) {
                 if (!img || img.dataset.lunaraHydratorState) return;
+                ownedImages.add(img);
 
                 var loading = (img.getAttribute('loading') || '').toLowerCase();
                 if (loading === 'eager' || img.getAttribute('fetchpriority') === 'high') {
@@ -100,13 +120,13 @@
                 }
 
                 if (!observer) {
-                    observer = new IntersectionObserver(function (entries) {
+                    observer = scope.observe(new IntersectionObserver(function (entries) {
                         entries.forEach(function (entry) {
                             if (!entry.isIntersecting) return;
                             hydrateImage(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '640px 0px' });
+                    }, { rootMargin: '640px 0px' }));
                 }
 
                 img.dataset.lunaraHydratorState = 'observed';
@@ -124,10 +144,10 @@
             }
 
             function bootImageRuntime() {
-                scanImages(document);
+                scanImages(pageRoot);
                 if (!window.MutationObserver) return;
 
-                new MutationObserver(function (mutations) {
+                scope.observe(new MutationObserver(function (mutations) {
                     mutations.forEach(function (mutation) {
                         if (mutation.type === 'attributes') {
                             sanitizeImageSrcset(mutation.target);
@@ -143,7 +163,7 @@
                             }
                         });
                     });
-                }).observe(document.body || document.documentElement, {
+                 })).observe(pageRoot, {
                     attributes: true,
                     attributeFilter: ['srcset', 'data-srcset', 'data-lazy-srcset'],
                     childList: true,
@@ -151,90 +171,14 @@
                 });
             }
 
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', bootImageRuntime, { once: true });
-            } else {
-                bootImageRuntime();
-            }
+            bootImageRuntime();
         }());
-
-(function(){
-        if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-        // Only run scroll reveals on the front page — skip portal, plugin, single review, and other pages
-        var isFrontPage=document.body.classList.contains('home')||document.querySelector('.lunara-front-page');
-        var isPluginPage=document.querySelector('.aat-hub-page,.aat-entity-page');
-        var revealSels=[];
-        var staggerSels=[];
-        if(isFrontPage){
-            revealSels=[
-                '.lunara-front-page>.lunara-home-section','.lunara-review-grid-card','.lunara-review-feature-card',
-                '.lunara-poster-card','.lunara-ledger-card','.lunara-dispatch-archive-card'
-            ];
-            staggerSels=[
-                '.lunara-review-grid','.lunara-review-related-grid'
-            ];
-        }
-        // Entity pages get targeted reveals for stats/timeline only
-        if(isPluginPage){
-            revealSels=['.aat-entity-status-banner','.aat-stat','.aat-timeline-card'];
-            staggerSels=['.aat-stats-bar','.aat-timeline-list'];
-        }
-        if(!revealSels.length)return;
-        revealSels.forEach(function(s){
-            document.querySelectorAll(s).forEach(function(el){el.classList.add('lunara-reveal');});
-        });
-        staggerSels.forEach(function(s){
-            document.querySelectorAll(s).forEach(function(el){el.classList.add('lunara-reveal-stagger');});
-        });
-		if(isFrontPage){
-			document.querySelectorAll('.lunara-reveal').forEach(function(el){el.classList.add('is-visible');});
-			return;
-		}
-        var obs=new IntersectionObserver(function(entries){
-            entries.forEach(function(entry){
-                if(entry.isIntersecting){
-                    entry.target.classList.add('is-visible');
-                    obs.unobserve(entry.target);
-                }
-            });
-		},{threshold:0.01,rootMargin:'240px 0px'});
-        document.querySelectorAll('.lunara-reveal').forEach(function(el){obs.observe(el);});
-    })();
-
-(function(){
-        var stats=document.querySelectorAll('.aat-stat-number');
-        if(!stats.length||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-        var obs=new IntersectionObserver(function(entries){
-            entries.forEach(function(entry){
-                if(!entry.isIntersecting)return;
-                obs.unobserve(entry.target);
-                var el=entry.target,text=el.textContent.trim();
-                var match=text.match(/^([\d,]+)(.*)/);
-                if(!match)return;
-                var target=parseInt(match[1].replace(/,/g,''),10);
-                var suffix=match[2];
-                if(isNaN(target)||target===0)return;
-                var duration=Math.min(1600,Math.max(600,target*8));
-                var start=performance.now();
-                function tick(now){
-                    var t=Math.min(1,(now-start)/duration);
-                    var ease=1-Math.pow(1-t,3);
-                    var current=Math.round(target*ease);
-                    el.textContent=current.toLocaleString()+suffix;
-                    if(t<1)requestAnimationFrame(tick);
-                }
-                el.textContent='0'+suffix;
-                requestAnimationFrame(tick);
-            });
-        },{threshold:0.3});
-        stats.forEach(function(el){obs.observe(el);});
-    })();
 
 (function(){
         if(!('startViewTransition' in document))return;
         if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
         var CARDS='.lunara-review-grid-card,.lunara-poster-card,.lunara-oscar-pick-card,.lunara-journal-home-card,.lunara-cinematic-hero-link';
-        document.addEventListener('click',function(e){
+        scope.on(document, 'click',function(e){
             if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
             var card=e.target.closest?e.target.closest(CARDS):null;if(!card)return;
             var a=card.matches('a')?card:card.querySelector('a[href]');
@@ -246,15 +190,23 @@
             if(r.width<1||r.bottom<0||r.top>window.innerHeight)return;
             /* Demote the current page's own hero name first — two elements
                sharing lunara-screen would abort the whole transition. */
-            var hero=document.querySelector('.lunara-review-single-cinematic-hero .lunara-review-visual--hero');
+            var hero=pageRoot.querySelector('.lunara-review-single-cinematic-hero .lunara-review-visual--hero');
             if(hero)hero.style.viewTransitionName='none';
             img.style.viewTransitionName='lunara-screen';
             img.setAttribute('data-lunara-vt','1');
         },true);
-        window.addEventListener('pageshow',function(e){
+        scope.on(window, 'pageshow',function(e){
             if(!e.persisted)return;
-            document.querySelectorAll('[data-lunara-vt]').forEach(function(el){el.style.viewTransitionName='';el.removeAttribute('data-lunara-vt');});
-            var hero=document.querySelector('.lunara-review-single-cinematic-hero .lunara-review-visual--hero');
+            pageRoot.querySelectorAll('[data-lunara-vt]').forEach(function(el){el.style.viewTransitionName='';el.removeAttribute('data-lunara-vt');});
+            var hero=pageRoot.querySelector('.lunara-review-single-cinematic-hero .lunara-review-visual--hero');
             if(hero)hero.style.viewTransitionName='';
         });
     })();
+
+    }
+    if (window.LunaraApp && window.LunaraApp.register) {
+        window.LunaraApp.register('public-runtime', mount);
+    } else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
+    } else { mount(); }
+}());

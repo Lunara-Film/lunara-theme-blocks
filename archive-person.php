@@ -19,8 +19,8 @@ $roles = array(
 ?>
 <div id="primary" class="site-main lunara-entity-page lunara-entity-archive">
     <header class="lunara-entity-archive-head">
-        <p class="lunara-home-section-kicker"><?php esc_html_e( 'The Talent Index', 'lunara-film' ); ?></p>
         <h1 class="lunara-entity-title"><?php esc_html_e( 'The People of the Record', 'lunara-film' ); ?></h1>
+        <p class="lunara-home-section-kicker"><?php esc_html_e( 'The Talent Index', 'lunara-film' ); ?></p>
         <p class="lunara-entity-archive-copy"><?php echo esc_html( sprintf( __( '%s artists, each with an auto-built filmography and award history.', 'lunara-film' ), number_format_i18n( $total ) ) ); ?></p>
         <nav class="lunara-entity-sort" aria-label="<?php esc_attr_e( 'Filter talent', 'lunara-film' ); ?>">
             <?php foreach ( $roles as $slug => $label ) : ?>

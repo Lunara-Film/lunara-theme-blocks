@@ -283,6 +283,23 @@
 			return;
 		}
 
+		window.addEventListener('lunara:page:teardown', function () {
+			// Navigation owns the next focus target; outgoing triggers may disappear.
+			invokingElement = null;
+			closeOverlay();
+			window.clearTimeout(closingTimer);
+			window.clearTimeout(debounceTimer);
+			window.cancelAnimationFrame(openingFrame);
+			if (controller) controller.abort();
+			lastQuery = '';
+			input.value = '';
+			overlay.hidden = true;
+			overlay.inert = true;
+		});
+		window.addEventListener('lunara:page:mount', function () {
+			cfg = window.LUNARA_LIVE_SEARCH || cfg;
+		});
+
 		// Keep keyboard navigation inside the current dialog, including new results.
 		document.addEventListener('keydown', function (event) {
 			if (!isOpen) {

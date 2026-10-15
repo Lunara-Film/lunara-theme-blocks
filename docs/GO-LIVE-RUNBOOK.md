@@ -1,3 +1,10 @@
+> **Superseded on 2026-10-10.** The working agreement is now the one page in
+> `AGENTS.md`: branch, PR, passing CI, Dalton merges, then separately authorized
+> manual deployment and live verification. Reverts also require deployment.
+> This runbook is kept for history and for the
+> canary script's usage notes; where it disagrees with `AGENTS.md`, `AGENTS.md`
+> wins.
+
 # Go-Live Runbook
 
 How a theme or plugin change gets from `main` onto lunarafilm.com, how it is
@@ -138,8 +145,8 @@ Three documents, three questions, no overlap:
 - Licensed Klim Tiempos faces are served from `/wp-content/uploads/lunara-fonts/v1/`
   and are **never** committed to the public repo. They are not restored by a
   redeploy — see §7.
-- Re-enabling auto-deploy should wait until canaries have been clean for
-  several consecutive releases, and is a deliberate decision, not a default.
+- Auto-deploy stays off unless Dalton explicitly changes that policy. Passing
+  canaries or merging code is not authorization to re-enable it.
 
 ## 7. What is durable, and what is not
 

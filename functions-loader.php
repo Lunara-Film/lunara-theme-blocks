@@ -20,6 +20,9 @@ $lunara_inc = get_stylesheet_directory() . '/inc/';
 require_once $lunara_inc . 'setup.php';
 require_once $lunara_inc . 'surface-pass.php';
 require_once $lunara_inc . 'helpers.php';
+require_once $lunara_inc . 'navigation-runtime.php'; // Audited public assets and page lifecycle.
+require_once $lunara_inc . 'analytics-off.php'; // 3.2.97: dormant Google Analytics outputs stay off.
+require_once $lunara_inc . 'fonts.php';         // 3.2.101: the theme is the only front-end source of @font-face.
 
 // Layer 1 — Independent modules.
 require_once $lunara_inc . 'customizer.php';
@@ -46,7 +49,9 @@ if ( is_admin() ) {
 // Layer 2 — Shared hub (Debrief data adapters and legacy renderer).
 require_once $lunara_inc . 'debrief-resolver.php';
 require_once $lunara_inc . 'debrief.php';
+require_once $lunara_inc . 'pairing-review-editor.php';
 require_once $lunara_inc . 'debrief-public.php';
+require_once $lunara_inc . 'debrief-method.php'; // The Debrief Method explainer page + live pairing index.
 require_once $lunara_inc . 'shot-reel.php';   // The Still Gallery — [lunara_shot_reel] screening-room shot essays
 
 // Layer 3 — Card rendering (depends on debrief).
@@ -55,15 +60,18 @@ require_once $lunara_inc . 'review-rendering.php';
 // Layer 4 — Query layer (depends on card builders + debrief).
 require_once $lunara_inc . 'queries.php';
 
-// Layer 5 — Home page sections (depends on all above).
+// Layer 5 — Oscars data layer, then the homepage sections (depend on all above).
+require_once $lunara_inc . 'oscars-data.php'; // Snapshot, winner cards, showcase, spotlight, deep cuts.
 require_once $lunara_inc . 'home-sections.php';
 
 // Layer 6 — Oscars portal (depends on home-sections + card builders).
 require_once $lunara_inc . 'oscars-portal.php';
+require_once $lunara_inc . 'oscars-hero-preload.php'; // 3.2.102: hero backdrop preload, portal poster sizes.
 
 // Layer 7 — Frontend output (footer, nav, search, content filters, animations).
 require_once $lunara_inc . 'blocks.php';
 require_once $lunara_inc . 'block-migration.php';
+require_once $lunara_inc . 'public-geometry.php'; // Publication-wide block and saved-content geometry.
 require_once $lunara_inc . 'review-archive-critical.php';
 require_once $lunara_inc . 'journal-archive-critical.php';
 require_once $lunara_inc . 'oscars-portal-critical.php';
@@ -146,6 +154,7 @@ require_once $lunara_inc . 'site-studio-adapters.php';
 require_once $lunara_inc . 'site-studio-footer-navigation.php';
 require_once $lunara_inc . 'site-studio-utility-recovery.php';
 require_once $lunara_inc . 'site-studio-journal-single.php';
+require_once $lunara_inc . 'site-studio-debrief-method.php'; // Debrief page words, sections and counts.
 require_once $lunara_inc . 'site-studio-oscars-ledger.php';
 require_once $lunara_inc . 'site-studio-carousels.php';
 require_once $lunara_inc . 'site-studio-home-oscars.php';

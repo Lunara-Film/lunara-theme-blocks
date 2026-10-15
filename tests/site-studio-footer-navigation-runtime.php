@@ -12,6 +12,7 @@ $default = lunara_site_studio_footer_read_state();
 footer_assert( count( lunara_site_studio_footer_keys() ) === 7 && count( lunara_site_studio_mod_surface_keys( lunara_site_studio_footer_spec() ) ) === 6, 'Footer extends exactly seven keys without changing the frozen scalar spec.' );
 footer_assert( 'inherited' === $default['navigation']['mode'] && array() === $lunara_pilot_theme_mods, 'Reading standard links is not adoption and writes no missing defaults.' );
 $html = footer_fixture_render();
+footer_assert( 3 === preg_match_all( '~<h2 class="lunara-footer-col-heading">~', $html ) && false === strpos( $html, '<h4' ), 'The three footer navigation groups start at a coherent h2 level inside the labelled footer landmark.' );
 preg_match( '~<nav class="lunara-footer-nav-grid".*?</nav>~s', $html, $nav );
 preg_match_all( '~<a href="([^"]+)">([^<]+)</a>~', $nav[0], $links );
 footer_assert( array( 'Home', 'Reviews', 'Journal', 'About', 'Editorial Policy', 'Oscars', 'Categories', 'Ceremonies', 'Full Ledger', 'Search', 'Contact', 'RSS Feed', 'Privacy' ) === $links[2], 'Actual inherited footer retains every original label and its order.' );

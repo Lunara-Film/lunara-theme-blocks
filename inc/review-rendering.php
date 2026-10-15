@@ -321,7 +321,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
             gap: 4px !important;
             padding: 11px 12px !important;
             border: 1px solid rgba(201,169,97,.28) !important;
-            border-radius: 8px !important;
+            border-radius: 0!important;
             background: linear-gradient(180deg, rgba(15,29,46,.94), rgba(10,21,32,.98)) !important;
             color: #FAFBFC !important;
             letter-spacing: 0 !important;
@@ -861,6 +861,11 @@ function lunara_get_dispatch_type_label( $post_id ) {
         }
 
         return __( 'Journal', 'lunara-film' );
+    }
+
+    // Reviews reach dispatch cards through shared tag archives; name them plainly.
+    if ( 'review' === get_post_type( $post_id ) ) {
+        return __( 'Review', 'lunara-film' );
     }
 
     $terms = get_the_terms( $post_id, 'category' );
@@ -1578,13 +1583,25 @@ if ( ! function_exists( 'lunara_lock_review_image_markup' ) ) {
             $html = lunara_replace_img_attribute( $html, 'sizes', $profile['sizes'] );
         }
 
-        $retina_profile           = $profile;
-        $retina_profile['width']  = $width * 2;
-        $retina_profile['height'] = $height * 2;
-        $retina_src               = lunara_lock_review_image_url( $source_url, $retina_profile );
+        // Same aspect ratio at a quarter, half, the locked size and retina, so a
+        // 320px poster slot stops downloading the 2000px source. The width and
+        // height attributes stay locked, so layout does not change.
+        $candidates = array();
+        foreach ( array( (int) round( $width / 4 ), (int) round( $width / 2 ), $width, $width * 2 ) as $candidate_width ) {
+            if ( $candidate_width < 200 && $candidate_width !== $width ) {
+                continue;
+            }
+            $candidate_profile           = $profile;
+            $candidate_profile['width']  = $candidate_width;
+            $candidate_profile['height'] = (int) round( $candidate_width * $height / $width );
+            $candidate_src               = $candidate_width === $width ? $src : lunara_lock_review_image_url( $source_url, $candidate_profile );
+            if ( '' !== $candidate_src && ( $candidate_width === $width || $candidate_src !== $src ) && ! isset( $candidates[ $candidate_src ] ) ) {
+                $candidates[ $candidate_src ] = $candidate_src . ' ' . $candidate_width . 'w';
+            }
+        }
 
-        if ( '' !== $retina_src && $retina_src !== $src ) {
-            $srcset = $src . ' ' . $width . 'w, ' . $retina_src . ' ' . ( $width * 2 ) . 'w';
+        if ( count( $candidates ) > 1 ) {
+            $srcset = implode( ', ', $candidates );
             $html   = lunara_replace_img_attribute( $html, 'srcset', $srcset );
             $html   = lunara_replace_img_attribute( $html, 'data-srcset', $srcset );
         } else {
@@ -2147,15 +2164,24 @@ if ( ! function_exists( 'lunara_render_review_visual_slot' ) ) {
             }
         }
         if ( '' === $image_html ) {
+            // External TMDB stills carried `sizes` with no candidates, so every
+            // reader downloaded the multi-megabyte original. Offer TMDB's own widths.
+            $srcset = function_exists( 'lunara_tmdb_image_srcset' )
+                ? lunara_tmdb_image_srcset( html_entity_decode( (string) $src, ENT_QUOTES, 'UTF-8' ), ! $is_poster_hero )
+                : '';
+            if ( '' !== $srcset && function_exists( 'lunara_resize_tmdb_image_url' ) ) {
+                $src = lunara_resize_tmdb_image_url( html_entity_decode( (string) $src, ENT_QUOTES, 'UTF-8' ), $is_poster_hero ? 'w780' : 'w1280' );
+            }
             $image_html = sprintf(
-                '<img class="lunara-review-visual-image" src="%1$s" alt="%2$s" loading="%3$s" decoding="async" width="%4$d" height="%5$d" sizes="%6$s"%7$s>',
+                '<img class="lunara-review-visual-image" src="%1$s"%8$s alt="%2$s" loading="%3$s" decoding="async" width="%4$d" height="%5$d" sizes="%6$s"%7$s>',
                 esc_url( $src ),
                 esc_attr( $data['alt'] ),
                 esc_attr( $args['loading'] ),
                 $width,
                 $height,
                 esc_attr( isset( $profile['sizes'] ) ? (string) $profile['sizes'] : '(max-width: 900px) 100vw, 960px' ),
-                'hero' === $args['context'] ? ' fetchpriority="high" data-no-lazy="1" data-skip-lazy="1"' : ''
+                'hero' === $args['context'] ? ' fetchpriority="high" data-no-lazy="1" data-skip-lazy="1"' : '',
+                '' !== $srcset ? ' srcset="' . esc_attr( $srcset ) . '"' : ''
             );
         }
 
@@ -2445,7 +2471,7 @@ if ( ! function_exists( 'lunara_render_review_feature_card' ) ) {
                     </a>
                 <?php endif; ?>
                 <div class="lunara-review-feature-copy">
-                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Lunara Review', 'lunara-film' ); ?></p>
+
                     <?php if ( ! $has_media && '' !== $score ) : ?>
                         <span class="lunara-score-badge lunara-score-badge-inline"><?php echo wp_kses_post( lunara_render_stars( $score ) ); ?></span>
                     <?php endif; ?>
@@ -2729,8 +2755,8 @@ if ( ! function_exists( 'lunara_render_full_spoiler_review_warning' ) ) {
             data-lunara-spoiler-post="<?php echo esc_attr( intval( $post_id ) ); ?>"
         >
             <div class="lunara-full-spoiler-warning-copy lunara-full-spoiler-shield-copy">
-                <p class="lunara-full-spoiler-warning-kicker lunara-full-spoiler-shield-kicker"><?php esc_html_e( 'Full Spoiler Review', 'lunara-film' ); ?></p>
                 <h2 class="lunara-full-spoiler-warning-title lunara-full-spoiler-shield-title"><?php esc_html_e( 'This file discusses the ending openly.', 'lunara-film' ); ?></h2>
+                <p class="lunara-full-spoiler-warning-kicker lunara-full-spoiler-shield-kicker"><?php esc_html_e( 'Full Spoiler Review', 'lunara-film' ); ?></p>
                 <p class="lunara-full-spoiler-warning-text lunara-full-spoiler-shield-text"><?php esc_html_e( 'Continue only if you are ready for plot revelations, final images, deaths, reversals, and the complete critical argument.', 'lunara-film' ); ?></p>
             </div>
             <div class="lunara-full-spoiler-shield-actions">
@@ -2773,8 +2799,8 @@ if ( ! function_exists( 'lunara_render_spoiler_review_bridge' ) ) {
         ?>
         <aside class="lunara-spoiler-review-bridge" aria-label="<?php esc_attr_e( 'Full spoiler review', 'lunara-film' ); ?>">
             <div class="lunara-spoiler-review-bridge-copy">
-                <p class="lunara-spoiler-review-bridge-kicker"><?php esc_html_e( 'Spoiler File', 'lunara-film' ); ?></p>
                 <h2 class="lunara-spoiler-review-bridge-title"><?php esc_html_e( 'Ready for the full breakdown?', 'lunara-film' ); ?></h2>
+                <p class="lunara-spoiler-review-bridge-kicker"><?php esc_html_e( 'Spoiler File', 'lunara-film' ); ?></p>
                 <p class="lunara-spoiler-review-bridge-text"><?php esc_html_e( 'For readers who have seen the film, continue into the ending, reversals, and full argument without pulling the spoiler-free review out of shape.', 'lunara-film' ); ?></p>
                 <?php echo $title_line; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             </div>
@@ -2791,67 +2817,7 @@ if ( ! function_exists( 'lunara_render_spoiler_review_bridge' ) ) {
 /**
  * Render Lunara-owned share controls for single Reviews.
  */
-if ( ! function_exists( 'lunara_render_review_share_strip' ) ) {
-    function lunara_render_review_share_strip( $post_id ) {
-        $post_id = intval( $post_id );
-        if ( $post_id <= 0 ) {
-            return '';
-        }
-
-        $url   = get_permalink( $post_id );
-        $title = trim( html_entity_decode( wp_strip_all_tags( get_the_title( $post_id ) ), ENT_QUOTES, get_bloginfo( 'charset' ) ) );
-        if ( empty( $url ) || '' === $title ) {
-            return '';
-        }
-
-        $share_text      = sprintf( __( '%s - Lunara Film', 'lunara-film' ), $title );
-        $share_text_url  = rawurlencode( $share_text );
-        $share_url       = rawurlencode( $url );
-        $share_body      = rawurlencode( $share_text . "\n\n" . $url );
-        $share_bluesky   = rawurlencode( $share_text . ' ' . $url );
-        $share_platforms = array(
-            array(
-                'label' => __( 'X', 'lunara-film' ),
-                'url'   => 'https://twitter.com/intent/tweet?text=' . $share_text_url . '&url=' . $share_url,
-            ),
-            array(
-                'label' => __( 'Bluesky', 'lunara-film' ),
-                'url'   => 'https://bsky.app/intent/compose?text=' . $share_bluesky,
-            ),
-            array(
-                'label' => __( 'Facebook', 'lunara-film' ),
-                'url'   => 'https://www.facebook.com/sharer/sharer.php?u=' . $share_url,
-            ),
-            array(
-                'label' => __( 'Email', 'lunara-film' ),
-                'url'   => 'mailto:?subject=' . $share_text_url . '&body=' . $share_body,
-            ),
-        );
-
-        ob_start();
-        ?>
-        <aside class="lunara-review-share-strip" aria-label="<?php esc_attr_e( 'Share this review', 'lunara-film' ); ?>">
-            <div class="lunara-review-share-strip-copy">
-                <p class="lunara-review-share-strip-kicker"><?php esc_html_e( 'Share File', 'lunara-film' ); ?></p>
-                <p class="lunara-review-share-strip-title"><?php esc_html_e( 'Put this review in circulation', 'lunara-film' ); ?></p>
-            </div>
-            <div class="lunara-review-share-strip-actions">
-                <button class="lunara-review-share-link lunara-review-share-copy" type="button" data-lunara-copy-share data-share-url="<?php echo esc_url( $url ); ?>">
-                    <?php esc_html_e( 'Copy Link', 'lunara-film' ); ?>
-                </button>
-                <?php foreach ( $share_platforms as $platform ) : ?>
-                    <a class="lunara-review-share-link" href="<?php echo esc_url( $platform['url'] ); ?>" target="_blank" rel="noopener noreferrer nofollow">
-                        <?php echo esc_html( $platform['label'] ); ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-            <p class="lunara-review-share-status" role="status" aria-live="polite"></p>
-        </aside>
-        <?php
-
-        return trim( ob_get_clean() );
-    }
-}
+// lunara_render_review_share_strip() retired in 3.2.94: reviews no longer carry a share card.
 
 /**
  * Query related reviews using director/year affinity first, then recent fallback.
@@ -3436,8 +3402,8 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
             <section class="lunara-home-section lunara-archive-hero lunara-editorial-archive-slot-hero" data-lunara-section="hero">
                 <div class="lunara-editorial-archive-hero-shell">
                     <div class="lunara-editorial-archive-hero-copy-wrap">
-                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <h1 class="lunara-archive-hero-title"><?php echo esc_html( $args['title'] ); ?></h1>
+                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <?php if ( '' !== $copy ) : ?>
                             <p class="lunara-archive-hero-copy"><?php echo esc_html( wp_trim_words( $copy, max( 12, intval( $args['copy_words'] ) ) ) ); ?></p>
                         <?php endif; ?>
@@ -3462,8 +3428,8 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
                     <div class="lunara-editorial-archive-toolbar">
                         <div class="lunara-home-section-head lunara-editorial-archive-toolbar-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Archive Order', 'lunara-film' ); ?></p>
                                 <h2 class="lunara-section-title"><?php esc_html_e( 'Filed Chronology Or Real Editing Activity', 'lunara-film' ); ?></h2>
+
                             </div>
                         </div>
                         <div class="lunara-archive-sort" aria-label="<?php esc_attr_e( 'Sort archive', 'lunara-film' ); ?>">
@@ -3487,8 +3453,8 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
                         <?php if ( ! empty( $support_posts ) ) : ?>
                             <div class="lunara-editorial-archive-rail">
                                 <div class="lunara-editorial-archive-rail-shell">
-                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $args['lead_rail_kicker'] ); ?></p>
                                     <h2 class="lunara-section-title"><?php echo esc_html( $args['lead_rail_title'] ); ?></h2>
+                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $args['lead_rail_kicker'] ); ?></p>
                                 </div>
                                 <?php foreach ( $support_posts as $post_item ) : ?>
                                     <?php echo lunara_render_dispatch_archive_card( $post_item->ID ); ?>
@@ -3502,8 +3468,8 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
                         <div class="lunara-editorial-archive-slot-run" data-lunara-section="run">
                         <div class="lunara-home-section-head lunara-editorial-archive-run-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php echo esc_html( $args['run_kicker'] ); ?></p>
                                 <h2 class="lunara-section-title"><?php echo esc_html( $args['run_title'] ); ?></h2>
+                                <p class="lunara-home-section-kicker"><?php echo esc_html( $args['run_kicker'] ); ?></p>
                             </div>
                         </div>
 
@@ -3530,8 +3496,8 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
                             <?php endif; ?>
                         </div>
                         <div class="lunara-editorial-archive-empty-note">
-                            <p class="lunara-home-section-kicker"><?php echo esc_html( $args['empty_note_kicker'] ); ?></p>
                             <h2 class="lunara-section-title"><?php echo esc_html( $args['empty_note_title'] ); ?></h2>
+                            <p class="lunara-home-section-kicker"><?php echo esc_html( $args['empty_note_kicker'] ); ?></p>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -3539,24 +3505,24 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
                     <div class="lunara-news-archive-standby-shell lunara-editorial-archive-slot-standby" data-lunara-section="standby">
                         <div class="lunara-home-section-head lunara-news-archive-standby-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Stay On Signal', 'lunara-film' ); ?></p>
                                 <h2 class="lunara-section-title"><?php esc_html_e( 'The publication is still alive around the dispatch desk.', 'lunara-film' ); ?></h2>
+
                             </div>
                         </div>
                         <div class="lunara-news-archive-standby-grid">
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['reviews'] ?? 1 ) ); ?>;" href="<?php echo esc_url( get_post_type_archive_link( 'review' ) ?: home_url( '/reviews/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Criticism', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Browse The Review Archive', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Enter The Reviews', 'lunara-film' ); ?></span>
                             </a>
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['ledger'] ?? 2 ) ); ?>;" href="<?php echo esc_url( home_url( '/oscars/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Ledger', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Step Into The Oscar Ledger', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Open The Ledger', 'lunara-film' ); ?></span>
                             </a>
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['home'] ?? 3 ) ); ?>;" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Front Door', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Return To The Live Homepage', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Go To Lunara', 'lunara-film' ); ?></span>
                             </a>
                         </div>
@@ -3604,8 +3570,7 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
         $year_options    = $is_director_archive ? array() : lunara_get_review_archive_year_options();
 
         $lead_post       = ! empty( $posts ) ? array_shift( $posts ) : null;
-        $support_posts   = array_slice( $posts, 0, 4 );
-        $remaining_posts = array_slice( $posts, 4 );
+        $remaining_posts = $posts; // One continuous archive after the lead; no companion split.
         $has_posts       = $lead_post instanceof WP_Post;
         $classes        .= $has_posts ? ' lunara-review-archive-has-posts' : ' lunara-review-archive-is-empty';
         $sort_options    = isset( $args['sort_options'] ) && is_array( $args['sort_options'] ) ? $args['sort_options'] : lunara_get_review_archive_sort_options();
@@ -3770,7 +3735,7 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                 }
             }
             if ( '' !== $showcase_cards ) {
-                $retention_showcase_markup = '<div class="lunara-review-archive-retention-showcase-head"><p class="lunara-home-section-kicker">' . esc_html( $labels['retention_kicker'] ) . '</p><h2 class="lunara-section-title">' . esc_html( $labels['retention_title'] ) . '</h2></div><div class="lunara-review-archive-retention-showcase-grid">' . $showcase_cards . '</div>';
+                $retention_showcase_markup = '<div class="lunara-review-archive-retention-showcase-head"><h2 class="lunara-section-title">' . esc_html( $labels['retention_title'] ) . '</h2><p class="lunara-home-section-kicker">' . esc_html( $labels['retention_kicker'] ) . '</p></div><div class="lunara-review-archive-retention-showcase-grid">' . $showcase_cards . '</div>';
             }
             $gallery_markup = function_exists( 'lunara_reviews_archive_studio_render_gallery' )
                 ? lunara_reviews_archive_studio_render_gallery( isset( $studio_config['gallery'] ) && is_array( $studio_config['gallery'] ) ? $studio_config['gallery'] : array() )
@@ -3796,8 +3761,8 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
             <section class="lunara-home-section lunara-archive-hero lunara-review-archive-hero lunara-review-archive-slot-hero" data-lunara-section="hero" data-lunara-site-studio-section="hero" style="order:<?php echo esc_attr( (string) $lane_orders['hero'] ); ?> !important;">
                 <div class="lunara-review-archive-hero-shell">
                     <div class="lunara-review-archive-hero-copy-wrap">
-                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <h1 class="lunara-archive-hero-title"><?php echo esc_html( $args['title'] ); ?></h1>
+                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <?php if ( '' !== $copy ) : ?>
                             <p class="lunara-archive-hero-copy"><?php echo esc_html( wp_trim_words( $copy, max( 12, intval( $args['copy_words'] ) ) ) ); ?></p>
                         <?php endif; ?>
@@ -3811,8 +3776,8 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                 <div class="lunara-review-archive-toolbar">
                     <div class="lunara-home-section-head lunara-review-archive-toolbar-head">
                         <div>
-                            <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['toolbar_kicker'] ); ?></p>
                             <h2 class="lunara-section-title"><?php echo esc_html( $labels['toolbar_title'] ); ?></h2>
+                            <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['toolbar_kicker'] ); ?></p>
                             <?php if ( is_array( $studio_config ) && isset( $studio_config['supporting_copy'] ) && '' !== trim( (string) $studio_config['supporting_copy'] ) ) : ?>
                                 <p class="lunara-home-section-summary"><?php echo esc_html( $studio_config['supporting_copy'] ); ?></p>
                             <?php endif; ?>
@@ -3867,56 +3832,6 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                         );
                         ?>
 
-                        <?php if ( ! empty( $support_posts ) ) : ?>
-                            <div class="lunara-review-archive-support-suite">
-                                <div class="lunara-review-archive-support-head">
-                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['support_kicker'] ); ?></p>
-                                    <h2 class="lunara-section-title"><?php echo esc_html( $labels['support_title'] ); ?></h2>
-                                </div>
-                                <div
-                                    class="lunara-review-archive-rail lunara-review-archive-dynamic-rail"
-                                    data-lunara-review-dynamic-rail
-                                    data-lunara-dynamic-rail
-                                    data-lunara-dynamic-rail-autoplay="6800"
-                                    aria-label="<?php esc_attr_e( 'Current companion review files', 'lunara-film' ); ?>"
-                                >
-                                    <?php if ( count( $support_posts ) > 1 ) : ?>
-                                        <div class="lunara-review-archive-rail-controls">
-                                            <button type="button" class="lunara-review-archive-rail-control" data-lunara-dynamic-rail-prev aria-label="<?php esc_attr_e( 'Previous companion review', 'lunara-film' ); ?>">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </button>
-                                            <button type="button" class="lunara-review-archive-rail-control" data-lunara-dynamic-rail-next aria-label="<?php esc_attr_e( 'Next companion review', 'lunara-film' ); ?>">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </button>
-                                            <button type="button" class="lunara-review-archive-rail-toggle" data-lunara-dynamic-rail-toggle aria-label="<?php esc_attr_e( 'Pause companion review rotation', 'lunara-film' ); ?>" aria-pressed="false">
-                                                <?php esc_html_e( 'Pause', 'lunara-film' ); ?>
-                                            </button>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="lunara-review-archive-rail-track" data-lunara-dynamic-rail-track tabindex="0">
-                                    <?php foreach ( $support_posts as $support_index => $support_post ) : ?>
-                                        <div class="lunara-review-archive-rail-item" data-lunara-dynamic-rail-item>
-                                            <?php echo lunara_render_review_grid_card( $support_post->ID ); ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    </div>
-                                    <?php if ( count( $support_posts ) > 1 ) : ?>
-                                        <div class="lunara-review-archive-rail-dots" aria-label="<?php esc_attr_e( 'Companion review position', 'lunara-film' ); ?>">
-                                            <?php foreach ( $support_posts as $support_index => $support_post ) : ?>
-                                                <button
-                                                    type="button"
-                                                    class="lunara-review-archive-rail-dot<?php echo 0 === $support_index ? ' is-active' : ''; ?>"
-                                                    data-lunara-dynamic-rail-dot
-                                                    data-lunara-dynamic-rail-index="<?php echo esc_attr( (string) $support_index ); ?>"
-                                                    aria-label="<?php echo esc_attr( sprintf( __( 'Go to companion review %d', 'lunara-film' ), $support_index + 1 ) ); ?>"
-                                                    <?php echo 0 === $support_index ? 'aria-current="true"' : ''; ?>
-                                                ></button>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                     <?php if ( ! empty( $remaining_posts ) ) : ?>
@@ -3937,7 +3852,6 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                         <div id="lunara-review-archive-run" class="lunara-review-archive-run" data-lunara-section="run">
                             <div class="lunara-home-section-head lunara-review-archive-run-head">
                                 <div>
-                                    <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['run_kicker'] ); ?></p>
                                     <h2 class="lunara-section-title"><?php echo esc_html( $labels['run_title'] ); ?></h2>
                                 </div>
                             </div>
@@ -3948,8 +3862,8 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                                 <?php if ( $retention_span > 0 ) : ?>
                                     <aside class="lunara-review-archive-retention-card spans-<?php echo esc_attr( (string) $retention_span ); ?>" aria-label="<?php esc_attr_e( 'More Lunara destinations', 'lunara-film' ); ?>">
                                         <div class="lunara-review-archive-retention-copy">
-                                            <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['retention_kicker'] ); ?></p>
                                             <h3><?php echo esc_html( $labels['retention_title'] ); ?></h3>
+                                            <p class="lunara-home-section-kicker"><?php echo esc_html( $labels['retention_kicker'] ); ?></p>
                                             <p><?php echo esc_html( $labels['retention_copy'] ); ?></p>
                                         </div>
                                         <div class="lunara-review-archive-retention-actions">
@@ -4064,8 +3978,8 @@ if ( ! function_exists( 'lunara_render_news_archive_shell' ) ) {
             <section class="lunara-home-section lunara-archive-hero lunara-news-archive-hero lunara-news-archive-slot-hero" data-lunara-section="hero">
                 <div class="lunara-news-archive-hero-shell">
                     <div class="lunara-news-archive-hero-copy-wrap">
-                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <h1 class="lunara-archive-hero-title"><?php echo esc_html( $args['title'] ); ?></h1>
+                        <p class="lunara-archive-hero-kicker"><?php echo esc_html( $args['kicker'] ); ?></p>
                         <?php if ( '' !== $copy ) : ?>
                             <p class="lunara-archive-hero-copy"><?php echo esc_html( wp_trim_words( $copy, max( 12, intval( $args['copy_words'] ) ) ) ); ?></p>
                         <?php endif; ?>
@@ -4104,8 +4018,8 @@ if ( ! function_exists( 'lunara_render_news_archive_shell' ) ) {
                         <?php if ( ! empty( $support_posts ) ) : ?>
                             <div class="lunara-news-archive-rail">
                                 <div class="lunara-news-archive-rail-shell">
-                                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'In Rotation', 'lunara-film' ); ?></p>
                                     <h2 class="lunara-section-title"><?php esc_html_e( 'What The Signal Is Holding Beside The Lead', 'lunara-film' ); ?></h2>
+
                                 </div>
                                 <?php foreach ( $support_posts as $post_item ) : ?>
                                     <?php echo lunara_render_dispatch_archive_card( $post_item->ID ); ?>
@@ -4119,8 +4033,8 @@ if ( ! function_exists( 'lunara_render_news_archive_shell' ) ) {
                         <div class="lunara-news-archive-slot-run" data-lunara-section="run">
                         <div class="lunara-home-section-head lunara-news-archive-run-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Archive Run', 'lunara-film' ); ?></p>
                                 <h2 class="lunara-section-title"><?php esc_html_e( 'More Lunara Dispatches', 'lunara-film' ); ?></h2>
+
                             </div>
                         </div>
 
@@ -4141,15 +4055,15 @@ if ( ! function_exists( 'lunara_render_news_archive_shell' ) ) {
                     <?php if ( function_exists( 'lunara_news_archive_empty_section_is_enabled' ) ? lunara_news_archive_empty_section_is_enabled( 'intro' ) : true ) : ?>
                     <div class="lunara-news-archive-empty-shell lunara-news-archive-slot-intro" data-lunara-section="intro">
                         <div class="lunara-archive-empty lunara-news-archive-empty">
-                            <p class="lunara-home-section-kicker"><?php esc_html_e( 'Desk Standby', 'lunara-film' ); ?></p>
                             <h2><?php echo esc_html( $args['empty_title'] ); ?></h2>
+
                             <?php if ( '' !== trim( (string) $args['empty_copy'] ) ) : ?>
                                 <p><?php echo esc_html( $args['empty_copy'] ); ?></p>
                             <?php endif; ?>
                         </div>
                         <div class="lunara-news-archive-empty-note">
-                            <p class="lunara-home-section-kicker"><?php esc_html_e( 'What Lives Here', 'lunara-film' ); ?></p>
                             <h2 class="lunara-section-title"><?php esc_html_e( 'Breaking items, industry shifts, and the stories worth moving on quickly.', 'lunara-film' ); ?></h2>
+
                         </div>
                     </div>
                     <?php endif; ?>
@@ -4157,24 +4071,24 @@ if ( ! function_exists( 'lunara_render_news_archive_shell' ) ) {
                     <div class="lunara-news-archive-standby-shell lunara-news-archive-slot-standby" data-lunara-section="standby">
                         <div class="lunara-home-section-head lunara-news-archive-standby-head">
                             <div>
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Stay On Signal', 'lunara-film' ); ?></p>
                                 <h2 class="lunara-section-title"><?php esc_html_e( 'The publication is still alive around the dispatch desk.', 'lunara-film' ); ?></h2>
+
                             </div>
                         </div>
                         <div class="lunara-news-archive-standby-grid">
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['reviews'] ?? 1 ) ); ?>;" href="<?php echo esc_url( get_post_type_archive_link( 'review' ) ?: home_url( '/reviews/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Criticism', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Browse The Review Archive', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Enter The Reviews', 'lunara-film' ); ?></span>
                             </a>
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['ledger'] ?? 2 ) ); ?>;" href="<?php echo esc_url( home_url( '/oscars/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Ledger', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Step Into The Oscar Ledger', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Open The Ledger', 'lunara-film' ); ?></span>
                             </a>
                             <a class="lunara-news-archive-standby-card" style="order:<?php echo esc_attr( intval( $standby_card_order['home'] ?? 3 ) ); ?>;" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                                <p class="lunara-home-section-kicker"><?php esc_html_e( 'Front Door', 'lunara-film' ); ?></p>
                                 <h3><?php esc_html_e( 'Return To The Live Homepage', 'lunara-film' ); ?></h3>
+
                                 <span class="lunara-section-link"><?php esc_html_e( 'Go To Lunara', 'lunara-film' ); ?></span>
                             </a>
                         </div>

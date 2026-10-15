@@ -14,6 +14,7 @@ function absint( $value ) {
 }
 
 require dirname( __DIR__ ) . '/inc/journal-archive-critical.php';
+require dirname( __DIR__ ) . '/inc/journal-archive-media.php';
 
 $payload = isset( $argv[1] ) ? json_decode( base64_decode( (string) $argv[1] ), true ) : array();
 $config  = array(
@@ -32,5 +33,11 @@ echo json_encode(
 	array(
 		'variables' => lunara_journal_archive_variable_css( $config ),
 		'seed'      => lunara_journal_archive_critical_css(),
+        'sizes'     => array(
+            'regular' => lunara_journal_archive_card_image_sizes( $config ),
+            'index' => lunara_journal_archive_card_image_sizes( $config, 'index' ),
+            'lead' => lunara_journal_archive_card_image_sizes( $config, 'lead' ),
+            'supporting' => lunara_journal_archive_card_image_sizes( $config, 'supporting' ),
+        ),
 	)
 );

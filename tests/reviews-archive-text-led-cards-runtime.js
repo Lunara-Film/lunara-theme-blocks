@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright-core');
 
 const themeRoot = path.resolve(__dirname, '..');
 const baseCss = fs.readFileSync(path.join(themeRoot, 'style.css'), 'utf8');
@@ -154,7 +154,8 @@ async function measure(page) {
             const title = card.querySelector('.lunara-pair-card-title-link');
             const pseudo = getComputedStyle(card, '::after');
             const cardRect = card.getBoundingClientRect();
-            const counterVisible = pseudo.display !== 'none' && pseudo.content !== 'none';
+            const counterGenerated = !['none', 'normal', '""', "''"].includes(pseudo.content);
+            const counterVisible = pseudo.display !== 'none' && counterGenerated;
             // Chromium exposes the unresolved counter() expression through
             // getComputedStyle(). Measure the visibly rendered 01/02/03 label.
             const content = String(index + 1).padStart(2, '0');
@@ -176,6 +177,8 @@ async function measure(page) {
             return {
                 counter,
                 counterDisplay: pseudo.display,
+                counterContent: pseudo.content,
+                counterGenerated,
                 counterFontSize: pseudo.fontSize,
                 counterLineHeight: pseudo.lineHeight,
                 counterRight: pseudo.right,
@@ -233,30 +236,29 @@ function assertMediaBackedPreserved(metrics, phase, mobile) {
 
 function assertPairingNumerals(metrics, viewportWidth, phase) {
     for (const [index, card] of metrics.pairing.entries()) {
-        if (viewportWidth <= 680) {
+        {
             if (card.roleIntersection > 0.5 || card.titleIntersection > 0.5) {
                 fail(`${phase}: Pairing numeral ${index + 1} overlaps its role or title.`, metrics);
             }
-            if (card.counterDisplay !== 'none' || card.counter !== null) {
-                fail(`${phase}: decorative Pairing numeral ${index + 1} must be hidden on phones.`, metrics);
+            // A pseudo-element with content:none generates no box even when
+            // legacy positioning leaves its computed display as block.
+            if (card.counterGenerated || card.counter !== null) {
+                fail(`${phase}: decorative Pairing numeral ${index + 1} must be absent at every viewport.`, metrics);
             }
             if (Number.parseFloat(card.rolePaddingRight) > 0.5 || Number.parseFloat(card.titlePaddingRight) > 0.5) {
                 fail(`${phase}: Pairing copy ${index + 1} must not reflow for the absolute numeral.`, metrics);
             }
-        } else if (Math.abs(Number.parseFloat(card.counterFontSize) - 54.4) > 0.5) {
-            fail(`${phase}: the desktop/tablet Pairing numeral geometry regressed.`, metrics);
         }
     }
 }
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await chromium.launch({ headless: true, ...(process.env.LUNARA_BROWSER_EXECUTABLE ? { executablePath: process.env.LUNARA_BROWSER_EXECUTABLE } : { channel: 'chrome' }) });
     const results = [];
 
     try {
         for (const viewportWidth of [375, 390, 782, 1440]) {
-            const page = await browser.newPage();
-            await page.setViewport({ width: viewportWidth, height: 1000, deviceScaleFactor: 1 });
+            const page = await browser.newPage({ viewport: { width: viewportWidth, height: 1000 }, deviceScaleFactor: 1 });
             await page.setContent(`<!doctype html>
                 <html>
                     <head>
@@ -285,8 +287,7 @@ function assertPairingNumerals(metrics, viewportWidth, phase) {
                 fail(`${viewportWidth}px: the Reviews archive overflows horizontally.`, { before, after });
             }
 
-            const homepage = await browser.newPage();
-            await homepage.setViewport({ width: viewportWidth, height: 1000, deviceScaleFactor: 1 });
+            const homepage = await browser.newPage({ viewport: { width: viewportWidth, height: 1000 }, deviceScaleFactor: 1 });
             await homepage.setContent(`<!doctype html>
                 <html>
                     <head>

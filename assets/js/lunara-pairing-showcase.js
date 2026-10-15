@@ -30,7 +30,7 @@
 
 	// Common role labels the signature feature uses — offered as suggestions,
 	// but the field is free text so any relation works.
-	var LABEL_SUGGESTIONS = [ 'Theme Echo', 'Counter-Program', 'Career Context', 'Double Feature', 'Origin Story', 'The Antidote' ];
+	var LABEL_SUGGESTIONS = [ 'Theme Echo', 'Counter Program', 'Career Context', 'Double Feature', 'Origin Story', 'The Antidote' ];
 
 	// id → poster thumbnail cache for the override preview.
 	var posterCache = {};
@@ -216,6 +216,19 @@
 		);
 	}
 
+	function ReviewAvailability( props ) {
+		var ref = element.useRef( null );
+		useEffect( function () {
+			var editor = window.wp.data.select( 'core/editor' );
+			var cancel, timer = setTimeout( function () {
+				cancel = window.LunaraPairingReviewEditor.mount( ref.current, { imdb: props.imdb || '', review_id: editor && editor.getCurrentPostId ? Number( editor.getCurrentPostId() ) || 0 : 0 }, false );
+			}, 250 );
+			ref.current.textContent = __( 'Checking Lunara reviews…', 'lunara-film' );
+			return function () { clearTimeout( timer ); if ( cancel ) { cancel(); } };
+		}, [ props.imdb ] );
+		return el( 'p', { ref: ref, className: 'description' } );
+	}
+
 	function PairingEditor( props ) {
 		var attributes = props.attributes;
 		var setAttributes = props.setAttributes;
@@ -257,7 +270,7 @@
 
 		var cardBox = {
 			border: '1px solid rgba(128,128,128,0.25)',
-			borderRadius: '6px',
+			borderRadius: '0',
 			padding: '10px',
 			marginBottom: '12px'
 		};
@@ -327,6 +340,7 @@
 							} )
 						)
 					),
+					el( ReviewAvailability, { imdb: pair.imdb } ),
 					el( TextareaControl, {
 						label: __( 'Note', 'lunara-film' ),
 						value: pair.note || '',
@@ -343,7 +357,7 @@
 							render: function ( o ) {
 								return el( 'div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
 									posterId && posterCache[ posterId ]
-										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '3px' } } )
+										? el( 'img', { src: posterCache[ posterId ], alt: '', style: { width: '34px', height: '50px', objectFit: 'cover', borderRadius: '0' } } )
 										: null,
 									el( Button, { variant: 'secondary', size: 'small', onClick: o.open },
 										posterId ? __( 'Replace poster', 'lunara-film' ) : __( 'Poster override (optional)', 'lunara-film' ) ),

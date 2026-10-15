@@ -103,7 +103,7 @@ function test_overrides() {
         'lunara_home_oscar_facts_artwork_overrides' => json_encode( (object) array( 101 => $full, 102 => $cover, 103 => $source, 104 => $missing, 105 => $full, 106 => $full, 107 => $cover ) ),
     );
 }
-$GLOBALS['pick_count'] = 4;
+$GLOBALS['pick_count'] = in_array( '--all-items', $argv, true ) ? 15 : 4;
 $GLOBALS['fact_count'] = 7;
 if ( in_array( '--framing-fixture', $argv, true ) ) {
     $GLOBALS['long_titles'] = true;

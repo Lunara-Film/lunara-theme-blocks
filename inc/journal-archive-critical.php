@@ -127,44 +127,44 @@ if ( ! function_exists( 'lunara_journal_archive_critical_css' ) ) {
 	 */
 	function lunara_journal_archive_critical_css() {
 		$css = <<<'CSS'
-#primary.lunara-journal-archive-page{box-sizing:border-box;display:flex!important;flex-direction:column!important;gap:16px!important;margin-inline:auto!important;max-width:1180px!important;min-width:0!important;padding:0 clamp(16px,4vw,40px) 80px!important;width:100%!important}
+#primary.lunara-journal-archive-page{box-sizing:border-box;display:flex!important;flex-direction:column!important;gap:24px!important;margin-inline:auto!important;max-width:1180px!important;min-width:0!important;padding:0 clamp(20px,4vw,40px) 80px!important;width:100%!important}
 #primary.lunara-journal-archive-page>[class*="lunara-journal-archive-slot-"]{box-sizing:border-box;max-width:100%;min-width:0;order:initial!important}
-#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-hero{align-content:center;display:grid!important;gap:10px!important;margin:0!important;min-height:min(var(--lunara-journal-archive-hero-min,240px),100px)!important;padding:24px 0 0!important;width:100%!important}
-#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-deskbar{align-items:center;display:flex!important;flex-wrap:wrap!important;gap:8px 20px!important;margin:0!important;padding:0!important;width:100%!important}
+#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-hero{align-content:center;justify-items:center!important;text-align:center;display:grid!important;gap:10px!important;margin:0!important;min-height:min(var(--lunara-journal-archive-hero-min,240px),100px)!important;padding:24px 0 0!important;width:100%!important}
+#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-deskbar{align-items:center;justify-content:center!important;display:flex!important;flex-wrap:wrap!important;gap:8px 20px!important;margin:0!important;padding:0!important;width:100%!important}
 #primary.lunara-journal-archive-page>.lunara-journal-archive-slot-filters{display:grid!important;gap:10px!important;margin:0!important;width:100%!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-filters{align-items:center;box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin:0!important;padding:0!important;width:100%!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-filters{align-items:center;justify-content:center!important;box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin:0!important;padding:0!important;width:100%!important}
 #primary.lunara-journal-archive-page>.lunara-journal-archive-slot-toolbar{align-items:center;display:grid!important;gap:12px!important;grid-template-columns:minmax(0,1fr)!important;margin:0!important;padding:0!important;width:100%!important}
-#primary.lunara-journal-archive-page .lunara-archive-hero-title{font-size:clamp(2rem,3.2vw,2.5rem)!important}
-#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head:not(:has(.lunara-home-section-summary)),#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head .lunara-home-section-kicker,#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head .lunara-section-title{display:none!important}
+#primary.lunara-journal-archive-page .lunara-archive-hero-title{font-size:clamp(2.7rem,6vw,4.5rem)!important}
+#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head .lunara-home-section-summary{width:100%!important;margin-inline:auto!important;text-align:center}
+#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head:not(:has(.lunara-home-section-summary)),#primary.lunara-journal-archive-page .lunara-editorial-archive-toolbar-head :is(.lunara-home-section-kicker,.lunara-section-title){display:none!important}
 #primary.lunara-journal-archive-page>.lunara-journal-archive-slot-deskbar span{padding:0!important;border:0!important}
 #primary.lunara-journal-archive-page .lunara-journal-filter-pill,#primary.lunara-journal-archive-page .lunara-archive-sort-link{min-height:44px!important}
-#primary.lunara-journal-archive-page .lunara-archive-sort{padding:0!important;justify-content:flex-start!important}
-#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-grid{align-items:stretch;grid-auto-rows:1fr!important;display:grid!important;gap:var(--lunara-journal-archive-grid-gap,24px)!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;margin:0!important;width:100%!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card{box-sizing:border-box;grid-column:auto!important;min-height:var(--lunara-journal-archive-card-min,390px)!important;min-width:0!important;width:100%!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-link{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto 1fr!important;height:100%!important;min-height:var(--lunara-journal-archive-card-min,390px)!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-poster-wrap{aspect-ratio:16/10!important;min-height:var(--lunara-journal-archive-media-min,220px)!important;overflow:hidden!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-poster-wrap img{display:block!important;height:100%!important;object-fit:cover!important;width:100%!important}
+#primary.lunara-journal-archive-page .lunara-archive-sort{padding:0!important;justify-content:center!important}
+#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-grid{align-items:stretch;grid-auto-rows:auto!important;display:grid!important;gap:var(--lunara-journal-archive-grid-gap,24px)!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:0!important;width:100%!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-card{box-sizing:border-box;grid-column:auto!important;min-height:0!important;min-width:0!important;width:100%!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-card{& .lunara-review-grid-link{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto 1fr!important;height:100%!important;min-height:0!important}& .lunara-review-grid-poster-wrap{aspect-ratio:16/10!important;min-height:0!important;overflow:hidden!important}& .lunara-review-grid-poster-wrap img{display:block!important;height:100%!important;object-fit:cover!important;width:100%!important}& .lunara-review-grid-kicker{display:none!important}& .lunara-review-grid-copy{display:flex!important;flex-direction:column!important;padding:20px 0 24px!important;gap:12px!important}& .lunara-review-grid-title{text-align:center;font-size:clamp(1.2rem,1.65vw,1.55rem)!important;line-height:1.25!important;min-height:0!important;max-height:none!important;overflow:visible!important}& .lunara-review-grid-footer{margin:auto 0 0!important}}
 #primary.lunara-journal-archive-page .lunara-journal-archive-card.is-lead .lunara-review-grid-poster{opacity:1!important;transition:none!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-kicker{display:none!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-copy{display:flex!important;flex-direction:column!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-footer{margin:auto 0 0!important}
-#primary.lunara-journal-archive-page .lunara-journal-card-labels{display:flex!important;flex-wrap:wrap!important;align-content:start!important;align-items:start!important;gap:8px!important;min-height:54px!important}
+#primary.lunara-journal-archive-page .lunara-journal-card-labels{display:flex!important;justify-content:center!important;text-align:center;flex-wrap:wrap!important;align-content:start!important;align-items:start!important;gap:8px!important;min-height:0!important}
 #primary.lunara-journal-archive-page .lunara-journal-card-labels>.lunara-dispatch-type{flex-basis:100%!important}
 #primary.lunara-journal-archive-page .lunara-journal-card-labels>:is(.lunara-journal-card-provenance,.lunara-trailer-card-badge){margin:0!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card.is-text-brief,#primary.lunara-journal-archive-page .lunara-journal-archive-card.is-media-failed{grid-column:auto!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-card.is-text-brief .lunara-review-grid-link,#primary.lunara-journal-archive-page .lunara-journal-archive-card.is-media-failed .lunara-review-grid-link{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
-#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-retention{display:grid!important;gap:var(--lunara-journal-archive-retention-gap,18px)!important;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)!important;margin:0!important;padding:clamp(18px,2.4vw,30px)!important;width:100%!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-card:is(.is-text-brief,.is-media-failed){grid-column:auto!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-card:is(.is-text-brief,.is-media-failed) .lunara-review-grid-link{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-retention{display:grid!important;gap:24px!important;grid-template-columns:minmax(0,1fr)!important;margin:32px 0 0!important;padding:32px 0!important;width:100%!important}
 #primary.lunara-journal-archive-page .lunara-journal-archive-retention-grid{display:grid!important;gap:var(--lunara-journal-archive-retention-gap,18px)!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;min-width:0!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-retention-card{box-sizing:border-box;display:flex!important;flex-direction:column!important;gap:12px!important;min-height:185px!important;min-width:0!important;overflow:hidden!important}
-#primary.lunara-journal-archive-page .lunara-journal-archive-retention-media{aspect-ratio:16/9;display:block;flex:0 0 auto;margin:-16px -16px 2px;overflow:hidden;position:relative;width:calc(100% + 32px)}
+#primary.lunara-journal-archive-page .lunara-journal-archive-retention-card{box-sizing:border-box;display:flex!important;flex-direction:column!important;gap:12px!important;min-height:0!important;min-width:0!important;overflow:visible!important;padding:16px 0!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-retention-media{aspect-ratio:16/9;display:block;flex:0 0 auto;margin:0;overflow:hidden;position:relative;width:100%}
 #primary.lunara-journal-archive-page .lunara-journal-archive-retention-media img{display:block;height:100%!important;object-fit:cover!important;object-position:var(--lunara-retention-focus-x,50%) var(--lunara-retention-focus-y,50%)!important;width:100%!important}
-#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-pagination{margin:0 auto!important;width:100%!important}
-@media(max-width:900px){#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-toolbar{grid-template-columns:minmax(0,1fr)!important}#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-retention{grid-template-columns:minmax(0,1fr)!important}}
+#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-pagination{justify-content:center!important;margin:0 auto!important;width:100%!important}
+#primary.lunara-journal-archive-page .lunara-journal-archive-retention-head{align-items:center!important;text-align:center}
+#primary.lunara-journal-archive-page .lunara-journal-archive-gallery-head{justify-items:center!important;text-align:center}
+#primary.lunara-journal-archive-page :is(.lunara-journal-archive-retention-title,.lunara-journal-archive-retention-kicker){text-align:center}
+#primary.lunara-journal-archive-page .lunara-journal-card-provenance{justify-content:center!important}
+@media(min-width:641px){#primary.lunara-journal-archive-page>.lunara-journal-archive-slot-grid>.lunara-journal-archive-card:last-child:nth-child(odd){grid-column:1/-1!important;width:calc((100% - var(--lunara-journal-archive-grid-gap,24px)) / 2)!important;justify-self:center}}
+@media(min-width:981px){#primary.lunara-journal-archive-page>.is-editorial-edition{&>.lunara-journal-archive-card:last-child:nth-child(odd){grid-column:auto!important;width:100%!important}&>.lunara-journal-archive-card:last-child:nth-child(even){grid-column:1/-1!important;width:calc((100% - var(--lunara-journal-archive-grid-gap,24px)) / 2)!important;justify-self:center}&>.lunara-journal-archive-card.is-lead{grid-column:1/-1!important;max-width:860px!important;justify-self:center}&>.is-lead .lunara-review-grid-title{font-size:calc(var(--lunara-journal-archive-lead-title,1.72rem) * 1.6)!important;line-height:1.12!important}&>.is-lead .lunara-review-grid-excerpt{font-size:1.125rem!important;-webkit-line-clamp:unset!important;max-height:none!important;overflow:visible!important;max-width:58ch;margin-inline:auto!important}&>.is-lead .lunara-review-grid-footer{margin:12px 0 0!important}}}
 @media(max-width:768px) {#primary.lunara-journal-archive-page{
     & {
         gap: 20px !important;
-        padding: 0 16px 48px !important;
-        width: 100% !important;
+        padding: 0 20px 48px !important;
         max-width: 100% !important;
     }
     & > .lunara-journal-archive-slot-hero {
@@ -173,7 +173,7 @@ if ( ! function_exists( 'lunara_journal_archive_critical_css' ) ) {
         padding: 20px 0 0 !important;
     }
     & > .lunara-journal-archive-slot-deskbar {
-        display: none !important;
+        display: flex !important;
     }
     & .lunara-journal-archive-filters,
     & > .lunara-journal-archive-slot-toolbar,
@@ -183,39 +183,10 @@ if ( ! function_exists( 'lunara_journal_archive_critical_css' ) ) {
         overflow: visible !important;
         padding: 0 !important;
     }
-    & .lunara-journal-archive-card,
-    & .lunara-journal-archive-card .lunara-review-grid-link {
-        min-height: 0 !important;
-    }
 }}
-@media(max-width:620px) {#primary.lunara-journal-archive-page{
-    & > .lunara-journal-archive-slot-grid,
-    & .lunara-journal-archive-retention-grid,
-    & .lunara-journal-archive-gallery-grid {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-    & .lunara-journal-archive-card,
-    & .lunara-journal-archive-card.is-lead {
-        grid-column: auto !important;
-    }
-    & .lunara-journal-archive-card .lunara-review-grid-link,
-    & .lunara-journal-archive-card.is-lead .lunara-review-grid-link {
-        grid-template-columns: minmax(0, 1fr) !important;
-        grid-template-rows: auto 1fr !important;
-        height: 100% !important;
-    }
-    & .lunara-journal-archive-card .lunara-review-grid-poster-wrap,
-    & .lunara-journal-archive-card.is-lead .lunara-review-grid-poster-wrap {
-        aspect-ratio: 16 / 10 !important;
-        height: auto !important;
-        min-height: 0 !important;
-    }
-    & > .lunara-journal-archive-slot-retention {
-        padding: 18px !important;
-    }
-    & .lunara-journal-archive-retention-card {
-        min-height: 0 !important;
-    }
+@media(max-width:640px){#primary.lunara-journal-archive-page{
+&>.lunara-journal-archive-slot-grid,& .lunara-journal-archive-retention-grid,& .lunara-journal-archive-gallery-grid{grid-template-columns:minmax(0,1fr)!important}
+& .lunara-journal-archive-card .lunara-review-grid-poster-wrap{height:auto!important}
 }}
 CSS;
 

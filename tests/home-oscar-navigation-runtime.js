@@ -4,7 +4,7 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { chromium } = require('playwright-core');
 const root = path.resolve(__dirname, '..');
-const rendered = spawnSync('php', [path.join(__dirname, 'home-oscar-mobile-art-runtime.php'), '--fixture'], {encoding:'utf8'});
+const rendered = spawnSync('php', [path.join(__dirname, 'home-oscar-mobile-art-runtime.php'), '--fixture', '--all-items'], {encoding:'utf8'});
 if (rendered.status !== 0) throw new Error(rendered.stderr || rendered.stdout);
 const styles = ['style.css','assets/css/lunara-shell.css','assets/css/lunara-home-modules.css','assets/css/lunara-public-guardrails.css'];
 const html = `<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">${styles.map(file=>`<link rel="stylesheet" href="/${file}">`).join('')}<style>:root{--lunara-home-oscar-picks-gap:24px;--lunara-home-oscar-picks-card-min:460px;--lunara-home-oscar-picks-mobile-column:86%}body{margin:0}.lunara-front-page{width:calc(100% - 32px);margin:16px auto}</style><script src="/assets/js/lunara-scroll-carousel.js" defer></script></head><body class="home"><main class="lunara-front-page">${rendered.stdout}</main></body></html>`;
@@ -34,6 +34,13 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
             });
             await page.goto('https://oscar-rail.test/');
             const track = page.locator('[data-lunara-carousel-track]');
+            const opening = await track.evaluate(el=>{const r=el.getBoundingClientRect(),cards=[...el.children].map(n=>n.getBoundingClientRect()),visible=cards.filter(c=>c.left>=r.left-1&&c.right<=r.right+1);return{count:visible.length,left:visible[0].left-r.left,right:r.right-visible.at(-1).right};});
+            check(opening.count===(width===1440?3:1)&&Math.abs(opening.left-opening.right)<=2,`${width}/${reducedMotion}: forecast opening must have complete columns and equal gutters: ${JSON.stringify(opening)}`);
+            const headerAxes = await page.locator('.lunara-home-section-head').evaluateAll(heads=>heads.flatMap(head=>{
+                const r=head.getBoundingClientRect(),axis=r.left+r.width/2;
+                return [...head.querySelectorAll('.lunara-home-section-title,.lunara-home-section-summary,.lunara-section-link')].map(node=>{const box=node.getBoundingClientRect();return{text:node.textContent.trim(),delta:Math.abs(box.left+box.width/2-axis)};});
+            }));
+            check(headerAxes.length>0&&headerAxes.every(item=>item.delta<=1),`${width}/${reducedMotion}: Forecast heading, summary and action share the page axis: ${JSON.stringify(headerAxes)}`);
             const next = page.locator('[data-lunara-carousel-next]');
             const prev = page.locator('[data-lunara-carousel-prev]');
             const toggle = page.locator('[data-lunara-carousel-toggle]');
@@ -62,13 +69,16 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
                 return {max,step:el.children[0].offsetWidth+parseInt(styles.columnGap,10),targets:Array.from(el.children).map(card=>Math.min(max,Math.max(0,card.getBoundingClientRect().left-left-parseFloat(styles.scrollPaddingLeft))))};
             });
             check(geometry.max > 0,`${width}: fixture must have more than one visible page.`);
-            const advances = Math.ceil(geometry.max/geometry.step);
+            check(geometry.targets.length === 15, 'The public renderer must preserve all fifteen forecast records.');
+            const advances = geometry.targets.findIndex(target => Math.abs(target - geometry.max) < 2);
             for (let index=1;index<=advances;index++) {
                 await next.click();
                 try { await waitOffset(geometry.targets[index]); }
                 catch (error) { throw new Error(`${width}/${reducedMotion}: Next must reach card ${index+1} before wrapping. ${JSON.stringify(geometry)} ${error.message}`); }
                 check(true, 'Next reaches the next card.');
             }
+            const reachedEnd = await track.evaluate(el => el.scrollLeft);
+            check(Math.abs(reachedEnd - geometry.max) <= 1, `${width}/${reducedMotion}: fractional final snap must reach the actual boundary before wrapping (${reachedEnd}/${geometry.max}).`);
             await next.click(); await waitOffset(0); check(true,'Next wraps only after reaching the end.');
             await prev.click(); await waitOffset(geometry.max); check(true,'Previous wraps from the first to the last page.');
             const keyboardTarget = geometry.targets.reduce((nearest,target)=>Math.abs(target-(geometry.max-geometry.step))<Math.abs(nearest-(geometry.max-geometry.step))?target:nearest,0);
@@ -76,8 +86,28 @@ function check(value, message) { checks++; if (!value) throw new Error(message);
             await page.locator('[data-lunara-carousel-dot]').first().click(); await waitOffset(0);
             await page.locator('[data-lunara-carousel-dot]').last().click(); await waitOffset(geometry.max); check(true,'Dots can reach the final card.');
             if (width===390) {
-                await page.waitForFunction(()=>document.querySelectorAll('[data-lunara-carousel-dot]')[3].getAttribute('aria-selected')==='true');
+                await page.waitForFunction(()=>[...document.querySelectorAll('[data-lunara-carousel-dot]')].at(-1).getAttribute('aria-selected')==='true');
                 check(true,'The final mobile dot reflects the visible final card.');
+            }
+            // Offscreen rectangles are intentional. Bring every record into
+            // the viewport before judging its actual text and hit area.
+            for (let index = 0; index < geometry.targets.length; index++) {
+                await page.locator('[data-lunara-carousel-dot]').nth(index).click();
+                await waitOffset(geometry.targets[index]);
+                const visible = await track.evaluate((rail, itemIndex) => {
+                    const card = rail.children[itemIndex], bounds = card.getBoundingClientRect(), clip = rail.getBoundingClientRect();
+                    const copy = card.querySelector('.lunara-oscar-pick-card-copy');
+                    return {
+                        id: card.getAttribute('data-lunara-oscar-item-id'),
+                        visible: bounds.left >= clip.left - 2 && bounds.right <= clip.right + 2,
+                        destination: card.querySelector('a').getAttribute('href'),
+                        textFits: [...copy.querySelectorAll('h3,p')].every(node => node.scrollWidth <= node.clientWidth + 1 && node.scrollHeight <= node.clientHeight + 2),
+                        metadata: [...copy.querySelectorAll('.lunara-oscar-pick-card-kicker,.lunara-oscar-pick-card-meta,.lunara-oscar-pick-card-ledger')].map(node => parseFloat(getComputedStyle(node).fontSize)),
+                        shadow: getComputedStyle(card).boxShadow
+                    };
+                }, index);
+                check(visible.visible && visible.textFits && visible.destination && visible.id, `${width}/${reducedMotion}: record ${index + 1} must be reachable, readable and linked: ${JSON.stringify(visible)}`);
+                check(visible.shadow === 'none' && visible.metadata.every(size => size >= 13), `${width}/${reducedMotion}: record ${index + 1} must retain readable metadata without a decorative frame: ${JSON.stringify(visible)}`);
             }
             const behaviors = await page.evaluate(()=>window.railScrollBehaviors);
             check(behaviors.length >= 5,'The real runtime must handle the controls.');

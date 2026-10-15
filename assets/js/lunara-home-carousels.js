@@ -1,10 +1,17 @@
 /* Independently mounted Journal and Reviews carousels; the cinematic hero keeps its own runtime. */
 (function () {
 	'use strict';
-	function start() {
+	function start(pageRoot) {
+		pageRoot = pageRoot && pageRoot.querySelectorAll ? pageRoot : document;
+		var cleanups = [];
+		function listen(target, type, handler, options) {
+			target.addEventListener(type, handler, options);
+			cleanups.push(function () { target.removeEventListener(type, handler, options); });
+		}
+		function dispose() { cleanups.reverse().forEach(function (cleanup) { cleanup(); }); }
 		var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		// Failed remote artwork receives the same treatment as an absent image.
-		document.querySelectorAll('.lunara-home-curated-journal img, .lunara-home-curated-reviews img, .lunara-home-curated-hero img').forEach(function (img) {
+		pageRoot.querySelectorAll('.lunara-home-curated-journal img, .lunara-home-curated-reviews img, .lunara-home-curated-hero img').forEach(function (img) {
 			function fallback() {
 				// A source-less distant hero has not failed; Splide owns when
 				// its request starts and removes these attributes on activation.
@@ -15,14 +22,14 @@
 				var label = document.createElement('span'); label.textContent = 'LUNARA FILM'; placeholder.appendChild(label);
 				img.replaceWith(placeholder);
 			}
-			img.addEventListener('error', fallback, { once: true });
+			listen(img, 'error', fallback, { once: true });
 			if (img.complete && img.naturalWidth === 0) { fallback(); }
 		});
-		if (!window.Splide) { return; }
-		document.querySelectorAll('[data-lunara-journal-carousel], [data-lunara-reviews-carousel]').forEach(function (root) {
+		if (!window.Splide) { return dispose; }
+		pageRoot.querySelectorAll('[data-lunara-journal-carousel], [data-lunara-reviews-carousel]').forEach(function (root) {
 			if (root.classList.contains('is-initialized')) { return; }
 			var count = root.querySelectorAll('.splide__slide').length;
-			if (count < 2) { root.classList.add('is-journal-static'); return; }
+			if (count < 2) { root.classList.add('is-journal-static'); cleanups.push(function () { root.classList.remove('is-journal-static'); }); return; }
 			var enabled = root.getAttribute('data-lunara-autoplay-enabled') === '1';
 			var userPaused = !enabled;
 			var toggle = root.querySelector('.splide__toggle');
@@ -35,6 +42,7 @@
 				pauseOnHover: true, pauseOnFocus: true, speed: 500,
 				reducedMotion: { speed: 0, rewindSpeed: 0, autoplay: 'pause' }
 			});
+			cleanups.push(function () { try { carousel.destroy(true); } catch (ignored) {} root.classList.remove('is-journal-static', 'has-carousel-error'); });
 			function playback() {
 				var fits = count <= carousel.options.perPage;
 				root.classList.toggle('is-journal-static', fits);
@@ -42,15 +50,17 @@
 				if ((fits || motion.matches) && carousel.Components.Autoplay) { carousel.Components.Autoplay.pause(); }
 				else if (!userPaused && carousel.Components.Autoplay && !root.matches(':hover') && !root.contains(document.activeElement)) { carousel.Components.Autoplay.play(); }
 			}
-			if (toggle) { toggle.addEventListener('click', function () { userPaused = !carousel.Components.Autoplay.isPaused(); }); }
+			if (toggle) { listen(toggle, 'click', function () { userPaused = !carousel.Components.Autoplay.isPaused(); }); }
 			carousel.on('mounted resized updated', playback);
 			try { carousel.mount(); } catch (error) {
 				// Restore the ordinary readable card grid if the slider cannot initialize.
 				try { carousel.destroy(true); } catch (ignored) { /* The CSS fallback does not depend on teardown. */ }
 				root.classList.add('has-carousel-error');
 			}
-			if (motion.addEventListener) { motion.addEventListener('change', playback); }
+			if (motion.addEventListener) { listen(motion, 'change', playback); }
 		});
+		return dispose;
 	}
-	if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', start); } else { start(); }
+	if (window.LunaraApp && window.LunaraApp.register) { window.LunaraApp.register('home-carousels', start); }
+	else if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', function () { start(); }, { once: true }); } else { start(); }
 })();

@@ -26,7 +26,9 @@
 		}
 	}
 
-	function mountHeroCarousels() {
+	function mountHeroCarousels(pageRoot) {
+		pageRoot = pageRoot && pageRoot.querySelectorAll ? pageRoot : document;
+		var cleanups = [];
 		if (!window.Splide) {
 			return;
 		}
@@ -35,7 +37,7 @@
 			? window.matchMedia('(prefers-reduced-motion: reduce)').matches
 			: false;
 
-		var roots = document.querySelectorAll('.lunara-cinematic-hero-carousel.splide');
+		var roots = pageRoot.querySelectorAll('.lunara-cinematic-hero-carousel.splide');
 
 		Array.prototype.forEach.call(roots, function (root) {
 			if (root.classList.contains('is-hero-mounted')) {
@@ -48,6 +50,7 @@
 				// keeps .splide roots hidden until is-initialized/is-rendered, so
 				// release that guard explicitly when no mount is needed.
 				root.classList.add('is-hero-mounted', 'is-hero-static', 'is-rendered');
+				cleanups.push(function () { root.classList.remove('is-hero-mounted', 'is-hero-static', 'is-rendered'); });
 				return;
 			}
 
@@ -87,6 +90,10 @@
 					page: 'splide__pagination__page lunara-hero-page'
 				}
 			});
+			cleanups.push(function () {
+				try { splide.destroy(true); } catch (error) { warn('dispose', error); }
+				root.classList.remove('is-hero-mounted', 'is-hero-static');
+			});
 
 			// Pagination can jump beyond the prepared neighbors. Start its image
 			// request at the beginning of the fade, instead of waiting for moved.
@@ -98,25 +105,6 @@
 				}
 			});
 
-			// Title Card: replay the kicker/title/CTA rise on every slide
-			// change. Purely decorative, so it is isolated — a failure here
-			// must never break paging or the mount sequence.
-			splide.on('active', function (slide) {
-				try {
-					if (reduceMotion || !slide || !slide.slide) {
-						return;
-					}
-					var content = slide.slide.querySelector('.lunara-cinematic-hero-content');
-					if (content) {
-						content.classList.remove('is-title-live');
-						void content.offsetWidth;
-						content.classList.add('is-title-live');
-					}
-				} catch (err) {
-					warn('title-card', err);
-				}
-			});
-
 			// Release the pre-mount guard BEFORE mounting: Splide fires events
 			// synchronously inside mount(), and if anything in that chain ever
 			// throws, the deck must already be visible.
@@ -124,19 +112,7 @@
 
 			try {
 				splide.mount();
-				// The first slide is server-marked is-active, which means
-				// Splide's initial 'active' event can be skipped — arm its
-				// title card explicitly.
-				if (!reduceMotion) {
-					try {
-						var initial = root.querySelector('.splide__slide.is-active .lunara-cinematic-hero-content');
-						if (initial && !initial.classList.contains('is-title-live')) {
-							initial.classList.add('is-title-live');
-						}
-					} catch (err) {
-						warn('initial title-card', err);
-					}
-				}
+
 			} catch (err) {
 				warn('mount failed', err);
 				if (!root.classList.contains('splide--fade')) {
@@ -152,9 +128,12 @@
 				root.classList.add('is-hero-static');
 			}
 		});
+		return function () { cleanups.reverse().forEach(function (dispose) { dispose(); }); };
 	}
 
-	if (document.readyState !== 'loading') {
+	if (window.LunaraApp && window.LunaraApp.register) {
+		window.LunaraApp.register('hero-carousels', mountHeroCarousels);
+	} else if (document.readyState !== 'loading') {
 		mountHeroCarousels();
 	} else {
 		document.addEventListener('DOMContentLoaded', mountHeroCarousels);

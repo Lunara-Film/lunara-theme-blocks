@@ -5,8 +5,8 @@
  * The :root tokens in style.css remain the shipped defaults. This module is
  * the single runtime emitter for the six shared palette variables: explicit
  * lunara_design_tokens values win, missing keys inherit compatible Customizer
- * theme mods, and absent/invalid values use the shipped defaults. Non-default
- * font-role selections share the same wp_head layer. Reset deletes the option
+ * theme mods, and absent/invalid values use the shipped defaults. All resolved
+ * font roles share the same synchronous wp_head layer. Reset deletes the option
  * so compatible Customizer values or shipped defaults resume. The override
  * block carries a marker and is excluded from WP Rocket's unused-CSS pass.
  *
@@ -40,8 +40,8 @@ if ( ! function_exists( 'lunara_design_token_font_choices' ) ) {
 	 */
 	function lunara_design_token_font_choices() {
 		return array(
-			'tiempos-text'     => array( 'label' => 'Tiempos Text', 'stack' => '"Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", "Palatino Linotype", serif' ),
-			'tiempos-headline' => array( 'label' => 'Tiempos Headline', 'stack' => '"Tiempos Headline", "Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", serif' ),
+			'tiempos-text'     => array( 'label' => 'Tiempos Text', 'stack' => '"Tiempos Text", "Tiempos Text Fallback", Georgia, "Times New Roman", "Iowan Old Style", "Palatino Linotype", serif' ),
+			'tiempos-headline' => array( 'label' => 'Tiempos Headline', 'stack' => '"Tiempos Headline", "Tiempos Headline Fallback", "Tiempos Text", Georgia, "Times New Roman", "Iowan Old Style", serif' ),
 			'gt-sectra'        => array( 'label' => 'GT Sectra Display', 'stack' => '"GT Sectra Display", "Tiempos Headline", Georgia, "Times New Roman", serif' ),
 			'canela-deck'      => array( 'label' => 'Canela Deck', 'stack' => '"Canela Deck", "Tiempos Headline", Georgia, "Times New Roman", serif' ),
 			'bebas'            => array( 'label' => 'Bebas Neue', 'stack' => '"Bebas Neue", "Oswald", "Arial Narrow", sans-serif' ),
@@ -197,9 +197,24 @@ if ( ! function_exists( 'lunara_design_tokens_prepare_save' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lunara_design_token_fallback_font_css' ) ) {
+	/**
+	 * Metric-matched local faces must exist before deferred styles arrive.
+	 * Keep these definitions in this synchronous owner so a stale optimizer
+	 * sheet cannot introduce a different fallback halfway through first paint.
+	 *
+	 * @return string
+	 */
+	function lunara_design_token_fallback_font_css() {
+		return '@font-face{font-family:"Tiempos Text Fallback";src:local("Georgia");size-adjust:105.89%;ascent-override:99.54%;descent-override:23.23%;line-gap-override:0%}'
+			. '@font-face{font-family:"Tiempos Text Fallback";font-style:italic;src:local("Georgia Italic"),local("Georgia-Italic");size-adjust:105.89%;ascent-override:99.54%;descent-override:23.23%;line-gap-override:0%}'
+			. '@font-face{font-family:"Tiempos Headline Fallback";src:local("Georgia");size-adjust:105.15%;ascent-override:74.47%;descent-override:20.64%;line-gap-override:19.02%}';
+	}
+}
+
 if ( ! function_exists( 'lunara_design_tokens_output_css' ) ) {
 	/**
-	 * Print the sole runtime layer for the six shared palette variables.
+	 * Print the runtime palette, resolved font roles and metric fallbacks.
 	 *
 	 * A present Design Tokens key wins even when it stores the shipped default;
 	 * only a missing key falls back to its compatible Customizer theme mod.
@@ -221,16 +236,24 @@ if ( ! function_exists( 'lunara_design_tokens_output_css' ) ) {
 		}
 
 		foreach ( lunara_design_token_font_role_specs() as $role => $spec ) {
-			if ( empty( $fonts[ $role ] ) || $fonts[ $role ] === $spec['default'] || ! isset( $choices[ $fonts[ $role ] ] ) ) {
-				continue;
-			}
-			$lines[] = $spec['var'] . ':' . $choices[ $fonts[ $role ] ]['stack'] . ';';
+			$selected = isset( $fonts[ $role ] ) && is_scalar( $fonts[ $role ] ) ? (string) $fonts[ $role ] : $spec['default'];
+			$resolved = isset( $choices[ $selected ] ) ? $selected : $spec['default'];
+			$lines[]  = $spec['var'] . ':' . $choices[ $resolved ]['stack'] . ';';
 		}
+		// Older public components still consume these aliases. Resolve them
+		// in the same first-paint layer as the canonical saved role variables.
+		$lines[] = '--lunara-body-font:var(--lunara-font-body);';
+		$lines[] = '--lunara-heading-font:var(--lunara-font-display);';
+		$lines[] = '--lunara-label-font:var(--lunara-font-label);';
+		$lines[] = '--lunara-body-font-stack:var(--lunara-font-body);';
+		$lines[] = '--lunara-heading-font-stack:var(--lunara-font-display);';
 
 		if ( empty( $lines ) ) {
 			return;
 		}
-		echo '<style id="lunara-design-tokens-css">/*lunara-design-tokens*/:root{' . implode( '', $lines ) . '}</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- values sanitized above.
+		// The resolved settings must outrank default :root declarations even
+		// when an optimizer delivers the base stylesheet after this head layer.
+		echo '<style id="lunara-design-tokens-css">/*lunara-design-tokens*/' . lunara_design_token_fallback_font_css() . ':root:root{' . implode( '', $lines ) . '}</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static faces and validated token values.
 	}
 	add_action( 'wp_head', 'lunara_design_tokens_output_css', 44 );
 }

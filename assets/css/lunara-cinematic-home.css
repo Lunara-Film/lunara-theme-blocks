@@ -17,7 +17,7 @@ body.home .lunara-home-cinematic-front-door {
 }
 
 body.home .lunara-home-plugin-hero {
-	min-height: min(76svh, 760px);
+	min-height: clamp(380px, 60svh, 620px);
 }
 
 body.home .lunara-home-plugin-hero::after {
@@ -59,30 +59,15 @@ body.home .lunara-home-plugin-hero-frame a {
 
 body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-home-hero {
 	margin-block: 0;
+	padding-bottom: 0;
 }
 
 body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-cinematic-hero-link {
-	min-height: min(76svh, 760px);
+	min-height: clamp(380px, 60svh, 620px);
 }
 
 body.home .lunara-pairing-desk-section .lunara-pair-cards-grid {
 	isolation: isolate;
-}
-
-body.home .lunara-pairing-desk-section .lunara-pair-card {
-	will-change: opacity, transform;
-}
-
-@supports selector(:has(*)) {
-	body.home .lunara-pairing-desk-section .lunara-pair-cards-grid:has(.lunara-pair-card:is(:hover, :focus-within)) .lunara-pair-card:not(:hover):not(:focus-within) {
-		opacity: .6;
-		transform: scale(.985);
-	}
-
-	body.home .lunara-pairing-desk-section .lunara-pair-cards-grid:has(.lunara-pair-card:is(:hover, :focus-within)) .lunara-pair-card:is(:hover, :focus-within) {
-		box-shadow: 0 28px 60px rgba(0, 0, 0, .48), 0 0 34px rgba(201, 169, 97, .18);
-		transform: translateY(-6px) scale(1.018);
-	}
 }
 
 body.home .lunara-journal-home-card,
@@ -111,26 +96,15 @@ body.home .lunara-oscar-fact-card.is-cinematic-visible {
 	transition: none;
 }
 
-body.home .lunara-oscar-picks-section .lunara-oscar-pick-card-link,
-body.home .lunara-oscar-facts-section .lunara-oscar-fact-card-link {
-	border-color: rgba(224, 196, 129, .24);
-}
-
-body.home .lunara-oscar-picks-section .lunara-oscar-pick-card:is(:hover, :focus-within) .lunara-oscar-pick-card-link,
-body.home .lunara-oscar-facts-section .lunara-oscar-fact-card:is(:hover, :focus-within) .lunara-oscar-fact-card-link {
-	border-color: rgba(224, 196, 129, .62);
-	box-shadow: 0 18px 46px rgba(0, 0, 0, .34);
-}
-
 body.home .lunara-home-section-head,
 body.home .lunara-journal-home-deskbar {
-	backdrop-filter: blur(10px);
+	backdrop-filter: none;
 }
 
 @media (max-width: 720px) {
 	body.home .lunara-home-plugin-hero,
 	body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-cinematic-hero-link {
-		min-height: 620px;
+		min-height: clamp(380px, 56svh, 500px);
 	}
 
 	body.home .lunara-home-plugin-hero-frame {
