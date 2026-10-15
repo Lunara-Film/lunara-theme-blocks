@@ -19,7 +19,12 @@ const research=`<main id="primary" class="lunara-oscars-portal"><section class="
    const page=await browser.newPage({viewport:{width,height:900},javaScriptEnabled:false,reducedMotion:'reduce'});
    await page.route('**/*',r=>r.abort());
    const routeCss=(route==='home'?['assets/css/lunara-home-modules.css','assets/css/lunara-cinematic-home.css','assets/css/lunara-home-carousels.css']:['assets/css/lunara-oscars-portal.css']).map(read).join('\n');
-   await page.setContent(`<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}</style><style>${common}\n${routeCss}</style><body class="${route==='home'?'home':'lunara-oscars-portal-page'}">${route==='home'?home:research}</body>`);
+   // Include the historical late asset if it returns: earlier gallery fixtures
+   // omitted it and therefore passed while production added a 20px hero band.
+   const latePath='assets/css/lunara-surface-pass.css';
+   const lateCss=fs.existsSync(path.join(root,latePath))?read(latePath):'';
+   const markup=route==='home'?home.replace('lunara-home-curated-hero lunara-cinematic-hero','lunara-home-curated-hero lunara-cinematic-hero lunara-cinematic-hero-carousel is-hero-mounted'):research;
+   await page.setContent(`<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}</style><style>body.home .lunara-cinematic-hero-carousel{margin-bottom:20px!important}</style><style>${common}\n${routeCss}\n${lateCss}</style><body class="${route==='home'?'home':'lunara-oscars-portal-page'}">${markup}</body>`);
    const data=await page.evaluate(route=>{
     const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,b:r.bottom}};
     const q=s=>document.querySelector(s),style=s=>getComputedStyle(q(s));
@@ -29,6 +34,7 @@ const research=`<main id="primary" class="lunara-oscars-portal"><section class="
    },route);
    assert(data.overflow<=1,`${route}/${width}: no document overflow`);checks++;
    if(route==='home'){
+    assert.equal(await page.locator('.lunara-home-curated-hero').evaluate(e=>getComputedStyle(e).marginBottom),'0px',`${width}: mounted carousel keeps the approved spacing even with an old critical seed`);checks++;
     assert(new Set(data.heads).size===1,`${width}: shared section typography`);
     assert(data.hero.b-data.track.b<=12,`${width}: no unused band below hero: ${JSON.stringify(data)}`);
     assert(data.posters.every(r=>r.w<=260.1&&Math.abs(r.w/r.h-2/3)<.01),`${width}: bounded portrait artwork`);

@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Reconcile GitHub, deployed Theme and preview cascade
+
+- **Shipped:** Theme 3.2.113 candidate removes the obsolete 3.2.88 surface-pass stylesheet, its enqueue/reprint hooks and old body marker. Current route styles own the approved Home, Oscars and Reviews geometry. Regression coverage now includes the mounted hero class and an old critical-CSS seed, rather than testing only the static gallery.
+- **Live:** Read-only verification found Theme 3.2.112: all 185 checked tracked runtime/assets matched GitHub main `63a8a12`. WordPress.com independently shows that exact main commit deployed; its Grok/3.2.88 commit title is not the deployed branch/version. Theme automatic deployment was unexpectedly on; restored Off and verified the saved setting. Other plugin connections were observed On and left unchanged during this Theme task. No runtime deployment or cache clear in this entry.
+- **Verified:** Five page-family desktop comparisons; most typography and shared layout already match. The preview builder omitted the active late surface-pass sheet, which reintroduced a 20px Home hero margin and altered phone artwork, Oscars card density and research padding. The updated browser test reproduced the 20px failure before removal. This is an active legacy override, not evidence of a stale asset cache.
+- **Holding:** Current parity candidate; required CI and actual production-rendered acceptance remain release gates. User granted autonomy to reconcile GitHub. PR #239 was closed without deleting its branch because its proposed revert would undo 299 files of approved work. Other historical proposals are preserved and not release candidates.
+- **Next:** Verify this candidate in the complete production cascade, pass CI, then release and compare the actual rendered pages. Static galleries are design references, not deployed acceptance.
+- **Found, not fixed:** GitHub main has no branch protection; historical PR cleanup is secondary to the reported visual mismatch. A local screenshot comparison cannot prove an authenticated Site Studio editing session.
+
 ## 2026-10-15 — Supabase Oscars Ledger plugin: tested, waiting for approval
 
 - **Shipped:** No Lunara repo code. Standalone plugin `lunara-oscars-supabase` 2.0.0 is a zip on Dalton's Desktop; its source is in `lunara work\lunara-oscars-supabase\`, not in a repo. Supabase project `cemoahbfkpbahudkuixw`: migration `revoke_unused_grants_oscars_records`, run at Dalton's request, leaves `anon` and `authenticated` with SELECT only on `oscars_records` (RLS on, one SELECT policy).
