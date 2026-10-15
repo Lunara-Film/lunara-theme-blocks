@@ -80,9 +80,9 @@ CSS;
 &>.lunara-review-archive-slot-hero{height:auto!important;min-height:0!important;margin:0!important;padding-bottom:0!important;padding-top:20px!important}
 & .lunara-review-archive-hero-shell{align-items:start!important;background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;display:grid!important;gap:0!important;grid-template-columns:minmax(0,1fr)!important;height:auto!important;min-height:0!important;overflow:visible!important;padding:0!important}
 & .lunara-review-archive-hero-shell::before{content:none!important;display:none!important}
-& .lunara-review-archive-hero-copy-wrap{align-content:start!important;display:grid!important;gap:6px!important;grid-template-columns:minmax(0,1fr)!important;min-width:0!important}
+& .lunara-review-archive-hero-copy-wrap{justify-items:center!important;text-align:center;align-content:start!important;display:grid!important;gap:6px!important;grid-template-columns:minmax(0,1fr)!important;min-width:0!important}
 & :is(.lunara-archive-hero-kicker,.lunara-archive-hero-title){font-family:var(--h)!important}
-& .lunara-archive-hero-title{font-size:clamp(28px,3vw,36px)!important;hyphens:none!important;letter-spacing:-.02em!important;line-height:1.1!important;margin:0!important;max-width:none!important;overflow-wrap:break-word!important;word-break:normal!important}
+& .lunara-archive-hero-title{font-size:clamp(2.7rem,6vw,4.5rem)!important;hyphens:none!important;letter-spacing:-.02em!important;line-height:1.1!important;margin:0!important;max-width:none!important;overflow-wrap:break-word!important;word-break:normal!important}
 & .lunara-archive-hero-copy{font-family:var(--b)!important;font-size:1rem!important;line-height:1.55!important;margin:0!important;max-width:70ch!important;overflow-wrap:anywhere!important}
 CSS;
 
@@ -122,10 +122,10 @@ CSS;
         $pairing = <<<'CSS'
 & .lunara-pairing-desk-head{align-items:center!important;display:grid!important;gap:14px!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center!important;margin-bottom:18px!important;text-align:center!important}
 & .lunara-pairing-desk-intro{max-width:56ch!important;margin-inline:auto!important;align-content:end!important;display:grid!important;gap:10px!important;padding-bottom:4px!important}
-& .lunara-pairing-desk-thesis{font-family:var(--h)!important;font-size:clamp(1.3rem,2.4vw,1.8rem)!important;line-height:1.25!important;margin:16px auto 0!important;max-width:24ch!important;text-wrap:balance!important}
+& .lunara-pairing-desk-thesis{font-family:var(--b)!important;font-size:1.125rem!important;line-height:1.5!important;margin:12px auto 0!important;max-width:56ch!important;text-wrap:balance!important}
 & .lunara-pairing-desk-source{font-size:.88rem!important;margin:0!important}
-& .lunara-pairing-desk-head .lunara-home-section-title{font-size:clamp(1.7rem,3vw,2.3rem)!important;letter-spacing:-.02em!important;line-height:.98!important;margin:0 auto!important;max-width:14ch!important}
-& .lunara-pairing-desk-copy{font-size:.97rem!important;line-height:1.6!important;margin:0!important}
+& .lunara-pairing-desk-head .lunara-home-section-title{font-size:clamp(1.7rem,3vw,2.3rem)!important;letter-spacing:-.02em!important;line-height:1.12!important;margin:0 auto!important;max-width:24ch!important}
+& .lunara-pairing-desk-copy{font-size:1rem!important;line-height:1.6!important;margin:0!important}
 & .lunara-pair-cards{border:0!important;box-sizing:border-box!important;margin:0 auto!important;max-width:min(100%,1040px)!important;padding:24px 0!important}
 & .lunara-pair-cards-grid{align-items:stretch!important;display:grid!important;gap:clamp(24px,3vw,40px)!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,236px),1fr))!important}
 & .lunara-pair-card{border:0!important;display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}

@@ -13,8 +13,8 @@
     color: #e0c481; font: inherit; font-size: 0.8125rem; letter-spacing: .12em;
 }
 .lunara-home-carousel-toggle {
-    min-height: 44px; min-width: 70px; padding: 8px 16px; border: 1px solid rgba(201,169,97,.5);
-    border-radius: 0; background: #0a1722; color: #e0c481; font: inherit; font-size: 0.8125rem; cursor: pointer;
+    min-height: 44px; min-width: 70px; padding: 8px 16px; border: 1px solid rgba(201,169,97,.25);
+    border-radius: 0; background: transparent; color: #e0c481; font: inherit; font-size: 0.8125rem; cursor: pointer;
 }
 .lunara-home-carousel-toggle[hidden] { display: none !important; }
 .lunara-home-carousel-toggle:focus-visible,
@@ -39,7 +39,7 @@ body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
 /* Journal reads as a news desk; Reviews retains its portrait-led composition. */
 .lunara-home-curated-journal {
     --lunara-story-media-ratio: 2 / 1;
-    --lunara-story-title-size: clamp(1.4rem, 2.05vw, 1.875rem);
+    --lunara-story-title-size: clamp(1.4rem, 1.8vw, 1.65rem);
     --lunara-story-title-leading: 1.15;
     --lunara-story-excerpt-size: 1rem;
 }
@@ -64,7 +64,7 @@ body.home .lunara-home-curated-journal .lunara-home-section-title { max-width: 2
 .lunara-home-news-meta { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px !important; font-size: .8125rem !important; color: #bec5ca; line-height: 1.4 !important; }
 .lunara-home-news-meta > span { color: #e0c481; }
 .lunara-home-journal-carousel .splide__arrows { position: static; grid-column: 1; grid-row: 2; display: flex; justify-content: space-between; gap: 8px; }
-.lunara-home-journal-carousel .splide__arrow { display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid rgba(201,169,97,.45); border-radius: 0; background: #0a1722; color: #e0c481; cursor: pointer; }
+.lunara-home-journal-carousel .splide__arrow { display: grid; place-items: center; width: 44px; height: 44px; padding: 10px; border: 1px solid rgba(201,169,97,.45); border-radius: 0; background: transparent; color: #e0c481; cursor: pointer; }
 .lunara-home-journal-carousel .splide__arrow svg { width: 18px; height: 18px; fill: currentColor; }
 .lunara-home-journal-carousel .splide__arrow--prev svg { transform: rotate(180deg); }
 .lunara-home-journal-carousel .splide__arrow:disabled { opacity: .35; }
@@ -151,7 +151,7 @@ body.home .lunara-home-curated-journal .lunara-home-section-title { max-width: 2
         min-height: 44px;
         max-width: 100%;
         box-sizing: border-box;
-        letter-spacing: .12em !important;
+        letter-spacing: 0 !important;
         overflow-wrap: break-word;
     }
     body.home .lunara-home-curated-hero .lunara-hero-arrows {

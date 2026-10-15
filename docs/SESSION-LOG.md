@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Refine the deployed editorial composition
+
+- **Shipped:** Theme 3.2.112 candidate only on `codex/editorial-composition-refinement`. Centered Oscars portal masthead and supporting film record; retired conflicting hero geometry from base/shell CSS and decorative shafts. Centered Reviews identity, quieter Journal/Reviews sorting, consistent near-white section headings, readable Method supporting text, tighter ruled Home sections, and house-type hero actions. Public square geometry and complete content remain.
+- **Live:** read-only browser inspection confirmed Home reports 3.2.111+20261015-100623. No deployment, merge, cache operation, production setting or content write in this session.
+- **Holding:** candidate visual comparison uses current public Home, Journal, Oscars, Reviews and Debrief HTML with baseline/candidate styles. These are controlled static previews; carousels expand, plugin runtime is not booted, and they are not deployed acceptance. Focused checks passed: Home carousel 135 assertions; portal composition 24 assertions at three widths with/without the real structural seed; Journal and Reviews first-paint suites; four-route containment at five widths; public CSS geometry policy and Portal Studio behavior. The Reviews suite caught and verified the repaired Method seed mismatch. Final PR CI remains pending.
+- **Next:** review the five-page composition comparison, complete final candidate CI, then Dalton merges only the accepted candidate; deployment remains a separate explicit step.
+- **Found, not fixed:** the full Oscars portal repeats research entry points and winner summaries across saved sections. Content consolidation needs a separate renderer decision; no records or saved sections were removed by this presentation change. Existing HQ02/JQ25 investigations remain outside this focused correction.
+
+---
+
 ## 2026-10-15 — Align the seven website repositories
 
 - **Shipped:** candidate alignment only. Identical AGENTS.md now points all seven repositories to Theme design authority, explicitly exempts private editorial/admin UI, and defines manual review/merge/deploy/acceptance stages. Added repository ownership and secondary-source classification in docs/REPOSITORY-ALIGNMENT.md. AI Assistant README requires Theme-inherited public markup; no prompt/settings mutation. Dispatch 3.4.2 adds long-title wrapping plus browser-parsed CSS policy and actual block-renderer geometry fixtures in CI.

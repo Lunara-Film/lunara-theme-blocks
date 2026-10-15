@@ -34,6 +34,11 @@ and restrained gold. This contract applies to the existing visitor features.
   Responsive image hints and synchronous route geometry must change with layout.
 - Oscar records retain category, film/person, status, evidence and destinations.
   Status has words as well as color. Long names and complete records remain usable.
+- Section headings use near-white ink; gold identifies links and small accents.
+  Supporting theses use reading type, not a second competing display headline.
+  Archive sorting uses a visible underline for selection, retaining full touch
+  targets and focus outlines. The Oscars portal has a centered masthead followed
+  by its supporting Best Picture record, with no decorative light shafts.
 - Use whitespace, image proportions, typography and restrained separators for
   hierarchy. Footer navigation is a publication directory, with the same links
   and saved editing ownership.
@@ -100,6 +105,7 @@ variables, Customizer output and first-paint styles can win over a static file.
 | Journal archive | `archive-journal.php`, `inc/journal-archive-studio.php`, `assets/css/lunara-journal-archive.css`, `inc/journal-archive-critical.php` |
 | Footer and shared public inline output | `inc/frontend.php`, `assets/css/lunara-public-guardrails.css` |
 | Menu and search | `inc/header-command.php`, `inc/live-search.php`, scoped public CSS |
+| Oscars landing page | `page-oscars.php`, `assets/css/lunara-oscars-portal.css`, `inc/oscars-portal-critical.php`; shared shell must not restore the retired split masthead |
 | Oscar records and explorer | Ledger plugin templates and public CSS; theme `assets/css/oscars.css` owns integration only |
 
 The Oscars shell owns page framing and shared controls; it must not restate the

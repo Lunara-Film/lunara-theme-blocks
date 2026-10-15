@@ -390,10 +390,10 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
 .lunara-pairing-desk-inner{position:relative;z-index:2}
 .lunara-pairing-desk-head{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:14px;align-items:center;margin-bottom:18px;text-align:center}
 .lunara-pairing-desk-claim{display:inline-block;margin:0 0 12px;padding:6px 13px;border:0;background:transparent;color:#e8d9b0;font-family:'Bebas Neue','Oswald',Impact,sans-serif;font-size:.85rem;letter-spacing:.32em;text-transform:uppercase}
-.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:14ch;text-shadow:0 3px 22px rgba(0,0,0,.5)}
-.lunara-pairing-desk-thesis{margin:16px auto 0;max-width:24ch;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-display,"Tiempos Headline",serif);font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.25;text-wrap:balance}
+.lunara-pairing-desk-head .lunara-home-section-title{margin:0 auto;max-width:24ch;text-shadow:none;color:var(--lunara-text,#fafbfc)}
+.lunara-pairing-desk-thesis{margin:12px auto 0;max-width:56ch;color:var(--lunara-text-muted,#bac4ce);font-family:var(--lunara-font-body,"Tiempos Text",serif);font-size:1.125rem;line-height:1.5;text-wrap:balance}
 .lunara-pairing-desk-intro{display:grid;max-width:56ch;margin-inline:auto;gap:10px;align-content:end;padding-bottom:4px}
-.lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:.97rem;line-height:1.6;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.lunara-pairing-desk-copy{margin:0;color:rgba(244,239,227,.84);font-size:1rem;line-height:1.6;text-shadow:none}
 .lunara-pairing-desk-source{margin:0;color:rgba(244,239,227,.74);font-size:.88rem}
 .lunara-pairing-desk-source a{color:var(--lunara-gold-light,#eadbb3);text-decoration:none;border-bottom:1px solid rgba(201,169,97,.4);transition:color .2s ease, border-color .2s ease}
 .lunara-pairing-desk-source a:hover{color:#fff;border-color:rgba(225,197,126,.85)}
