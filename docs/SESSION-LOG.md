@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Remove Home Oscar Forecast slide markers
+
+- **Shipped:** Theme 3.2.114 candidate removes all fifteen Forecast pagination markers at their PHP renderer and deletes their unused component styling. A centered arrow/playback row remains on desktop and phone, including Site Studio previews using the same renderer.
+- **Live:** Theme 3.2.113 was deployed from main `3032763`; all 183 checked runtime/assets matched. Home, Oscars and Reviews passed actual phone/desktop checks after the deployment cache invalidation. PR #240 CI passed; main now requires CI, rejects force pushes and includes administrators. Theme auto-deploy remains Off.
+- **Holding:** This focused Forecast control refinement pending required CI and deployment. Existing tests now exercise the renderer's real controls and reach every forecast through the retained arrows instead of deleted dots.
+- **Next:** Complete release verification on the actual Home Forecast; continue visual refinement using live-page annotations.
+- **Found, not fixed:** Other carousel families retain their own navigation; this request targets the Home Academy Awards Forecast.
+
 ## 2026-10-15 — Reconcile GitHub, deployed Theme and preview cascade
 
 - **Shipped:** Theme 3.2.113 candidate removes the obsolete 3.2.88 surface-pass stylesheet, its enqueue/reprint hooks and old body marker. Current route styles own the approved Home, Oscars and Reviews geometry. Regression coverage now includes the mounted hero class and an old critical-CSS seed, rather than testing only the static gallery.

@@ -10,14 +10,14 @@ const renderedArt = spawnSync('php', [path.join(__dirname, 'home-oscar-mobile-ar
 if (renderedArt.status !== 0) throw new Error(renderedArt.stderr || renderedArt.stdout);
 const portraitMedia = renderedArt.stdout.match(/<div class="lunara-oscar-pick-card-media is-portrait">[\s\S]*?<\/div>/);
 if (!portraitMedia) throw new Error('The public Oscar renderer must expose its portrait artwork.');
+const forecastControls = renderedArt.stdout.match(/<div class="lunara-oscar-picks-controls">[\s\S]*?<\/div>/)[0];
 const art = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="1600" height="1000" fill="#34485c"/><circle cx="800" cy="500" r="290" fill="#bba470"/></svg>');
 const titles = ['It Took Forty Years to Become the Star of This Story', 'A Film Festival Dispatch With a Long but Entirely Readable Headline', 'A Journal Story Without Artwork', 'The Fourth Card Must Keep a Landscape Image Even When Its Headline Wraps Across Several Lines'];
 function panelFixture(count = 15) {
     const journal = titles.map((title, i) => `<article class="lunara-journal-home-card ${i === 0 ? 'is-lead' : ''} ${i === 2 ? 'has-no-visual' : 'has-visual'}"><a class="lunara-journal-home-card-link" href="#journal-${i}">${i === 2 ? '' : `<div class="lunara-journal-home-card-media"><img class="lunara-journal-home-card-image" src="${art}" width="1600" height="1000" alt="Landscape artwork"></div>`}<div class="lunara-journal-home-card-copy"><p class="lunara-journal-home-card-kicker">From the desk</p><p class="lunara-dispatch-type">Journal</p><h3 class="lunara-journal-home-card-title">${title}</h3><p class="lunara-journal-home-card-excerpt">Film coverage should be readable on a phone. The artwork and the headline both need enough room to make sense.</p><div class="lunara-journal-home-card-meta"><span>Sep 10, 2026</span><span class="lunara-journal-home-card-cta">Read file</span></div></div></a></article>`).join('');
     const oscars = Array.from({ length: count }, (_, i) => `<article class="lunara-oscar-pick-card is-status-contender ${i === 2 ? 'has-no-visual' : 'has-visual'}" role="listitem"><a class="lunara-oscar-pick-card-link" href="#oscars-${i}">${i === 2 ? '' : `<div class="lunara-oscar-pick-card-media"><img class="lunara-oscar-pick-card-image" src="${art}" width="1600" height="1000" alt="Film artwork"><span class="lunara-oscar-pick-card-status">CONTENDER</span></div>`}<div class="lunara-oscar-pick-card-copy"><p class="lunara-oscar-pick-card-kicker">${i % 2 ? 'Best Cinematography' : 'Best Picture'}</p><h3 class="lunara-oscar-pick-card-title">${i % 2 ? 'A Cinematographer With a Long Name — An Ambitious Film With an Equally Long Title' : 'The Odyssey'}</h3><p class="lunara-oscar-pick-card-meta">99th Academy Awards · 2027 ceremony</p><p class="lunara-oscar-pick-card-rationale">A forecast with enough detail to explain the choice. Longer titles must remain inside the card without changing the shape of its artwork.</p><p class="lunara-oscar-pick-card-ledger">Open in Ledger</p></div></a></article>`).join('');
-    const dots = Array.from({ length: count }, (_, i) => `<button class="lunara-carousel-dot ${i === 0 ? 'active' : ''}" type="button" data-lunara-carousel-dot role="tab" aria-selected="${i === 0 ? 'true' : 'false'}" aria-label="Show Oscar Pick ${i + 1}"></button>`).join('');
     const oscarCards = oscars.replace(/<div class="lunara-oscar-pick-card-media">[\s\S]*?<\/div>/, () => portraitMedia[0]);
-    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${['style.css','assets/css/lunara-shell.css','assets/css/lunara-home-modules.css','assets/css/lunara-public-guardrails.css'].map(file => `<link rel="stylesheet" href="/${file}">`).join('')}<style>*,*::before,*::after{box-sizing:border-box}:root{--lunara-home-journal-card-min:420px;--lunara-home-journal-excerpt-clamp:3;--lunara-home-oscar-picks-gap:24px;--lunara-home-oscar-picks-mobile-column:86%;--lunara-home-oscar-picks-card-min:460px}body{margin:0;background:#07101b;color:#fafbfc}main.lunara-front-page{display:grid;width:calc(100% - 32px);max-width:1440px;margin:16px auto;padding:0}</style><script src="/assets/js/lunara-scroll-carousel.js" defer></script></head><body class="home"><main class="lunara-front-page"><section class="lunara-home-section lunara-home-slot-dispatch lunara-dispatches-section" aria-label="Journal"><div class="lunara-home-section-head"><div><p class="lunara-home-section-kicker">Journal</p><h2 class="lunara-home-section-title">Fresh movement from the Lunara Journal</h2></div></div><div class="lunara-journal-home-grid">${journal}</div></section><section class="lunara-home-section lunara-home-slot-oscar-picks lunara-oscar-picks-section" aria-label="Lunara Oscar Forecast" data-lunara-carousel><div class="lunara-home-section-head"><div><p class="lunara-home-section-kicker">Lunara Sweep Watch</p><h2 class="lunara-home-section-title">The Odyssey across the Academy Awards</h2></div></div>${count > 1 ? `<div class="lunara-oscar-picks-controls"><button class="lunara-carousel-control" aria-label="Previous Oscar Pick" data-lunara-carousel-prev>&lt;</button><div class="lunara-oscar-picks-dots lunara-carousel-dots">${dots}</div><button class="lunara-carousel-control" aria-label="Next Oscar Pick" data-lunara-carousel-next>&gt;</button></div>` : ''}<div class="lunara-oscar-picks-track" data-lunara-carousel-track role="list" tabindex="0">${oscarCards}</div></section></main></body></html>`;
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${['style.css','assets/css/lunara-shell.css','assets/css/lunara-home-modules.css','assets/css/lunara-public-guardrails.css'].map(file => `<link rel="stylesheet" href="/${file}">`).join('')}<style>*,*::before,*::after{box-sizing:border-box}:root{--lunara-home-journal-card-min:420px;--lunara-home-journal-excerpt-clamp:3;--lunara-home-oscar-picks-gap:24px;--lunara-home-oscar-picks-mobile-column:86%;--lunara-home-oscar-picks-card-min:460px}body{margin:0;background:#07101b;color:#fafbfc}main.lunara-front-page{display:grid;width:calc(100% - 32px);max-width:1440px;margin:16px auto;padding:0}</style><script src="/assets/js/lunara-scroll-carousel.js" defer></script></head><body class="home"><main class="lunara-front-page"><section class="lunara-home-section lunara-home-slot-dispatch lunara-dispatches-section" aria-label="Journal"><div class="lunara-home-section-head"><div><p class="lunara-home-section-kicker">Journal</p><h2 class="lunara-home-section-title">Fresh movement from the Lunara Journal</h2></div></div><div class="lunara-journal-home-grid">${journal}</div></section><section class="lunara-home-section lunara-home-slot-oscar-picks lunara-oscar-picks-section" aria-label="Lunara Oscar Forecast" data-lunara-carousel><div class="lunara-home-section-head"><div><p class="lunara-home-section-kicker">Lunara Sweep Watch</p><h2 class="lunara-home-section-title">The Odyssey across the Academy Awards</h2></div></div>${count > 1 ? forecastControls : ''}<div class="lunara-oscar-picks-track" data-lunara-carousel-track role="list" tabindex="0">${oscarCards}</div></section></main></body></html>`;
 }
 if (process.argv.includes('--fixture')) { process.stdout.write(panelFixture()); } else {
     let checks = 0;
@@ -50,7 +50,6 @@ if (process.argv.includes('--fixture')) { process.stdout.write(panelFixture()); 
                         oscars:[...track.children].map(el => ({ card:rect(el), link:rect(el.firstElementChild), media:el.querySelector('.lunara-oscar-pick-card-media') ? rect(el.querySelector('.lunara-oscar-pick-card-media')) : null })),
                         titleOverflow:[...document.querySelectorAll('h3')].some(el => el.scrollWidth > el.clientWidth + 1 || (innerWidth <= 820 && el.scrollHeight > el.clientHeight + 1)),
                         controls:rect(document.querySelector('.lunara-oscar-picks-controls')),
-                        dots:(() => { const el = document.querySelector('.lunara-oscar-picks-dots'); return { ...rect(el), count:el.children.length, widthInside:el.clientWidth, contentWidth:el.scrollWidth, overflowX:getComputedStyle(el).overflowX }; })(),
                         arrows:[...document.querySelectorAll('.lunara-oscar-picks-controls .lunara-carousel-control')].map(rect),
                         buttons:[...document.querySelectorAll('.lunara-oscar-picks-controls button')].map(rect)
                     };
@@ -72,50 +71,11 @@ if (process.argv.includes('--fixture')) { process.stdout.write(panelFixture()); 
                         assert(Math.abs(item.card.height - geometry.oscars[0].card.height) < 2, `${width}px: Oscars cards must keep a stable height.`);
                         if (item.media) assert(Math.abs(item.media.width / item.media.height - 1.6) < .02, `${width}px: Oscars landscape art must keep its ratio.`);
                     }
-                    assert([...geometry.arrows, geometry.dots].every(box => box.x >= geometry.controls.x - 1 && box.right <= geometry.controls.right + 1), `${width}px: arrows and the independently scrolling dot strip must stay inside their panel.`);
-                    assert(geometry.buttons.every(button => button.width >= 44 && button.height >= 44), `${width}px: every slide control must retain a 44px target.`);
-                    assert(geometry.dots.count === 15 && geometry.dots.contentWidth > geometry.dots.widthInside && ['auto', 'scroll'].includes(geometry.dots.overflowX), `${width}px: all fifteen destinations must remain in a scrollable strip, without shrinking their targets.`);
-                    assert(geometry.buttons.every(button => button.y >= geometry.controls.y - 1 && button.bottom <= geometry.controls.bottom + 1), `${width}px: slide dots must stay beside the arrows, without overlaying card content.`);
-                    // Keyboard navigation must reveal each clipped destination.
-                    // Do not scroll it into view in the test: that would mask a
-                    // broken overflow/focus contract in the public component.
-                    await page.locator('.lunara-oscar-picks-controls .lunara-carousel-control').first().focus();
-                    for (let index = 0; index < geometry.dots.count; index++) {
-                        await page.keyboard.press('Tab');
-                        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-                        const focused = await page.evaluate(expectedIndex => {
-                            const strip = document.querySelector('.lunara-oscar-picks-dots');
-                            const button = strip.children[expectedIndex];
-                            const box = button.getBoundingClientRect(), clip = strip.getBoundingClientRect(), style = getComputedStyle(button);
-                            const ring = Math.max(0, parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset));
-                            return {
-                                expected:document.activeElement === button,
-                                visible:button.matches(':focus-visible') && style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0 && style.outlineColor !== 'rgba(0, 0, 0, 0)',
-                                contained:box.left - ring >= clip.left - 1 && box.right + ring <= clip.right + 1 && box.top - ring >= clip.top - 1 && box.bottom + ring <= clip.bottom + 1,
-                                documentWidth:document.documentElement.scrollWidth,
-                                viewport:document.documentElement.clientWidth,
-                                trackOffset:document.querySelector('.lunara-oscar-picks-track').scrollLeft,
-                                selectedIndex:[...strip.children].findIndex(dot => dot.getAttribute('aria-selected') === 'true'),
-                                scrollLeft:strip.scrollLeft,
-                                label:button.getAttribute('aria-label'),
-                                bounds:{ left:box.left, right:box.right, top:box.top, bottom:box.bottom, clipLeft:clip.left, clipRight:clip.right, clipTop:clip.top, clipBottom:clip.bottom },
-                                outline:[style.outlineStyle, style.outlineWidth, style.outlineOffset, style.outlineColor]
-                            };
-                        }, index);
-                        assert(focused.expected && focused.visible && focused.contained, `${width}px: keyboard destination ${index + 1} and its visible focus ring must be revealed inside the strip: ${JSON.stringify(focused)}`);
-                        assert(focused.documentWidth <= focused.viewport + 1, `${width}px: revealing destination ${index + 1} must not widen the page.`);
-                        assert(Math.abs(focused.trackOffset - geometry.trackOffset) < 1 && focused.selectedIndex === 0, `${width}px: focusing destination ${index + 1} must not advance the card track or change its selected destination.`);
-                        if (index === geometry.dots.count - 1) assert(focused.scrollLeft > 0, `${width}px: native focus must scroll the independent strip to its final destination.`);
-                    }
-                    await page.keyboard.press('Enter');
-                    await page.waitForFunction(() => {
-                        const rail = document.querySelector('.lunara-oscar-picks-track');
-                        const lastDot = document.querySelector('.lunara-oscar-picks-dots').lastElementChild;
-                        return lastDot.getAttribute('aria-selected') === 'true' && Math.abs(rail.scrollLeft - (rail.scrollWidth - rail.clientWidth)) < 2;
-                    });
-                    assert(true, `${width}px: activating the focused final dot must still select and reveal the final card.`);
+                    assert(geometry.arrows.every(box => box.x >= geometry.controls.x - 1 && box.right <= geometry.controls.right + 1), `${width}px: controls stay inside their panel.`);
+                    assert(geometry.buttons.length === 3 && geometry.buttons.every(button => button.width >= 44 && button.height >= 44), `${width}px: the two arrows and playback control retain full targets.`);
+                    await page.locator('[data-lunara-carousel-prev]').focus();
                     await page.keyboard.press('Tab');
-                    assert(await page.locator('.lunara-oscar-picks-controls .lunara-carousel-control').last().evaluate(button => document.activeElement === button), `${width}px: keyboard navigation must leave the dot strip for the next arrow.`);
+                    assert(await page.locator('[data-lunara-carousel-next]').evaluate(button => document.activeElement === button), `${width}px: keyboard focus moves directly between arrows without obsolete slide tabs.`);
                 } else {
                     assert(geometry.portrait.fit === 'cover' && geometry.portrait.width > geometry.portrait.height, 'Desktop must retain the existing landscape thumbnail and crop.');
                     assert(geometry.journal[3].copy.x >= geometry.journal[3].media.right - 1, 'Desktop must retain the existing side-by-side fourth Journal card.');

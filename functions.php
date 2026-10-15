@@ -13127,18 +13127,6 @@ if ( ! function_exists( 'lunara_render_oscar_picks_carousel' ) ) {
 			<?php if ( $pick_count > 1 ) : ?>
 				<div class="lunara-oscar-picks-controls">
 					<button class="lunara-carousel-control" type="button" data-lunara-carousel-prev aria-label="<?php esc_attr_e( 'Previous Oscar Pick', 'lunara-film' ); ?>">&lt;</button>
-					<div class="lunara-oscar-picks-dots lunara-carousel-dots" role="tablist" aria-label="<?php esc_attr_e( 'Oscar Picks slides', 'lunara-film' ); ?>">
-						<?php for ( $dot_index = 0; $dot_index < $pick_count; $dot_index++ ) : ?>
-							<button
-								class="lunara-carousel-dot <?php echo 0 === $dot_index ? 'active' : ''; ?>"
-								type="button"
-								data-lunara-carousel-dot
-								role="tab"
-								aria-label="<?php echo esc_attr( sprintf( __( 'Show Oscar Pick %d', 'lunara-film' ), $dot_index + 1 ) ); ?>"
-								aria-selected="<?php echo 0 === $dot_index ? 'true' : 'false'; ?>"
-							></button>
-						<?php endfor; ?>
-					</div>
 					<button class="lunara-carousel-control" type="button" data-lunara-carousel-next aria-label="<?php esc_attr_e( 'Next Oscar Pick', 'lunara-film' ); ?>">&gt;</button>
 					<?php if ( $args['autoplay'] > 0 ) : ?>
 						<button class="lunara-carousel-control lunara-carousel-toggle lunara-oscar-picks-toggle" type="button" data-lunara-carousel-toggle aria-pressed="false" aria-label="<?php esc_attr_e( 'Pause Oscar Picks rotation', 'lunara-film' ); ?>"><?php esc_html_e( 'Pause', 'lunara-film' ); ?></button>
