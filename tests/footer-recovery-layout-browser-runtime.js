@@ -71,7 +71,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                         footerGeometry:{
                             frame:rect(document.querySelector('.lunara-footer-inner')),
                             nav:rect(document.querySelector('.lunara-footer-nav-grid')),
-                            columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),links:[...node.querySelectorAll('a')].map(rect)})),
+                            columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),list:rect(node.querySelector("ul")||node),links:[...node.querySelectorAll('a')].map(rect)})),
                             closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-copyright,.lunara-footer-legal')].filter(visible).map(rect)
                         },
                     };
@@ -86,7 +86,11 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 const centered = (box,center) => Math.abs((box.left+box.right)/2-center)<=1;
                 const geometry=data.footerGeometry;
                 check(centered(geometry.frame,width/2)&&centered(geometry.nav,width/2)&&geometry.closing.every(box=>centered(box,width/2)), `${tag}: shared footer frame, brand and closing groups share the page center`, geometry);
-                check(geometry.columns.every(column=>column.links.every(link=>centered(link,(column.box.left+column.box.right)/2))), `${tag}: each footer link is centered in its directory column`, geometry.columns);
+                check(geometry.columns.every(column=>{
+                    const rows=new Map();for(const link of column.links){const key=Math.round(link.top);rows.set(key,[...(rows.get(key)||[]),link]);}
+                    return [...rows.values()].every(row=>centered({left:Math.min(...row.map(x=>x.left)),right:Math.max(...row.map(x=>x.right))},(column.list.left+column.list.right)/2));
+                }), `${tag}: each wrapping footer row is centered in its directory`, geometry.columns);
+                if(!fixture.footer_only&&width>=768) check(data.footerBox.height<400,`${tag}: compact default footer stays below 400px`,data.footerBox);
                 check(width<=640 ? geometry.columns.every(column=>centered(column.box,width/2)) : Math.abs(geometry.columns[0].box.left-(width-geometry.columns[2].box.right))<=1&&Math.abs((geometry.columns[0].box.width)-(geometry.columns[2].box.width))<=1&&centered(geometry.columns[1].box,width/2), `${tag}: directory columns have symmetric gutters and a centered final phone stack`, geometry.columns);
                 if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);

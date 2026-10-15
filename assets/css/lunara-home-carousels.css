@@ -1,4 +1,5 @@
 /* Applied homepage carousels only. The legacy composition keeps its existing sheet. */
+body.home .lunara-home-curated-hero { margin-block: 0 !important; padding: 0 !important; }
 .lunara-home-curated-hero.splide,
 .lunara-home-journal-carousel.splide { visibility: visible; }
 .lunara-home-carousel-placeholder {
@@ -27,7 +28,7 @@
 .lunara-home-curated-hero .lunara-hero-arrow-prev svg { transform: rotate(180deg); }
 body.home .lunara-home-curated-hero .lunara-cinematic-hero-title {
     display: block !important; -webkit-line-clamp: unset !important; max-height: none !important;
-    max-width: 24ch; margin-inline: auto; font-size: clamp(2.8rem, 4.4vw, 4.5rem); line-height: 1.06;
+    max-width: 24ch; margin-inline: auto; font-size: clamp(2.8rem, 4.4vw, 4.5rem); line-height: 1.12;
     overflow: visible; overflow-wrap: anywhere;
 }
 .lunara-home-curated-hero .lunara-cinematic-hero-content { padding-bottom: 112px; text-align: center; }
@@ -114,7 +115,7 @@ body.home .lunara-home-curated-journal .lunara-home-section-title { max-width: 2
         grid-template-columns: minmax(0, 1fr);
         min-height: 0;
         padding: 0 0 8px !important;
-        margin-bottom: 32px;
+        margin-bottom: 0;
         row-gap: 4px;
     }
     body.home .lunara-home-curated-hero::after { content: none; }

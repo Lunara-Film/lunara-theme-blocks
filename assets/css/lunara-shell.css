@@ -1012,8 +1012,8 @@ body.lunara-oscars-portal-page .lunara-home-section-title {
 
 body.lunara-oscars-portal-page .lunara-home-section-title {
     color: #FAFBFC !important;
-    font-size: clamp(1.7rem, 2.4vw, 2.5rem) !important;
-    line-height: 1.08 !important;
+    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
+    line-height:1.18 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-home-section-summary,
@@ -1993,8 +1993,8 @@ body:not(.wp-admin) .lunara-home-hero-title,
 body:not(.wp-admin) .lunara-home-section-title,
 body:not(.wp-admin) .lunara-archive-hero-title,
 body:not(.wp-admin) .lunara-review-single-title {
-    font-family: var(--lunara-font-display, Georgia, "Times New Roman", serif) !important;
-    font-weight: 700 !important;
+    font-family:var(--lunara-font-display) !important;
+    font-weight:600 !important;
     letter-spacing: 0 !important;
     text-wrap: balance !important;
 }
@@ -2096,8 +2096,8 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy
 
 body.lunara-oscars-portal-page .lunara-home-section-title {
     max-width: 18ch !important;
-    font-size: clamp(1.38rem, 2vw, 1.95rem) !important;
-    line-height: 1.08 !important;
+    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
+    line-height:1.18 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-home-section-summary {
@@ -2778,11 +2778,11 @@ body.lunara-oscars-portal-page .lunara-home-section-title,
 body.lunara-oscars-portal-page .aat-hub-section h2,
 body.lunara-oscars-portal-page .aat-ceremony-marquee h2 {
     color: #f7f4ec !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
-    font-size: clamp(2rem, 3.4vw, 4.15rem) !important;
-    font-weight: 800 !important;
+    font-family:var(--lunara-font-display) !important;
+    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
+    font-weight:600 !important;
     letter-spacing: 0 !important;
-    line-height: 1.03 !important;
+    line-height:1.18 !important;
     text-wrap: balance !important;
 }
 
@@ -2792,7 +2792,7 @@ body.lunara-oscars-portal-page .aat-subtitle,
 body.lunara-oscars-portal-page .aat-database-landing-note {
     color: rgba(249, 250, 251, .91) !important;
     font-size: clamp(1.04rem, 1.18vw, 1.2rem) !important;
-    font-weight: 600 !important;
+    font-weight: 400 !important;
     line-height: 1.62 !important;
     max-width: 64ch !important;
     text-wrap: pretty !important;
@@ -2805,7 +2805,7 @@ body.lunara-oscars-portal-page .aat-stat-label {
     color: #f1cc6e !important;
     font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
     font-size: .82rem !important;
-    font-weight: 800 !important;
+    font-weight: 600 !important;
     letter-spacing: 0 !important;
     text-transform: none !important;
 }
@@ -2824,12 +2824,10 @@ body.lunara-oscars-portal-page .aat-header.aat-database-landing-header {
     gap: clamp(20px, 3vw, 42px) !important;
     min-height: 300px !important;
     padding: clamp(26px, 4vw, 58px) !important;
-    border: 1px solid rgba(241, 204, 110, .26) !important;
+    border: 0 !important;
     border-radius: 0 !important;
-    background:
-        linear-gradient(135deg, rgba(2, 9, 19, .96), rgba(8, 24, 38, .92) 52%, rgba(16, 22, 32, .98)),
-        linear-gradient(90deg, rgba(241, 204, 110, .12), transparent 58%) !important;
-    box-shadow: 0 32px 90px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+    background: transparent !important;
+    box-shadow: none !important;
     overflow: hidden !important;
     position: relative !important;
     text-align: left !important;
@@ -2837,12 +2835,7 @@ body.lunara-oscars-portal-page .aat-header.aat-database-landing-header {
 
 body.lunara-oscars-portal-page .aat-header.aat-ledger-command::after,
 body.lunara-oscars-portal-page .aat-header.aat-database-landing-header::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: auto 28px 28px auto !important;
-    width: min(34vw, 440px) !important;
-    height: 1px !important;
-    background: linear-gradient(90deg, transparent, rgba(241, 204, 110, .66)) !important;
+    content: none !important;
 }
 
 body.lunara-oscars-portal-page .aat-ledger-command-symbol,
@@ -2861,13 +2854,13 @@ body.lunara-oscars-portal-page .aat-oscar-icon {
 body.lunara-oscars-portal-page .aat-ledger-command-copy h2,
 body.lunara-oscars-portal-page .aat-database-landing-header h2 {
     color: #ffffff !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
-    font-size: clamp(2.25rem, 4.8vw, 5.65rem) !important;
-    font-weight: 800 !important;
+    font-family: var(--lunara-font-display, "Tiempos Headline", Georgia, serif) !important;
+    font-size: var(--lunara-type-section, clamp(1.7rem, 3vw, 2.3rem)) !important;
+    font-weight: 600 !important;
     letter-spacing: 0 !important;
-    line-height: .98 !important;
+    line-height: 1.18 !important;
     margin: 0 0 18px !important;
-    max-width: 10.5ch !important;
+    max-width: 24ch !important;
     text-wrap: balance !important;
 }
 
@@ -3263,8 +3256,8 @@ body.lunara-oscars-portal-page a:not(.ct-menu-link):not(.lunara-button):not(.lun
 
     body.lunara-oscars-portal-page .aat-ledger-command-copy h2,
     body.lunara-oscars-portal-page .aat-database-landing-header h2 {
-        font-size: clamp(2.15rem, 12vw, 3.4rem) !important;
-        max-width: 9.5ch !important;
+        font-size: var(--lunara-type-section, clamp(1.7rem, 3vw, 2.3rem)) !important;
+        max-width: 24ch !important;
     }
 
     body.lunara-oscars-portal-page .aat-ceremony-gallery-section .aat-filmography-link,
@@ -3699,8 +3692,8 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-c
     body.home .lunara-home-section-title {
         width: 100% !important;
         max-width: 280px !important;
-        font-size: clamp(1.88rem, 8.6vw, 2.22rem) !important;
-        line-height: 1.07 !important;
+        font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
+        line-height:1.18 !important;
         letter-spacing: 0 !important;
         overflow-wrap: anywhere !important;
         text-wrap: balance !important;

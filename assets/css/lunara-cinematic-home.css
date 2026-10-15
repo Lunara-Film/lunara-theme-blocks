@@ -17,7 +17,7 @@ body.home .lunara-home-cinematic-front-door {
 }
 
 body.home .lunara-home-plugin-hero {
-	min-height: min(76svh, 760px);
+	min-height: clamp(380px, 60svh, 620px);
 }
 
 body.home .lunara-home-plugin-hero::after {
@@ -59,10 +59,11 @@ body.home .lunara-home-plugin-hero-frame a {
 
 body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-home-hero {
 	margin-block: 0;
+	padding-bottom: 0;
 }
 
 body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-cinematic-hero-link {
-	min-height: min(76svh, 760px);
+	min-height: clamp(380px, 60svh, 620px);
 }
 
 body.home .lunara-pairing-desk-section .lunara-pair-cards-grid {
@@ -103,7 +104,7 @@ body.home .lunara-journal-home-deskbar {
 @media (max-width: 720px) {
 	body.home .lunara-home-plugin-hero,
 	body.home .lunara-home-cinematic-front-door.is-native-fallback .lunara-cinematic-hero-link {
-		min-height: 620px;
+		min-height: clamp(380px, 56svh, 500px);
 	}
 
 	body.home .lunara-home-plugin-hero-frame {

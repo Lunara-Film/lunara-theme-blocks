@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Apply fifteen annotated composition corrections
+
+- **Shipped:** Theme 3.2.112 draft revision on `codex/editorial-composition-refinement`, existing PR #233. Shared section type, compact footer, tighter native Home hero, bounded Debrief posters with attached source rows, grouped forecast arguments, unframed embedded Oscars research with centered captions, and one continuous Reviews index. Approved Ledger navigator preserved. Details: `docs/EDITORIAL-ANNOTATIONS-2026-10-15.md`.
+- **Live:** No production writes, merge, deployment or cache changes this session.
+- **Holding:** Revised candidate awaits required CI and Dalton's visual review. Ledger source remains untouched. Local five-page comparison includes the public Ledger CSS omitted by the earlier gallery; it is captured content, not a WordPress deployment.
+- **Verified:** Annotation fixture 56 checks; actual Home carousel 135; real footer renderer/browser 500; Reviews renderer 171 plus provider/media coverage; Reviews first-paint scenarios under 1px and existing 12KB seed budget preserved. Full PR CI is the release gate for this exact revision.
+- **Next:** Review the revised Home, Oscars, Reviews, Journal and Debrief gallery, then decide on merge and separate manual deployment.
+- **Found, not fixed:** Existing repeated Oscars research/winner content remains; annotations remove its redundant framing, not its records. Retired companion settings retain stored values for compatibility. No claim of live acceptance from local fixtures.
+
 ## 2026-10-15 — Refine the deployed editorial composition
 
 - **Shipped:** Theme 3.2.112 candidate only on `codex/editorial-composition-refinement`. Centered Oscars portal masthead and supporting film record; retired conflicting hero geometry from base/shell CSS and decorative shafts. Centered Reviews identity, quieter Journal/Reviews sorting, consistent near-white section headings, readable Method supporting text, tighter ruled Home sections, and house-type hero actions. Public square geometry and complete content remain.

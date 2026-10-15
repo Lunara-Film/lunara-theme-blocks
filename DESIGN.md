@@ -42,6 +42,18 @@ and restrained gold. This contract applies to the existing visitor features.
 - Use whitespace, image proportions, typography and restrained separators for
   hierarchy. Footer navigation is a publication directory, with the same links
   and saved editing ownership.
+- Section headings share `--lunara-type-section`, the display face, 600 weight
+  and 1.18 leading. Reading copy uses the body face at regular weight. Embedded
+  Ledger headings inherit those roles; do not introduce another Tiempos alias
+  or force reading copy to display weight. Preserve the Ledger navigator.
+- Home and archive Debrief columns use bounded portrait artwork, lightly ruled
+  argument columns and an attached source-link row. Preserve all three full
+  role names and complete arguments. Forecast image, identity and argument
+  should form one clear unit without a second painted card.
+- Reviews has one continuous index after its lead. Do not split the next four
+  records into a companion carousel or reintroduce retired companion labels.
+- The footer uses compact wrapping directory rows, not tall navigation towers.
+  Keep every saved link, readable group labels, 44px targets and symmetric rows.
 
 ## Surfaces and type
 

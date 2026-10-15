@@ -107,6 +107,7 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
                                 const readable = [...copy.querySelectorAll('h1,h2,h3,p')].filter(node => node.getBoundingClientRect().height);
                                 return { index, bounded: box.left >= clip.left - 2 && box.right <= clip.right + 2,
                                     copyFits: readable.every(node => node.scrollWidth <= node.clientWidth + 1 && node.scrollHeight <= node.clientHeight + 2),
+                                    overflow: readable.filter(node => node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 2).map(node => ({tag:node.tagName,width:node.clientWidth,scrollWidth:node.scrollWidth,height:node.clientHeight,scrollHeight:node.scrollHeight})),
                                     destination: slide.querySelector('a[href]')?.getAttribute('href'),
                                     title: slide.querySelector('h1,h2,h3')?.textContent.trim() };
                             }).filter(Boolean);
