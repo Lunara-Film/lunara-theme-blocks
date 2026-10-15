@@ -1,22 +1,11 @@
-(function () {
-    'use strict';
-    function mount(pageRoot, scope) {
-        pageRoot = pageRoot || document;
-        // Standalone documents keep their native page-unload lifecycle.
-        scope = scope || {
-            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
-            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
-            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
-            cleanup: function () {}
-        };
 /**
  * Generated from the verified inline runtime during Phase 1C.
  * Keep behavior route-gated and free of render-blocking dependencies.
  */
 
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
         const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        pageRoot.querySelectorAll('[data-lunara-carousel]').forEach(function(section) {
+        document.querySelectorAll('[data-lunara-carousel]').forEach(function(section) {
             let reduceMotion = motionQuery.matches;
             const track = section.querySelector('[data-lunara-carousel-track]');
             const prev = section.querySelector('[data-lunara-carousel-prev]');
@@ -33,7 +22,7 @@
             function amount() {
                 const card = track.children[0];
                 const styles = window.getComputedStyle(track);
-                const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+                const gap = parseInt(styles.columnGap || styles.gap || 24, 10);
                 return card ? card.offsetWidth + gap : 360;
             }
             function getIndexFromOffset(scrollLeft) {
@@ -68,11 +57,9 @@
                 }
                 const trackRect = track.getBoundingClientRect();
                 const cardRect = card.getBoundingClientRect();
-                const padding = parseFloat(window.getComputedStyle(track).scrollPaddingLeft) || 0;
-                const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
-                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left - padding;
+                const targetLeft = track.scrollLeft + cardRect.left - trackRect.left;
                 track.scrollTo({
-                    left: Math.min(maxScroll, Math.max(0, targetLeft)),
+                    left: Math.max(0, targetLeft),
                     behavior: reduceMotion ? 'auto' : 'smooth'
                 });
             }
@@ -81,53 +68,35 @@
                 const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
                 const behavior = reduceMotion ? 'auto' : 'smooth';
                 // Reach the final card before wrapping on the following advance.
-                // Fractional card widths can leave a final snap only a few
-                // pixels from the boundary. Reach that boundary before wrapping.
-                if (direction > 0 && track.scrollLeft >= maxScroll - 1) {
+                if (direction > 0 && track.scrollLeft >= maxScroll - 6) {
                     track.scrollTo({ left: 0, behavior: behavior });
                     return;
                 }
-                if (direction < 0 && track.scrollLeft <= 1) {
+                if (direction < 0 && track.scrollLeft <= 6) {
                     track.scrollTo({ left: maxScroll, behavior: behavior });
                     return;
                 }
                 track.scrollBy({ left: distance, behavior: behavior });
             }
             if (prev) {
-                scope.on(prev, 'click', function () {
+                prev.addEventListener('click', function () {
                     step(-1);
                 });
             }
             if (next) {
-                scope.on(next, 'click', function () {
+                next.addEventListener('click', function () {
                     step(1);
                 });
             }
             if (dots.length) {
                 dots.forEach(function(dot, index) {
-                    scope.on(dot, 'click', function() {
+                    dot.addEventListener('click', function() {
                         scrollToIndex(index);
-                    });
-                    scope.on(dot, 'focus', function() {
-                        const strip = dot.parentElement;
-                        if (!strip || strip.scrollWidth <= strip.clientWidth) {
-                            return;
-                        }
-                        // Native focus may leave a partly visible button clipped.
-                        // Reveal its full target and ring in this strip only.
-                        const stripRect = strip.getBoundingClientRect();
-                        const dotRect = dot.getBoundingClientRect();
-                        const padding = parseFloat(window.getComputedStyle(strip).scrollPaddingLeft) || 0;
-                        const left = dotRect.left - stripRect.left - padding;
-                        const right = dotRect.right - stripRect.right + padding;
-                        if (left < 0 || right > 0) {
-                            strip.scrollBy({ left: left < 0 ? left : right, behavior: 'auto' });
-                        }
                     });
                 });
             }
 
-            scope.on(section, 'keydown', function(event) {
+            section.addEventListener('keydown', function(event) {
                 if ('ArrowLeft' === event.key) {
                     event.preventDefault();
                     step(-1);
@@ -138,14 +107,14 @@
             });
 
             let syncRaf = null;
-            scope.on(track, 'scroll', function () {
+            track.addEventListener('scroll', function () {
                 if (!dots.length) {
                     return;
                 }
                 if (syncRaf) {
                     window.cancelAnimationFrame(syncRaf);
                 }
-                syncRaf = scope.frame(function () {
+                syncRaf = window.requestAnimationFrame(function () {
                     syncDots();
                     syncRaf = null;
                 });
@@ -190,7 +159,7 @@
                     syncToggle();
                     return;
                 }
-                timer = scope.interval(function () {
+                timer = window.setInterval(function () {
                     step(1);
                 }, autoplay);
                 syncToggle();
@@ -206,7 +175,7 @@
             }
 
             if (toggle) {
-                scope.on(toggle, 'click', function () {
+                toggle.addEventListener('click', function () {
                     userPaused = !userPaused;
                     if (userPaused) {
                         stop();
@@ -221,31 +190,31 @@
             // section. Touch users can still swipe and autoplay resumes after
             // the gesture ends. A user pause always wins over these temporary
             // interaction pauses.
-            scope.on(section, 'pointerenter', function (event) {
+            section.addEventListener('pointerenter', function (event) {
                 if (event.pointerType === 'mouse') {
                     pointerHover = true;
                     stop();
                 }
             });
-            scope.on(section, 'pointerleave', function (event) {
+            section.addEventListener('pointerleave', function (event) {
                 if (event.pointerType === 'mouse') {
                     pointerHover = false;
                     resumeWhenAvailable();
                 }
             });
-            scope.on(section, 'focusin', function () {
+            section.addEventListener('focusin', function () {
                 focusWithin = true;
                 stop();
             });
-            scope.on(section, 'focusout', function () {
-                scope.timeout(function () {
+            section.addEventListener('focusout', function () {
+                window.setTimeout(function () {
                     if (!section.contains(document.activeElement)) {
                         focusWithin = false;
                         resumeWhenAvailable();
                     }
                 }, 0);
             });
-            scope.on(track, 'touchstart', function () {
+            track.addEventListener('touchstart', function () {
                 touchActive = true;
                 stop();
             }, { passive: true });
@@ -253,16 +222,16 @@
                 touchActive = false;
                 resumeWhenAvailable();
             }
-            scope.on(track, 'touchend', finishTouch, { passive: true });
-            scope.on(track, 'touchcancel', finishTouch, { passive: true });
-            scope.on(document, 'visibilitychange', function () {
+            track.addEventListener('touchend', finishTouch, { passive: true });
+            track.addEventListener('touchcancel', finishTouch, { passive: true });
+            document.addEventListener('visibilitychange', function () {
                 if (document.hidden) {
                     stop();
                 } else {
                     resumeWhenAvailable();
                 }
             });
-            scope.on(motionQuery, 'change', function (event) {
+            motionQuery.addEventListener('change', function (event) {
                 reduceMotion = event.matches;
                 stop();
                 syncToggle();
@@ -275,12 +244,4 @@
             // Defer geometry reads until the rail actually scrolls or a reader
             // uses a control; this keeps below-fold carousels out of first paint.
         });
-    }());
-
-    }
-    if (window.LunaraApp && window.LunaraApp.register) {
-        window.LunaraApp.register('scroll-carousel', mount);
-    } else if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
-    } else { mount(); }
-}());
+    });

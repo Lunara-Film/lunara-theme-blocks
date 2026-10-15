@@ -102,7 +102,7 @@ if ( ! function_exists( 'lunara_trailer_badge_inline_styles' ) ) {
 				margin: 0 0 8px !important;
 				padding: 5px 10px !important;
 				border: 1px solid rgba(124,211,255,.28) !important;
-				border-radius: 0!important;
+				border-radius: 999px !important;
 				background: linear-gradient(180deg, rgba(124,211,255,.12), rgba(201,169,97,.06)) !important;
 				color: color-mix(in srgb, rgba(124,211,255,.92) 68%, var(--lunara-gold-light, #e0c481)) !important;
 				font-size: .66rem !important;
@@ -396,20 +396,20 @@ if ( ! function_exists( 'lunara_get_trailer_inline_guardrails' ) ) {
 .lunara-trailer-shell::before{display:none!important}
 .lunara-trailer-copy{display:grid!important;justify-items:center!important;gap:8px!important;max-width:680px!important;text-align:center!important}
 .lunara-trailer-kicker,.lunara-trailer-title,.lunara-trailer-note,.lunara-trailer-credit{margin:0!important}
-.lunara-trailer-kicker{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:5px 11px!important;border:1px solid rgba(201,169,97,.32)!important;border-radius:0!important;background:rgba(201,169,97,.08)!important;color:rgba(224,196,129,.92)!important;font-size:.66rem!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1!important;text-transform:uppercase!important}
+.lunara-trailer-kicker{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:5px 11px!important;border:1px solid rgba(201,169,97,.32)!important;border-radius:999px!important;background:rgba(201,169,97,.08)!important;color:rgba(224,196,129,.92)!important;font-size:.66rem!important;font-weight:700!important;letter-spacing:.16em!important;line-height:1!important;text-transform:uppercase!important}
 .lunara-trailer-title{color:#fff6dd!important;font-size:clamp(1.34rem,2.1vw,1.82rem)!important;line-height:1.12!important}
 .lunara-trailer-note{max-width:58ch!important;color:rgba(250,251,252,.78)!important;font-size:.96rem!important;line-height:1.6!important}
 .lunara-trailer-credit{color:rgba(224,196,129,.82)!important;font-size:.72rem!important;font-weight:700!important;letter-spacing:.12em!important;text-transform:uppercase!important}
-.lunara-trailer-frame{width:min(100%,720px)!important;margin:0 auto!important;box-sizing:border-box!important;border:1px solid rgba(201,169,97,.2)!important;border-radius:0!important;background:#05080c!important;box-shadow:0 18px 42px rgba(0,0,0,.28)!important;overflow:hidden!important}
+.lunara-trailer-frame{width:min(100%,720px)!important;margin:0 auto!important;box-sizing:border-box!important;border:1px solid rgba(201,169,97,.2)!important;border-radius:16px!important;background:#05080c!important;box-shadow:0 18px 42px rgba(0,0,0,.28)!important;overflow:hidden!important}
 .lunara-trailer-embed{position:relative!important;width:100%!important;aspect-ratio:16/9!important;min-height:0!important}
 .lunara-trailer-embed iframe,.lunara-trailer-embed embed,.lunara-trailer-embed object,.lunara-trailer-embed video{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;min-height:0!important;border:0!important}
 .lunara-trailer-facade{position:absolute!important;inset:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:12px!important;width:100%!important;height:100%!important;border:0!important;background-color:#05080c!important;background-position:center!important;background-size:cover!important;cursor:pointer!important}
 .lunara-trailer-facade::before{content:""!important;position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(4,10,18,.18),rgba(4,10,18,.62))!important}
-.lunara-trailer-facade-play{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:64px!important;height:64px!important;border-radius:0!important;border:1px solid rgba(224,196,129,.85)!important;background:rgba(7,15,26,.72)!important;color:#e0c481!important;font-size:1.25rem!important;padding-left:5px!important;transition:transform .18s ease,background .18s ease}
+.lunara-trailer-facade-play{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:64px!important;height:64px!important;border-radius:999px!important;border:1px solid rgba(224,196,129,.85)!important;background:rgba(7,15,26,.72)!important;color:#e0c481!important;font-size:1.25rem!important;padding-left:5px!important;transition:transform .18s ease,background .18s ease}
 .lunara-trailer-facade:hover .lunara-trailer-facade-play,.lunara-trailer-facade:focus-visible .lunara-trailer-facade-play{transform:scale(1.08);background:rgba(201,169,97,.32)!important}
 .lunara-trailer-facade-label{position:relative!important;color:rgba(244,239,227,.9)!important;font-size:.78rem!important;letter-spacing:.18em!important;text-transform:uppercase!important}
 @media(prefers-reduced-motion:reduce){.lunara-trailer-facade-play{transition:none!important}}
-@media(max-width:520px){.lunara-trailer-module{width:min(calc(100% - 36px),720px)!important}.lunara-trailer-frame{border-radius:0!important}}
+@media(max-width:520px){.lunara-trailer-module{width:min(calc(100% - 36px),720px)!important}.lunara-trailer-frame{border-radius:14px!important}}
 </style>';
 	}
 }

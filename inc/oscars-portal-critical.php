@@ -198,10 +198,7 @@ if ( ! function_exists( 'lunara_oscars_portal_critical_css' ) ) {
 #primary.lunara-oscars-portal>:is([class*="lunara-oscars-portal-slot-"],.lunara-oscars-navigator){box-sizing:border-box;max-width:100%;min-width:0;order:initial!important}
 #primary.lunara-oscars-portal>.lunara-home-section{max-width:100%!important;min-width:0!important;overflow:hidden!important;width:100%!important}
 #primary.lunara-oscars-portal>.lunara-oscars-portal-slot-hero{min-height:var(--lunara-oscars-portal-hero-min-height,clamp(360px,42vh,540px))!important}
-#primary.lunara-oscars-portal>.lunara-oscars-portal-hero::before,#primary.lunara-oscars-portal>.lunara-oscars-portal-hero::after{content:none!important}
-#primary.lunara-oscars-portal .lunara-oscars-portal-hero-grid{align-items:center!important;display:grid!important;gap:32px!important;grid-template-columns:var(--lunara-oscars-portal-hero-columns,minmax(0,1.25fr) minmax(260px,clamp(300px,24vw,440px)))!important;min-height:0!important;padding:0!important}
-#primary.lunara-oscars-portal .lunara-oscars-portal-copy{grid-column:1/-1!important;text-align:center!important;justify-items:center!important}
-#primary.lunara-oscars-portal .lunara-oscars-portal-feature-card{grid-column:1/-1!important;justify-self:center!important}
+#primary.lunara-oscars-portal .lunara-oscars-portal-hero-grid{align-items:center!important;display:grid!important;gap:clamp(20px,3vw,34px)!important;grid-template-columns:var(--lunara-oscars-portal-hero-columns,minmax(0,1.25fr) minmax(260px,clamp(300px,24vw,440px)))!important;min-height:inherit!important;padding:clamp(16px,2.2vw,32px)!important}
 #primary.lunara-oscars-portal .lunara-oscars-portal-stat-grid{display:grid!important;gap:10px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
 #primary.lunara-oscars-portal .lunara-oscars-command-rail{display:grid!important;gap:10px!important;grid-column:1/-1!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;min-width:0!important;width:100%!important}
 #primary.lunara-oscars-portal .lunara-oscars-board-list{display:grid!important;gap:clamp(8px,.8vw,14px)!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--lunara-oscars-portal-board-min-width,190px)),1fr))!important;list-style:none!important;margin:clamp(18px,2vw,28px) 0 0!important;padding:0!important}

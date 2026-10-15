@@ -105,25 +105,6 @@ img, picture, video, canvas, svg {
 input, button, textarea, select {
     font: inherit;
     color: inherit;
-    border-radius: 0;
-}
-
-/* Native WordPress content follows the same publication geometry on every route.
- * Saved inline choices are adapted by public-geometry.php without changing posts.
- */
-.wp-block-button .wp-block-button__link,
-.wp-block-search .wp-block-search__button,
-.wp-block-search .wp-block-search__input,
-.wp-block-search .wp-block-search__inside-wrapper,
-.wp-block-image img,
-.wp-block-post-featured-image img,
-.wp-block-gallery img,
-.wp-block-cover,
-.wp-block-group,
-.wp-block-media-text,
-.wp-block-details,
-.wp-block-file .wp-block-file__button {
-    border-radius: 0;
 }
 
 button {
@@ -155,7 +136,7 @@ table {
 
 .screen-reader-text:focus {
     background-color: #f1f1f1;
-    border-radius: 0;
+    border-radius: 3px;
     box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
     clip: auto !important;
     clip-path: none;

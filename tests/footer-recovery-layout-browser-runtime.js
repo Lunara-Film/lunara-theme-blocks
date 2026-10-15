@@ -1,4 +1,3 @@
-const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 // Real public templates and active CSS; no frontend JavaScript or network dependency.
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
@@ -32,7 +31,6 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 let document = fixture.html.replace('</head>', `<meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}.screen-reader-text{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0}</style><style>${css}</style>${fixture.authority}</head>`).replace('<body>', `<body class="${fixture.body_class}">`);
                 if (fixture.native_size) document = document.replace(/<input\b(?=[^>]*\btype="search")/g, `<input size="${fixture.native_size}"`);
                 await page.setContent(document, { waitUntil: 'load' });
-                await assertSquareSurfaces(page, `Footer/recovery ${name} ${width}`);
                 const data = await page.evaluate(() => {
                     const rect = node => { const r=node.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
                     const label = node => node.tagName.toLowerCase() + (node.className ? '.' + String(node.className).trim().replace(/\s+/g,'.') : '');
@@ -52,11 +50,6 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                         footer:document.querySelectorAll('footer.lunara-site-footer').length,
                         columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>node.querySelectorAll('a').length),
                         footerLabels:[...document.querySelectorAll('.lunara-footer-nav-col a')].map(node=>node.textContent),
-                        footerPresentation:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({
-                            shadow:getComputedStyle(node).boxShadow,
-                            background:getComputedStyle(node).backgroundImage,
-                            labels:[...node.querySelectorAll('a,h2,h3,h4,p')].filter(visible).map(item=>parseFloat(getComputedStyle(item).fontSize))
-                        })),
                         bodyText:document.body.textContent,
                         titles:[...document.querySelectorAll('.lunara-search-result-title')].map(node=>node.textContent),
                         excerpts:[...document.querySelectorAll('.lunara-search-result-copy')].map(node=>({text:node.textContent,...rect(node)})),
@@ -68,12 +61,6 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                                 outside:[...node.querySelectorAll('input:not([type=hidden]),button')].filter(visible).map(child=>({selector:label(child),...rect(child)})).filter(child=>child.left<left-1||child.right>right+1)};
                         }),
                         footerBox:rect(document.querySelector('.lunara-site-footer')),
-                        footerGeometry:{
-                            frame:rect(document.querySelector('.lunara-footer-inner')),
-                            nav:rect(document.querySelector('.lunara-footer-nav-grid')),
-                            columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),list:rect(node.querySelector("ul")||node),links:[...node.querySelectorAll('a')].map(rect)})),
-                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-copyright,.lunara-footer-legal')].filter(visible).map(rect)
-                        },
                     };
                 });
                 const tag=`${name}@${width}`;
@@ -82,16 +69,6 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 check(data.clipped.length===0, `${tag}: complete headings, labels and configured copy remain readable`, data.clipped);
                 check(data.controls.length>0&&data.controls.every(item=>item.height>=43.9&&item.width>=43.9), `${tag}: every public link, input and button has a44px target`, data.controls.filter(item=>item.height<43.9||item.width<43.9));
                 check(JSON.stringify(data.columns)===JSON.stringify(fixture.expected_columns), `${tag}: exact zero/one/twelve or inherited footer lists`, data.columns);
-                check(data.footerPresentation.every(group=>group.shadow==='none'&&group.background==='none'&&group.labels.every(size=>size>=13)), `${tag}: footer remains a flat directory with readable navigation`, data.footerPresentation);
-                const centered = (box,center) => Math.abs((box.left+box.right)/2-center)<=1;
-                const geometry=data.footerGeometry;
-                check(centered(geometry.frame,width/2)&&centered(geometry.nav,width/2)&&geometry.closing.every(box=>centered(box,width/2)), `${tag}: shared footer frame, brand and closing groups share the page center`, geometry);
-                check(geometry.columns.every(column=>{
-                    const rows=new Map();for(const link of column.links){const key=Math.round(link.top);rows.set(key,[...(rows.get(key)||[]),link]);}
-                    return [...rows.values()].every(row=>centered({left:Math.min(...row.map(x=>x.left)),right:Math.max(...row.map(x=>x.right))},(column.list.left+column.list.right)/2));
-                }), `${tag}: each wrapping footer row is centered in its directory`, geometry.columns);
-                if(!fixture.footer_only&&width>=768) check(data.footerBox.height<400,`${tag}: compact default footer stays below 400px`,data.footerBox);
-                check(width<=640 ? geometry.columns.every(column=>centered(column.box,width/2)) : Math.abs(geometry.columns[0].box.left-(width-geometry.columns[2].box.right))<=1&&Math.abs((geometry.columns[0].box.width)-(geometry.columns[2].box.width))<=1&&centered(geometry.columns[1].box,width/2), `${tag}: directory columns have symmetric gutters and a centered final phone stack`, geometry.columns);
                 if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);
                 if (!fixture.footer_only) {

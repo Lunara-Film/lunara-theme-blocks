@@ -1,21 +1,10 @@
-(function () {
-    'use strict';
-    function mount(pageRoot, scope) {
-        pageRoot = pageRoot || document;
-        // Standalone documents keep their native page-unload lifecycle.
-        scope = scope || {
-            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
-            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
-            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
-            cleanup: function () {}
-        };
 /**
  * Generated from the verified inline runtime during Phase 1C.
  * Keep behavior route-gated and free of render-blocking dependencies.
  */
 
 (function(){
-        var stage=pageRoot.querySelector('.lunara-hero-cinema-stage');
+        var stage=document.querySelector('.lunara-hero-cinema-stage');
         if(!stage)return;
         var slides=stage.querySelectorAll('.lunara-hero-cinema-slide');
         var pips=stage.querySelectorAll('.lunara-hero-cinema-pip');
@@ -36,15 +25,15 @@
         function next(){goTo(current+1);}
         function startAuto(){
             if(timer||paused||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-            timer=scope.interval(next,interval);
+            timer=setInterval(next,interval);
         }
         function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
-        scope.on(stage, 'mouseenter',function(){paused=true;stopAuto();});
-        scope.on(stage, 'mouseleave',function(){paused=false;startAuto();});
-        scope.on(stage, 'focusin',function(){paused=true;stopAuto();});
-        scope.on(stage, 'focusout',function(){paused=false;startAuto();});
+        stage.addEventListener('mouseenter',function(){paused=true;stopAuto();});
+        stage.addEventListener('mouseleave',function(){paused=false;startAuto();});
+        stage.addEventListener('focusin',function(){paused=true;stopAuto();});
+        stage.addEventListener('focusout',function(){paused=false;startAuto();});
         pips.forEach(function(pip){
-            scope.on(pip, 'click',function(){
+            pip.addEventListener('click',function(){
                 stopAuto();
                 goTo(parseInt(pip.getAttribute('data-slide'),10));
                 if(!paused)startAuto();
@@ -56,18 +45,13 @@
 (function () {
         'use strict';
 
-        var section = pageRoot.querySelector('.lunara-home-oscar-story-section');
+        var section = document.querySelector('.lunara-home-oscar-story-section');
         if (!section) return;
         var wrap  = section.querySelector('.lunara-ledger-carousel-wrap');
         var track = section.querySelector('[data-lunara-carousel-track]');
         if (!wrap || !track) return;
 
         var currentDetail = null;
-        scope.cleanup(function () {
-            section.classList.remove('has-expanded');
-            wrap.querySelectorAll('.lunara-lore-detail').forEach(function (detail) { detail.remove(); });
-            currentDetail = null;
-        });
 
         function getText(parent, selector) {
             var el = parent.querySelector(selector);
@@ -98,7 +82,7 @@
             currentDetail = null;
             detail.classList.add('is-closing');
             section.classList.remove('has-expanded');
-            scope.timeout(function () {
+            setTimeout(function () {
                 if (detail && detail.parentNode) {
                     detail.parentNode.removeChild(detail);
                 }
@@ -165,17 +149,17 @@
 
             // Focus the close button for a11y
             if (closeButton) {
-                scope.on(closeButton, 'click', function (e) {
+                closeButton.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     closeDetail();
                 });
-                scope.timeout(function () { closeButton.focus(); }, 60);
+                setTimeout(function () { closeButton.focus(); }, 60);
             }
         }
 
         // Intercept lore card clicks
-        scope.on(track, 'click', function (e) {
+        track.addEventListener('click', function (e) {
             // Let modifier-key clicks open in new tab normally
             if (e.ctrlKey || e.metaKey || e.shiftKey) return;
 
@@ -188,14 +172,14 @@
         });
 
         // Escape to close
-        scope.on(document, 'keydown', function (e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && currentDetail) {
                 closeDetail();
             }
         });
 
         // Click outside the detail to close
-        scope.on(document, 'click', function (e) {
+        document.addEventListener('click', function (e) {
             if (!currentDetail) return;
             if (currentDetail.contains(e.target)) return;
             // Ignore clicks that are already handled by track (new card click)
@@ -203,11 +187,3 @@
             closeDetail();
         });
     })();
-
-    }
-    if (window.LunaraApp && window.LunaraApp.register) {
-        window.LunaraApp.register('home-runtime', mount);
-    } else if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
-    } else { mount(); }
-}());

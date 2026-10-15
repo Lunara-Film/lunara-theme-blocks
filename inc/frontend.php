@@ -464,7 +464,7 @@ function lunara_preload_journal_archive_label_font() {
 
     printf(
         '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin />' . "\n",
-        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Semibold.woff2' ) )
+        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Bold.woff2' ) )
     );
 }
 add_action( 'wp_head', 'lunara_preload_journal_archive_label_font', 4 );
@@ -489,7 +489,7 @@ function lunara_preload_reviews_archive_label_font() {
 
     printf(
         '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin />' . "\n",
-        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Semibold.woff2' ) )
+        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Bold.woff2' ) )
     );
 }
 add_action( 'wp_head', 'lunara_preload_reviews_archive_label_font', 4 );
@@ -509,7 +509,7 @@ function lunara_preload_oscars_portal_label_font() {
 
     printf(
         '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin />' . "\n",
-        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Semibold.woff2' ) )
+        esc_url( home_url( '/wp-content/uploads/lunara-fonts/v1/TiemposText-Bold.woff2' ) )
     );
 }
 add_action( 'wp_head', 'lunara_preload_oscars_portal_label_font', 4 );
@@ -527,34 +527,9 @@ function lunara_output_home_hero_geometry_css() {
         return;
     }
 
-    // Splide inserts the arrows and pagination at mount, beside the Play/Pause
-    // toggle. On desktop their positioning lives only in deferred CSS, so until it
-    // arrived they sat in normal flow and pushed the page down (measured CLS 0.98).
-    // Match the centered desktop toggle without retaining a legacy right inset.
-    // Phones (900px and below) deliberately place the controls
-    // in the grid's flow, so the seed leaves them alone there.
-    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}@media (min-width:901px){.lunara-cinematic-hero-carousel{position:relative}.lunara-cinematic-hero-carousel .lunara-hero-arrows{position:absolute;inset:0;z-index:4;pointer-events:none}.lunara-cinematic-hero-carousel .lunara-hero-pagination{position:absolute;left:0;right:0;bottom:28px;z-index:4;margin:0;padding:0}.lunara-home-curated-hero .lunara-home-carousel-toggle{position:absolute;left:50%;right:auto;bottom:64px;transform:translateX(-50%);z-index:5}}</style>';
+    echo '<style id="lunara-home-hero-geometry-css">.lunara-cinematic-hero-carousel .splide__list>.lunara-cinematic-hero-slide{flex:0 0 100%;width:100%;min-width:0}</style>';
 }
 add_action( 'wp_head', 'lunara_output_home_hero_geometry_css', 2 );
-
-/**
- * Film and person dossiers: the same first-paint seed for their layout.
- *
- * The dossier layout rules live in style.css, which Jetpack Boost defers, and
- * the stored critical CSS carries none of them. Until the sheet applied, the
- * hero poster rendered at full size and the filmography grid as one column,
- * then snapped into place (measured CLS 0.26 to 0.50), and the award list gained
- * its padding late. These declarations are copied from style.css verbatim, so
- * nothing changes once it applies.
- */
-function lunara_output_entity_geometry_css() {
-    if ( is_admin() || is_feed() || ! is_singular( array( 'movie', 'person' ) ) ) {
-        return;
-    }
-
-    echo '<style id="lunara-entity-geometry-css">.lunara-entity-hero{position:relative;overflow:hidden;margin:28px 0 34px}.lunara-entity-hero-backdrop{position:absolute;inset:-4%}.lunara-entity-hero-overlay{position:absolute;inset:0}.lunara-entity-hero-inner{position:relative;z-index:2;display:flex;gap:clamp(22px,3.4vw,44px);align-items:flex-end;padding:clamp(28px,4.4vw,56px)}.lunara-entity-hero-poster{flex:0 0 clamp(160px,18vw,250px);aspect-ratio:2/3;overflow:hidden}.lunara-entity-hero-poster img,.lunara-entity-card-poster img{display:block;width:100%;height:100%;object-fit:cover}.lunara-entity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:clamp(14px,2vw,22px);margin-top:14px}.lunara-entity-card-poster{aspect-ratio:2/3;overflow:hidden}.lunara-entity-body>*+*{margin-top:clamp(28px,4vw,44px)}.lunara-entity-awards{padding:clamp(20px,3vw,32px);border:1px solid rgba(201,169,97,.24);border-radius:0}.lunara-entity-awards-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}.lunara-entity-awards-tally{margin:0}.lunara-entity-award-list{margin:0;padding:0;list-style:none}.lunara-entity-award{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:10px 4px}.lunara-entity-award-year{min-width:52px}.lunara-entity-award-state{margin-left:auto;padding:3px 10px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase}@media (max-width:760px){.lunara-entity-hero-inner{flex-direction:column;align-items:flex-start}.lunara-entity-hero-poster{flex-basis:auto;width:min(58vw,220px)}.lunara-entity-award-state{margin-left:0}}</style>';
-}
-add_action( 'wp_head', 'lunara_output_entity_geometry_css', 2 );
 
 /**
  * Keep the masthead's layout CSS out of WP Rocket's used-CSS pipeline.
@@ -569,7 +544,6 @@ add_action( 'wp_head', 'lunara_output_entity_geometry_css', 2 );
 function lunara_rocket_preserve_front_door_css( $exclusions ) {
     $exclusions[] = 'lunara-home-front-door-vars';
     $exclusions[] = 'lunara-home-hero-geometry-css';
-    $exclusions[] = 'lunara-entity-geometry-css';
     $exclusions[] = 'lunara-home-modules.css';
     return $exclusions;
 }
@@ -1281,34 +1255,7 @@ function lunara_output_oscars_ledger_critical_css() {
 add_action( 'wp_head', 'lunara_output_oscars_ledger_critical_css', 7 );
 
 /**
- * Only the known section renderers can safely omit block/global CSS.
- * Hybrid Home composition may also contain core, synced or third-party blocks.
- */
-function lunara_home_can_trim_block_styles() {
-    if ( ! is_front_page() || is_preview() || is_customize_preview() || ! empty( $GLOBALS['lunara_site_studio_preview_context'] ) ) {
-        return false;
-    }
-    if ( ! function_exists( 'lunara_home_uses_block_composition' ) || ! lunara_home_uses_block_composition() ) {
-        return true; // The legacy registry renders only owned sections.
-    }
-    if ( ! function_exists( 'parse_blocks' ) || ! function_exists( 'lunara_home_section_block_map' ) ) {
-        return false;
-    }
-    $owned = array_values( lunara_home_section_block_map() );
-    $blocks = parse_blocks( lunara_home_front_page_content( lunara_home_front_page_id() ) );
-    foreach ( $blocks as $block ) {
-        if ( empty( $block['blockName'] ) && '' === trim( isset( $block['innerHTML'] ) ? $block['innerHTML'] : '' ) ) {
-            continue;
-        }
-        if ( ! in_array( $block['blockName'], $owned, true ) || ! empty( $block['innerBlocks'] ) ) {
-            return false; // Unknown output retains its styles; no recursive guess.
-        }
-    }
-    return true;
-}
-
-/**
- * The canonical Home section renderers do not consume theme.json markup.
+ * The canonical Home renderer does not consume block or theme.json markup.
  *
  * WordPress core prints the full global stylesheet through actions in both
  * the header and footer, so dequeueing the handle alone cannot prevent the
@@ -1316,7 +1263,7 @@ function lunara_home_can_trim_block_styles() {
  * mobile pixel comparisons confirmed this stylesheet has no visual effect.
  */
 function lunara_disable_unused_home_global_styles() {
-    if ( ! lunara_home_can_trim_block_styles() ) {
+    if ( ! is_front_page() ) {
         return;
     }
 
@@ -1331,7 +1278,7 @@ add_action( 'wp', 'lunara_disable_unused_home_global_styles', 0 );
  * these unused styles were removed, so keep them off this route only.
  */
 function lunara_trim_unused_home_styles() {
-    if ( ! lunara_home_can_trim_block_styles() ) {
+    if ( ! is_front_page() ) {
         return;
     }
 
@@ -1566,7 +1513,7 @@ function lunara_render_custom_footer() {
             <nav class="lunara-footer-nav-grid" aria-label="<?php esc_attr_e( 'Footer navigation', 'lunara-film' ); ?>">
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col1_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col1_head ); ?></h2>
+                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col1_head ); ?></h4>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['editorial'] );
@@ -1574,7 +1521,7 @@ function lunara_render_custom_footer() {
                 </div>
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col2_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col2_head ); ?></h2>
+                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col2_head ); ?></h4>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['oscars'] );
@@ -1582,7 +1529,7 @@ function lunara_render_custom_footer() {
                 </div>
                 <div class="lunara-footer-nav-col">
                     <?php if ( $col3_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col3_head ); ?></h2>
+                        <h4 class="lunara-footer-col-heading"><?php echo esc_html( $col3_head ); ?></h4>
                     <?php endif; ?>
                     <?php
                     lunara_render_footer_link_list( $navigation['utility'] );
@@ -2239,12 +2186,6 @@ if ( ! function_exists( 'lunara_get_search_recovery_routes' ) ) {
                     $film_id = strtolower( trim( (string) ( $row['film_id'] ?? '' ) ) );
                     $score   = $score_label( $film );
 
-                    // A never-link or guarded title (the plugin's legacy link
-                    // guard) is not offered: this builds the title URL itself.
-                    if ( '' !== $film_id && function_exists( 'lunara_oscars_pair_is_guarded' ) && lunara_oscars_pair_is_guarded( $film_id, $film ) ) {
-                        continue;
-                    }
-
                     if ( '' !== $film && preg_match( '/^tt\d+$/', $film_id ) && $score >= 72 ) {
                         if ( intval( $row['winner'] ?? 0 ) > 0 ) {
                             $score += 2;
@@ -2610,27 +2551,14 @@ if ( ! function_exists( 'lunara_get_oscars_search_matches' ) ) {
                 return array();
             }
 
-            // Drop each pair the plugin's legacy link guard rejects (a
-            // known-wrong legacy pairing or a never-link ID).
-            $pairs = array();
-            foreach ( $id_parts as $index => $id_part ) {
-                if ( function_exists( 'lunara_oscars_pair_is_guarded' ) && lunara_oscars_pair_is_guarded( $id_part, $value_parts[ $index ] ) ) {
-                    continue;
-                }
-                $pairs[ $id_part ] = $value_parts[ $index ];
-            }
-
-            return $pairs;
+            return array_combine( $id_parts, $value_parts );
         };
 
         foreach ( $rows as $row ) {
             $film    = trim( (string) ( $row['film'] ?? '' ) );
             $film_id = strtolower( trim( (string) ( $row['film_id'] ?? '' ) ) );
 
-            // A never-link or guarded title (the plugin's legacy link guard)
-            // is not offered: this builds the title URL itself. The row's
-            // nominee pairs are still considered below.
-            if ( '' !== $film && preg_match( '/^tt\d+$/', $film_id ) && ! ( function_exists( 'lunara_oscars_pair_is_guarded' ) && lunara_oscars_pair_is_guarded( $film_id, $film ) ) ) {
+            if ( '' !== $film && preg_match( '/^tt\d+$/', $film_id ) ) {
                 $film_score = function_exists( 'lunara_search_text_match_score' )
                     ? lunara_search_text_match_score( $film, $query_text )
                     : 0;
@@ -3703,7 +3631,11 @@ add_action( 'wp_head', 'lunara_output_review_seo_meta', 7 );
  * Suppress Blocksy's native footer via CSS so ours is the only one.
  */
 function lunara_hide_blocksy_footer_css() {
-    // Compatibility callback. The cacheable public guardrails own footer CSS.
+    if ( ! apply_filters( 'lunara_use_custom_footer', true ) ) {
+        return;
+    }
+
+    echo '<style id="lunara-hide-blocksy-footer">.ct-footer,footer.site-footer:not(.lunara-site-footer){display:none!important;}#header .menu-item-27569 .ct-menu-badge{display:none!important;}.lunara-site-footer{position:relative;overflow:hidden;margin-top:clamp(76px,8vw,120px);padding:clamp(48px,6vw,86px) 0 54px;background:radial-gradient(circle at top center,rgba(201,169,97,.08),transparent 34%),linear-gradient(180deg,rgba(15,29,46,.95),rgba(10,21,32,.98));border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text,#FAFBFC);}.lunara-footer-inner{max-width:min(100%,1360px);margin:0 auto;padding-inline:var(--lunara-shell-pad,28px);display:grid;gap:48px;}.lunara-footer-brand{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}.lunara-footer-logo{max-height:var(--lunara-logo-max,64px);width:auto;}.lunara-footer-tagline{max-width:48ch;margin:0;color:var(--lunara-text-muted,#A8A8B8);font-size:.98rem;line-height:1.55;}.lunara-footer-nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;}.lunara-footer-nav-col{padding:20px;border:1px solid rgba(201,169,97,.12);border-radius:22px;background:linear-gradient(180deg,rgba(18,31,47,.82),rgba(10,20,32,.56));}.lunara-footer-col-heading{margin:0 0 16px;color:var(--lunara-gold,#c9a961);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;}.lunara-footer-nav-col ul,.lunara-site-footer .menu{list-style:none!important;margin:0!important;padding:0!important;display:grid!important;gap:10px!important;}.lunara-footer-nav-col li,.lunara-site-footer .menu li{list-style:none!important;margin:0!important;padding:0!important;}.lunara-footer-nav-col a,.lunara-site-footer .menu a{display:inline-flex!important;align-items:center;min-height:38px;padding:8px 14px;border:1px solid rgba(201,169,97,.12);border-radius:999px;background:rgba(255,255,255,.02);color:var(--lunara-text,#FAFBFC)!important;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none!important;}.lunara-footer-nav-col a:hover,.lunara-site-footer .menu a:hover{border-color:rgba(201,169,97,.32);color:var(--lunara-gold-light,#e0c481)!important;}.lunara-footer-utility{display:flex;justify-content:space-between;gap:14px 18px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(201,169,97,.24);color:var(--lunara-text-muted,#A8A8B8);font-size:.78rem;}.lunara-footer-utility a{color:var(--lunara-text-muted,#A8A8B8)!important;text-decoration:none!important;}@media(max-width:900px){.lunara-footer-nav-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}@media(max-width:640px){.lunara-footer-nav-grid{grid-template-columns:1fr;}.lunara-footer-utility{justify-content:center;text-align:center;}}</style>' . "\n";
 }
 // Phase 1C: behavior moved to cacheable route assets.
 
@@ -4265,21 +4197,22 @@ if ( ! function_exists( 'lunara_render_newsletter_signup' ) ) {
         ?>
         <section class="lunara-newsletter" aria-label="<?php esc_attr_e( 'Newsletter signup', 'lunara-film' ); ?>">
             <style>
-            .lunara-newsletter{width:min(100%,1080px);margin:clamp(40px,6vw,86px) auto;padding:clamp(28px,4vw,52px) 20px;box-sizing:border-box;border:0;border-top:1px solid rgba(201,169,97,.28);border-radius:0;background:transparent;box-shadow:none;}
+            .lunara-newsletter{width:min(100%,1080px);margin:clamp(40px,6vw,86px) auto;padding:clamp(28px,4vw,52px);box-sizing:border-box;border:1px solid rgba(201,169,97,.28);border-radius:20px;background:radial-gradient(circle at 88% 0%,rgba(201,169,97,.12),transparent 42%),linear-gradient(180deg,rgba(15,29,46,.92),rgba(8,16,27,.96));box-shadow:0 30px 70px rgba(0,0,0,.34);}
             .lunara-newsletter-inner{display:grid;gap:clamp(14px,2vw,20px);max-width:640px;margin-inline:auto;text-align:center;}
+            .lunara-newsletter-kicker{margin:0;color:var(--lunara-gold-light,#e0c481);font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;}
             .lunara-newsletter-heading{margin:0;color:var(--lunara-gold,#c9a961);font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.12;}
             .lunara-newsletter-blurb{margin:0 auto;max-width:52ch;color:rgba(223,228,234,.86);font-size:clamp(.95rem,1vw,1.05rem);line-height:1.6;}
             .lunara-newsletter-form{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px;}
-            .lunara-newsletter-input{flex:1 1 280px;min-width:0;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.5);border-radius:0;background:#0a1520;color:var(--lunara-text,#fafbfc);font-size:1rem;}
-            .lunara-newsletter-input::placeholder{color:#bac4ce;}
+            .lunara-newsletter-input{flex:1 1 280px;max-width:360px;min-height:50px;padding:12px 18px;box-sizing:border-box;border:1px solid rgba(201,169,97,.34);border-radius:999px;background:rgba(5,11,18,.6);color:var(--lunara-text,#fafbfc);font-size:1rem;}
+            .lunara-newsletter-input::placeholder{color:rgba(223,228,234,.5);}
             .lunara-newsletter-input:focus{outline:none;border-color:rgba(224,196,129,.8);box-shadow:0 0 0 3px rgba(201,169,97,.18);}
-            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:0;background:#e0c481;color:#0a1525;font-family:var(--lunara-font-label,serif);font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;transition:background-color .16s ease;}
-            .lunara-newsletter-submit:hover{background:#c9a961;}
-            .lunara-newsletter-submit:focus-visible{outline:2px solid #fafbfc;outline-offset:3px;}
-            .lunara-newsletter-fineprint{margin:0;color:#bac4ce;font-size:.8125rem;}
-            @media(max-width:540px){.lunara-newsletter-form{flex-direction:column;align-items:stretch;}.lunara-newsletter-input{flex:none;width:100%;max-width:none;}}
+            .lunara-newsletter-submit{min-height:50px;padding:12px 30px;border:none;border-radius:999px;background:linear-gradient(135deg,#e0c481,#c9a961);color:#0a1525;font-family:var(--lunara-label-font,"Arial Narrow",sans-serif);font-size:.86rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease;}
+            .lunara-newsletter-submit:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(201,169,97,.32);}
+            .lunara-newsletter-fineprint{margin:0;color:rgba(223,228,234,.5);font-size:.76rem;}
+            @media(max-width:540px){.lunara-newsletter-form{flex-direction:column;align-items:stretch;}.lunara-newsletter-input{max-width:none;}}
             </style>
             <div class="lunara-newsletter-inner">
+                <p class="lunara-newsletter-kicker"><?php esc_html_e( 'The Lunara Dispatch', 'lunara-film' ); ?></p>
                 <h2 class="lunara-newsletter-heading"><?php echo esc_html( $heading ); ?></h2>
                 <p class="lunara-newsletter-blurb"><?php echo esc_html( $blurb ); ?></p>
                 <form class="lunara-newsletter-form" action="<?php echo esc_url( $action ); ?>" method="post" target="_blank" rel="noopener">
@@ -4302,7 +4235,70 @@ if ( ! function_exists( 'lunara_render_newsletter_signup' ) ) {
 
 // lunara-review-share-strip-css moved to assets/css/lunara-review-single.css.
 
-// Review share strip script retired in 3.2.94 with the share card.
+/**
+ * Single Review owned share strip behavior.
+ */
+function lunara_output_review_share_strip_script() {
+    if ( is_admin() || is_feed() || ! is_singular( 'review' ) ) {
+        return;
+    }
+    ?>
+    <script id="lunara-review-share-strip-js">
+    (function() {
+        var buttons = document.querySelectorAll('[data-lunara-copy-share]');
+        if (!buttons.length) {
+            return;
+        }
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var url = button.getAttribute('data-share-url') || window.location.href;
+                var strip = button.closest('.lunara-review-share-strip');
+                var status = strip ? strip.querySelector('.lunara-review-share-status') : null;
+                var setStatus = function(message) {
+                    if (status) {
+                        status.textContent = message;
+                    }
+                };
+                var markCopied = function() {
+                    button.classList.add('is-copied');
+                    button.textContent = 'Copied';
+                    setStatus('Link copied.');
+                    window.setTimeout(function() {
+                        button.classList.remove('is-copied');
+                        button.textContent = 'Copy Link';
+                        setStatus('');
+                    }, 1800);
+                };
+                var fallbackCopy = function() {
+                    var input = document.createElement('textarea');
+                    input.value = url;
+                    input.setAttribute('readonly', 'readonly');
+                    input.style.position = 'fixed';
+                    input.style.left = '-9999px';
+                    document.body.appendChild(input);
+                    input.select();
+                    try {
+                        document.execCommand('copy');
+                        markCopied();
+                    } catch (error) {
+                        setStatus('Copy failed.');
+                    }
+                    document.body.removeChild(input);
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(markCopied).catch(fallbackCopy);
+                } else {
+                    fallbackCopy();
+                }
+            });
+        });
+    }());
+    </script>
+    <?php
+}
+add_action( 'wp_footer', 'lunara_output_review_share_strip_script', 100 );
 
 // lunara-review-related-retention-css moved to assets/css/lunara-review-single.css.
 
@@ -4402,10 +4398,20 @@ function lunara_output_review_single_studio_css() {
     $debrief_poster_width = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_single_debrief_poster_width', 300, 220, 360 );
     $related_count        = lunara_get_review_single_studio_number_value( $preview_values, 'lunara_review_related_count', 4, 2, 6 );
 
+    $body_gap_map = array(
+        'compact'   => 28,
+        'editorial' => 40,
+        'feature'   => 56,
+    );
     $hero_max_map = array(
         'standard'       => 980,
         'poster-forward' => 760,
         'wide-forward'   => 1180,
+    );
+    $rail_width_map = array(
+        'minimal'          => 240,
+        'balanced'         => 286,
+        'metadata-forward' => 334,
     );
     $pairing_gap_map = array(
         'compact'   => 14,
@@ -4423,7 +4429,9 @@ function lunara_output_review_single_studio_css() {
         'feature'   => 4,
     );
 
+    $body_gap              = $body_gap_map[ $density ];
     $hero_max              = $hero_max_map[ $hero_scale ];
+    $rail_width            = $rail_width_map[ $rail_mode ];
     $pairing_gap           = $pairing_gap_map[ $pairing_density ];
     $related_card_min      = $related_card_min_map[ $density ];
     $related_excerpt_clamp = $related_excerpt_clamp_map[ $density ];
@@ -4441,12 +4449,13 @@ function lunara_output_review_single_studio_css() {
     if ( $related_count <= 3 ) {
         $related_card_min = max( $related_card_min, 212 );
     }
-    // Reading-frame and rail geometry live in lunara-review-single.css.
     ?>
     <style id="lunara-review-single-studio-css">
     body.single-review .lunara-review-single-page {
         --lunara-review-single-section-gap: <?php echo absint( $section_gap ); ?>px;
+        --lunara-review-single-body-gap: <?php echo absint( $body_gap ); ?>px;
         --lunara-review-single-hero-max: <?php echo absint( $hero_max ); ?>px;
+        --lunara-review-single-rail-width: <?php echo absint( $rail_width ); ?>px;
         --lunara-review-single-debrief-poster-width: <?php echo absint( $debrief_poster_width ); ?>px;
         --lunara-review-single-pairing-gap: <?php echo absint( $pairing_gap ); ?>px;
         --lunara-review-single-related-card-min: <?php echo absint( $related_card_min ); ?>px;
@@ -4457,13 +4466,32 @@ function lunara_output_review_single_studio_css() {
         overflow-x: clip !important;
     }
 
+    body.single-review .lunara-review-single-hero {
+        margin-bottom: var(--lunara-review-single-section-gap) !important;
+    }
+
     body.single-review .lunara-review-single-body {
         margin-top: 0 !important;
         margin-bottom: var(--lunara-review-single-section-gap) !important;
     }
 
+    body.single-review .lunara-review-single-body-grid {
+        gap: var(--lunara-review-single-body-gap) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(220px, var(--lunara-review-single-rail-width)) !important;
+    }
+
     body.single-review .lunara-review-single-content {
         min-width: 0 !important;
+    }
+
+    body.single-review .lunara-review-single-rail {
+        width: min(100%, var(--lunara-review-single-rail-width)) !important;
+        max-width: var(--lunara-review-single-rail-width) !important;
+        min-width: 0 !important;
+    }
+
+    body.single-review .lunara-review-single-rail-sticky {
+        gap: clamp(12px, 1.4vw, 18px) !important;
     }
 
     body.single-review .lunara-review-single-cinematic-hero {
@@ -4571,6 +4599,16 @@ function lunara_output_review_single_studio_css() {
     <?php endif; ?>
 
     @media (max-width: 900px) {
+        body.single-review .lunara-review-single-body-grid {
+            display: block !important;
+        }
+
+        body.single-review .lunara-review-single-rail {
+            width: min(100%, 720px) !important;
+            max-width: 720px !important;
+            margin: clamp(24px, 6vw, 44px) auto 0 !important;
+        }
+
         body.single-review .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: minmax(0, 1fr) !important;
         }
@@ -4579,6 +4617,7 @@ function lunara_output_review_single_studio_css() {
     @media (max-width: 520px) {
         body.single-review .lunara-review-single-page {
             --lunara-review-single-section-gap: min(<?php echo absint( $section_gap ); ?>px, 42px);
+            --lunara-review-single-body-gap: min(<?php echo absint( $body_gap ); ?>px, 28px);
         }
 
         body.single-review .lunara-review-single-debrief-poster-shell {
@@ -5056,7 +5095,7 @@ function lunara_output_oscars_dossier_studio_css() {
         max-width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
         overflow: hidden !important;
         width: min(100%, var(--lunara-oscars-profile-media-width)) !important;
-        background: var(--aat-black, #0a1520) !important;
+        background: linear-gradient(180deg, rgba(8, 20, 32, .94), rgba(5, 12, 21, .98)) !important;
     }
 
     body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap img,
@@ -5099,9 +5138,14 @@ function lunara_output_oscars_dossier_studio_css() {
         gap: 14px !important;
     }
 
+    body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-card,
+    body.aat-shell-page .aat-related-review-card.aat-related-treatment-compact-rail {
+        border-radius: 16px !important;
+    }
+
     body.aat-shell-page .aat-related-treatment-compact-rail .aat-related-review-body {
         gap: 9px !important;
-        padding: 12px 0 0 !important;
+        padding: 15px !important;
     }
 
     @media (min-width: 860px) {
@@ -5109,8 +5153,6 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-related-reviews-grid.aat-related-treatment-feature-strip .aat-related-review-card:first-child {
             display: grid !important;
             grid-column: span 2;
-            flex-basis: calc(2 * var(--lunara-oscars-related-review-min) + 20px);
-            max-width: 100%;
             grid-template-columns: minmax(240px, .95fr) minmax(0, 1fr);
         }
 
@@ -5151,19 +5193,10 @@ function lunara_output_oscars_dossier_studio_css() {
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-person,
         body.aat-shell-page .aat-profile-file .aat-entity-poster-wrap.is-company {
-            flex-basis: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
+            flex-basis: min(100%, 260px) !important;
             max-height: min(var(--lunara-oscars-profile-media-height), 420px) !important;
-            max-width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
-            width: min(100%, var(--lunara-oscars-profile-media-width), 260px) !important;
-        }
-    }
-    @media (max-width: 540px) {
-        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap,
-        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-person,
-        body.aat-shell-page .aat-container.aat-profile-file .aat-entity-hero .aat-entity-poster-wrap.is-company {
-            flex-basis: auto !important;
-            max-width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
-            width: min(100%, var(--lunara-oscars-profile-media-width), 45vw, 180px) !important;
+            max-width: min(100%, 260px) !important;
+            width: min(100%, 260px) !important;
         }
     }
     </style>
@@ -5366,19 +5399,23 @@ function lunara_output_utility_search_studio_css() {
     body.search .lunara-search-oscar-card,
     body.search .lunara-search-empty-shell,
     body.error404 .lunara-404-panel {
-        background: transparent;
-        border: 0;
-        box-shadow: none;
+        background:
+            linear-gradient(135deg, rgba(201, 169, 97, .11), transparent 44%),
+            rgba(8, 22, 36, .92);
+        border: 1px solid rgba(201, 169, 97, .18);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, .2);
         min-width: 0;
     }
 
     body.search .lunara-search-page--focus-ledger .lunara-search-oscar-shell,
     body.search .lunara-search-page--focus-reviews .lunara-search-results-shell,
     body.search .lunara-search-page--focus-journal .lunara-search-results-shell {
-        border: 0;
-        border-radius: 0;
-        padding: 0;
-        background: transparent;
+        border: 1px solid var(--lunara-utility-focus-ring);
+        border-radius: 18px;
+        padding: clamp(16px, 2.4vw, 26px);
+        background:
+            linear-gradient(135deg, rgba(201, 169, 97, .08), transparent 45%),
+            rgba(6, 18, 31, .34);
     }
 
     body.search .lunara-search-page--focus-reviews .lunara-search-results-head .lunara-home-section-kicker::after,
@@ -5412,8 +5449,8 @@ function lunara_output_utility_search_studio_css() {
     body.error404 .lunara-404-page--primary-journal .lunara-404-action--journal,
     body.error404 .lunara-404-page--primary-search .lunara-404-action--search,
     body.error404 .lunara-404-page--primary-home .lunara-404-action--home {
-        color: #07111b;
-        background: #c9a961;
+        box-shadow: 0 0 0 1px rgba(201, 169, 97, .34), 0 18px 38px rgba(0, 0, 0, .22);
+        transform: translateY(-1px);
     }
 
     body.search .lunara-search-empty-shell,
@@ -5890,30 +5927,12 @@ if ( ! function_exists( 'lunara_separate_review_from_editorial_archives' ) ) {
             return;
         }
 
-        // Journal entries and Reviews share editorial taxonomies with ordinary Posts.
-        // Category and tag archives must include every eligible assigned type;
-        // limiting categories to Posts hid Reviews and reported a false zero total.
-        if ( $query->is_tag() || $query->is_category() ) {
-            $query->set( 'post_type', array( 'journal', 'review', 'post' ) );
-
-            if ( function_exists( 'lunara_apply_editorial_archive_sort_args' ) ) {
-                $query_vars = array(
-                    'orderby' => $query->get( 'orderby' ),
-                    'order'   => $query->get( 'order' ),
-                );
-                $query_vars = lunara_apply_editorial_archive_sort_args( $query_vars );
-                $query->set( 'orderby', $query_vars['orderby'] );
-                $query->set( 'order', $query_vars['order'] );
-            }
-            return;
-        }
-
         $requested_post_type = $query->get( 'post_type' );
         if ( 'review' === $requested_post_type || ( is_array( $requested_post_type ) && in_array( 'review', $requested_post_type, true ) ) ) {
             return;
         }
 
-        if ( $query->is_home() || $query->is_author() || $query->is_date() ) {
+        if ( $query->is_home() || $query->is_category() || $query->is_tag() || $query->is_author() || $query->is_date() ) {
             $query->set( 'post_type', 'post' );
 
             if ( function_exists( 'lunara_apply_editorial_archive_sort_args' ) ) {

@@ -21,7 +21,7 @@
  *       • slider   → horizontal scroll-snap rail with peek + optional arrows,
  *       • carousel → one-at-a-time fading slides reusing the theme's existing
  *                    .lunara-carousel contract (autoplay, dots, swipe, keys).
- *   - Frame dials: aspect ratio, gap, per-image caption,
+ *   - Frame dials: aspect ratio, gap, rounded corners, per-image caption,
  *     and where each image links (nowhere / the file / its attachment page).
  *   - Section header: per-instance kicker/heading/CTA, or no header at all.
  *
@@ -51,8 +51,7 @@ if ( ! function_exists( 'lunara_media_showcase_attribute_schema' ) ) {
 			'featureFirst'  => array( 'type' => 'boolean', 'default' => false ),
 			'aspectRatio'   => array( 'type' => 'string', 'default' => 'landscape' ),
 			'gap'           => array( 'type' => 'string', 'default' => 'normal' ),
-			// Accept legacy saved attributes without restoring retired rounded frames.
-			'rounded'       => array( 'type' => 'boolean', 'default' => false ),
+			'rounded'       => array( 'type' => 'boolean', 'default' => true ),
 			'linkTo'        => array( 'type' => 'string', 'default' => 'none' ),
 			'showCaptions'  => array( 'type' => 'boolean', 'default' => false ),
 			'autoplay'      => array( 'type' => 'boolean', 'default' => true ),
@@ -236,6 +235,7 @@ if ( ! function_exists( 'lunara_render_media_showcase' ) ) {
 		$feature_first = ! empty( $attrs['featureFirst'] );
 		$ratio         = lunara_media_showcase_ratio_value( isset( $attrs['aspectRatio'] ) ? sanitize_key( $attrs['aspectRatio'] ) : 'landscape' );
 		$gap           = lunara_media_showcase_gap_value( isset( $attrs['gap'] ) ? sanitize_key( $attrs['gap'] ) : 'normal' );
+		$rounded       = ! isset( $attrs['rounded'] ) || (bool) $attrs['rounded'];
 		$link_to       = isset( $attrs['linkTo'] ) ? sanitize_key( $attrs['linkTo'] ) : 'none';
 		if ( ! in_array( $link_to, array( 'none', 'media', 'attachment' ), true ) ) {
 			$link_to = 'none';
@@ -264,6 +264,7 @@ if ( ! function_exists( 'lunara_render_media_showcase' ) ) {
 
 		$root_classes = 'lunara-media-showcase lunara-media-display-' . $display;
 		$root_classes .= '' !== $ratio ? ' has-ratio' : ' is-ratio-auto';
+		$root_classes .= $rounded ? ' is-rounded' : '';
 
 		ob_start();
 		?>

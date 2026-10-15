@@ -99,21 +99,21 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
             .lunara-meta-section h4 { margin: 0 0 15px; color: #c9a961; }
             .lunara-meta-row { display: flex; gap: 20px; }
             .lunara-meta-row .lunara-meta-field { flex: 1; }
-            .lunara-pair-preview { margin-top: 18px; border: 1px solid #d8c38a; border-radius: 0; background: #071523; overflow: hidden; color: #f7f1dd; }
+            .lunara-pair-preview { margin-top: 18px; border: 1px solid #d8c38a; border-radius: 10px; background: #071523; overflow: hidden; color: #f7f1dd; }
             .lunara-pair-preview-head { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-bottom: 1px solid rgba(216, 195, 138, 0.28); background: rgba(216, 195, 138, 0.08); }
             .lunara-pair-preview-head strong { color: #e4c875; text-transform: uppercase; letter-spacing: .08em; }
             .lunara-pair-preview-head span { color: #b8c3cf; font-size: 12px; }
             .lunara-pair-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 14px; }
-            .lunara-pair-preview-card { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-height: 122px; padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 0; background: rgba(255,255,255,.045); }
+            .lunara-pair-preview-card { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-height: 122px; padding: 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(255,255,255,.045); }
             .lunara-pair-preview-card.is-warning { border-color: rgba(214, 126, 70, .85); }
             .lunara-pair-preview-card.is-empty { opacity: .72; }
-            .lunara-pair-preview-media { width: 74px; aspect-ratio: 2 / 3; border-radius: 0; overflow: hidden; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: #8f9aa7; font-size: 11px; text-align: center; }
+            .lunara-pair-preview-media { width: 74px; aspect-ratio: 2 / 3; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,.07); display: flex; align-items: center; justify-content: center; color: #8f9aa7; font-size: 11px; text-align: center; }
             .lunara-pair-preview-thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
             .lunara-pair-preview-role { margin: 0 0 4px; color: #e4c875; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
             .lunara-pair-preview-title { margin: 0 0 5px; color: #fff; font-size: 14px; line-height: 1.25; }
             .lunara-pair-preview-note { margin: 0 0 8px; color: #c8d0d8; font-size: 12px; line-height: 1.35; }
             .lunara-pair-preview-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
-            .lunara-pair-preview-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 7px; border: 1px solid rgba(228, 200, 117, .42); border-radius: 0; color: #f2d986; font-size: 11px; line-height: 1.2; text-decoration: none; }
+            .lunara-pair-preview-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 2px 7px; border: 1px solid rgba(228, 200, 117, .42); border-radius: 999px; color: #f2d986; font-size: 11px; line-height: 1.2; text-decoration: none; }
             .lunara-pair-preview-chip.is-muted { border-color: rgba(255,255,255,.18); color: #aeb8c4; }
             .lunara-pair-preview-warnings { margin: 8px 0 0; padding-left: 16px; color: #ffb07b; font-size: 12px; }
             .lunara-pair-preview-warnings li { margin: 0 0 4px; }
@@ -214,7 +214,7 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
             </div>
 
             <div class="lunara-meta-field">
-                <label for="lunara_counter_program">Counter Program</label>
+                <label for="lunara_counter_program">Counter-Program</label>
                 <input type="text" id="lunara_counter_program" name="lunara_counter_program" value="<?php echo esc_attr( $counter ); ?>" placeholder="Film that offers opposing perspective">
                 <p class="description">Tip: optionally add <code>| tt1234567</code> (or an IMDb URL) to enable direct links. No punctuation is required after the IMDb ID before your note.</p>
             </div>
@@ -230,9 +230,9 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
                 echo lunara_render_pair_it_with_admin_preview(
                     $post->ID,
                     array(
-                        'Theme Echo'     => $theme_echo,
-                        'Counter Program' => $counter,
-                        'Career Context' => $craft,
+                        'Theme Echo'      => $theme_echo,
+                        'Counter-Program' => $counter,
+                        'Career Context'  => $craft,
                     )
                 );
             }
@@ -291,10 +291,8 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
  *   Score: ⭐⭐⭐                                   → Score
  *   Where to Watch: Theatrical / Digital           → Where to Watch
  *   Theme Echo: <em>Title</em> (YYYY) tt... — ...  → Theme Echo pairing
- *   Counter Program: <em>Title</em> ...           → Counter Program pairing
- *   Career Context: <em>Title</em> ...            → Career Context pairing
- *   (The shortened Echo, Counter, Context and historical Counter-Program
- *   and Craft Mirror headings are still read, so older drafts keep importing.)
+ *   Counter-Program: <em>Title</em> ...            → Counter-Program pairing
+ *   Career Context: <em>Title</em> ...             → Career Context pairing
  *   <!-- Director: Name / Runtime: 135 min / Studio: Name -->  → Detail fields
  *
  * Only fills EMPTY fields — never overwrites manually entered data.
@@ -405,18 +403,18 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
         $fill( $post_id, '_lunara_where', $value );
     }
 
-    // 5) Pair It With — Theme Echo (also accepts the shortened Echo heading)
-    if ( preg_match( '/Theme\s+Echo:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Echo:\s*(.+)/', $content, $m ) ) {
+    // 5) Pair It With — Theme Echo
+    if ( preg_match( '/Theme\s+Echo:\s*(.+)/i', $content, $m ) ) {
         $fill( $post_id, '_lunara_theme_echo', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     }
 
-    // 6) Pair It With — Counter Program (also accepts Counter-Program and Counter)
-    if ( preg_match( '/Counter[\-\s]Program:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Counter:\s*(.+)/', $content, $m ) ) {
+    // 6) Pair It With — Counter-Program
+    if ( preg_match( '/Counter[\-\s]Program:\s*(.+)/i', $content, $m ) ) {
         $fill( $post_id, '_lunara_counter_program', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     }
 
-    // 7) Pair It With — Career Context (also accepts Context and Craft Mirror)
-    if ( preg_match( '/Career\s+Context:\s*(.+)/i', $content, $m ) || preg_match( '/(?<![\w-])Context:\s*(.+)/', $content, $m ) ) {
+    // 7) Pair It With — Career Context (or Craft Mirror)
+    if ( preg_match( '/Career\s+Context:\s*(.+)/i', $content, $m ) ) {
         $fill( $post_id, '_lunara_career_context', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
     } elseif ( preg_match( '/Craft\s+Mirror:\s*(.+)/i', $content, $m ) ) {
         $fill( $post_id, '_lunara_career_context', wp_strip_all_tags( html_entity_decode( $m[1] ) ) );
@@ -619,12 +617,10 @@ if ( ! function_exists( 'lunara_get_review_permalink_by_imdb_title_id' ) ) {
                 ON pm.post_id = p.ID
             WHERE p.post_type = 'review'
               AND p.post_status = 'publish'
-              AND p.post_password = ''
               AND pm.meta_key = '_lunara_imdb_title_id'
-              AND LOWER(pm.meta_value) REGEXP %s
+              AND LOWER(pm.meta_value) LIKE %s
         ";
-        // Match the whole ID, including when older metadata contains an IMDb URL.
-        $params          = array( '(^|[^a-z0-9])' . $tt . '([^0-9]|$)' );
+        $params          = array( '%' . $wpdb->esc_like( $tt ) . '%' );
 
         if ( $exclude_post_id > 0 ) {
             $sql      .= ' AND p.ID != %d';
@@ -636,20 +632,6 @@ if ( ! function_exists( 'lunara_get_review_permalink_by_imdb_title_id' ) ) {
         $review_id = (int) $wpdb->get_var( $wpdb->prepare( $sql, $params ) );
 
         return $review_id > 0 ? (string) get_permalink( $review_id ) : '';
-    }
-}
-
-if ( ! function_exists( 'lunara_pair_review_link' ) ) {
-    /** Keep the published review destination visible beside the external sources. */
-    function lunara_pair_review_link( $data, $post_id = 0 ) {
-        $href = 'review' === ( $data['title_href_type'] ?? '' ) ? (string) ( $data['title_href'] ?? '' ) : '';
-        if ( '' === $href ) {
-            $href = lunara_get_review_permalink_by_imdb_title_id( (string) ( $data['tt'] ?? '' ), $post_id );
-        }
-        if ( '' === $href ) {
-            return '';
-        }
-        return '<a class="lunara-pair-card-chip lunara-pair-card-chip--review" href="' . esc_url( $href ) . '">' . esc_html__( 'Read Lunara Review', 'lunara-film' ) . '</a>';
     }
 }
 
@@ -680,58 +662,13 @@ if ( ! function_exists( 'lunara_get_internal_title_reference_url' ) ) {
     }
 }
 
-if ( ! function_exists( 'lunara_poster_html_with_sizes' ) ) {
-    /**
-     * Give a responsive poster <img> an accurate `sizes` hint.
-     *
-     * WordPress defaults `sizes` to the attachment's full width, so a 76px
-     * card thumbnail can download a 1333px source. Markup without a srcset is
-     * returned unchanged; lazy images keep the leading `auto` so browsers that
-     * support it still size from layout.
-     *
-     * @param string $html    Poster markup.
-     * @param string $sizes   Sanitized sizes value, '' to leave unchanged.
-     * @param string $loading 'lazy' or 'eager'.
-     * @return string
-     */
-    function lunara_poster_html_with_sizes( $html, $sizes, $loading = 'lazy' ) {
-        $html  = (string) $html;
-        $sizes = trim( (string) $sizes );
-        if ( '' === $sizes || false === stripos( $html, ' srcset=' ) ) {
-            return $html;
-        }
-
-        $value = ( 'lazy' === $loading ? 'auto, ' : '' ) . $sizes;
-        if ( preg_match( '/\ssizes="[^"]*"/i', $html ) ) {
-            return (string) preg_replace( '/\ssizes="[^"]*"/i', ' sizes="' . esc_attr( $value ) . '"', $html, 1 );
-        }
-
-        return (string) preg_replace( '/<img\b/i', '<img sizes="' . esc_attr( $value ) . '"', $html, 1 );
-    }
-}
-
 if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
-    /**
-     * Poster <img> for an IMDb title, resolved through the Oscars Ledger.
-     *
-     * @param string $tt      IMDb title ID.
-     * @param string $size    Registered image size.
-     * @param string $class   Class for the <img>.
-     * @param string $title   Film title for the alt text.
-     * @param string $loading 'lazy' or 'eager'.
-     * @param string $sizes   Optional rendered-width hint. When the poster is a
-     *                        responsive attachment, it replaces WordPress's
-     *                        full-width default so small cards stop fetching
-     *                        the largest source.
-     * @return string
-     */
-    function lunara_get_title_poster_html( $tt, $size = 'medium', $class = 'lunara-debrief-thumb', $title = '', $loading = 'lazy', $sizes = '' ) {
+    function lunara_get_title_poster_html( $tt, $size = 'medium', $class = 'lunara-debrief-thumb', $title = '', $loading = 'lazy' ) {
         $tt      = strtolower( trim( (string) $tt ) );
         $size    = trim( (string) $size );
         $class   = trim( (string) $class );
         $title   = trim( (string) $title );
         $loading = 'eager' === trim( (string) $loading ) ? 'eager' : 'lazy';
-        $sizes   = trim( preg_replace( '/[^a-z0-9(),:.\s-]/i', '', (string) $sizes ) );
 
         if ( ! preg_match( '/^tt\d{7,8}$/', $tt ) ) {
             return '';
@@ -797,7 +734,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                             );
                         }
 
-                        return lunara_poster_html_with_sizes( $poster_html, $sizes, $loading );
+                        return $poster_html;
                     }
                 }
             }
@@ -816,7 +753,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                 );
 
                 if ( '' !== trim( $poster_html ) ) {
-                    return lunara_poster_html_with_sizes( $poster_html, $sizes, $loading );
+                    return $poster_html;
                 }
             }
         }
@@ -931,7 +868,7 @@ if ( ! function_exists( 'lunara_parse_pair_it_with_value' ) ) {
         $clean = preg_replace( '/\s+([,.;:!?])/', '$1', (string) $clean );
         $clean = trim( preg_replace( '/\s{2,}/', ' ', (string) $clean ) );
 
-        $parts = preg_split( '/\s+(?:-|\x{2013}|\x{2014}|\x{00E2}\x{20AC}\x{201D})\s+/u', $clean, 2 );
+        $parts = preg_split( '/\s+(?:-|\x{2013}|\x{2014}|â€”)\s+/u', $clean, 2 );
         $title = trim( $parts[0] ?? '' );
         $note  = trim( $parts[1] ?? '' );
 
@@ -949,12 +886,6 @@ if ( ! function_exists( 'lunara_parse_pair_it_with_value' ) ) {
         if ( '' === $note && preg_match( '/^(.*?\(\d{4}\))\s*[.:;\-\x{2013}\x{2014}]+\s*(.+)$/u', $title, $m4 ) ) {
             $title = trim( $m4[1] );
             $note  = trim( $m4[2] );
-        }
-        // A note that follows the year with a full stop, before a later dash, stays out of the title:
-        // "Under the Skin (2013). The opposite argument … — more" (3.2.95).
-        elseif ( '' !== $note && preg_match( '/^(.*?\(\d{4}\))\s*[.:;!?]+\s+(\S.*)$/u', $title, $m5 ) ) {
-            $title = trim( $m5[1] );
-            $note  = trim( $m5[2] ) . ' — ' . $note;
         }
 
         $title_base = $title;
@@ -1309,7 +1240,7 @@ if ( ! function_exists( 'lunara_pair_relational_data' ) ) {
             );
         }
         if ( '' === trim( $poster_html ) && '' !== $tt && function_exists( 'lunara_get_title_poster_html' ) ) {
-            $poster_html = (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-pair-preview-thumb', $title_base, 'lazy', '(max-width: 680px) 116px, (max-width: 879px) 45vw, 340px' );
+            $poster_html = (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-pair-preview-thumb', $title_base );
         }
 
         $dossier_href = (string) get_permalink( $movie_id );
@@ -1365,7 +1296,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             array(
                 'slug'     => 'counter',
                 'relation' => 'counter_program',
-                'label'    => __( 'Counter Program', 'lunara-film' ),
+                'label'    => __( 'Counter-Program', 'lunara-film' ),
                 'value'    => get_post_meta( $post_id, '_lunara_counter_program', true ),
             ),
             array(
@@ -1434,7 +1365,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             }
 
             // -- Chips: IMDb (always) + Oscar Ledger (only when Oscar history exists). --
-            $chips     = function_exists( 'lunara_pair_review_link' ) ? lunara_pair_review_link( $data, $post_id ) : '';
+            $chips     = '';
             $imdb_href = (string) $data['imdb_href'];
             if ( '' !== $imdb_href ) {
                 $chips .= '<a class="lunara-pair-card-chip lunara-pair-card-chip--imdb" href="' . esc_url( $imdb_href ) . '" target="_blank" rel="noopener noreferrer nofollow">IMDb</a>';
@@ -1451,7 +1382,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
             $card .= $media;
             $card .= '<div class="lunara-pair-card-body">';
             $card .= '<p class="lunara-pair-card-role">' . esc_html( $row['label'] ) . '</p>';
-            $card .= '<h3 class="lunara-pair-card-title">' . $title_html . '</h3>';
+            $card .= '<h4 class="lunara-pair-card-title">' . $title_html . '</h4>';
             if ( '' !== trim( $note ) ) {
                 $card .= '<p class="lunara-pair-card-note">' . esc_html( $note ) . '</p>';
             }
@@ -1478,12 +1409,9 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
 
         $html  = '<section class="lunara-pair-cards" aria-label="' . esc_attr__( 'Pair It With', 'lunara-film' ) . '">';
         $html .= '<div class="lunara-pair-cards-head">';
-        $html .= '<h2 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h2>';
+        $html .= '<h3 class="lunara-pair-cards-title">' . esc_html__( 'Pair It With', 'lunara-film' ) . '</h3>';
         if ( '' !== trim( $subtitle ) ) {
             $html .= '<p class="lunara-pair-cards-sub">' . esc_html( $subtitle ) . '</p>';
-        }
-        if ( function_exists( 'lunara_debrief_method_link_html' ) ) {
-            $html .= lunara_debrief_method_link_html();
         }
         $html .= '</div>';
         $html .= '<div class="lunara-pair-cards-grid" data-count="' . count( $cards ) . '">' . implode( '', $cards ) . '</div>';
@@ -1602,10 +1530,6 @@ function lunara_debrief_shortcode( $atts ) {
         $title = trim( $m4[1] );
         $note  = trim( $m4[2] );
     }
-    elseif ( '' !== $note && preg_match( '/^(.*?\(\d{4}\))\s*[.:;!?]+\s+(\S.*)$/u', $title, $m5 ) ) {
-        $title = trim( $m5[1] );
-        $note  = trim( $m5[2] ) . ' — ' . $note;
-    }
 
     // 4) Pull year out of "Title (YYYY)" for smarter lookups & cleaner IMDb search queries.
     $title_base = $title;
@@ -1708,7 +1632,7 @@ function lunara_debrief_shortcode( $atts ) {
     ob_start();
     ?>
     <section class="lunara-debrief-block">
-        <h2 class="lunara-debrief-heading">Lunara Debrief</h2>
+        <h3 class="lunara-debrief-heading">LUNARA DEBRIEF</h3>
         <?php $kicker = trim( (string) get_theme_mod( 'lunara_debrief_kicker_text', 'A LUNARA FILM SIGNATURE' ) ); ?>
         <?php if ( $kicker !== '' ) : ?>
             <div class="lunara-debrief-kicker"><?php echo esc_html( $kicker ); ?></div>
@@ -1742,7 +1666,7 @@ function lunara_debrief_shortcode( $atts ) {
                 <?php endif; ?>
 
                 <?php if ( $counter ) : ?>
-                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--counter"><strong class="lunara-debrief-pair-type">Counter Program</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $counter ); ?></span></li>
+                    <li class="lunara-debrief-pair-row lunara-debrief-pair-row--counter"><strong class="lunara-debrief-pair-type">Counter-Program</strong><span class="lunara-debrief-value"><?php echo $format_pairing( $counter ); ?></span></li>
                 <?php endif; ?>
 
                 <?php if ( $craft ) : ?>

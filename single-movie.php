@@ -40,8 +40,8 @@ while ( have_posts() ) :
                     <div class="lunara-entity-hero-poster"><?php the_post_thumbnail( 'large', array( 'fetchpriority' => 'high' ) ); ?></div>
                 <?php endif; ?>
                 <div class="lunara-entity-hero-copy">
-                    <h1 class="lunara-entity-title"><?php the_title(); ?></h1>
                     <p class="lunara-home-section-kicker"><?php esc_html_e( 'Film Dossier', 'lunara-film' ); ?></p>
+                    <h1 class="lunara-entity-title"><?php the_title(); ?></h1>
                     <p class="lunara-entity-meta">
                         <?php if ( $year ) : ?><span><?php echo esc_html( $year ); ?></span><?php endif; ?>
                         <?php if ( $runtime ) : ?><span><?php echo esc_html( $runtime ); ?></span><?php endif; ?>

@@ -1,14 +1,3 @@
-(function () {
-    'use strict';
-    function mount(pageRoot, scope) {
-        pageRoot = pageRoot || document;
-        // Standalone documents keep their native page-unload lifecycle.
-        scope = scope || {
-            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
-            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
-            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
-            cleanup: function () {}
-        };
 /**
  * Lunara Lights Down — immersive screening mode for single reviews/journal.
  *
@@ -34,36 +23,30 @@
 	}
 
 	var body = document.body;
-    var ambientBefore = document.documentElement.style.getPropertyValue('--lunara-ambient');
-    scope.cleanup(function () {
-        body.classList.remove('is-lights-down');
-        if (ambientBefore) document.documentElement.style.setProperty('--lunara-ambient', ambientBefore);
-        else document.documentElement.style.removeProperty('--lunara-ambient');
-    });
-	var article = pageRoot.querySelector('article') || pageRoot.querySelector('.entry-content');
+	var article = document.querySelector('article') || document.querySelector('.entry-content');
 	if (!article) {
 		return;
 	}
 
 	// --- Lights down: dim the chrome while deep in the read -------------
-	var hero = pageRoot.querySelector('.lunara-review-single-cinematic-hero')
-		|| pageRoot.querySelector('.lunara-review-visual--hero')
-		|| pageRoot.querySelector('.entry-header');
+	var hero = document.querySelector('.lunara-review-single-cinematic-hero')
+		|| document.querySelector('.lunara-review-visual--hero')
+		|| document.querySelector('.entry-header');
 	if (hero) {
-		var io = scope.observe(new IntersectionObserver(function (entries) {
+		var io = new IntersectionObserver(function (entries) {
 			entries.forEach(function (entry) {
 				// Lights go down only once the hero has fully scrolled above
 				// the viewport; scrolling back up brings them right back.
 				var above = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
 				body.classList.toggle('is-lights-down', above);
 			});
-		}, { threshold: 0 }));
+		}, { threshold: 0 });
 		io.observe(hero);
 	}
 
 	// --- Ambient accent sampled from the hero art ------------------------
-	var img = pageRoot.querySelector('.lunara-review-single-cinematic-hero img')
-		|| pageRoot.querySelector('.lunara-review-visual--hero img')
+	var img = document.querySelector('.lunara-review-single-cinematic-hero img')
+		|| document.querySelector('.lunara-review-visual--hero img')
 		|| article.querySelector('img');
 	if (img) {
 		var ambientSampleUrl = function (image) {
@@ -101,7 +84,6 @@
 		// Photon/i0.wp.com sends ACAO:*; unsupported external hosts are skipped.
 		var sample = new Image();
 		sample.crossOrigin = 'anonymous';
-        scope.cleanup(function () { sample.removeAttribute('src'); });
 		var applyAmbient = function () {
 			try {
 				var c = document.createElement('canvas');
@@ -135,22 +117,14 @@
 				/* Cross-origin canvas taint — keep the gold default. */
 			}
 		};
-		scope.on(sample, 'load', applyAmbient, { once: true });
+		sample.addEventListener('load', applyAmbient, { once: true });
 		var armSample = function () {
 			sample.src = sampleUrl;
 		};
 		if (img.complete && img.naturalWidth) {
 			armSample();
 		} else {
-			scope.on(img, 'load', armSample, { once: true });
+			img.addEventListener('load', armSample, { once: true });
 		}
 	}
 })();
-
-    }
-    if (window.LunaraApp && window.LunaraApp.register) {
-        window.LunaraApp.register('immersive-read', mount);
-    } else if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
-    } else { mount(); }
-}());

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
-const { chromium } = require('playwright-core');
+const puppeteer = require('puppeteer');
 
 const themeRoot = path.resolve(__dirname, '..');
 const baseCss = fs.readFileSync(path.join(themeRoot, 'style.css'), 'utf8');
@@ -17,9 +17,6 @@ const staleAggregateCss = aggregateFixturePath
     ? fs.readFileSync(path.resolve(aggregateFixturePath), 'utf8')
     : productionBoostCritical;
 const criticalRenderer = path.join(__dirname, 'reviews-archive-critical-render.php');
-// Production emits the resolved font roles and fallback metrics synchronously.
-// Exercise that actual owner before the deferred base stylesheet is delivered.
-const designTokenHead = execFileSync('php', [path.join(__dirname, 'fixtures/design-token-head.php')], { encoding: 'utf8' });
 
 function renderCriticalSeed(orders) {
     const payload = {
@@ -295,8 +292,7 @@ function styleSnapshot() {
             return null;
         }
         const style = getComputedStyle(element);
-        const geometryProperties = [...new Set([...properties, 'font-family', 'font-size', 'font-weight', 'line-height', 'letter-spacing', 'text-transform', 'box-sizing', 'border-width'])];
-        return Object.fromEntries(geometryProperties.map((property) => [property, style.getPropertyValue(property)]));
+        return Object.fromEntries(properties.map((property) => [property, style.getPropertyValue(property)]));
     };
 
     return {
@@ -337,8 +333,7 @@ function styleSnapshot() {
         backdrop: read('.lunara-pairing-desk-backdrop', ['display', 'position', 'inset']),
         pairingGrid: read('.lunara-pair-cards-grid', ['display', 'gap', 'grid-template-columns']),
         pairingHead: read('.lunara-pairing-desk-head', ['height', 'gap', 'grid-template-columns', 'margin-bottom']),
-        pairingThesis: read('.lunara-pairing-desk-thesis', ['height', 'font-size', 'line-height', 'margin', 'padding']),
-        pairingSource: read('.lunara-pairing-desk-source', ['height', 'font-size', 'line-height', 'margin']),
+        pairingClaim: read('.lunara-pairing-desk-claim', ['height', 'font-size', 'line-height', 'margin', 'padding']),
         pairingTitle: read('.lunara-pairing-desk-head .lunara-home-section-title', ['height', 'font-size', 'line-height', 'margin']),
         pairingCopy: read('.lunara-pairing-desk-copy', ['height', 'font-size', 'line-height', 'margin']),
         pairingCard: read('.lunara-pair-card', ['display', 'height', 'grid-template-columns']),
@@ -432,7 +427,7 @@ function assertPairingCollisionFree(snapshot, label) {
 }
 
 (async () => {
-    const browser = await chromium.launch({ headless: true, ...(process.env.LUNARA_BROWSER_EXECUTABLE ? { executablePath: process.env.LUNARA_BROWSER_EXECUTABLE } : { channel: 'chrome' }) });
+    const browser = await puppeteer.launch({ headless: true });
     const results = [];
 
     try {
@@ -458,7 +453,8 @@ function assertPairingCollisionFree(snapshot, label) {
                 throw new Error(`${orderScenario} emitted an invalid critical seed (${Buffer.byteLength(criticalSeed || '', 'utf8')}B).`);
             }
             for (const viewport of [{ width: 1440, height: 1000 }, { width: 782, height: 1000 }, { width: 768, height: 1000 }, { width: 540, height: 900 }, { width: 390, height: 844 }, { width: 320, height: 800 }]) {
-                const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+                const page = await browser.newPage();
+                await page.setViewport({ ...viewport, deviceScaleFactor: 1 });
                 const heroMarkup = orders.showHero === false
                     ? '<h1 class="screen-reader-text">Lunara Reviews</h1>'
                     : `<section class="lunara-home-section lunara-archive-hero lunara-review-archive-hero lunara-review-archive-slot-hero" style="order:${orders.hero}!important">
@@ -490,11 +486,11 @@ function assertPairingCollisionFree(snapshot, label) {
                 const pairingMarkup = orders.showPairing === false
                     ? ''
                     : `<div class="lunara-review-archive-slot-pairing-desk" style="order:${orders.pairing}!important">
-                        <section id="pairing-desk" class="lunara-home-section lunara-pairing-desk-section"><div class="lunara-pairing-desk-backdrop"></div><div class="lunara-pairing-desk-overlay"></div><div class="lunara-pairing-desk-inner"><div class="lunara-pairing-desk-head"><div><h2 class="lunara-home-section-title">The Lunara Method</h2><p class="lunara-pairing-desk-thesis">Every review ends with three more films.</p></div><div class="lunara-pairing-desk-intro"><p class="lunara-pairing-desk-copy">Theme, counter-program, and career context keep the argument moving.</p><p class="lunara-pairing-desk-source">Fresh from the debrief of <a href="#review">The Reviewed Film</a></p></div></div><div class="lunara-pair-cards"><div class="lunara-pair-cards-grid" data-count="3">${['Theme Echo','Counter-Program','Career Context'].map((role, index) => `<article class="lunara-pair-card"><div class="lunara-pair-card-poster"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 3000'%3E%3Crect width='2000' height='3000' fill='%230b1b2a'/%3E%3C/svg%3E" alt="Companion poster ${index + 1}"></div><div class="lunara-pair-card-body"><p class="lunara-pair-card-role">${role}</p><h3 class="lunara-pair-card-title"><a class="lunara-pair-card-title-link">Companion Film ${index + 1} <span class="lunara-pair-card-year">(2020)</span></a></h3><p class="lunara-pair-card-note">A complete editorial reason connects this companion film to the reviewed work and keeps the argument moving after the credits.</p><div class="lunara-pair-card-chips"><a class="lunara-pair-card-chip">IMDb</a></div></div></article>`).join('')}</div></div></div></section>
+                        <section id="pairing-desk" class="lunara-home-section lunara-pairing-desk-section"><div class="lunara-pairing-desk-backdrop"></div><div class="lunara-pairing-desk-overlay"></div><div class="lunara-pairing-desk-inner"><div class="lunara-pairing-desk-head"><div><p class="lunara-pairing-desk-claim">The Lunara Method</p><h2 class="lunara-home-section-title">Every review ends with three more films.</h2></div><div class="lunara-pairing-desk-intro"><p class="lunara-pairing-desk-copy">Theme, counter-program, and career context keep the argument moving.</p></div></div><div class="lunara-pair-cards"><div class="lunara-pair-cards-grid" data-count="3">${['Theme Echo','Counter-Program','Career Context'].map((role, index) => `<article class="lunara-pair-card"><div class="lunara-pair-card-poster"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 3000'%3E%3Crect width='2000' height='3000' fill='%230b1b2a'/%3E%3C/svg%3E" alt="Companion poster ${index + 1}"></div><div class="lunara-pair-card-body"><p class="lunara-pair-card-role">${role}</p><h3 class="lunara-pair-card-title"><a class="lunara-pair-card-title-link">Companion Film ${index + 1} <span class="lunara-pair-card-year">(2020)</span></a></h3><p class="lunara-pair-card-note">A complete editorial reason connects this companion film to the reviewed work and keeps the argument moving after the credits.</p><div class="lunara-pair-card-chips"><a class="lunara-pair-card-chip">IMDb</a></div></div></article>`).join('')}</div></div></div></section>
                     </div>`;
                 await page.setContent(`<!doctype html>
                 <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-                <style id="stale-boost-critical">${productionBoostCritical}</style><style>${authorityCss(orders)}</style><style id="blocking-review-archive">${routeCss}</style>${designTokenHead}<style id="current-structural-seed">${criticalSeed}</style></head>
+                <style id="stale-boost-critical">${productionBoostCritical}</style><style>${authorityCss(orders)}</style><style id="blocking-review-archive">${routeCss}</style><style id="current-structural-seed">${criticalSeed}</style></head>
                 <body class="${bodyClass}"><header class="lunara-site-header" style="height:132px"></header>
                 <main id="primary" class="lunara-archive-page lunara-review-archive-page lra is-label-font-tiempos">
                     ${heroMarkup}
@@ -601,19 +597,6 @@ function assertPairingCollisionFree(snapshot, label) {
                 }
             }
             const withdrawalStyleChanges = {};
-            const deliveryStyleChanges = {};
-            for (const key of Object.keys(result.beforeStyles)) {
-                const before = result.beforeStyles[key];
-                const after = result.afterStyles[key];
-                if (!before || !after) continue;
-                const properties = {};
-                for (const property of Object.keys(before)) {
-                    if (before[property] !== after[property]) {
-                        properties[property] = { before: before[property], after: after[property] };
-                    }
-                }
-                if (Object.keys(properties).length) deliveryStyleChanges[key] = properties;
-            }
             for (const key of Object.keys(result.afterStyles)) {
                 const stale = result.afterStyles[key];
                 const withdrawn = result.settledStyles[key];
@@ -640,7 +623,6 @@ function assertPairingCollisionFree(snapshot, label) {
                 seedPersistenceDelta: result.seedPersistenceDelta,
                 dominantPhase: dominant.name,
                 changed,
-                deliveryStyleChanges,
                 withdrawalStyleChanges,
                 persistenceStyleChanges,
             };

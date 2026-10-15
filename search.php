@@ -224,8 +224,8 @@ if ( ! function_exists( 'lunara_search_render_post_result_card' ) ) {
         ?>
         <article class="lunara-search-result-card is-type-<?php echo esc_attr( sanitize_html_class( $post_item->post_type ) ); ?>">
             <a class="lunara-search-result-link" href="<?php echo esc_url( get_permalink( $post_item ) ); ?>">
-                <h3 class="lunara-search-result-title"><?php echo esc_html( get_the_title( $post_item ) ); ?></h3>
                 <p class="lunara-search-result-kicker"><?php echo esc_html( $type_label ); ?></p>
+                <h3 class="lunara-search-result-title"><?php echo esc_html( get_the_title( $post_item ) ); ?></h3>
                 <p class="lunara-search-result-copy"><?php echo esc_html( wp_trim_words( wp_strip_all_tags( get_the_excerpt( $post_item ) ), absint( get_theme_mod( 'lunara_search_excerpt_words', 22 ) ) ) ); ?></p>
             </a>
         </article>
@@ -242,8 +242,8 @@ if ( ! function_exists( 'lunara_search_render_oscar_matches' ) ) {
         <section class="lunara-home-section lunara-search-oscar-shell" data-lunara-site-studio-section="direct-matches">
             <div class="lunara-home-section-head lunara-search-results-head">
                 <div>
+                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Oscar Signal', 'lunara-film' ); ?></p>
                     <h2 class="lunara-section-title"><?php esc_html_e( 'Direct ledger matches', 'lunara-film' ); ?></h2>
-
                 </div>
             </div>
 
@@ -251,8 +251,8 @@ if ( ! function_exists( 'lunara_search_render_oscar_matches' ) ) {
                 <?php foreach ( $oscar_matches as $match ) : ?>
                     <article class="lunara-search-oscar-card">
                         <a class="lunara-search-oscar-link" href="<?php echo esc_url( $match['url'] ); ?>">
-                            <h3 class="lunara-search-oscar-title"><?php echo esc_html( $match['title'] ); ?></h3>
                             <p class="lunara-search-oscar-kicker"><?php echo esc_html( $match['kicker'] ); ?></p>
+                            <h3 class="lunara-search-oscar-title"><?php echo esc_html( $match['title'] ); ?></h3>
                             <?php if ( ! empty( $match['meta'] ) ) : ?>
                                 <p class="lunara-search-oscar-meta"><?php echo esc_html( $match['meta'] ); ?></p>
                             <?php endif; ?>
@@ -339,8 +339,8 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
     <section class="lunara-home-section lunara-archive-hero" data-lunara-site-studio-section="search-command">
         <div class="lunara-editorial-archive-hero-shell">
             <div class="lunara-editorial-archive-hero-copy-wrap">
+                <p class="lunara-archive-hero-kicker"><?php echo esc_html( get_theme_mod( 'lunara_search_kicker', __( 'Search Desk', 'lunara-film' ) ) ); ?></p>
                 <h1 class="lunara-archive-hero-title"><?php echo esc_html( $archive_title ); ?></h1>
-                <?php $context_label = trim( (string) get_theme_mod( 'lunara_search_kicker', '' ) ); if ( '' !== $context_label && 'Search Desk' !== $context_label ) : ?><p class="lunara-archive-hero-context"><?php echo esc_html( $context_label ); ?></p><?php endif; ?>
                 <?php if ( '' !== $query_text ) : ?>
                     <p class="lunara-search-query-line">
                         <span><?php esc_html_e( 'Query', 'lunara-film' ); ?></span>
@@ -378,8 +378,8 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
         <section class="lunara-home-section lunara-search-results-shell" data-lunara-site-studio-section="result-run">
             <div class="lunara-home-section-head lunara-search-results-head">
                 <div>
+                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Search Run', 'lunara-film' ); ?></p>
                     <h2 class="lunara-section-title"><?php esc_html_e( 'Results by desk', 'lunara-film' ); ?></h2>
-
                 </div>
             </div>
 
@@ -407,8 +407,8 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
         <section class="lunara-home-section lunara-search-recovery-shell" data-lunara-site-studio-section="recovery">
             <div class="lunara-home-section-head lunara-search-results-head">
                 <div>
+                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Closest Routes', 'lunara-film' ); ?></p>
                     <h2 class="lunara-section-title"><?php esc_html_e( 'You were close. These are the strongest nearby routes.', 'lunara-film' ); ?></h2>
-
                 </div>
             </div>
 
@@ -416,8 +416,8 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
                 <?php foreach ( $recovery_hits as $match ) : ?>
                     <article class="lunara-search-oscar-card lunara-search-recovery-card">
                         <a class="lunara-search-oscar-link" href="<?php echo esc_url( $match['url'] ); ?>">
-                            <h3 class="lunara-search-oscar-title"><?php echo esc_html( $match['title'] ); ?></h3>
                             <p class="lunara-search-oscar-kicker"><?php echo esc_html( $match['kicker'] ); ?></p>
+                            <h3 class="lunara-search-oscar-title"><?php echo esc_html( $match['title'] ); ?></h3>
                             <?php if ( ! empty( $match['meta'] ) ) : ?>
                                 <p class="lunara-search-oscar-meta"><?php echo esc_html( $match['meta'] ); ?></p>
                             <?php endif; ?>
@@ -434,8 +434,8 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
                     <p><?php esc_html_e( 'Try a film title, a filmmaker, an Oscar category, or a broader keyword.', 'lunara-film' ); ?></p>
                 </div>
                 <div class="lunara-editorial-archive-empty-note">
-                    <h2 class="lunara-section-title"><?php esc_html_e( 'Search for a title, person, or argument worth reopening.', 'lunara-film' ); ?></h2>
                     <p class="lunara-home-section-kicker"><?php echo esc_html( $has_query ? __( 'Try Again', 'lunara-film' ) : __( 'Explore Lunara', 'lunara-film' ) ); ?></p>
+                    <h2 class="lunara-section-title"><?php esc_html_e( 'Search for a title, person, or argument worth reopening.', 'lunara-film' ); ?></h2>
                     <form role="search" method="get" class="lunara-search-form lunara-search-form-shell" action="<?php echo esc_url( function_exists( 'lunara_search_command_url' ) ? lunara_search_command_url() : home_url( '/' ) ); ?>">
                         <label class="screen-reader-text" for="lunara-search-input"><?php esc_html_e( 'Search for:', 'lunara-film' ); ?></label>
                         <input id="lunara-search-input" type="search" class="lunara-search-input" placeholder="<?php esc_attr_e( 'Search Lunara Film', 'lunara-film' ); ?>" value="<?php echo esc_attr( $query_text ); ?>" name="<?php echo esc_attr( function_exists( 'lunara_search_command_url' ) ? 'q' : 's' ); ?>" />
@@ -446,24 +446,24 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
             <div class="lunara-search-empty-routes-shell">
                 <div class="lunara-home-section-head lunara-search-results-head">
                     <div>
+                        <p class="lunara-home-section-kicker"><?php esc_html_e( 'Stay In The Record', 'lunara-film' ); ?></p>
                         <h2 class="lunara-section-title"><?php esc_html_e( 'Elsewhere in Lunara', 'lunara-film' ); ?></h2>
-
                     </div>
                 </div>
                 <div class="lunara-search-empty-routes-grid">
                     <a class="lunara-search-empty-route-card" href="<?php echo esc_url( get_post_type_archive_link( 'review' ) ?: home_url( '/reviews/' ) ); ?>">
+                        <p class="lunara-home-section-kicker"><?php esc_html_e( 'Criticism', 'lunara-film' ); ?></p>
                         <h3><?php esc_html_e( 'Browse The Review Archive', 'lunara-film' ); ?></h3>
-
                         <span class="lunara-section-link"><?php esc_html_e( 'Enter The Reviews', 'lunara-film' ); ?></span>
                     </a>
                     <a class="lunara-search-empty-route-card" href="<?php echo esc_url( home_url( '/oscars/' ) ); ?>">
+                        <p class="lunara-home-section-kicker"><?php esc_html_e( 'Ledger', 'lunara-film' ); ?></p>
                         <h3><?php esc_html_e( 'Open The Oscar Ledger', 'lunara-film' ); ?></h3>
-
                         <span class="lunara-section-link"><?php esc_html_e( 'Open The Ledger', 'lunara-film' ); ?></span>
                     </a>
                     <a class="lunara-search-empty-route-card" href="<?php echo esc_url( ( get_post_type_archive_link( 'journal' ) ?: home_url( '/journal/' ) ) ); ?>">
+                        <p class="lunara-home-section-kicker"><?php esc_html_e( 'Editorial', 'lunara-film' ); ?></p>
                         <h3><?php esc_html_e( 'Return To The Journal', 'lunara-film' ); ?></h3>
-
                         <span class="lunara-section-link"><?php esc_html_e( 'Open The Journal', 'lunara-film' ); ?></span>
                     </a>
                 </div>

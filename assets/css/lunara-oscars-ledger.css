@@ -96,9 +96,26 @@ body.aat-shell-page .aat-hub-header {
 }
 
 /* Primary kicker tracking: plugin ships .18em. */
+body.aat-shell-page .aat-hub-kicker {
+    letter-spacing: 0.2em;
+}
 
 /* Card-level kickers: plugin ships .14em; meet the masthead halfway. */
+body.aat-shell-page .aat-crossroads-kicker,
+body.aat-shell-page .aat-related-review-kicker,
+body.aat-shell-page .aat-ceremony-neighbor-kicker,
+body.aat-shell-page .aat-editorial-ref-type {
+    letter-spacing: 0.16em;
+}
 
 /* Stat labels: plugin ships an absolute 1px; track relative to size. */
+body.aat-shell-page .aat-stat-label {
+    letter-spacing: 0.12em;
+}
 
 /* Control text settles with a whisper of tracking. */
+body.aat-shell-page .aat-btn,
+body.aat-shell-page .aat-hub-chip,
+body.aat-shell-page .aat-category-pill {
+    letter-spacing: 0.02em;
+}

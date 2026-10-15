@@ -36,9 +36,6 @@ function wp_print_styles( $handles ) {
 }
 function add_action() {}
 function add_shortcode() {}
-function is_admin() { return false; }
-function is_feed() { return false; }
-function current_user_can() { return false; }
 function remove_filter() {}
 function add_filter( $hook, $callback ) { $GLOBALS['article_filters'][ $hook ][] = $callback; }
 function apply_filters( $hook, $value ) { foreach ( $GLOBALS['article_filters'][ $hook ] ?? array() as $callback ) { $value = $callback( $value ); } return $value; }
@@ -50,17 +47,16 @@ function get_the_ID() { return 7; }
 function get_post_field( $key, $id = 0 ) { return 'post_author' === $key ? 1 : get_the_content(); }
 function get_the_author_meta() { return 'Dalton Johnson'; }
 function get_the_date() { return 'September 13, 2026'; }
-function get_the_title( $id = 0 ) { if ( is_object( $id ) ) { return $id->post_title; } return $id >= 100 ? 'Production still' : $GLOBALS['article_case']['title']; }
+function get_the_title( $id = 0 ) { return $id >= 100 ? 'Production still' : $GLOBALS['article_case']['title']; }
 function the_title() { echo esc_html( get_the_title() ); }
 function get_post_meta( $id, $key, $single = true ) {
-    if ( 'with-rail' === $GLOBALS['article_case']['scenario'] && in_array( $key, array( '_lunara_year', '_lunara_where' ), true ) ) { return '_lunara_year' === $key ? '2026' : 'Cinema'; }
     if ( '_wp_attachment_image_alt' === $key ) { return 'A film scene with a bright window on the left'; }
     if ( '_lunara_review_standfirst' === $key ) { return 'A close reading of the film, its choices, and the details that stay with us.'; }
     if ( '_lunara_journal_carousel_ids' === $key && 'journal' === $GLOBALS['article_case']['type'] && 'normal' === $GLOBALS['article_case']['scenario'] ) { $gallery_count = getenv( 'LUNARA_TEST_GALLERY_COUNT' ); return '0' === $gallery_count ? array() : ( '1' === $gallery_count ? array( 102 ) : array( 102, 103 ) ); }
     return '';
 }
 function get_the_content() {
-    return '<p>The camera stays with the room long enough for us to notice the details. Light at the window gives the scene its shape, while the conversation leaves room for a different reading.</p><h2>A scene worth returning to</h2><p>Good criticism makes an argument in ordinary language. It connects a film to the world around it without losing the images, performances, or surprises that first held our attention.</p><p>For further context, read <a href="https://example.test/context">https://example.test/' . str_repeat( 'cinema', 20 ) . '</a> and return to the film.</p><p>The ending rewards another look. Its last image asks us to reconsider what came before, making the familiar feel strange again.</p>' . ( 'review' === $GLOBALS['article_case']['type'] ? '<p></p>' : '' );
+    return '<p>The camera stays with the room long enough for us to notice the details. Light at the window gives the scene its shape, while the conversation leaves room for a different reading.</p><h2>A scene worth returning to</h2><p>Good criticism makes an argument in ordinary language. It connects a film to the world around it without losing the images, performances, or surprises that first held our attention.</p><p>For further context, read <a href="https://example.test/context">https://example.test/' . str_repeat( 'cinema', 20 ) . '</a> and return to the film.</p><p>The ending rewards another look. Its last image asks us to reconsider what came before, making the familiar feel strange again.</p>';
 }
 function has_excerpt() { return true; }
 function get_the_excerpt() { return 'A close reading of the film and its place in the current conversation.'; }
@@ -78,17 +74,6 @@ function have_posts() { return ! $GLOBALS['article_loop_done']; }
 function the_post() { $GLOBALS['article_loop_done'] = true; }
 function post_class( $class ) { echo 'class="' . esc_attr( $class ) . '"'; }
 class WP_Query { public function __construct( $args = array() ) {} public function have_posts() { return false; } }
-// Conditional: template-main-landmarks-runtime.php includes this fixture with its own seams.
-if ( ! class_exists( 'WP_Post' ) ) { class WP_Post { public $ID; public $post_title; public function __construct( $id, $title ) { $this->ID = $id; $this->post_title = $title; } } }
-// Journal neighbours: both directions normally, only an older entry for the long-title case.
-if ( ! function_exists( 'get_adjacent_post' ) ) {
-    function get_adjacent_post( $in_same_term = false, $excluded = '', $previous = true ) {
-        if ( 'journal' !== $GLOBALS['article_case']['type'] || 'missing' === $GLOBALS['article_case']['scenario'] ) { return null; }
-        if ( $previous ) { return new WP_Post( 201, 'An older dispatch about the festival circuit and the films that travel furthest' ); }
-        return 'long-title' === $GLOBALS['article_case']['scenario'] ? null : new WP_Post( 202, 'Newer entry' );
-    }
-}
-if ( ! function_exists( 'get_permalink' ) ) { function get_permalink( $post = 0 ) { return 'https://example.test/journal/entry-' . ( is_object( $post ) ? $post->ID : (int) $post ) . '/'; } }
 function has_post_thumbnail( $id = 0 ) { return 'missing' !== $GLOBALS['article_case']['art']; }
 function get_post_thumbnail_id( $id = 0 ) { return has_post_thumbnail() ? 101 : 0; }
 function wp_get_attachment_caption( $id ) { return ''; }
@@ -111,12 +96,6 @@ function lunara_get_review_image_profile( $classes ) {
     return array( 'width' => $poster ? 1000 : 1920, 'height' => $poster ? 1500 : 1080, 'sizes' => $poster ? '420px' : '100vw' );
 }
 
-function lunara_get_review_imdb_title_id() { return in_array( $GLOBALS['article_case']['scenario'], array( 'with-rail', 'with-two-rail' ), true ) ? 'tt0100001' : ''; }
-function lunara_entity_movie_for_review() { return 'with-two-rail' === $GLOBALS['article_case']['scenario'] ? 30 : 0; }
-function lunara_render_review_where_links( $where ) { return esc_html( $where ); }
-function lunara_get_oscar_ledger_counts() { return array( 'nominations' => 3, 'wins' => 1 ); }
-function lunara_render_oscar_ledger_pill() { return '<a class="lunara-oscar-ledger" href="https://example.test/oscars/title/tt0100001/">3 nominations, 1 win</a>'; }
-
 // Extract a real named function, respecting braces inside quoted strings.
 function article_fixture_function( $file, $name ) {
     $source = file_get_contents( $file );
@@ -136,15 +115,7 @@ $root = dirname( __DIR__ );
 article_fixture_function( $root . '/inc/setup.php', 'lunara_resolve_theme_asset' );
 article_fixture_function( $root . '/inc/setup.php', 'lunara_theme_asset_version' );
 article_fixture_function( $root . '/inc/review-rendering.php', 'lunara_render_review_visual_slot' );
-// The Journal lead-image alt resolves through the real Journal-family helpers.
-if ( ! function_exists( 'sanitize_key' ) ) { function sanitize_key( $value ) { return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $value ) ); } }
-foreach ( array( 'lunara_journal_field_has_value', 'lunara_get_journal_field_value', 'lunara_get_journal_hero_alt' ) as $journal_helper ) { article_fixture_function( $root . '/inc/journal-family.php', $journal_helper ); }
 article_fixture_function( $root . '/inc/frontend.php', 'lunara_output_journal_single_guardrail_css' );
-// Include the actual late Review authorities; static CSS alone missed the old
-// priority-1008 second-column restoration. No Customizer Additional CSS is used.
-foreach ( array( 'lunara_home_brand_number_setting', 'lunara_home_select_setting', 'lunara_get_review_single_preview_preset_values', 'lunara_get_review_single_studio_select_value', 'lunara_get_review_single_studio_number_value', 'lunara_output_review_single_studio_css', 'lunara_review_pair_with_image_focus_position', 'lunara_output_review_pair_it_with_controls_css' ) as $review_helper ) {
-    article_fixture_function( $root . '/inc/frontend.php', $review_helper );
-}
 require_once $root . '/inc/site-studio-journal-single.php';
 article_fixture_function( $root . '/inc/site-studio-adapters.php', 'lunara_site_studio_mod_surface_read_state' );
 article_fixture_function( $root . '/inc/site-studio-adapters.php', 'lunara_site_studio_mod_surface_desired_snapshot' );
@@ -154,12 +125,11 @@ function lunara_site_studio_preview_state_safe( $surface, $state ) { return 'jou
 article_fixture_function( $root . '/inc/site-studio-preview.php', 'lunara_site_studio_preview_install_state' );
 $fixtures = array();
 foreach ( array( 'review', 'journal' ) as $type ) {
-    $scenarios = 'journal' === $type ? array( 'normal', 'long-title', 'missing', 'framed-small', 'framed-large' ) : array( 'normal', 'long-title', 'missing', 'with-rail', 'with-two-rail' );
+    $scenarios = 'journal' === $type ? array( 'normal', 'long-title', 'missing', 'framed-small', 'framed-large' ) : array( 'normal', 'long-title', 'missing' );
     foreach ( $scenarios as $scenario ) {
         $article_case = array( 'type' => $type, 'scenario' => $scenario, 'title' => 'The films we carry out of the theater', 'art' => 'review' === $type ? 'poster' : 'landscape' );
         $article_mods = array();
         $article_filters = array();
-        if ( 'with-two-rail' === $scenario ) { $article_mods = array( 'lunara_review_single_density' => 'feature', 'lunara_review_single_rail_mode' => 'metadata-forward', 'lunara_review_single_pairing_density' => 'showcase' ); }
         if ( 'long-title' === $scenario ) { $article_case['title'] = 'A late summer conversation about the films that surprise us, the stories we revisit, and ' . str_repeat( 'Cinema', 14 ); $article_case['art'] = 'landscape'; }
         if ( 'missing' === $scenario ) { $article_case['art'] = 'missing'; }
         if ( 0 === strpos( $scenario, 'framed-' ) ) {
@@ -177,7 +147,7 @@ foreach ( array( 'review', 'journal' ) as $type ) {
         $article_loop_done = false;
         ob_start(); include $root . '/single-' . $type . '.php'; $html = ob_get_clean();
         $GLOBALS['article_styles'] = array(); $GLOBALS['article_printed'] = array();
-        ob_start(); lunara_output_journal_single_guardrail_css(); lunara_output_review_single_studio_css(); lunara_output_review_pair_it_with_controls_css(); $authority = ob_get_clean();
+        ob_start(); lunara_output_journal_single_guardrail_css(); $authority = ob_get_clean();
         if ( $is_private && array() !== $article_mods ) { throw new RuntimeException( 'Private template read changed public settings.' ); }
         $fixtures[ $type . '-' . $scenario ] = array( 'type' => $type, 'scenario' => $scenario, 'title' => $article_case['title'], 'art' => $article_case['art'], 'html' => $html, 'authority' => $authority, 'mods' => $desired_mods, 'private' => $is_private, 'public_unchanged' => ! $is_private || array() === $article_mods );
     }

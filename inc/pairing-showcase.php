@@ -4,7 +4,7 @@
  *
  * The signature Lunara module, freed from the review it usually hangs off.
  * The automatic Pair It With (inc/debrief.php) derives exactly three cards —
- * Theme Echo, Counter Program, Career Context — from the CURRENT review's
+ * Theme Echo, Counter-Program, Career Context — from the CURRENT review's
  * meta. This block lets any page hand-build its own Pair It With: choose the
  * films, the role label above each, the note, the poster, and the order, and
  * change any of it on a whim.
@@ -57,17 +57,6 @@ if ( ! function_exists( 'lunara_pairing_showcase_sanitize_pairings' ) ) {
 	 * @return array<int,array<string,mixed>>
 	 */
 	function lunara_pairing_showcase_sanitize_pairings( $raw ) {
-		// Expand only known signature roles when reading older saved blocks.
-		// Custom editorial labels remain exactly as authored after sanitizing.
-		$role_labels = array(
-			'echo' => __( 'Theme Echo', 'lunara-film' ),
-			'theme echo' => __( 'Theme Echo', 'lunara-film' ),
-			'counter' => __( 'Counter Program', 'lunara-film' ),
-			'counter-program' => __( 'Counter Program', 'lunara-film' ),
-			'counter program' => __( 'Counter Program', 'lunara-film' ),
-			'context' => __( 'Career Context', 'lunara-film' ),
-			'career context' => __( 'Career Context', 'lunara-film' ),
-		);
 		$clean = array();
 		foreach ( (array) $raw as $item ) {
 			if ( ! is_array( $item ) ) {
@@ -82,10 +71,8 @@ if ( ! function_exists( 'lunara_pairing_showcase_sanitize_pairings' ) ) {
 			if ( isset( $item['year'] ) && preg_match( '/\d{4}/', (string) $item['year'], $ym ) ) {
 				$year = $ym[0];
 			}
-			$label = isset( $item['label'] ) ? sanitize_text_field( (string) $item['label'] ) : '';
-			$role_key = strtolower( trim( preg_replace( '/\s+/', ' ', $label ) ) );
 			$clean[] = array(
-				'label'    => $role_labels[ $role_key ] ?? $label,
+				'label'    => isset( $item['label'] ) ? sanitize_text_field( (string) $item['label'] ) : '',
 				'title'    => $title,
 				'year'     => $year,
 				'note'     => isset( $item['note'] ) ? sanitize_textarea_field( (string) $item['note'] ) : '',
@@ -154,7 +141,7 @@ if ( ! function_exists( 'lunara_pairing_showcase_build_card' ) ) {
 			$title_html = '<span class="lunara-pair-card-title-link">' . $title_inner . '</span>';
 		}
 
-		$chips     = function_exists( 'lunara_pair_review_link' ) ? lunara_pair_review_link( $data, $post_id ) : '';
+		$chips     = '';
 		$imdb_href = (string) $data['imdb_href'];
 		if ( '' !== $imdb_href ) {
 			$chips .= '<a class="lunara-pair-card-chip lunara-pair-card-chip--imdb" href="' . esc_url( $imdb_href ) . '" target="_blank" rel="noopener noreferrer nofollow">IMDb</a>';
@@ -329,7 +316,7 @@ if ( ! function_exists( 'lunara_register_pairing_showcase_block' ) ) {
 			wp_register_script(
 				'lunara-pairing-showcase',
 				$asset['uri'],
-				array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-server-side-render', 'wp-api-fetch', 'wp-url', 'wp-data', 'lunara-pairing-review-editor' ),
+				array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-server-side-render', 'wp-api-fetch', 'wp-url' ),
 				function_exists( 'lunara_theme_asset_version' ) ? lunara_theme_asset_version( $asset['path'] ) : null,
 				true
 			);

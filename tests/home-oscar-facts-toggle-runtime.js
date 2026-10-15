@@ -69,23 +69,6 @@ function check(value, message) {
                 const resumed = await toggle.evaluate(el => ({ label: el.getAttribute('aria-label') || '', play: getComputedStyle(el.querySelector('.splide__toggle__play')).display, pause: getComputedStyle(el.querySelector('.splide__toggle__pause')).display }));
                 check(resumed.pause !== 'none' && resumed.play === 'none', `${width}/${reducedMotion}: clicking again must expose Pause.`);
             }
-            if (reducedMotion === 'no-preference') await toggle.click();
-            const progress = await facts.evaluate(root => ({
-                total: Number(root.dataset.lunaraFactsTotal),
-                current: Number(root.dataset.lunaraCurrentSlide),
-                ratio: parseFloat(root.style.getPropertyValue('--lunara-oscar-facts-progress-ratio'))
-            }));
-            check(progress.total === 7 && Math.abs(progress.ratio - progress.current / progress.total) < .00001, `${width}/${reducedMotion}: progress must represent the active fact.`);
-            await facts.locator('button.splide__arrow--next').click();
-            await page.waitForFunction(previous => Number(document.querySelector('.lunara-oscar-facts-carousel').dataset.lunaraCurrentSlide) !== previous, progress.current);
-            const nextProgress = await facts.evaluate(async root => {
-                const bar = root.querySelector('.lunara-oscar-facts-progress-bar');
-                await Promise.all(bar.getAnimations().map(animation => animation.finished.catch(() => {})));
-                const style = getComputedStyle(bar);
-                return { current: Number(root.dataset.lunaraCurrentSlide), total: Number(root.dataset.lunaraFactsTotal), scale: new DOMMatrix(style.transform).a,
-                    layoutWidth: bar.offsetWidth, trackWidth: bar.parentElement.clientWidth };
-            });
-            check(Math.abs(nextProgress.scale - nextProgress.current / nextProgress.total) < .001 && Math.abs(nextProgress.layoutWidth - nextProgress.trackWidth) <= 1, `${width}/${reducedMotion}: progress changes its visible scale without resizing layout: ${JSON.stringify(nextProgress)}`);
             await page.close();
         }
         console.log(`Homepage Oscar Facts toggle runtime passed: ${checks} checks across phone/desktop and normal/reduced motion.`);

@@ -101,8 +101,8 @@ $reentry_actions = lunara_404_order_reentry_actions(
     <section class="lunara-home-section lunara-archive-hero" data-lunara-site-studio-section="search-command">
         <div class="lunara-editorial-archive-hero-shell">
             <div class="lunara-editorial-archive-hero-copy-wrap">
+                <p class="lunara-archive-hero-kicker"><?php echo esc_html( get_theme_mod( 'lunara_404_kicker', __( 'Lost Signal', 'lunara-film' ) ) ); ?></p>
                 <h1 class="lunara-archive-hero-title"><?php echo esc_html( get_theme_mod( 'lunara_404_title', __( 'This page is not on the record.', 'lunara-film' ) ) ); ?></h1>
-                <?php $context_label = trim( (string) get_theme_mod( 'lunara_404_kicker', '' ) ); if ( '' !== $context_label && 'Lost Signal' !== $context_label ) : ?><p class="lunara-archive-hero-context"><?php echo esc_html( $context_label ); ?></p><?php endif; ?>
                 <p class="lunara-archive-hero-copy"><?php echo esc_html( get_theme_mod( 'lunara_404_explanation', __( 'The route you followed does not currently resolve inside Lunara Film. The publication shell is still intact, and the quickest way back is through the front door, the reviews, or the Oscars ledger.', 'lunara-film' ) ) ); ?></p>
             </div>
             <aside class="lunara-editorial-archive-debrief" aria-label="<?php esc_attr_e( 'Recovery options', 'lunara-film' ); ?>">
@@ -129,8 +129,8 @@ $reentry_actions = lunara_404_order_reentry_actions(
         <div class="lunara-404-panel">
             <div class="lunara-home-section-head">
                 <div>
+                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Re-enter The Site', 'lunara-film' ); ?></p>
                     <h2 class="lunara-section-title"><?php echo esc_html( get_theme_mod( 'lunara_404_reentry_title', __( 'Choose the cleanest way back in.', 'lunara-film' ) ) ); ?></h2>
-
                     <p class="lunara-editorial-archive-run-copy"><?php esc_html_e( 'The goal here is recovery without friction: get back to criticism, the Journal, or the Oscar ledger in one move.', 'lunara-film' ); ?></p>
                 </div>
             </div>

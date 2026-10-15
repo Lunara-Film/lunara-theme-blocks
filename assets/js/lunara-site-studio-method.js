@@ -11,7 +11,7 @@
  function validDom(root) { return !!controls && typeof controls.image === 'function' && ['editor','manual','mode','search','search-button','results','selected','clear','retry','image'].every(function (key) { return root.querySelectorAll('[data-method-'+key+']').length === 1; }); }
  function create(context) {
   var root = context.root, config = context.config, stateOwner, version = 0, metadataSequence = 0, searchSequence = 0, metadataKey = '', busy = false, frozen = [];
-  var item = null, imageUrl = '', searchItems = [], status = 'Loading Review details…', cancelPairingReport = null;
+  var item = null, imageUrl = '', searchItems = [], status = 'Loading Review details…';
   function find(key) { return root.querySelector('[data-method-'+key+']'); }
   var container = find('editor'), selected = find('selected'), results = find('results'), mode = find('mode'), retry = find('retry');
   function enabled() { return !busy && !context.isBusy(); }
@@ -27,12 +27,10 @@
    else { controls.node('strong','Unavailable Review',parent); }
   }
   function renderDetails() {
-   if (cancelPairingReport) { cancelPairingReport(); cancelPairingReport=null; }
    selected.replaceChildren();
    if (status) { controls.node('p',status,selected); }
    else if (item) { summary(selected,item); if (!item.available) { controls.node('p','This Manual Review is unavailable. The Method will be hidden after Apply. Choose another Review or Automatic.',selected); } }
    else { controls.node('p',context.getState().review_mode === 'manual' ? 'No Manual Review selected. The Method will be hidden after Apply.' : 'No eligible published Review with pairings is available.',selected); }
-   if (!status && item && item.available && window.LunaraPairingReviewEditor) { cancelPairingReport=window.LunaraPairingReviewEditor.mount(controls.node('div','',selected),{review_id:item.id},true); }
    imageEditor.render();
   }
   var imageEditor = controls.image({parent:find('image'),allowHidden:true,bleed:4,aspect:'1440 / 600',getValue:function () { return Object.assign({image_id:context.getState().backdrop_id},context.getState().backdrop); },source:function () { return {url:item && item.available ? item.image_url : '',label:item && item.available ? item.image_source : status || 'No available Review artwork'}; },image:function () { return imageUrl; },enabled:enabled,ticket:function () { return version; },announce:context.announce,selectedImage:function (id,url) { imageUrl=url; },change:function (patch) {
@@ -77,7 +75,7 @@
   var preview=root.querySelector('iframe');
   function syncFraming() { try { var section=preview.contentDocument.querySelector('.lunara-pairing-desk-section'); if (section && preview.contentWindow.innerWidth > 820) { var rect=section.getBoundingClientRect(); imageEditor.setAspect(rect.width,rect.height); } } catch (error) { /* Keep last desktop dimensions until same-origin preview loads. */ } }
   if (preview) { preview.addEventListener('load',syncFraming); if (window.MutationObserver) { new MutationObserver(syncFraming).observe(preview,{attributes:true,attributeFilter:['width','height']}); } }
-  function invalidate() { version++; metadataSequence++; searchSequence++; metadataKey=''; if(cancelPairingReport){cancelPairingReport();cancelPairingReport=null;} }
+  function invalidate() { version++; metadataSequence++; searchSequence++; metadataKey=''; }
   function setBusy(value) {
    busy=value;
    if (value) { frozen=[]; container.querySelectorAll('input,select,button').forEach(function (control) { frozen.push([control,control.disabled]); control.disabled=true; }); }

@@ -3,7 +3,6 @@
 	"version": 2,
 	"settings": {
 		"appearanceTools": true,
-		"border": { "radius": false },
 		"color": {
 			"defaultPalette": false,
 			"defaultGradients": false,
@@ -71,87 +70,6 @@
 				{ "slug": "60", "name": "X-Large", "size": "72px" },
 				{ "slug": "70", "name": "Section", "size": "110px" }
 			]
-		}
-	},
-	"styles": {
-		"elements": {
-			"button": {
-				"border": {
-					"radius": "0"
-				}
-			}
-		},
-		"blocks": {
-			"core/button": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/image": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/gallery": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/group": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/cover": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/columns": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/media-text": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/search": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/post-featured-image": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/pullquote": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/quote": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/table": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/details": {
-				"border": {
-					"radius": "0"
-				}
-			},
-			"core/file": {
-				"border": {
-					"radius": "0"
-				}
-			}
 		}
 	}
 }

@@ -69,7 +69,7 @@ body.post-type-archive-review .lunara-review-archive-hero-shell {
     gap: 28px !important;
     align-items: stretch !important;
     padding: 34px 36px !important;
-    border-radius: 0 !important;
+    border-radius: 28px !important;
     position: relative !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
@@ -86,9 +86,9 @@ body.post-type-archive-review .lunara-review-archive-debrief {
 body.post-type-archive-review .lunara-archive-hero-kicker {
     margin: 0 !important;
     color: #e0c481 !important;
-    font-size: 0.8125rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
 }
 
 body.post-type-archive-review .lunara-archive-hero-title {
@@ -110,17 +110,17 @@ body.post-type-archive-review .lunara-archive-hero-copy {
 body.post-type-archive-review .lunara-review-archive-debrief {
     display: block !important;
     padding: 22px 24px !important;
-    border-radius: 0 !important;
-    border: 0 !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(201, 169, 97, 0.18) !important;
     box-sizing: border-box !important;
 }
 
 body.post-type-archive-review .lunara-review-archive-debrief-kicker {
     margin: 0 0 14px !important;
     color: rgba(224, 196, 129, 0.94) !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
-    font-size: 0.8125rem !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+    font-size: 0.72rem !important;
 }
 
 body.post-type-archive-review .lunara-review-archive-debrief-list {
@@ -142,7 +142,7 @@ body.post-type-archive-review .lunara-review-archive-debrief-list strong {
     color: rgba(224, 196, 129, 0.96) !important;
     letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.7rem !important;
     font-weight: 700 !important;
 }
 
@@ -191,14 +191,14 @@ body.post-type-archive-review .lunara-archive-page .lunara-reveal {
         grid-template-columns: 1fr !important;
         gap: 20px !important;
         padding: 26px 20px !important;
-        border-radius: 0 !important;
+        border-radius: 22px !important;
     }
 
     body.post-type-archive-review .lunara-review-archive-debrief,
     body.post-type-archive-review .lunara-review-archive-rail-shell,
     body.post-type-archive-review .lunara-review-archive-run-head {
         padding: 18px 18px 16px !important;
-        border-radius: 0 !important;
+        border-radius: 18px !important;
     }
 
     body.post-type-archive-review .lunara-review-archive-debrief-list li {
@@ -246,8 +246,8 @@ body.home .lunara-journal-home-card {
     height: 100% !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    border-radius: 18px !important;
+    background: rgba(16, 28, 43, 0.88) !important;
 }
 
 body.home .lunara-latest-reviews-section .lunara-review-grid-link,
@@ -271,7 +271,7 @@ body.post-type-archive-review .lunara-review-grid-poster-wrap {
     aspect-ratio: 3 / 4 !important;
     width: 100% !important;
     min-height: 0 !important;
-    border-radius: 0 !important;
+    border-radius: 18px 18px 0 0 !important;
     overflow: hidden !important;
     background-color: rgba(255, 255, 255, 0.04) !important;
 }
@@ -280,7 +280,7 @@ body.home .lunara-journal-home-card-media {
     aspect-ratio: 16 / 10 !important;
     width: 100% !important;
     max-height: none !important;
-    border-radius: 0 !important;
+    border-radius: 18px 18px 0 0 !important;
     overflow: hidden !important;
 }
 
@@ -312,6 +312,8 @@ body.post-type-archive-review .lunara-review-grid-copy {
     min-height: clamp(232px, 18vw, 284px) !important;
 }
 
+body.home .lunara-section-link,
+body.post-type-archive-review .lunara-section-link,
 body.home .lunara-review-grid-kicker,
 body.post-type-archive-review .lunara-review-grid-kicker,
 body.home .lunara-journal-home-card-kicker {
@@ -342,11 +344,11 @@ body.home .lunara-journal-home-card-kicker,
 body.home .lunara-dispatch-type {
     margin: 0 !important;
     color: rgba(224, 196, 129, 0.9) !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.72rem !important;
     font-weight: 700 !important;
-    letter-spacing: 0 !important;
-    line-height: 1.4 !important;
-    text-transform: none !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
 }
 
 body.home .lunara-journal-home-card:not(.is-lead) .lunara-journal-home-card-kicker {
@@ -354,7 +356,7 @@ body.home .lunara-journal-home-card:not(.is-lead) .lunara-journal-home-card-kick
 }
 
 body.home .lunara-journal-home-card.is-lead {
-    border: 0 !important;
+    border: 1px solid rgba(224, 196, 129, 0.28) !important;
 }
 
 body.home .lunara-journal-home-card.is-lead .lunara-journal-home-card-kicker {
@@ -364,9 +366,9 @@ body.home .lunara-journal-home-card.is-lead .lunara-journal-home-card-kicker {
     width: max-content !important;
     max-width: 100% !important;
     padding: 6px 9px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    border: 1px solid rgba(224, 196, 129, 0.32) !important;
+    border-radius: 999px !important;
+    background: rgba(224, 196, 129, 0.10) !important;
     color: #f0d795 !important;
 }
 
@@ -396,7 +398,7 @@ body.home .lunara-journal-home-card-meta {
     border-top: 1px solid rgba(201, 169, 97, 0.16) !important;
     color: rgba(239, 232, 214, 0.68) !important;
     font-size: 0.82rem !important;
-    line-height: 1.4 !important;
+    line-height: 1.25 !important;
 }
 
 body.home .lunara-journal-home-card-cta {
@@ -406,9 +408,9 @@ body.home .lunara-journal-home-card-cta {
     min-height: 30px !important;
     padding: 6px 9px !important;
     border: 1px solid rgba(224, 196, 129, 0.30) !important;
-    border-radius: 0 !important;
+    border-radius: 999px !important;
     color: #f0d795 !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.72rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.04em !important;
     text-transform: uppercase !important;
@@ -429,7 +431,7 @@ body.home .lunara-journal-home-card-cta {
     body.home .lunara-journal-home-card.is-lead .lunara-journal-home-card-media {
         height: 100% !important;
         min-height: 280px !important;
-        border-radius: 0 !important;
+        border-radius: 18px 0 0 18px !important;
     }
 
     body.home .lunara-journal-home-card.is-lead .lunara-journal-home-card-copy {
@@ -495,9 +497,9 @@ body.post-type-archive-review .lunara-review-archive-toolbar-head {
 body.post-type-archive-review .lunara-review-archive-toolbar .lunara-home-section-kicker {
     margin: 0 0 8px !important;
     color: #e0c481 !important;
-    font-size: 0.8125rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
+    font-size: 0.74rem !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
 }
 
 body.post-type-archive-review .lunara-review-archive-toolbar .lunara-section-title {
@@ -523,7 +525,7 @@ body.post-type-archive-review .lunara-review-archive-sort-link {
     min-height: 44px !important;
     padding: 10px 16px !important;
     border: 1px solid rgba(201, 169, 97, 0.32) !important;
-    border-radius: 0 !important;
+    border-radius: 10px !important;
     background: rgba(11, 25, 40, 0.88) !important;
     color: #FAFBFC !important;
     font-size: 0.84rem !important;
@@ -559,7 +561,7 @@ body.post-type-archive-review .lunara-review-archive-sort-link.is-active {
     min-height: 42px !important;
     padding: 8px 12px !important;
     border: 1px solid rgba(201, 169, 97, 0.24) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: rgba(15, 29, 46, 0.84) !important;
     color: #FAFBFC !important;
     text-decoration: none !important;
@@ -573,9 +575,9 @@ body.post-type-archive-review .lunara-review-archive-sort-link.is-active {
 
 body.single-review .lunara-review-single-content,
 body.single-journal .lunara-review-single-content {
-    max-width: 64ch !important;
+    max-width: min(100%, 74ch) !important;
     color: #FAFBFC !important;
-    font-family: var(--lunara-font-body) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     line-height: 1.84 !important;
 }
 
@@ -586,7 +588,7 @@ body.single-review .lunara-review-single-hero-inner {
 body.single-review .lunara-review-single-excerpt {
     max-width: 74ch !important;
     color: rgba(250, 251, 252, 0.94) !important;
-    font-family: var(--lunara-font-body) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     line-height: 1.78 !important;
     letter-spacing: 0 !important;
 }
@@ -620,17 +622,17 @@ body.single-journal .lunara-review-single-content h3 {
     margin: 0 0 30px !important;
     padding: 18px !important;
     border: 1px solid rgba(201, 169, 97, 0.28) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: linear-gradient(180deg, rgba(15, 29, 46, 0.92), rgba(10, 21, 32, 0.96)) !important;
 }
 
 .lunara-reader-toc-kicker {
     margin: 0 !important;
     color: #c9a961 !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.76rem !important;
     font-weight: 700 !important;
     letter-spacing: 0 !important;
-    text-transform: none !important;
+    text-transform: uppercase !important;
 }
 
 .lunara-reader-toc-links {
@@ -645,7 +647,7 @@ body.single-journal .lunara-review-single-content h3 {
     min-height: 40px !important;
     padding: 8px 12px !important;
     border: 1px solid rgba(224, 196, 129, 0.28) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: rgba(250, 251, 252, 0.04) !important;
     color: #FAFBFC !important;
     text-decoration: none !important;
@@ -660,7 +662,7 @@ body.single-journal .lunara-review-single-rail-actions .lunara-btn {
     min-height: 44px !important;
     padding: 10px 16px !important;
     border: 1px solid rgba(201, 169, 97, 0.34) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: rgba(201, 169, 97, 0.1) !important;
     color: #e0c481 !important;
     text-align: center !important;
@@ -779,9 +781,9 @@ body.home .lunara-oscar-fact-card {
     min-width: 0 !important;
     height: 100% !important;
     overflow: hidden !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
+    border-radius: 18px !important;
+    background: rgba(16, 28, 43, 0.88) !important;
+    border: 1px solid rgba(201, 169, 97, 0.12) !important;
 }
 
 body.home .lunara-oscar-fact-card:not(.has-poster) {
@@ -809,7 +811,7 @@ body.home .lunara-oscar-fact-card-poster {
     aspect-ratio: 16 / 10 !important;
     width: 100% !important;
     overflow: hidden !important;
-    border-radius: 0 !important;
+    border-radius: 18px 18px 0 0 !important;
     background-color: rgba(255, 255, 255, 0.04) !important;
     background-position: center !important;
     background-size: cover !important;
@@ -825,14 +827,7 @@ body.home .lunara-oscar-fact-card-poster img {
     object-fit: cover !important;
 }
 
-/* Mobile-art picks wrap the image in <picture>; give it the frame's size so the
-   image's 100% height resolves instead of overflowing the 16:10 frame. */
-body.home .lunara-oscar-pick-card-media > picture {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-}
-
+body.home .lunara-oscar-pick-card-copy,
 body.home .lunara-oscar-fact-card-text {
     display: grid !important;
     align-content: start !important;
@@ -840,37 +835,11 @@ body.home .lunara-oscar-fact-card-text {
     padding: 18px !important;
 }
 
-body.home .lunara-oscar-pick-card-copy {
-    display: grid !important;
-    align-content: start !important;
-    gap: 10px !important;
-    padding: 18px 4px 20px !important;
-}
-
-body.home .lunara-oscar-fact-card-kicker {
-    color: #e0c481 !important;
-    text-decoration: none !important;
-}
-
-body.home .lunara-oscar-pick-card-kicker {
-    color: #e0c481 !important;
-    text-decoration: none !important;
-    font-size: .8125rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
-    line-height: 1.4 !important;
-}
-
+body.home .lunara-oscar-pick-card-kicker,
+body.home .lunara-oscar-fact-card-kicker,
 body.home .lunara-oscar-pick-card-status {
     color: #e0c481 !important;
     text-decoration: none !important;
-    background: #0a1520 !important;
-    font-size: .8125rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
-    line-height: 1.4 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
 }
 
 body.home .lunara-oscar-pick-card-title,
@@ -883,20 +852,12 @@ body.home .lunara-oscar-fact-card-title {
     text-decoration: none !important;
 }
 
+body.home .lunara-oscar-pick-card-meta,
 body.home .lunara-oscar-fact-card-body,
 body.home .lunara-oscar-fact-card-foot,
 body.home .lunara-oscar-fact-card-attribution {
     color: #A8A8B8 !important;
     text-decoration: none !important;
-}
-
-body.home .lunara-oscar-pick-card-meta {
-    color: #A8A8B8 !important;
-    text-decoration: none !important;
-    font-size: .8125rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
-    line-height: 1.4 !important;
 }
 
 body.home .lunara-oscar-pick-card-status {
@@ -908,16 +869,11 @@ body.home .lunara-oscar-pick-card-status {
     justify-content: center !important;
     min-height: 30px !important;
     padding: 6px 10px !important;
-    border-radius: 0 !important;
-    background: #0a1520 !important;
-    border: 0 !important;
-    font-size: .8125rem !important;
-    letter-spacing: 0 !important;
-    color: #e0c481 !important;
-    text-transform: none !important;
-    line-height: 1.4 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    border-radius: 999px !important;
+    background: rgba(7, 15, 26, 0.78) !important;
+    border: 1px solid rgba(237, 210, 150, 0.4) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal {
@@ -950,6 +906,8 @@ body.lunara-oscars-portal-page .lunara-oscars-portal > .lunara-home-section {
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-hero,
+body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid,
+body.lunara-oscars-portal-page .lunara-oscars-portal-copy,
 body.lunara-oscars-portal-page .lunara-oscars-portal-actions,
 body.lunara-oscars-portal-page .lunara-oscars-portal-stat-grid,
 body.lunara-oscars-portal-page .lunara-oscars-portal-link-grid,
@@ -984,16 +942,38 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-hero {
     min-height: clamp(360px, 42vh, 540px) !important;
     padding: clamp(18px, 2.8vw, 32px) !important;
     border: 1px solid rgba(201, 169, 97, 0.2) !important;
-    border-radius: 0 !important;
+    border-radius: 22px !important;
     background-size: cover !important;
     background-position: center !important;
     box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28) !important;
     overflow: hidden !important;
 }
 
+body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.18fr) minmax(220px, 330px) !important;
+    gap: clamp(20px, 3vw, 34px) !important;
+    align-items: center !important;
+    min-height: inherit !important;
+    padding: 0 !important;
+}
+
+body.lunara-oscars-portal-page .lunara-oscars-portal-copy {
+    display: grid !important;
+    gap: clamp(13px, 1.7vw, 19px) !important;
+    align-content: center !important;
+    padding: 0 !important;
+}
+
 body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+    max-width: 16.4ch !important;
+    margin: 0 !important;
     color: #FAFBFC !important;
+    font-size: clamp(2.15rem, 4vw, 4.05rem) !important;
+    line-height: 1.01 !important;
+    letter-spacing: 0 !important;
     text-transform: none !important;
+    text-wrap: balance !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy {
@@ -1012,8 +992,8 @@ body.lunara-oscars-portal-page .lunara-home-section-title {
 
 body.lunara-oscars-portal-page .lunara-home-section-title {
     color: #FAFBFC !important;
-    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
-    line-height:1.18 !important;
+    font-size: clamp(1.7rem, 2.4vw, 2.5rem) !important;
+    line-height: 1.08 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-home-section-summary,
@@ -1041,10 +1021,10 @@ body.lunara-oscars-portal-page .lunara-btn {
     min-height: 42px !important;
     padding: 10px 16px !important;
     border: 1px solid rgba(237, 210, 150, 0.34) !important;
-    border-radius: 0 !important;
+    border-radius: 999px !important;
     background: rgba(7, 15, 26, 0.62) !important;
     color: #e0c481 !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.72rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.12em !important;
     line-height: 1.1 !important;
@@ -1089,22 +1069,15 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-card,
 body.lunara-oscars-portal-page .lunara-oscars-portal-title-card,
 body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card,
 body.lunara-oscars-portal-page .lunara-oscars-research-card,
-body.lunara-oscars-portal-page .lunara-ceremony-winner-card {
-    min-width: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background:
-        transparent !important;
-    box-shadow: none !important;
-    overflow: hidden !important;
-}
-
+body.lunara-oscars-portal-page .lunara-ceremony-winner-card,
 body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
-    border: 0 !important;
-    border-radius: 0 !important;
+    min-width: 0 !important;
+    border: 1px solid rgba(201, 169, 97, 0.16) !important;
+    border-radius: 18px !important;
     background:
-        transparent !important;
-    box-shadow: none !important;
+        radial-gradient(circle at top right, rgba(201, 169, 97, 0.1), transparent 38%),
+        linear-gradient(180deg, rgba(16, 28, 43, 0.94), rgba(7, 15, 26, 0.96)) !important;
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.18) !important;
     overflow: hidden !important;
 }
 
@@ -1119,7 +1092,10 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-feature-copy {
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+    display: grid !important;
     grid-template-rows: auto 1fr !important;
+    gap: 0 !important;
+    padding: 0 !important;
     text-decoration: none !important;
 }
 
@@ -1181,10 +1157,10 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-label,
 body.lunara-oscars-portal-page .lunara-ceremony-winner-category {
     display: block !important;
     color: #e0c481 !important;
-    font-size: 0.8125rem !important;
-    letter-spacing: 0 !important;
-    line-height: 1.4 !important;
-    text-transform: none !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em !important;
+    line-height: 1.35 !important;
+    text-transform: uppercase !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-stat {
@@ -1210,6 +1186,16 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
         padding: clamp(20px, 2.2vw, 30px) !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(250px, 276px) !important;
+        gap: clamp(18px, 2.2vw, 28px) !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+        max-width: 15.6ch !important;
+        font-size: clamp(2.15rem, 3.45vw, 3.6rem) !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy {
         max-width: 62ch !important;
         font-size: clamp(.98rem, 1vw, 1.06rem) !important;
@@ -1217,13 +1203,20 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        align-items: center !important;
+        display: grid !important;
+        gap: 12px !important;
+        grid-template-columns: 104px minmax(0, 1fr) !important;
         grid-template-rows: none !important;
+        justify-self: end !important;
+        max-width: 276px !important;
+        padding: 12px !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
         align-self: start !important;
         aspect-ratio: 2 / 3 !important;
-        border-radius: 0 !important;
+        border-radius: 12px !important;
         max-height: 156px !important;
         width: 104px !important;
     }
@@ -1241,6 +1234,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-body {
+        font-size: .82rem !important;
         line-height: 1.42 !important;
     }
 
@@ -1302,6 +1296,16 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
         min-width: 0 !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+        max-width: 20ch !important;
+        font-size: clamp(2rem, 4.8vw, 2.75rem) !important;
+        line-height: 1.04 !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-link-grid,
     body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-grid,
     body.lunara-oscars-portal-page .lunara-oscars-portal-title-grid,
@@ -1316,7 +1320,10 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        display: grid !important;
+        grid-template-columns: minmax(150px, 210px) minmax(0, 1fr) !important;
         grid-template-rows: none !important;
+        max-width: none !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
@@ -1345,10 +1352,21 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
         padding: 22px !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid,
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+        max-width: none !important;
+        font-size: clamp(1.56rem, 7.2vw, 2rem) !important;
+        line-height: 1.06 !important;
         white-space: normal !important;
         overflow-wrap: anywhere !important;
         word-break: normal !important;
+        text-wrap: pretty !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy {
@@ -1366,6 +1384,10 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
     body.lunara-oscars-portal-page .lunara-oscars-research-card-grid,
     body.lunara-oscars-portal-page .lunara-ledger-carousel-track {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: minmax(96px, 36vw) minmax(0, 1fr) !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
@@ -1414,6 +1436,13 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
         object-fit: cover !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: minmax(104px, 36vw) minmax(0, 1fr) !important;
+        max-width: 100% !important;
+        margin-inline: 0 !important;
+        min-width: 0 !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
         height: auto !important;
         min-height: 0 !important;
@@ -1443,6 +1472,13 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-stat-value {
  * Oscars portal poster scale ceiling.
  * Keep /oscars/ as a fast ledger front door, not a poster wall.
  */
+body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+    display: grid !important;
+    grid-template-columns: minmax(118px, 150px) minmax(0, 1fr) !important;
+    gap: 0 !important;
+    max-width: min(100%, 520px) !important;
+    padding: 0 !important;
+}
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
     align-self: stretch !important;
@@ -1458,7 +1494,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-feature-copy {
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-feature-body {
     font-size: .82rem !important;
-    line-height: 1.6 !important;
+    line-height: 1.38 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-grid,
@@ -1511,8 +1547,8 @@ body.lunara-oscars-portal-page .lunara-ceremony-winner-name {
 body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-secondary,
 body.lunara-oscars-portal-page .lunara-oscars-portal-title-line,
 body.lunara-oscars-portal-page .lunara-ceremony-winner-meta {
-    font-size: 0.8125rem !important;
-    line-height: 1.4 !important;
+    font-size: .72rem !important;
+    line-height: 1.28 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-filmography-grid,
@@ -1544,7 +1580,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-filmography-li
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-filmography-poster-wrap {
     aspect-ratio: 2 / 3 !important;
-    border-radius: 0 !important;
+    border-radius: 12px 12px 0 0 !important;
     max-height: 214px !important;
     min-height: 0 !important;
     overflow: hidden !important;
@@ -1553,7 +1589,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-filmography-po
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-media {
     aspect-ratio: 16 / 10 !important;
-    border-radius: 0 !important;
+    border-radius: 12px 12px 0 0 !important;
     max-height: 92px !important;
     min-height: 0 !important;
     overflow: hidden !important;
@@ -1585,6 +1621,9 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-
 }
 
 @media (max-width: 980px) {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: minmax(112px, 150px) minmax(0, 1fr) !important;
+    }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
         max-height: 216px !important;
@@ -1613,6 +1652,9 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-
 }
 
 @media (max-width: 560px) {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: 92px minmax(0, 1fr) !important;
+    }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
         max-height: 138px !important;
@@ -1673,6 +1715,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-
 }
 
 body.aat-shell-page {
+    background: #08131f !important;
     color: #FAFBFC !important;
 }
 
@@ -1685,6 +1728,12 @@ body.aat-shell-page .aat-container {
     max-width: 1320px !important;
     margin: 0 auto !important;
     padding: clamp(22px, 3vw, 42px) !important;
+    border: 1px solid rgba(201, 169, 97, 0.18) !important;
+    border-radius: 22px !important;
+    background:
+        radial-gradient(circle at 14% 0%, rgba(201, 169, 97, 0.12), transparent 28%),
+        linear-gradient(145deg, rgba(12, 25, 40, 0.96), rgba(7, 15, 26, 0.98)) !important;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32) !important;
     overflow: hidden !important;
 }
 
@@ -1696,30 +1745,31 @@ body.aat-shell-page .aat-entity-breadcrumbs {
     gap: 8px !important;
     margin: 0 0 24px !important;
     color: rgba(244, 239, 227, 0.72) !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
 }
 
-body.aat-shell-page .aat-hub-page a:not(.aat-btn-primary),
-body.aat-shell-page .aat-entity-page a:not(.aat-btn-primary) {
+body.aat-shell-page .aat-hub-page a,
+body.aat-shell-page .aat-entity-page a {
     color: #e0c481 !important;
     text-decoration: none !important;
 }
 
-body.aat-shell-page .aat-hub-page a:not(.aat-btn-primary):hover,
-body.aat-shell-page .aat-entity-page a:not(.aat-btn-primary):hover {
+body.aat-shell-page .aat-hub-page a:hover,
+body.aat-shell-page .aat-entity-page a:hover {
     color: #fff2c2 !important;
 }
 
 body.aat-shell-page .aat-hub-header,
 body.aat-shell-page .aat-entity-header {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    align-items: center !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: end !important;
     gap: clamp(18px, 3vw, 36px) !important;
     margin-bottom: clamp(28px, 4vw, 48px) !important;
     padding-bottom: clamp(18px, 2vw, 28px) !important;
     border-bottom: 1px solid rgba(201, 169, 97, 0.2) !important;
-    justify-items: center;
-    text-align: center;
 }
 
 body.aat-shell-page .aat-hub-title,
@@ -1728,6 +1778,13 @@ body.aat-shell-page .aat-hub-section h2,
 body.aat-shell-page .aat-section-title {
     margin: 0 !important;
     color: #FAFBFC !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0 !important;
+}
+
+body.aat-shell-page .aat-hub-title,
+body.aat-shell-page .aat-entity-title {
+    font-size: clamp(2.15rem, 5vw, 4.5rem) !important;
 }
 
 body.aat-shell-page .aat-hub-subtitle,
@@ -1739,12 +1796,12 @@ body.aat-shell-page .aat-hub-spotlight-meta {
 }
 
 body.aat-shell-page .aat-hub-actions,
+body.aat-shell-page .aat-entity-actions,
 body.aat-shell-page .aat-winner-circle-actions {
     display: flex !important;
     align-items: center !important;
     flex-wrap: wrap !important;
     gap: 10px !important;
-    justify-content: center;
 }
 
 body.aat-shell-page .aat-btn,
@@ -1755,16 +1812,42 @@ body.aat-shell-page .aat-winner-circle-action {
     justify-content: center !important;
     min-height: 44px !important;
     padding: 10px 16px !important;
+    border: 1px solid rgba(201, 169, 97, 0.28) !important;
+    border-radius: 999px !important;
+    background: rgba(11, 21, 35, 0.88) !important;
+    color: #e0c481 !important;
+    font-size: 0.75rem !important;
     font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
     text-decoration: none !important;
 }
 
-body.aat-shell-page .aat-btn:not(.aat-btn-primary),
-body.aat-shell-page .aat-hub-card-action,
-body.aat-shell-page .aat-winner-circle-action {
-    color: #e0c481 !important;
+body.aat-shell-page .aat-btn:hover,
+body.aat-shell-page .aat-hub-card-action:hover,
+body.aat-shell-page .aat-winner-circle-action:hover {
+    border-color: rgba(237, 210, 150, 0.55) !important;
+    background: rgba(201, 169, 97, 0.14) !important;
 }
 
+body.aat-shell-page .aat-hub-section,
+body.aat-shell-page .aat-entity-section {
+    margin-top: clamp(28px, 5vw, 60px) !important;
+}
+
+body.aat-shell-page .aat-ceremony-marquee {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr) !important;
+    gap: clamp(18px, 3vw, 34px) !important;
+    align-items: stretch !important;
+    padding: clamp(18px, 2.6vw, 34px) !important;
+    border: 1px solid rgba(201, 169, 97, 0.16) !important;
+    border-radius: 20px !important;
+    background: rgba(4, 12, 22, 0.5) !important;
+}
+
+body.aat-shell-page .aat-ceremony-marquee-stack,
 body.aat-shell-page .aat-hub-chip-stack {
     display: grid !important;
     gap: 16px !important;
@@ -1773,13 +1856,13 @@ body.aat-shell-page .aat-hub-chip-stack {
 
 body.aat-shell-page .aat-hub-grid,
 body.aat-shell-page .aat-winner-circle-grid,
+body.aat-shell-page .aat-filmography-grid,
+body.aat-shell-page .aat-related-reviews-grid,
 body.aat-shell-page .aat-best-picture-grid {
-    display: flex !important;
+    display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
     gap: clamp(16px, 2vw, 26px) !important;
     align-items: stretch !important;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 body.aat-shell-page .aat-winner-circle-grid.is-hero-latest,
@@ -1790,8 +1873,17 @@ body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest {
 body.aat-shell-page .aat-hub-card,
 body.aat-shell-page .aat-hub-spotlight-card,
 body.aat-shell-page .aat-hub-chip-rich,
-body.aat-shell-page .aat-winner-circle-card {
+body.aat-shell-page .aat-winner-circle-card,
+body.aat-shell-page .aat-filmography-card,
+body.aat-shell-page .aat-related-review-card,
+body.aat-shell-page .aat-entity-status-banner,
+body.aat-shell-page .aat-history-item,
+body.aat-shell-page .aat-timeline-card {
     min-width: 0 !important;
+    border: 1px solid rgba(201, 169, 97, 0.14) !important;
+    border-radius: 18px !important;
+    background: rgba(12, 25, 40, 0.78) !important;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2) !important;
     overflow: hidden !important;
 }
 
@@ -1824,33 +1916,63 @@ body.aat-shell-page .aat-winner-circle-top {
 }
 
 body.aat-shell-page .aat-hub-spotlight-media,
-body.aat-shell-page .aat-winner-circle-media {
+body.aat-shell-page .aat-winner-circle-media,
+body.aat-shell-page .aat-filmography-poster-wrap,
+body.aat-shell-page .aat-related-review-media,
+body.aat-shell-page .aat-entity-poster-wrap {
     position: relative !important;
     width: 100% !important;
     min-height: 0 !important;
     overflow: hidden !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
 }
 
-body.aat-shell-page .aat-hub-spotlight-media {
+body.aat-shell-page .aat-hub-spotlight-media,
+body.aat-shell-page .aat-entity-poster-wrap,
+body.aat-shell-page .aat-filmography-poster-wrap {
     aspect-ratio: 2 / 3 !important;
 }
 
-body.aat-shell-page .aat-winner-circle-media {
+body.aat-shell-page .aat-winner-circle-media,
+body.aat-shell-page .aat-related-review-media {
     aspect-ratio: 16 / 10 !important;
 }
 
 body.aat-shell-page .aat-hub-spotlight-media img,
 body.aat-shell-page .aat-winner-circle-media img,
-body.aat-shell-page .aat-winner-circle-photo {
+body.aat-shell-page .aat-winner-circle-photo,
+body.aat-shell-page .aat-filmography-poster,
+body.aat-shell-page .aat-filmography-poster-wrap img,
+body.aat-shell-page .aat-related-review-image,
+body.aat-shell-page .aat-related-review-media img,
+body.aat-shell-page .aat-entity-poster-wrap img,
+body.aat-shell-page .aat-entity-poster {
     display: block !important;
     width: 100% !important;
     max-width: none !important;
     height: 100% !important;
     object-fit: cover !important;
     opacity: 1 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+body.aat-shell-page .aat-entity-hero {
+    display: grid !important;
+    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) !important;
+    gap: clamp(20px, 3vw, 38px) !important;
+    align-items: start !important;
+}
+
+body.aat-shell-page .aat-entity-poster-wrap {
+    max-width: 260px !important;
 }
 
 body.aat-shell-page .aat-winner-circle-grid,
+body.aat-shell-page .aat-filmography-grid,
+body.aat-shell-page .aat-related-reviews-grid,
 body.aat-shell-page .aat-best-picture-grid {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
     gap: 14px !important;
@@ -1879,10 +2001,61 @@ body.aat-shell-page .aat-winner-circle-card.is-marquee-latest .aat-winner-circle
     width: min(100%, 168px) !important;
 }
 
+body.aat-shell-page .aat-entity-hero {
+    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr) !important;
+    gap: clamp(16px, 2vw, 24px) !important;
+}
+
+body.aat-shell-page .aat-entity-poster-wrap {
+    max-width: 210px !important;
+}
+
+body.aat-shell-page .aat-entity-poster-wrap img,
+body.aat-shell-page .aat-entity-poster {
+    max-height: 320px !important;
+}
+
+body.aat-shell-page .aat-stats-bar.aat-entity-stats {
+    display: grid !important;
+    gap: 10px !important;
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)) !important;
+    margin: 16px 0 30px !important;
+}
+
+body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat {
+    align-content: start !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+    border: 1px solid rgba(201, 169, 97, 0.14) !important;
+    border-radius: 12px !important;
+    display: grid !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    padding: 11px 12px !important;
+    text-align: left !important;
+}
+
+body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-number,
+body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-label {
+    display: block !important;
+}
+
+body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-number {
+    font-size: 1.18rem !important;
+    line-height: 1.1 !important;
+}
+
+body.aat-shell-page .aat-stats-bar.aat-entity-stats .aat-stat-label {
+    font-size: .68rem !important;
+    line-height: 1.2 !important;
+}
+
+body.aat-shell-page .aat-winner-badge,
 body.aat-shell-page .aat-hub-kicker,
 body.aat-shell-page .aat-hub-chip,
 body.aat-shell-page .aat-winner-circle-category {
     color: #e0c481 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
     text-decoration: none !important;
 }
 
@@ -1894,6 +2067,11 @@ body.aat-shell-page .aat-winner-circle-category {
     align-items: center !important;
     min-height: 30px !important;
     padding: 6px 10px !important;
+    border: 1px solid rgba(201, 169, 97, 0.24) !important;
+    border-radius: 999px !important;
+    background: rgba(5, 13, 24, 0.62) !important;
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
 }
 
 /* Linked category chips need a full action target; decorative badges stay compact. */
@@ -1902,13 +2080,18 @@ body.aat-shell-page a.aat-hub-chip {
 }
 
 body.aat-shell-page .aat-hub-spotlight-title,
-body.aat-shell-page .aat-winner-circle-title {
+body.aat-shell-page .aat-winner-circle-title,
+body.aat-shell-page .aat-filmography-title,
+body.aat-shell-page .aat-related-review-title {
     margin: 0 !important;
     color: #FAFBFC !important;
+    line-height: 1.16 !important;
     overflow-wrap: anywhere !important;
 }
 
-body.aat-shell-page .aat-hub-spotlight-body {
+body.aat-shell-page .aat-hub-spotlight-body,
+body.aat-shell-page .aat-filmography-body,
+body.aat-shell-page .aat-related-review-body {
     display: grid !important;
     align-content: start !important;
     gap: 10px !important;
@@ -1917,12 +2100,25 @@ body.aat-shell-page .aat-hub-spotlight-body {
 
 @media (max-width: 900px) {
     body.aat-shell-page .aat-hub-header,
-    body.aat-shell-page .aat-entity-header {
+    body.aat-shell-page .aat-entity-header,
+    body.aat-shell-page .aat-ceremony-marquee,
+    body.aat-shell-page .aat-entity-hero {
         grid-template-columns: 1fr !important;
     }
 
-    body.aat-shell-page .aat-hub-actions {
-        justify-content: center !important;
+    body.aat-shell-page .aat-hub-actions,
+    body.aat-shell-page .aat-entity-actions {
+        justify-content: flex-start !important;
+    }
+
+    body.aat-shell-page .aat-entity-poster-wrap {
+        justify-self: start !important;
+        max-width: 146px !important;
+    }
+
+    body.aat-shell-page .aat-entity-poster-wrap img,
+    body.aat-shell-page .aat-entity-poster {
+        max-height: 220px !important;
     }
 }
 
@@ -1934,10 +2130,13 @@ body.aat-shell-page .aat-hub-spotlight-body {
     body.aat-shell-page .aat-container {
         width: calc(100vw - 22px) !important;
         padding: 16px !important;
+        border-radius: 16px !important;
     }
 
     body.aat-shell-page .aat-hub-grid,
     body.aat-shell-page .aat-winner-circle-grid,
+    body.aat-shell-page .aat-filmography-grid,
+    body.aat-shell-page .aat-related-reviews-grid,
     body.aat-shell-page .aat-best-picture-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
@@ -1949,7 +2148,8 @@ body.aat-shell-page .aat-hub-spotlight-body {
 
     body.aat-shell-page .aat-winner-circle-grid,
     body.aat-shell-page .aat-winner-circle-grid.is-hero-latest,
-    body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest {
+    body.aat-shell-page .aat-winner-circle-grid.is-marquee-latest,
+    body.aat-shell-page .aat-related-reviews-grid {
         grid-template-columns: 1fr !important;
     }
 
@@ -1958,6 +2158,10 @@ body.aat-shell-page .aat-hub-spotlight-body {
     body.aat-shell-page .aat-winner-circle-card.is-marquee-latest .aat-winner-circle-media {
         max-width: 132px !important;
         width: 132px !important;
+    }
+
+    body.aat-shell-page .aat-entity-poster-wrap {
+        max-width: 132px !important;
     }
 }
 
@@ -1992,18 +2196,13 @@ body:not(.wp-admin) .page-title,
 body:not(.wp-admin) .lunara-home-hero-title,
 body:not(.wp-admin) .lunara-home-section-title,
 body:not(.wp-admin) .lunara-archive-hero-title,
-body:not(.wp-admin) .lunara-review-single-title {
-    font-family:var(--lunara-font-display) !important;
-    font-weight:600 !important;
-    letter-spacing: 0 !important;
-    text-wrap: balance !important;
-}
-
+body:not(.wp-admin) .lunara-review-single-title,
 body:not(.wp-admin) .aat-entity-title,
 body:not(.wp-admin) .aat-section-title,
 body:not(.wp-admin) .aat-category-history-title {
     font-family: var(--lunara-font-display, Georgia, "Times New Roman", serif) !important;
     font-weight: 700 !important;
+    letter-spacing: 0 !important;
     text-wrap: balance !important;
 }
 
@@ -2033,46 +2232,16 @@ body:not(.wp-admin) a:not(.button):not(.wp-block-button__link):not(.lunara-butto
 body:not(.wp-admin) .lunara-button,
 body:not(.wp-admin) .lunara-button-ghost,
 body:not(.wp-admin) .lunara-btn,
-body:not(.wp-admin) .lunara-journal-filter-pill,
-body:not(.wp-admin) .lunara-archive-sort a {
-    font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-    letter-spacing: 0.09em !important;
-}
-
-body:not(.wp-admin) .lunara-site-footer .menu a {
-    font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-    letter-spacing: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 8px 0 !important;
-    font-size: .875rem !important;
-    text-transform: none !important;
-    min-height: 44px !important;
-    box-shadow: none !important;
-    min-inline-size: 44px !important;
-}
-
 body:not(.wp-admin) .aat-btn,
+body:not(.wp-admin) .lunara-site-footer .lunara-footer-nav-col a,
+body:not(.wp-admin) .lunara-site-footer .menu a,
+body:not(.wp-admin) .lunara-journal-filter-pill,
+body:not(.wp-admin) .lunara-archive-sort a,
 body:not(.wp-admin) .aat-decade-pill,
 body:not(.wp-admin) .aat-crossroad-pill,
 body:not(.wp-admin) .aat-winner-circle-action {
     font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-}
-
-body:not(.wp-admin) .lunara-site-footer .lunara-footer-nav-col a {
-    font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-    letter-spacing: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 8px 0 !important;
-    min-height: 44px !important;
-    font-size: .875rem !important;
-    text-transform: none !important;
-    transform: none !important;
-    box-shadow: none !important;
-    min-inline-size: 44px !important;
+    letter-spacing: 0.09em !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal {
@@ -2084,8 +2253,19 @@ body.lunara-oscars-portal-page .lunara-oscars-portal {
 body.lunara-oscars-portal-page .lunara-oscars-portal-hero {
     min-height: clamp(300px, 36vh, 430px) !important;
     padding: clamp(16px, 2.2vw, 26px) !important;
-    border-radius: 0 !important;
+    border-radius: 18px !important;
     box-shadow: 0 22px 54px rgba(0, 0, 0, 0.24) !important;
+}
+
+body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid {
+    grid-template-columns: minmax(0, 1.24fr) minmax(180px, 270px) !important;
+    gap: clamp(16px, 2.4vw, 28px) !important;
+}
+
+body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+    max-width: 14.4ch !important;
+    font-size: clamp(1.9rem, 3.35vw, 3.15rem) !important;
+    line-height: 1.04 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy {
@@ -2096,8 +2276,8 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-copy
 
 body.lunara-oscars-portal-page .lunara-home-section-title {
     max-width: 18ch !important;
-    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
-    line-height:1.18 !important;
+    font-size: clamp(1.38rem, 2vw, 1.95rem) !important;
+    line-height: 1.08 !important;
 }
 
 body.lunara-oscars-portal-page .lunara-home-section-summary {
@@ -2127,7 +2307,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-card,
 body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card,
 body.lunara-oscars-portal-page .lunara-oscars-research-card,
 body.lunara-oscars-portal-page .lunara-ceremony-winner-card {
-    border-radius: 0 !important;
+    border-radius: 14px !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-link-card,
@@ -2177,7 +2357,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-copy {
     body.lunara-oscars-portal-page .lunara-oscars-spotlight-poster {
         align-self: center !important;
         aspect-ratio: auto !important;
-        border-radius: 0 !important;
+        border-radius: 10px !important;
         height: 88px !important;
         max-height: 88px !important;
         max-width: 72px !important;
@@ -2200,8 +2380,8 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-copy {
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-secondary,
     body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-meta {
-        font-size: 0.8125rem !important;
-        line-height: 1.4 !important;
+        font-size: .78rem !important;
+        line-height: 1.28 !important;
         margin: 0 !important;
     }
 }
@@ -2228,7 +2408,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-copy {
     body.lunara-oscars-portal-page .lunara-oscars-spotlight-poster {
         align-self: center !important;
         aspect-ratio: auto !important;
-        border-radius: 0 !important;
+        border-radius: 10px !important;
         height: 88px !important;
         max-height: 88px !important;
         max-width: 70px !important;
@@ -2254,6 +2434,11 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-copy {
     body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-grid {
         grid-template-columns: minmax(0, 1fr) !important;
     }
+}
+
+body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+    grid-template-columns: minmax(106px, 136px) minmax(0, 1fr) !important;
+    max-width: min(100%, 460px) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
@@ -2286,7 +2471,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-card {
 body.lunara-oscars-portal-page .lunara-oscars-portal-title-media {
     align-self: stretch !important;
     aspect-ratio: auto !important;
-    border-radius: 0 !important;
+    border-radius: 14px 0 0 14px !important;
     height: 100% !important;
     max-height: none !important;
     min-height: 108px !important;
@@ -2321,7 +2506,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-title-card h3 {
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-title-year,
 body.lunara-oscars-portal-page .lunara-oscars-portal-title-line {
-    font-size: 0.8125rem !important;
+    font-size: .76rem !important;
     line-height: 1.25 !important;
     margin: 0 !important;
 }
@@ -2356,7 +2541,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-filmography-po
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-media {
     align-self: stretch !important;
     aspect-ratio: auto !important;
-    border-radius: 0 !important;
+    border-radius: 14px 0 0 14px !important;
     height: 100% !important;
     max-height: none !important;
     min-height: 106px !important;
@@ -2417,9 +2602,10 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-database-landi
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-header {
     align-items: center !important;
     background:
+        radial-gradient(circle at top left, rgba(201, 169, 97, .12), transparent 42%),
         linear-gradient(135deg, rgba(15, 28, 43, .9), rgba(7, 15, 26, .96)) !important;
     border: 1px solid rgba(201, 169, 97, .16) !important;
-    border-radius: 0 !important;
+    border-radius: 18px !important;
     display: grid !important;
     gap: 4px 18px !important;
     grid-template-columns: 104px minmax(0, 1fr) !important;
@@ -2494,21 +2680,25 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-header .aat-su
 }
 
 body.aat-shell-page .aat-container {
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     max-width: min(1200px, calc(100vw - 36px)) !important;
 }
 
 body.aat-shell-page .aat-hub-header,
 body.aat-shell-page .aat-entity-header,
-body.aat-shell-page .aat-category-latest-winner {
+body.aat-shell-page .aat-category-latest-winner,
+body.aat-shell-page .aat-ceremony-marquee {
+    border-radius: 18px !important;
     padding: clamp(20px, 2.8vw, 32px) !important;
 }
 
-body.aat-shell-page .aat-category-latest-winner {
+body.aat-shell-page .aat-category-latest-winner,
+body.aat-shell-page .aat-ceremony-marquee {
     gap: clamp(16px, 2vw, 24px) !important;
 }
 
-body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
+body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
+body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
     grid-template-columns: minmax(104px, 148px) minmax(0, 1fr) !important;
     gap: 14px !important;
     max-width: 760px !important;
@@ -2516,10 +2706,26 @@ body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
 }
 
 body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media,
-body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link {
+body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link,
+body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media,
+body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media-link {
     max-width: 148px !important;
     min-height: 0 !important;
     width: 148px !important;
+}
+
+body.aat-shell-page .aat-category-latest-winner h2,
+body.aat-shell-page .aat-ceremony-marquee h2,
+body.aat-shell-page .aat-section-title {
+    font-size: clamp(1.42rem, 2.2vw, 2.08rem) !important;
+    line-height: 1.08 !important;
+}
+
+body.aat-shell-page .aat-hub-spotlight-title,
+body.aat-shell-page .aat-category-history-title,
+body.aat-shell-page .aat-winner-circle-title {
+    font-size: clamp(.98rem, 1.35vw, 1.18rem) !important;
+    line-height: 1.15 !important;
 }
 
 body.aat-shell-page .aat-hub-metric-grid,
@@ -2532,15 +2738,35 @@ body.aat-shell-page .aat-hub-metric-card,
 body.aat-shell-page .aat-stat,
 body.aat-shell-page .aat-category-history-winner,
 body.aat-shell-page .aat-category-ceremony-row,
-body.aat-shell-page .aat-nominee-row {
+body.aat-shell-page .aat-nominee-row,
+body.aat-shell-page .aat-history-item,
+body.aat-shell-page .aat-timeline-card {
+    border-radius: 14px !important;
     gap: 8px !important;
     padding: 12px 14px !important;
+}
+
+body.aat-shell-page .aat-hub-metric-copy,
+body.aat-shell-page .aat-section-description,
+body.aat-shell-page .aat-history-line,
+body.aat-shell-page .aat-category-history-detail,
+body.aat-shell-page .aat-nominee-secondary,
+body.aat-shell-page .aat-nominee-detail {
+    font-size: .9rem !important;
+    line-height: 1.45 !important;
 }
 
 body.aat-shell-page .aat-decade-nav,
 body.aat-shell-page .aat-hub-chip-stack,
 body.aat-shell-page .aat-crossroads-list {
     gap: 8px !important;
+}
+
+body.aat-shell-page .aat-decade-pill,
+body.aat-shell-page .aat-crossroad-pill,
+body.aat-shell-page .aat-winner-circle-action,
+body.aat-shell-page .aat-hub-inline-link.aat-hub-inline-link-title {
+    line-height: 1.18 !important;
 }
 
 body.single-journal .lunara-journal-single-page {
@@ -2556,23 +2782,15 @@ body.single-journal .lunara-review-single-kicker {
     font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
 }
 
+body.single-journal .lunara-review-single-content,
 body.single-journal .lunara-journal-single-content {
     font-family: var(--lunara-font-body, "Tiempos Text", Georgia, "Times New Roman", serif) !important;
-}
-
-body.single-journal .lunara-review-single-content {
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, "Times New Roman", serif) !important;
-    max-width: 64ch !important;
 }
 
 body.single-journal .lunara-review-single-content h2,
 body.single-journal .lunara-review-single-content h3,
 body.single-journal .lunara-journal-single-content h2,
-body.single-journal .lunara-journal-single-content h3 {
-    font-family: var(--lunara-font-display, "Tiempos Headline", Georgia, "Times New Roman", serif) !important;
-    font-weight: 700 !important;
-}
-
+body.single-journal .lunara-journal-single-content h3,
 body.single-journal .lunara-journal-single-content h4 {
     font-family: var(--lunara-font-display, "Tiempos Headline", Georgia, "Times New Roman", serif) !important;
     font-weight: 700 !important;
@@ -2583,16 +2801,10 @@ body.single-journal .lunara-review-single-rail-actions .lunara-btn {
 }
 
 body.home .lunara-journal-home-card,
+body.single-journal .lunara-review-single-body,
 body.single-journal .lunara-journal-image-carousel {
-    border-radius: 0 !important;
+    border-radius: 18px !important;
     box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22) !important;
-}
-
-body.single-journal .lunara-review-single-body {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    border: 0 !important;
 }
 
 body.home .lunara-journal-home-card-title,
@@ -2600,27 +2812,19 @@ body.single-journal .lunara-review-single-title {
     line-height: 1.12 !important;
 }
 
-body.home .lunara-journal-home-card-excerpt {
-    line-height: 1.62 !important;
-}
-
+body.home .lunara-journal-home-card-excerpt,
 body.single-journal .lunara-review-single-content p {
     line-height: 1.62 !important;
-    max-width: 64ch !important;
 }
 
 body.single-journal .lunara-review-single-body {
     max-width: 900px !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
 }
 
 body.home .lunara-journal-home-card.is-lead {
     background:
-        transparent !important;
-    box-shadow: none !important;
+        linear-gradient(180deg, rgba(22, 39, 58, 0.94), rgba(10, 22, 34, 0.98)) !important;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.28) !important;
 }
 
 body.home .lunara-journal-home-card-cta {
@@ -2631,10 +2835,6 @@ body.single-journal .lunara-journal-cinematic-hero-credit {
     border-color: rgba(224, 196, 129, 0.28) !important;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28) !important;
     color: rgba(244, 239, 227, 0.92) !important;
-    font-size: .8125rem !important;
-    letter-spacing: 0 !important;
-    line-height: 1.4 !important;
-    backdrop-filter: none !important;
 }
 
 body.single-journal .lunara-journal-image-carousel {
@@ -2660,7 +2860,7 @@ body.single-journal .lunara-journal-image-carousel-head p {
 body.single-journal .lunara-journal-image-carousel-slide {
     overflow: hidden !important;
     border: 1px solid rgba(201, 169, 97, 0.16) !important;
-    border-radius: 0 !important;
+    border-radius: 14px !important;
     background: rgba(255, 255, 255, 0.035) !important;
 }
 
@@ -2669,12 +2869,12 @@ body.single-journal .lunara-journal-image-carousel-slide figcaption {
     gap: 4px !important;
     padding: 9px 11px !important;
     color: rgba(244, 239, 227, 0.78) !important;
-    font-size: 0.8125rem !important;
+    font-size: .78rem !important;
     line-height: 1.35 !important;
 }
 
 body.single-journal .lunara-review-single-content {
-    max-width: 64ch !important;
+    max-width: min(100%, 68ch) !important;
     font-size: clamp(1rem, 1.08vw, 1.08rem) !important;
 }
 
@@ -2683,24 +2883,38 @@ body.single-journal .lunara-review-single-content {
         width: min(100%, calc(100vw - 24px)) !important;
     }
 
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+        max-width: 12ch !important;
+        font-size: clamp(1.62rem, 6.8vw, 2.25rem) !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: minmax(92px, 31vw) minmax(0, 1fr) !important;
+    }
+
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
+    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
         max-width: 100% !important;
     }
 }
 
 @media (max-width: 560px) {
-    body.aat-shell-page .aat-category-latest-winner {
+    body.aat-shell-page .aat-category-latest-winner,
+    body.aat-shell-page .aat-ceremony-marquee {
         padding: 18px !important;
     }
 
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card {
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-card,
+    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-card {
         grid-template-columns: minmax(88px, 108px) minmax(0, 1fr) !important;
         max-width: 100% !important;
         padding: 10px !important;
     }
 
     body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media,
-    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link {
+    body.aat-shell-page .aat-category-latest-winner .aat-hub-spotlight-media-link,
+    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media,
+    body.aat-shell-page .aat-ceremony-marquee .aat-hub-spotlight-media-link {
         max-width: 108px !important;
         width: 108px !important;
     }
@@ -2712,8 +2926,27 @@ body.single-journal .lunara-review-single-content {
         padding: clamp(16px, 4vw, 24px) !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-hero-grid {
+        display: grid !important;
+        gap: 16px !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy,
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        max-width: 100% !important;
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-copy .lunara-home-hero-title {
+        font-size: clamp(1.76rem, 7vw, 2.5rem) !important;
+        line-height: 1.06 !important;
+        max-width: 100% !important;
         overflow-wrap: normal !important;
+        text-wrap: balance !important;
         word-break: normal !important;
     }
 
@@ -2721,6 +2954,15 @@ body.single-journal .lunara-review-single-content {
         max-width: 34rem !important;
         overflow-wrap: normal !important;
         word-break: normal !important;
+    }
+
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        align-items: center !important;
+        display: grid !important;
+        gap: 10px !important;
+        grid-template-columns: minmax(96px, 124px) minmax(0, 1fr) !important;
+        justify-self: stretch !important;
+        padding: 10px !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
@@ -2742,6 +2984,12 @@ body.single-journal .lunara-review-single-content {
         word-break: normal !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-kicker {
+        font-size: .58rem !important;
+        letter-spacing: .08em !important;
+        line-height: 1.18 !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-copy h2 {
         font-size: clamp(.96rem, 3vw, 1.2rem) !important;
         line-height: 1.13 !important;
@@ -2755,6 +3003,9 @@ body.single-journal .lunara-review-single-content {
 }
 
 @media (max-width: 520px) {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        grid-template-columns: minmax(84px, 102px) minmax(0, 1fr) !important;
+    }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
         max-height: 154px !important;
@@ -2778,11 +3029,11 @@ body.lunara-oscars-portal-page .lunara-home-section-title,
 body.lunara-oscars-portal-page .aat-hub-section h2,
 body.lunara-oscars-portal-page .aat-ceremony-marquee h2 {
     color: #f7f4ec !important;
-    font-family:var(--lunara-font-display) !important;
-    font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
-    font-weight:600 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: clamp(2rem, 3.4vw, 4.15rem) !important;
+    font-weight: 800 !important;
     letter-spacing: 0 !important;
-    line-height:1.18 !important;
+    line-height: 1.03 !important;
     text-wrap: balance !important;
 }
 
@@ -2792,7 +3043,7 @@ body.lunara-oscars-portal-page .aat-subtitle,
 body.lunara-oscars-portal-page .aat-database-landing-note {
     color: rgba(249, 250, 251, .91) !important;
     font-size: clamp(1.04rem, 1.18vw, 1.2rem) !important;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
     line-height: 1.62 !important;
     max-width: 64ch !important;
     text-wrap: pretty !important;
@@ -2803,11 +3054,11 @@ body.lunara-oscars-portal-page .aat-hub-kicker,
 body.lunara-oscars-portal-page .aat-hub-metric-label,
 body.lunara-oscars-portal-page .aat-stat-label {
     color: #f1cc6e !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     font-size: .82rem !important;
-    font-weight: 600 !important;
+    font-weight: 800 !important;
     letter-spacing: 0 !important;
-    text-transform: none !important;
+    text-transform: uppercase !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-container.aat-database-landing-shell,
@@ -2824,10 +3075,12 @@ body.lunara-oscars-portal-page .aat-header.aat-database-landing-header {
     gap: clamp(20px, 3vw, 42px) !important;
     min-height: 300px !important;
     padding: clamp(26px, 4vw, 58px) !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    border: 1px solid rgba(241, 204, 110, .26) !important;
+    border-radius: 8px !important;
+    background:
+        linear-gradient(135deg, rgba(2, 9, 19, .96), rgba(8, 24, 38, .92) 52%, rgba(16, 22, 32, .98)),
+        linear-gradient(90deg, rgba(241, 204, 110, .12), transparent 58%) !important;
+    box-shadow: 0 32px 90px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
     overflow: hidden !important;
     position: relative !important;
     text-align: left !important;
@@ -2835,7 +3088,12 @@ body.lunara-oscars-portal-page .aat-header.aat-database-landing-header {
 
 body.lunara-oscars-portal-page .aat-header.aat-ledger-command::after,
 body.lunara-oscars-portal-page .aat-header.aat-database-landing-header::after {
-    content: none !important;
+    content: "" !important;
+    position: absolute !important;
+    inset: auto 28px 28px auto !important;
+    width: min(34vw, 440px) !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(241, 204, 110, .66)) !important;
 }
 
 body.lunara-oscars-portal-page .aat-ledger-command-symbol,
@@ -2854,13 +3112,13 @@ body.lunara-oscars-portal-page .aat-oscar-icon {
 body.lunara-oscars-portal-page .aat-ledger-command-copy h2,
 body.lunara-oscars-portal-page .aat-database-landing-header h2 {
     color: #ffffff !important;
-    font-family: var(--lunara-font-display, "Tiempos Headline", Georgia, serif) !important;
-    font-size: var(--lunara-type-section, clamp(1.7rem, 3vw, 2.3rem)) !important;
-    font-weight: 600 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: clamp(2.25rem, 4.8vw, 5.65rem) !important;
+    font-weight: 800 !important;
     letter-spacing: 0 !important;
-    line-height: 1.18 !important;
+    line-height: .98 !important;
     margin: 0 0 18px !important;
-    max-width: 24ch !important;
+    max-width: 10.5ch !important;
     text-wrap: balance !important;
 }
 
@@ -2878,10 +3136,10 @@ body.lunara-oscars-portal-page .aat-database-landing-actions .aat-btn {
     min-height: 76px !important;
     padding: 16px 18px !important;
     border: 1px solid rgba(241, 204, 110, .32) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: rgba(255, 255, 255, .055) !important;
     color: #fff7df !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     text-decoration: none !important;
     transition: background .18s ease, border-color .18s ease, transform .18s ease !important;
 }
@@ -2922,17 +3180,17 @@ body.lunara-oscars-portal-page .aat-stat {
     gap: 12px !important;
     min-height: 150px !important;
     padding: 18px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    border: 1px solid rgba(241, 204, 110, .22) !important;
+    border-radius: 8px !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025)) !important;
     color: #f7f4ec !important;
-    box-shadow: none !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05) !important;
 }
 
 body.lunara-oscars-portal-page .aat-hub-metric-value,
 body.lunara-oscars-portal-page .aat-stat-number {
     color: #fff !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     font-size: clamp(1.65rem, 2.8vw, 3.1rem) !important;
     font-weight: 800 !important;
     letter-spacing: 0 !important;
@@ -2953,7 +3211,7 @@ body.lunara-oscars-portal-page .aat-ceremony-marquee {
     gap: clamp(18px, 3vw, 38px) !important;
     padding: clamp(24px, 4vw, 46px) !important;
     border: 1px solid rgba(241, 204, 110, .22) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     background: linear-gradient(135deg, rgba(5, 14, 25, .92), rgba(8, 19, 29, .72)) !important;
 }
 
@@ -2968,7 +3226,7 @@ body.lunara-oscars-portal-page .aat-hub-chip-rich {
     gap: 7px !important;
     min-height: 86px !important;
     padding: 17px 18px !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     border: 1px solid rgba(241, 204, 110, .36) !important;
     background-color: rgba(255, 255, 255, .065) !important;
     color: #fff7df !important;
@@ -2998,11 +3256,11 @@ body.lunara-oscars-portal-page .aat-filmography-grid.aat-hub-film-grid {
 body.lunara-oscars-portal-page .aat-ceremony-gallery-section .aat-filmography-card {
     grid-column: span 2 !important;
     min-height: clamp(168px, 14vw, 220px) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     overflow: hidden !important;
-    border: 0 !important;
+    border: 1px solid rgba(241, 204, 110, .22) !important;
     background-color: rgba(4, 13, 23, .9) !important;
-    box-shadow: none !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .25) !important;
 }
 
 body.lunara-oscars-portal-page .aat-ceremony-gallery-section .aat-filmography-card:nth-child(1),
@@ -3051,7 +3309,7 @@ body.lunara-oscars-portal-page .aat-filmography-trail {
 
 body.lunara-oscars-portal-page .aat-filmography-title {
     color: #ffe28b !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     font-size: clamp(1.08rem, 1.65vw, 1.55rem) !important;
     font-weight: 800 !important;
     letter-spacing: 0 !important;
@@ -3081,9 +3339,9 @@ body.lunara-oscars-portal-page .aat-winner-circle-card {
     gap: 18px !important;
     min-height: 156px !important;
     padding: 14px !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    border: 1px solid rgba(241, 204, 110, .24) !important;
+    border-radius: 8px !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025)) !important;
     color: #f7f4ec !important;
 }
 
@@ -3092,7 +3350,7 @@ body.lunara-oscars-portal-page .aat-winner-circle-media {
     max-width: 140px !important;
     min-height: 126px !important;
     aspect-ratio: 1 / 1.18 !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     overflow: hidden !important;
 }
 
@@ -3107,7 +3365,7 @@ body.lunara-oscars-portal-page .aat-winner-circle-photo {
 body.lunara-oscars-portal-page .aat-winner-circle-title,
 body.lunara-oscars-portal-page .aat-winner-circle-title a {
     color: #ffe28b !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
     font-size: clamp(1.04rem, 1.35vw, 1.32rem) !important;
     font-weight: 800 !important;
     letter-spacing: 0 !important;
@@ -3121,7 +3379,7 @@ body.lunara-oscars-portal-page .aat-winner-circle-meta a {
     color: rgba(255, 255, 255, .82) !important;
     font-size: .92rem !important;
     font-weight: 600 !important;
-    line-height: 1.4 !important;
+    line-height: 1.35 !important;
     text-decoration: none !important;
 }
 
@@ -3134,9 +3392,9 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-facts-grid {
 body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card {
     min-height: 178px !important;
     padding: 20px !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     border-color: rgba(241, 204, 110, .24) !important;
-    background: transparent !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .022)) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-fact-value {
@@ -3159,9 +3417,9 @@ body.lunara-oscars-portal-page .lunara-ceremony-winners-grid {
 }
 
 body.lunara-oscars-portal-page .lunara-ceremony-winner-card {
-    border-radius: 0 !important;
-    border: 0 !important;
-    background: transparent !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(241, 204, 110, .24) !important;
+    background: rgba(255, 255, 255, .045) !important;
     overflow: hidden !important;
 }
 
@@ -3256,8 +3514,8 @@ body.lunara-oscars-portal-page a:not(.ct-menu-link):not(.lunara-button):not(.lun
 
     body.lunara-oscars-portal-page .aat-ledger-command-copy h2,
     body.lunara-oscars-portal-page .aat-database-landing-header h2 {
-        font-size: var(--lunara-type-section, clamp(1.7rem, 3vw, 2.3rem)) !important;
-        max-width: 24ch !important;
+        font-size: clamp(2.15rem, 12vw, 3.4rem) !important;
+        max-width: 9.5ch !important;
     }
 
     body.lunara-oscars-portal-page .aat-ceremony-gallery-section .aat-filmography-link,
@@ -3358,7 +3616,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-
     max-width: 136px !important;
     min-height: 126px !important;
     aspect-ratio: 1 / 1.18 !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-winner-circle-section .aat-winner-circle-title {
@@ -3427,7 +3685,7 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-c
     align-content: end !important;
     min-height: 178px !important;
     padding: 18px !important;
-    background: transparent !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025)) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-ceremony-winner-card:not(.has-poster) .lunara-ceremony-winner-copy {
@@ -3506,8 +3764,8 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-o
     color: rgba(244, 239, 227, .74) !important;
     font-size: .82rem !important;
     font-weight: 700 !important;
-    letter-spacing: 0 !important;
-    line-height: 1.6 !important;
+    letter-spacing: .05em !important;
+    line-height: 1.25 !important;
     text-transform: uppercase !important;
 }
 
@@ -3525,10 +3783,10 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-p
     min-width: 40px !important;
     padding: 0 !important;
     border: 1px solid rgba(237, 210, 150, .44) !important;
-    border-radius: 0 !important;
+    border-radius: 999px !important;
     background: rgba(7, 15, 26, .72) !important;
     color: #ffe28b !important;
-    font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
+    font-family: Georgia, serif !important;
     font-size: 1rem !important;
     line-height: 1 !important;
     cursor: pointer !important;
@@ -3578,7 +3836,7 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-o
     max-width: calc((100% - 36px) / 3) !important;
     min-width: 0 !important;
     min-height: clamp(260px, 26vw, 332px) !important;
-    border-radius: 0 !important;
+    border-radius: 8px !important;
     scroll-snap-align: start !important;
     scroll-snap-stop: always !important;
     transition: border-color .2s ease, transform .2s ease, background .2s ease !important;
@@ -3588,8 +3846,9 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-o
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-oscars-winner-carousel-card:focus-within {
     border-color: rgba(255, 226, 139, .5) !important;
     background:
-        transparent !important;
-    transform: none !important;
+        radial-gradient(circle at top right, rgba(241, 204, 110, .14), transparent 42%),
+        linear-gradient(180deg, rgba(18, 32, 49, .98), rgba(7, 15, 26, .98)) !important;
+    transform: translateY(-2px) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-oscars-winner-carousel-card .lunara-ceremony-winner-media-link,
@@ -3692,8 +3951,8 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-c
     body.home .lunara-home-section-title {
         width: 100% !important;
         max-width: 280px !important;
-        font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;
-        line-height:1.18 !important;
+        font-size: clamp(1.88rem, 8.6vw, 2.22rem) !important;
+        line-height: 1.07 !important;
         letter-spacing: 0 !important;
         overflow-wrap: anywhere !important;
         text-wrap: balance !important;
@@ -3761,13 +4020,20 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-c
 
     body.home .lunara-home-slot-dispatch,
     body.home .lunara-dispatches-section {
-        background: transparent !important;
+        background:
+            radial-gradient(circle at 14% 2%, rgba(224, 196, 129, 0.055), transparent 30%),
+            linear-gradient(180deg, #081421 0%, #07111d 54%, #050d18 100%) !important;
+        background-color: #0a1520 !important;
+        background-blend-mode: normal !important;
         color: #FAFBFC !important;
     }
 
     body.home .lunara-home-slot-dispatch > .lunara-home-section-head,
     body.home .lunara-dispatches-section > .lunara-home-section-head {
-        background: transparent !important;
+        background:
+            radial-gradient(circle at 0% 0%, rgba(224, 196, 129, 0.045), transparent 42%),
+            linear-gradient(180deg, #081421 0%, #07111d 100%) !important;
+        background-color: #07111d !important;
     }
 
     body.home .lunara-home-slot-dispatch::before,
@@ -3864,19 +4130,11 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-c
     }
 
     body.home .lunara-journal-home-card-media:has(.lunara-journal-home-card-placeholder),
-body.home .lunara-latest-reviews-section .lunara-review-grid-poster-wrap:has(.lunara-review-grid-poster-placeholder),
-body.home .lunara-oscar-pick-card-media:has(.lunara-oscar-pick-card-placeholder),
-body.home .lunara-oscar-fact-card:not(.has-poster) .lunara-oscar-fact-card-poster {
-        display: none !important;
-        aspect-ratio: auto !important;
-        min-height: 0 !important;
-        max-height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
+    body.home .lunara-latest-reviews-section .lunara-review-grid-poster-wrap:has(.lunara-review-grid-poster-placeholder),
+    body.home .lunara-oscar-pick-card-media:has(.lunara-oscar-pick-card-placeholder),
+    body.home .lunara-oscar-fact-card:not(.has-poster) .lunara-oscar-fact-card-poster,
     body.home .lunara-ledger-story-poster:not(:has(img)):not(:has(.aat-entity-poster)),
-body.home .lunara-lore-card-poster:not(:has(img)):not(:has(.aat-entity-poster)) {
+    body.home .lunara-lore-card-poster:not(:has(img)):not(:has(.aat-entity-poster)) {
         display: none !important;
         aspect-ratio: auto !important;
         min-height: 0 !important;
@@ -3893,26 +4151,17 @@ body.home .lunara-lore-card-poster:not(:has(img)):not(:has(.aat-entity-poster)) 
     }
 
     body.home .lunara-latest-reviews-section .lunara-review-grid-copy,
-body.home .lunara-journal-home-card-copy,
-body.home .lunara-oscar-fact-card-text,
-body.home .lunara-ledger-story-copy,
-body.home .lunara-lore-card .lunara-ledger-story-copy {
+    body.home .lunara-journal-home-card-copy,
+    body.home .lunara-oscar-pick-card-copy,
+    body.home .lunara-oscar-fact-card-text,
+    body.home .lunara-ledger-story-copy,
+    body.home .lunara-lore-card .lunara-ledger-story-copy {
         display: grid !important;
         gap: 12px !important;
         grid-template-rows: none !important;
         min-height: 0 !important;
         height: auto !important;
         padding: 18px !important;
-        align-content: start !important;
-    }
-
-    body.home .lunara-oscar-pick-card-copy {
-        display: grid !important;
-        gap: 12px !important;
-        grid-template-rows: none !important;
-        min-height: 0 !important;
-        height: auto !important;
-        padding: 18px 4px 20px !important;
         align-content: start !important;
     }
 
@@ -3933,25 +4182,12 @@ body.home .lunara-lore-card .lunara-ledger-story-copy {
     }
 
     body.home .lunara-latest-reviews-section .lunara-review-grid-excerpt,
-body.home .lunara-latest-reviews-section .lunara-review-grid-quote,
-body.home .lunara-journal-home-card-excerpt,
-body.home .lunara-oscar-fact-card-body,
-body.home .lunara-ledger-story-summary,
-body.home .lunara-ledger-story-categories {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        min-height: 0 !important;
-        max-height: none !important;
-        overflow: visible !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
-        word-break: normal !important;
-        -webkit-line-clamp: unset !important;
-        -webkit-box-orient: initial !important;
-    }
-
-    body.home .lunara-oscar-pick-card-meta {
+    body.home .lunara-latest-reviews-section .lunara-review-grid-quote,
+    body.home .lunara-journal-home-card-excerpt,
+    body.home .lunara-oscar-pick-card-meta,
+    body.home .lunara-oscar-fact-card-body,
+    body.home .lunara-ledger-story-summary,
+    body.home .lunara-ledger-story-categories {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -4005,6 +4241,7 @@ body.home .lunara-ledger-story-categories {
     body.post-type-archive-review .lunara-editorial-archive-page,
     body.lunara-oscars-portal-page .lunara-oscars-portal {
         background:
+            radial-gradient(circle at 10% 0%, rgba(224, 196, 129, 0.045), transparent 30%),
             linear-gradient(180deg, #081421 0%, #07111d 54%, #050d18 100%) !important;
         background-color: #07111d !important;
         width: 100% !important;
@@ -4032,10 +4269,12 @@ body.home .lunara-ledger-story-categories {
         box-sizing: border-box !important;
     }
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-copy,
     body.lunara-oscars-portal-page .lunara-oscars-portal-actions,
-body.lunara-oscars-portal-page .lunara-oscars-portal-stat-grid,
-body.lunara-oscars-portal-page .lunara-home-section-header,
-body.lunara-oscars-portal-page .lunara-home-section-head {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-stat-grid,
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card,
+    body.lunara-oscars-portal-page .lunara-home-section-header,
+    body.lunara-oscars-portal-page .lunara-home-section-head {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
@@ -4044,22 +4283,12 @@ body.lunara-oscars-portal-page .lunara-home-section-head {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-copy,
-body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
-        box-sizing: border-box !important;
-        overflow-wrap: anywhere !important;
-    }
-
     body.lunara-oscars-portal-page .lunara-oscars-portal-actions,
-body.lunara-oscars-portal-page .lunara-oscars-portal-stat-grid,
-body.lunara-oscars-portal-page .lunara-home-section-header,
-body.lunara-oscars-portal-page .lunara-home-section-head {
+    body.lunara-oscars-portal-page .lunara-oscars-portal-stat-grid,
+    body.lunara-oscars-portal-page .lunara-home-section-header,
+    body.lunara-oscars-portal-page .lunara-home-section-head {
         width: min(100%, 320px) !important;
         max-width: 320px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    body.lunara-oscars-portal-page .lunara-oscars-portal-copy {
         margin-left: auto !important;
         margin-right: auto !important;
     }
@@ -4125,6 +4354,7 @@ body.lunara-oscars-portal-page .lunara-home-section-head {
 
     body.post-type-archive-review .lunara-archive-hero {
         background:
+            radial-gradient(circle at 0% 0%, rgba(224, 196, 129, 0.04), transparent 42%),
             linear-gradient(180deg, #081421 0%, #07111d 100%) !important;
         background-color: #07111d !important;
         border: 0 !important;
@@ -4195,6 +4425,11 @@ body.lunara-oscars-portal-page .lunara-home-section-head {
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 14px !important;
+        width: min(100%, 320px) !important;
+        max-width: 320px !important;
         margin-left: auto !important;
         margin-right: auto !important;
         overflow: hidden !important;
@@ -4273,9 +4508,17 @@ body.lunara-oscars-portal-page .lunara-home-section-head {
        compact rules above at equal specificity. Turns the thumbnail-sized,
        text-first portal cards into poster-forward cards with real motion. */
 
+    body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
+align-content: start !important;
+gap: 12px !important;
+grid-template-columns: minmax(0, 1fr) !important;
+max-width: 344px !important;
+padding: 14px 14px 18px !important;
+    }
+
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-poster {
 aspect-ratio: 2 / 3 !important;
-border-radius: 0 !important;
+border-radius: 14px !important;
 max-height: none !important;
 width: 100% !important;
     }
@@ -4410,7 +4653,7 @@ padding: 13px 15px 16px !important;
     }
 
     body.lunara-oscars-portal-page .lunara-ceremony-winner-category {
-font-size: 0.8125rem !important;
+font-size: .62rem !important;
     }
 
     body.lunara-oscars-portal-page .lunara-ceremony-winner-name {
@@ -4434,7 +4677,7 @@ position: relative !important;
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-link-card.has-backdrop::before,
     body.lunara-oscars-portal-page .lunara-oscars-research-card.has-backdrop::before {
-background: transparent !important;
+background: linear-gradient(180deg, rgba(7, 16, 27, .12), rgba(7, 16, 27, .5) 52%, rgba(4, 11, 19, .9)) !important;
 content: '' !important;
 inset: 0 !important;
 position: absolute !important;
@@ -4451,14 +4694,11 @@ font-size: clamp(1.45rem, 2.4vw, 1.85rem) !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-link-card,
-body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-card,
-body.lunara-oscars-portal-page .lunara-oscars-portal-title-card,
-body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card,
-body.lunara-oscars-portal-page .lunara-oscars-research-card,
-body.lunara-oscars-portal-page .lunara-ceremony-winner-card {
-transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease !important;
-    }
-
+    body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-card,
+    body.lunara-oscars-portal-page .lunara-oscars-portal-title-card,
+    body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card,
+    body.lunara-oscars-portal-page .lunara-oscars-research-card,
+    body.lunara-oscars-portal-page .lunara-ceremony-winner-card,
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
 transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease !important;
     }
@@ -4481,8 +4721,8 @@ transition: transform .65s cubic-bezier(.2, .7, .2, 1) !important;
     body.lunara-oscars-portal-page .lunara-oscars-portal-fact-card:hover,
     body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card:hover {
 border-color: rgba(225, 197, 126, .55) !important;
-box-shadow: none !important;
-transform: none !important;
+box-shadow: 0 18px 40px rgba(0, 0, 0, .35) !important;
+transform: translateY(-4px) !important;
     }
 
     body.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-card:hover .lunara-oscars-spotlight-poster img,
@@ -4637,7 +4877,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-ceremony-galle
     min-height: 0 !important;
     padding: 0 !important;
     width: 100% !important;
-    border-radius: 0 !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
 
@@ -4674,7 +4914,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-ceremony-galle
     max-width: none !important;
     margin: 0 !important;
     padding: 12px 12px 2px !important;
-    font-size: clamp(.92rem, .38vw + 0.8125rem, 1.18rem) !important;
+    font-size: clamp(.92rem, .38vw + .68rem, 1.18rem) !important;
     line-height: 1.25 !important;
     color: #fff7df !important;
 }
@@ -4686,7 +4926,7 @@ body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-ceremony-galle
     width: auto !important;
     margin: 0 !important;
     padding: 0 12px 12px !important;
-    font-size: clamp(0.8125rem, .28vw + 0.8125rem, .98rem) !important;
+    font-size: clamp(.78rem, .28vw + .56rem, .98rem) !important;
     color: rgba(255, 247, 223, .68) !important;
 }
 
@@ -4704,11 +4944,11 @@ body.lunara-oscars-portal-page .lunara-home-section-kicker,
 body.lunara-oscars-portal-page .aat-hub-kicker,
 body.lunara-oscars-portal-page .aat-hub-metric-label,
 body.lunara-oscars-portal-page .aat-stat-label {
-    font-size: clamp(0.8125rem, .3vw + 0.8125rem, 1rem) !important;
+    font-size: clamp(.78rem, .3vw + .5rem, 1rem) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-research-shell .aat-hub-metric-copy {
-    font-size: clamp(.86rem, .3vw + 0.8125rem, 1.05rem) !important;
+    font-size: clamp(.86rem, .3vw + .62rem, 1.05rem) !important;
 }
 
 @media (max-width: 1120px) {
@@ -4780,7 +5020,7 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-link-card.has-backdrop {
 
 body.lunara-oscars-portal-page .lunara-oscars-portal-link-card.has-backdrop:hover {
     background-size: 112% auto !important;
-    transform: none;
+    transform: translateY(-3px);
 }
 
 @media (prefers-reduced-motion: reduce) {

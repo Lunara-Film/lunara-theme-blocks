@@ -47,7 +47,7 @@ $authority_end = strpos( $frontend_source, "add_action( 'wp_head', 'lunara_outpu
 $opening_assert( false !== $authority_start && false !== $authority_end, 'The actual dynamic authority CSS emitter is present.' );
 eval( substr( $frontend_source, $authority_start, $authority_end - $authority_start ) );
 $opening_defaults = lunara_reviews_archive_studio_defaults();
-$retired_labels = array( 'debrief_kicker', 'debrief_depth', 'debrief_visible', 'debrief_latest', 'debrief_order', 'hero_action_run', 'hero_action_oscars', 'hero_action_journal', 'support_title', 'support_kicker', 'run_kicker' );
+$retired_labels = array( 'debrief_kicker', 'debrief_depth', 'debrief_visible', 'debrief_latest', 'debrief_order', 'hero_action_run', 'hero_action_oscars', 'hero_action_journal' );
 foreach ( $retired_labels as $key ) { $opening_defaults['labels'][ $key ] = 'Retired saved ' . $key; }
 $_GET = array();
 $lunara_test_is_review_route = true;
@@ -86,10 +86,6 @@ foreach ( array( 'normal', 'empty', 'director', 'hero-off', 'long-copy' ) as $sc
 	);
 	$html = lunara_render_review_archive_shell( $args );
 	$assert_archive_landmark( $html, 'Reviews ' . $scenario );
-    $merged_dom = new DOMDocument(); $previous = libxml_use_internal_errors( true ); $merged_dom->loadHTML( $html ); libxml_clear_errors(); libxml_use_internal_errors( $previous );
-    $merged_xpath = new DOMXPath( $merged_dom );
-    $opening_assert( 0 === $merged_xpath->query( '//*[@data-lunara-review-dynamic-rail]' )->length, $scenario . ': the retired companion carousel is absent.' );
-    $opening_assert( ( 'empty' === $scenario ? 0 : count( $posts ) - 1 ) === $merged_xpath->query( '//*[@id="lunara-review-archive-run"]//*[contains(concat(" ",normalize-space(@class)," ")," lunara-review-grid-card ")]' )->length, $scenario . ': every non-lead review appears exactly once in the single archive.' );
 	$opening_assert( ( 'director' !== $scenario ) === ( false !== strpos( $html, 'lunara-review-archive-year-filter' ) ), $scenario . ': published years provide a usable filter outside director routes.' );
 	$opening_assert( 1 === preg_match_all( '/<h1\b/i', $html ), $scenario . ': exactly one H1 survives.' );
 	foreach ( array( 'Reviews Command', 'Archive Depth', 'Visible File', 'Latest Update', 'Current Order', 'lunara-review-archive-debrief', 'lunara-review-archive-hero-actions' ) as $removed ) {
@@ -112,25 +108,6 @@ foreach ( array( 'normal', 'empty', 'director', 'hero-off', 'long-copy' ) as $sc
 	$opening_assert( ! empty( $authority_css[1] ), $scenario . ': actual saved geometry variables accompany renderer markup.' );
 	$opening_fixtures[ $scenario ] = array( 'html' => $html, 'authorityCss' => $authority_css[1], 'bodyClass' => 'director' === $scenario ? 'tax-lunara_director' : 'post-type-archive-review' );
 }
-
-// Cross the former four-companion boundary and verify the actual renderer's
-// record membership and order, not just its section labels.
-$merge_posts = array( new WP_Post( get_post( 12 ) ) );
-for ( $id = 201; $id <= 209; ++$id ) {
-    $lunara_test_posts[ $id ] = clone $lunara_test_posts[11];
-    $lunara_test_posts[ $id ]->ID = $id;
-    $lunara_test_posts[ $id ]->post_title = 'Archive film ' . $id;
-    $merge_posts[] = new WP_Post( $lunara_test_posts[ $id ] );
-}
-$merge_html = lunara_render_review_archive_shell( array( 'posts' => $merge_posts ) );
-$merge_dom = new DOMDocument(); $previous = libxml_use_internal_errors( true ); $merge_dom->loadHTML( $merge_html ); libxml_clear_errors(); libxml_use_internal_errors( $previous );
-$merge_xpath = new DOMXPath( $merge_dom );
-$merge_titles = array();
-foreach ( $merge_xpath->query( '//*[@id="lunara-review-archive-run"]//*[contains(concat(" ",normalize-space(@class)," ")," lunara-review-grid-title ")]' ) as $title ) {
-    $merge_titles[] = trim( $title->textContent );
-}
-$opening_assert( array_map( static function ( $id ) { return 'Archive film ' . $id; }, range(201,209) ) === $merge_titles, 'All nine non-lead films remain once, in order, across the retired companion boundary.' );
-foreach ( range(201,209) as $id ) { unset( $lunara_test_posts[ $id ] ); }
 
 // Execute the actual Classic labels loop, then submit only the labels it
 // exposes. Omitted retired keys must retain fresh canonical values, not reset.

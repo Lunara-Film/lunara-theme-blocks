@@ -1,4 +1,3 @@
-const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -21,32 +20,11 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
         return route.fulfill({ contentType: type, body: fs.readFileSync(file) });
     });
     await page.goto('https://carousel.test/');
-    await assertSquareSurfaces(page, "Home carousel fixture");
     return page;
 }
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
-        // Use the actual emitted head seed while only the component stylesheet
-        // is withheld. Both stages must keep desktop controls compact and
-        // centered; phone controls must remain in document flow.
-        const deferredHtml = rendered.stdout.replace(/<link\b[^>]*href="\/assets\/css\/lunara-home-carousels\.css"[^>]*>/, '');
-        for (const width of [390,900,901,1440]) {
-            const page = await fixture(browser, { viewport:{width,height:1000}, reducedMotion:'no-preference' }, deferredHtml);
-            await page.waitForSelector('.lunara-home-curated-hero.is-initialized');
-            const toggleGeometry = () => page.locator('.lunara-home-curated-hero').evaluate(root=>{
-                const toggle=root.querySelector('.lunara-home-carousel-toggle'),r=root.getBoundingClientRect(),b=toggle.getBoundingClientRect(),track=root.querySelector('.splide__track').getBoundingClientRect();
-                return {position:getComputedStyle(toggle).position,width:b.width,height:b.height,axisDelta:Math.abs(b.left+b.width/2-r.left-r.width/2),bottomGap:r.bottom-b.bottom,top:b.top,trackBottom:track.bottom};
-            });
-            const initial = await toggleGeometry();
-            if(width>900)assert(initial.position==='absolute'&&initial.axisDelta<=1&&Math.abs(initial.bottomGap-64)<=1&&initial.width>0&&initial.width<160, `${width}px synchronous seed centers a compact out-of-flow toggle: ${JSON.stringify(initial)}`);
-            else assert(initial.position==='static',`${width}px desktop seed must not position the phone/tablet toggle: ${JSON.stringify(initial)}`);
-            await page.addStyleTag({url:'https://carousel.test/assets/css/lunara-home-carousels.css'});
-            const final = await toggleGeometry();
-            if(width>900)assert(final.position==='absolute'&&final.axisDelta<=1&&Math.abs(final.bottomGap-64)<=1&&final.width>=44&&final.width<160&&final.height>=44,`${width}px stylesheet delivery preserves compact centered desktop controls: ${JSON.stringify(final)}`);
-            else assert(final.position==='static'&&final.axisDelta<=1&&final.top>=final.trackBottom&&final.width>=44&&final.height>=44,`${width}px stylesheet delivery keeps centered controls in flow below the story: ${JSON.stringify(final)}`);
-            await page.close();
-        }
         for (const [width, columns] of [[1440,3], [820,2], [390,1]]) {
             const page = await fixture(browser, { viewport: { width, height: 1000 } });
             await page.waitForSelector('[data-lunara-journal-carousel].is-initialized');
@@ -58,21 +36,8 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
                 titles: Array.from(document.querySelectorAll('[data-lunara-journal-carousel] .lunara-home-news-copy h3')).map(el => el.scrollWidth <= el.clientWidth + 1)
             }));
             assert(metrics.visible === columns, `${width}px should display ${columns} news cards: ${JSON.stringify(metrics)}`);
-            const sectionAxes = await page.locator('.lunara-home-section-head').evaluateAll(heads => heads.flatMap(head => {
-                const axis = head.getBoundingClientRect().left + head.getBoundingClientRect().width / 2;
-                return [...head.querySelectorAll('.lunara-home-section-title,.lunara-section-link')].map(node => {
-                    const box = node.getBoundingClientRect(); return { text:node.textContent.trim(), delta:Math.abs(box.left+box.width/2-axis) };
-                });
-            }));
-            assert(sectionAxes.length > 0 && sectionAxes.every(item=>item.delta<=1), `${width}px actual carousel section titles/actions share the centered header axis: ${JSON.stringify(sectionAxes)}`);
             assert(metrics.scroll <= metrics.width + 1 && metrics.titles.every(Boolean), `${width}px must not overflow or clip long headlines.`);
             assert(metrics.cards.every(card => Math.abs(card.height - metrics.cards[0].height) < 2), `${width}px news cards must have consistent heights.`);
-            const centered = await page.evaluate(() => {
-                const hero=document.querySelector('.lunara-home-curated-hero .is-active'),title=hero.querySelector('.lunara-cinematic-hero-title'),a=hero.getBoundingClientRect(),b=title.getBoundingClientRect();
-                const journal=document.querySelector('[data-lunara-journal-carousel]'),p=journal.querySelector('.splide__pagination'),r=journal.getBoundingClientRect(),q=p.getBoundingClientRect();
-                return {hero:Math.abs(a.x+a.width/2-b.x-b.width/2),titleAlign:getComputedStyle(title).textAlign,pagination:Math.abs(r.x+r.width/2-q.x-q.width/2)};
-            });
-            assert(centered.hero<=1&&centered.titleAlign==='center'&&centered.pagination<=1,`${width}px hero title and Journal navigation must share their composition axis: ${JSON.stringify(centered)}`);
             const arrowDirection = await page.evaluate(() => ['.lunara-hero-arrow-prev svg','.lunara-hero-arrow-next svg'].map(selector => {
                 const transform = getComputedStyle(document.querySelector(selector)).transform;
                 const matrix = transform === 'none' ? new DOMMatrix() : new DOMMatrix(transform);
@@ -90,40 +55,6 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             await page.keyboard.press('ArrowRight');
             await page.waitForFunction(() => document.querySelector('[data-lunara-journal-carousel] .splide__slide:nth-child(3)').classList.contains('is-active'));
             assert(await news.locator('.splide__slide:nth-child(3)').isVisible(), 'Focused keyboard navigation must work.');
-            if ([390, 1440].includes(width)) {
-                for (const selector of ['.lunara-home-curated-hero', '[data-lunara-journal-carousel]']) {
-                    const carousel = page.locator(selector);
-                    const pause = carousel.getByRole('button', { name: 'Pause autoplay', exact: true });
-                    if (await pause.count()) await pause.click();
-                    const seen = new Set();
-                    for (let step = 0; step < 6; step++) {
-                        await carousel.locator('.splide__list').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))));
-                        const items = await carousel.evaluate(root => {
-                            const clip = root.querySelector('.splide__track').getBoundingClientRect();
-                            return [...root.querySelectorAll('.splide__slide')].map((slide, index) => {
-                                if (!slide.classList.contains('is-visible')) return null;
-                                const box = slide.getBoundingClientRect();
-                                const copy = slide.querySelector('.lunara-cinematic-hero-content,.lunara-home-news-copy') || slide;
-                                const readable = [...copy.querySelectorAll('h1,h2,h3,p')].filter(node => node.getBoundingClientRect().height);
-                                return { index, bounded: box.left >= clip.left - 2 && box.right <= clip.right + 2,
-                                    copyFits: readable.every(node => node.scrollWidth <= node.clientWidth + 1 && node.scrollHeight <= node.clientHeight + 2),
-                                    overflow: readable.filter(node => node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 2).map(node => ({tag:node.tagName,width:node.clientWidth,scrollWidth:node.scrollWidth,height:node.clientHeight,scrollHeight:node.scrollHeight})),
-                                    destination: slide.querySelector('a[href]')?.getAttribute('href'),
-                                    title: slide.querySelector('h1,h2,h3')?.textContent.trim() };
-                            }).filter(Boolean);
-                        });
-                        for (const item of items) {
-                            seen.add(item.index);
-                            assert(item.bounded && item.copyFits && item.destination && item.title, `${width}px ${selector} item ${item.index + 1} stays readable when active: ${JSON.stringify(item)}`);
-                        }
-                        const active = await carousel.locator('.splide__slide.is-active').getAttribute('id');
-                        // Splide relabels the rewind arrow "Go to first slide" at the end.
-                        await carousel.locator('button.splide__arrow--next').click();
-                        await page.waitForFunction(({selector, active}) => document.querySelector(selector + ' .splide__slide.is-active').id !== active, {selector, active});
-                    }
-                    assert(seen.size === 6, `${width}px ${selector}: all six published items must be reachable, including the imageless item.`);
-                }
-            }
             await page.close();
         }
         // Include the real native-fallback wrapper and header offset: both supplied
@@ -216,22 +147,6 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
         const singleReviews=await fixture(browser,{viewport:{width:390,height:1000}},singleReviewsHtml);
         assert(await singleReviews.locator('[data-lunara-reviews-carousel] article:visible').count()===1&&await singleReviews.locator('[data-lunara-reviews-carousel] button:visible').count()===0,'One Review is a static readable card without navigation.');
         await singleReviews.close();
-        for (const [count, javaScriptEnabled] of [[1,true],[2,true],[5,false]]) {
-            const partialHtml = rendered.stdout.replace(/<section\b[^>]*lunara-home-curated-journal[\s\S]*?<\/section>/, section => {
-                let seen = 0;
-                return section.replace(/<li\b[\s\S]*?<\/li>/g, slide => seen++ < count ? slide : '');
-            });
-            const partial = await fixture(browser, { viewport:{width:1440,height:1000}, javaScriptEnabled }, partialHtml);
-            const balance = await partial.evaluate(() => {
-                const root = document.querySelector('[data-lunara-journal-carousel]');
-                const bounds = root.getBoundingClientRect();
-                const cards = [...root.querySelectorAll('.splide__slide')].map(node => node.getBoundingClientRect());
-                const last = cards.at(-1), row = cards.filter(box => Math.abs(box.top-last.top)<1);
-                return { count:cards.length, delta:Math.abs((row[0].left+last.right)/2-(bounds.left+bounds.right)/2), overflow:document.documentElement.scrollWidth-innerWidth };
-            });
-            assert(balance.count===count && balance.delta<=1 && balance.overflow<=1, `Partial Journal rows remain centered with all ${count} stories (${javaScriptEnabled?'runtime':'no JavaScript'}): ${JSON.stringify(balance)}`);
-            await partial.close();
-        }
         const reduced = await fixture(browser, { viewport: { width: 390, height: 1000 }, reducedMotion: 'reduce' });
         assert(await reduced.locator('.splide__toggle:visible').count() === 0, 'Reduced motion must disable automatic playback controls.');
         assert(await reduced.locator('.lunara-home-curated-hero .is-active').count() >= 1, 'Reduced motion must leave readable hero content.');

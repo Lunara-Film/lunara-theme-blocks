@@ -13,8 +13,8 @@ get_header();
     <?php if ( have_posts() ) : ?>
         <section class="lunara-home-section lunara-archive-hero">
             <div class="lunara-container">
-                <h1 class="lunara-archive-hero-title"><?php esc_html_e( 'Archive', 'lunara-film' ); ?></h1>
                 <p class="lunara-archive-hero-kicker"><?php esc_html_e( 'Archive', 'lunara-film' ); ?></p>
+                <h1 class="lunara-archive-hero-title"><?php esc_html_e( 'Archive', 'lunara-film' ); ?></h1>
             </div>
         </section>
 

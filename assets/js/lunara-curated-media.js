@@ -121,7 +121,7 @@
 			width: '40px',
 			height: '40px',
 			objectFit: 'cover',
-			borderRadius: '0',
+			borderRadius: '4px',
 			flex: '0 0 auto',
 			background: 'rgba(128,128,128,0.15)'
 		};
@@ -271,6 +271,11 @@
 								{ label: __( 'Roomy', 'lunara-film' ), value: 'roomy' }
 							],
 							onChange: set( 'gap' )
+						} ),
+						el( ToggleControl, {
+							label: __( 'Rounded corners', 'lunara-film' ),
+							checked: !! attributes.rounded,
+							onChange: set( 'rounded' )
 						} )
 					),
 					el( PanelBody, { title: __( 'Behavior', 'lunara-film' ), initialOpen: false },

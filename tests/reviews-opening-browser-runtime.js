@@ -1,4 +1,3 @@
-const assertSquareSurfaces=require('./tools/assert-square-surfaces.cjs');
 /* Actual PHP shell geometry, including a browser with JavaScript disabled. */
 const fs = require('fs');
 const path = require('path');
@@ -28,7 +27,6 @@ const assert = (condition, message) => { if (!condition) throw new Error(message
                 // Blocksy provides the universal border-box reset; dynamic
                 // authority variables come from the real theme emitter.
                 await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}</style><style>${fixture.boostCss || ''}</style><style>${css}</style><style>${fixture.authorityCss}</style><style>${seed}</style><style>body{margin:0}.fixture-header{height:112px;box-sizing:border-box;padding:32px;font:20px Georgia;background:#09151e;color:#dbb761}.lunara-reveal{opacity:1!important;transform:none!important}</style></head><body class="${fixture.bodyClass}"><header class="fixture-header">Lunara Film</header>${scenario === 'published' ? fixture.html : '<main id="main" class="site-main">' + fixture.html + '</main>'}</body></html>`, { waitUntil: 'load' });
-                await assertSquareSurfaces(page, `Review archive ${scenario} ${width}`);
                 const geometry = await page.evaluate(() => {
                     const rect = selector => { const node = document.querySelector(selector); if (!node) return null; const r = node.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, height: r.height, left: r.left, right: r.right, width: r.width }; };
                     const hero = document.querySelector('.lunara-review-archive-hero');
@@ -81,9 +79,7 @@ const assert = (condition, message) => { if (!condition) throw new Error(message
                     assert(geometry.toolbar.height <= 260, `${label}: archive controls must remain compact in the published cascade.`);
                     if (width >= 360 && geometry.yearBounds.length) {
                         const [labelBounds, selectBounds, buttonBounds] = geometry.yearBounds;
-                        const labelAbove = labelBounds.bottom <= Math.min(selectBounds.top, buttonBounds.top) + 1;
-                        const labelBeside = labelBounds.right <= selectBounds.left + 1;
-                        assert((labelAbove || labelBeside) && selectBounds.right <= buttonBounds.left + 1 && Math.abs(selectBounds.top - buttonBounds.top) < 1, `${label}: the year label may wrap above its bounded selector/button row, without overlapping either control.`);
+                        assert(labelBounds.right <= selectBounds.left && selectBounds.right <= buttonBounds.left && Math.abs(selectBounds.top - buttonBounds.top) < 1, `${label}: the year label, selector and button must share a row when space permits.`);
                     }
                     assert(geometry.toolbar.left >= 15 && geometry.toolbar.right <= width - 15, `${label}: toolbar must keep mobile gutters.`);
                     if (geometry.hero) assert(geometry.hero.left >= 15 && geometry.hero.right <= width - 15, `${label}: introduction must keep mobile gutters.`);

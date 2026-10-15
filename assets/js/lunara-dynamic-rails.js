@@ -1,14 +1,3 @@
-(function () {
-    'use strict';
-    function mount(pageRoot, scope) {
-        pageRoot = pageRoot || document;
-        // Standalone documents keep their native page-unload lifecycle.
-        scope = scope || {
-            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
-            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
-            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
-            cleanup: function () {}
-        };
 /**
  * Lunara Dynamic Rails.
  *
@@ -116,7 +105,7 @@
 				syncToggle();
 				return;
 			}
-			timer = scope.interval(function () {
+			timer = window.setInterval(function () {
 				if (!document.hidden && !touchActive && !reduceMotion && !userPaused) {
 					scrollToIndex(current + 1, 'smooth');
 				}
@@ -160,7 +149,7 @@
 		}
 
 		if (previous) {
-			scope.on(previous, 'click', function () {
+			previous.addEventListener('click', function () {
 				scrollToIndex(current - 1, 'smooth');
 				stopAutoplay();
 				resumeAutoplay();
@@ -168,7 +157,7 @@
 		}
 
 		if (next) {
-			scope.on(next, 'click', function () {
+			next.addEventListener('click', function () {
 				scrollToIndex(current + 1, 'smooth');
 				stopAutoplay();
 				resumeAutoplay();
@@ -176,7 +165,7 @@
 		}
 
 		dots.forEach(function (dot) {
-			scope.on(dot, 'click', function () {
+			dot.addEventListener('click', function () {
 				var index = parseInt(dot.getAttribute('data-lunara-dynamic-rail-index') || '0', 10);
 				scrollToIndex(index, 'smooth');
 				stopAutoplay();
@@ -185,7 +174,7 @@
 		});
 
 		if (toggle) {
-			scope.on(toggle, 'click', function () {
+			toggle.addEventListener('click', function () {
 				userPaused = !userPaused;
 				if (userPaused) {
 					stopAutoplay();
@@ -196,26 +185,26 @@
 			});
 		}
 
-		scope.on(rail, 'pointerenter', function (event) {
+		rail.addEventListener('pointerenter', function (event) {
 			if (event.pointerType === 'mouse') {
 				pointerHover = true;
 				stopAutoplay();
 				syncToggle();
 			}
 		});
-		scope.on(rail, 'pointerleave', function (event) {
+		rail.addEventListener('pointerleave', function (event) {
 			if (event.pointerType === 'mouse') {
 				pointerHover = false;
 				resumeAutoplay();
 			}
 		});
-		scope.on(rail, 'focusin', function () {
+		rail.addEventListener('focusin', function () {
 			focusWithin = true;
 			stopAutoplay();
 			syncToggle();
 		});
-		scope.on(rail, 'focusout', function () {
-			scope.timeout(function () {
+		rail.addEventListener('focusout', function () {
+			window.setTimeout(function () {
 				if (!rail.contains(document.activeElement)) {
 					focusWithin = false;
 					resumeAutoplay();
@@ -223,7 +212,7 @@
 			}, 0);
 		});
 
-		scope.on(track, 'keydown', function (event) {
+		track.addEventListener('keydown', function (event) {
 			if (event.key === 'ArrowRight') {
 				event.preventDefault();
 				scrollToIndex(current + 1, 'smooth');
@@ -233,7 +222,7 @@
 			}
 		});
 
-		scope.on(track, 'touchstart', function (event) {
+		track.addEventListener('touchstart', function (event) {
 			if (!event.touches || !event.touches[0]) return;
 			touchStartX = event.touches[0].clientX;
 			touchStartY = event.touches[0].clientY;
@@ -242,7 +231,7 @@
 			syncToggle();
 		}, { passive: true });
 
-		scope.on(track, 'touchend', function (event) {
+		track.addEventListener('touchend', function (event) {
 			if (!touchActive) {
 				resumeAutoplay();
 				return;
@@ -269,18 +258,18 @@
 			startAutoplay();
 		});
 
-		scope.on(track, 'touchcancel', function () {
+		track.addEventListener('touchcancel', function () {
 			touchActive = false;
 			resumeAutoplay();
 		});
 
-		scope.on(track, 'scroll', function () {
-			scope.frame(function () {
+		track.addEventListener('scroll', function () {
+			window.requestAnimationFrame(function () {
 				updateState(closestIndex());
 			});
 		}, { passive: true });
 
-		scope.on(document, 'visibilitychange', function () {
+		document.addEventListener('visibilitychange', function () {
 			if (document.hidden) {
 				stopAutoplay();
 			} else {
@@ -289,7 +278,7 @@
 		});
 
 		if (motionQuery && motionQuery.addEventListener) {
-			scope.on(motionQuery, 'change', function (event) {
+			motionQuery.addEventListener('change', function (event) {
 				reduceMotion = event.matches;
 				stopAutoplay();
 				syncToggle();
@@ -303,16 +292,12 @@
 	}
 
 	function boot() {
-		pageRoot.querySelectorAll('[data-lunara-dynamic-rail]').forEach(initRail);
+		document.querySelectorAll('[data-lunara-dynamic-rail]').forEach(initRail);
 	}
 
-	boot();
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', boot);
+	} else {
+		boot();
+	}
 })();
-
-    }
-    if (window.LunaraApp && window.LunaraApp.register) {
-        window.LunaraApp.register('dynamic-rails', mount);
-    } else if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
-    } else { mount(); }
-}());

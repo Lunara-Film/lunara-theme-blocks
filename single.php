@@ -389,8 +389,8 @@ if ( 'review' === $post_type ) {
                 <article <?php post_class( 'lunara-journal-single lunara-review-single' ); ?>>
                     <section class="lunara-review-single-hero">
                         <div class="lunara-review-single-hero-inner">
-                            <h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
                             <p class="lunara-archive-hero-kicker"><?php esc_html_e( 'Lunara Review', 'lunara-film' ); ?></p>
+                            <h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
 
                             <?php if ( '' !== trim( $excerpt ) ) : ?>
                                 <p class="lunara-review-single-excerpt"><?php echo esc_html( $excerpt ); ?></p>
@@ -481,8 +481,8 @@ if ( 'review' === $post_type ) {
                         <section class="lunara-home-section lunara-review-single-debrief-shell">
                             <div class="lunara-home-section-head lunara-review-single-debrief-head">
                                 <div>
-                                    <h2 class="lunara-section-title"><?php esc_html_e( 'The Closing Ledger', 'lunara-film' ); ?></h2>
                                     <p class="lunara-home-section-kicker"><?php esc_html_e( 'Lunara Debrief', 'lunara-film' ); ?></p>
+                                    <h2 class="lunara-section-title"><?php esc_html_e( 'The Closing Ledger', 'lunara-film' ); ?></h2>
                                 </div>
                                 <?php if ( '' !== $ledger_pill ) : ?>
                                     <div class="lunara-review-single-debrief-ledger"><?php echo wp_kses_post( $ledger_pill ); ?></div>
@@ -512,8 +512,8 @@ if ( 'review' === $post_type ) {
                         <section class="lunara-home-section lunara-review-related">
                             <div class="lunara-home-section-head">
                                 <div>
-                                    <h2 class="lunara-section-title"><?php esc_html_e( 'More Lunara Criticism', 'lunara-film' ); ?></h2>
                                     <p class="lunara-home-section-kicker"><?php esc_html_e( 'Continue Watching', 'lunara-film' ); ?></p>
+                                    <h2 class="lunara-section-title"><?php esc_html_e( 'More Lunara Criticism', 'lunara-film' ); ?></h2>
                                 </div>
                                 <a class="lunara-section-link" href="<?php echo esc_url( $archive_url ); ?>">
                                     <?php esc_html_e( 'Open Reviews', 'lunara-film' ); ?>
@@ -689,8 +689,8 @@ if ( have_posts() ) :
                 <section class="lunara-home-section lunara-journal-single-hero">
                     <div class="lunara-journal-single-grid">
                         <div class="lunara-journal-single-copy lunara-dispatch-single-copy-shell">
-                            <h1 class="lunara-journal-single-title"><?php the_title(); ?></h1>
                             <p class="lunara-archive-hero-kicker"><?php echo esc_html( $type_label ); ?></p>
+                            <h1 class="lunara-journal-single-title"><?php the_title(); ?></h1>
                             <p class="lunara-dispatch-single-note"><?php echo esc_html( $signal_note ); ?></p>
                             <?php if ( '' !== trim( $excerpt ) ) : ?>
                                 <p class="lunara-journal-single-excerpt"><?php echo esc_html( $excerpt ); ?></p>
@@ -798,8 +798,8 @@ if ( have_posts() ) :
                     <section class="lunara-home-section lunara-editorial-related">
                         <div class="lunara-home-section-head">
                             <div>
-                                <h2 class="lunara-section-title"><?php echo esc_html( $related_heading ); ?></h2>
                                 <p class="lunara-home-section-kicker"><?php echo esc_html( $related_kicker ); ?></p>
+                                <h2 class="lunara-section-title"><?php echo esc_html( $related_heading ); ?></h2>
                                 <p class="lunara-review-related-copy"><?php echo esc_html( $related_copy ); ?></p>
                             </div>
                             <a class="lunara-section-link" href="<?php echo esc_url( $related_url ); ?>">

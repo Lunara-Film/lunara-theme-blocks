@@ -1,14 +1,3 @@
-(function () {
-    'use strict';
-    function mount(pageRoot, scope) {
-        pageRoot = pageRoot || document;
-        // Standalone documents keep their native page-unload lifecycle.
-        scope = scope || {
-            on: function (target, type, fn, options) { target.addEventListener(type, fn, options); },
-            timeout: window.setTimeout.bind(window), interval: window.setInterval.bind(window),
-            frame: window.requestAnimationFrame.bind(window), observe: function (observer) { return observer; },
-            cleanup: function () {}
-        };
 /**
  * Lunara Carousel — dependency-free slider with mobile-correct behavior.
  *
@@ -87,7 +76,7 @@
 
 		function startAutoplay() {
 			if (autoplayMs > 0 && slides.length > 1 && !timer && !prefersReducedMotion) {
-				timer = scope.interval(function () { show(current + 1); }, autoplayMs);
+				timer = setInterval(function () { show(current + 1); }, autoplayMs);
 			}
 		}
 
@@ -106,7 +95,7 @@
 
 		// Dot navigation
 		dots.forEach(function (el, k) {
-			scope.on(el, 'click', function () {
+			el.addEventListener('click', function () {
 				show(k);
 				stopAutoplay(); startAutoplay(); // reset cadence after manual nav
 			});
@@ -114,23 +103,23 @@
 
 		// Pause-on-hover — but ONLY for actual mouse pointers.
 		// pointerenter/leave with pointerType === 'mouse' avoids the mobile-tap trap.
-		scope.on(root, 'pointerenter', function (e) {
+		root.addEventListener('pointerenter', function (e) {
 			if (e.pointerType === 'mouse') stopAutoplay();
 		});
-		scope.on(root, 'pointerleave', function (e) {
+		root.addEventListener('pointerleave', function (e) {
 			if (e.pointerType === 'mouse') startAutoplay();
 		});
 
 		// Touch swipe gestures
 		var touchStartX = 0, touchStartY = 0, touchActive = false;
-		scope.on(root, 'touchstart', function (e) {
+		root.addEventListener('touchstart', function (e) {
 			if (!e.touches || !e.touches[0]) return;
 			touchStartX = e.touches[0].clientX;
 			touchStartY = e.touches[0].clientY;
 			touchActive = true;
 		}, { passive: true });
 
-		scope.on(root, 'touchend', function (e) {
+		root.addEventListener('touchend', function (e) {
 			if (!touchActive) return;
 			touchActive = false;
 			var t = e.changedTouches && e.changedTouches[0];
@@ -144,32 +133,35 @@
 		});
 
 		// Keyboard arrows (when carousel has focus)
-		scope.on(root, 'keydown', function (e) {
+		root.addEventListener('keydown', function (e) {
 			if (e.key === 'ArrowRight') { show(current + 1); stopAutoplay(); startAutoplay(); }
 			else if (e.key === 'ArrowLeft') { show(current - 1); stopAutoplay(); startAutoplay(); }
 		});
 
 		// Pause autoplay when the tab is hidden — saves battery and
 		// prevents a 30-slide jump-back when the user returns.
-		scope.on(document, 'visibilitychange', function () {
+		document.addEventListener('visibilitychange', function () {
 			if (document.hidden) stopAutoplay();
 			else startAutoplay();
 		});
 
 		root.setAttribute('data-lunara-carousel-ready', 'true');
-        scope.cleanup(function () { root.removeAttribute('data-lunara-carousel-ready'); });
 		startAutoplay();
 	}
 
 	function bootAll() {
-		pageRoot.querySelectorAll('.lunara-carousel').forEach(init);
+		document.querySelectorAll('.lunara-carousel').forEach(init);
 	}
 
-	bootAll();
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', bootAll);
+	} else {
+		bootAll();
+	}
 
 	// Hide any "X / Y" fraction counter overlay (preserved from original behavior).
 	function hideCounters() {
-		pageRoot.querySelectorAll('.lunara-carousel').forEach(function (root) {
+		document.querySelectorAll('.lunara-carousel').forEach(function (root) {
 			root.querySelectorAll(
 				'.swiper-pagination-fraction,.splide__pagination__counter,' +
 				'.slick-counter,.lunara-carousel-count,.lunara-slide-count,' +
@@ -184,13 +176,9 @@
 			});
 		});
 	}
-	hideCounters();
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', hideCounters);
+	} else {
+		hideCounters();
+	}
 })();
-
-    }
-    if (window.LunaraApp && window.LunaraApp.register) {
-        window.LunaraApp.register('carousel', mount);
-    } else if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { mount(); }, { once: true });
-    } else { mount(); }
-}());

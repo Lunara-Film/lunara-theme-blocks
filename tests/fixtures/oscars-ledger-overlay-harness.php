@@ -176,20 +176,6 @@ foreach ( array(
 	eval( lunara_extract_named_function( $root . '/inc/frontend.php', $frontend_function, $frontend_function ) );
 }
 
-// A browser consumer can request the actual synchronous/late output without
-// replaying the contract matrix. Saved values still pass the shipped readers.
-if ( isset( $argv[1] ) && '--fixture' === $argv[1] ) {
-	$mods = isset( $argv[2] ) ? json_decode( base64_decode( $argv[2] ), true ) : array();
-	$GLOBALS['lunara_ledger_test_state']['theme_mods'] = is_array( $mods ) ? $mods : array();
-	$GLOBALS['lunara_ledger_test_state']['query_vars'] = array( 'aat_entity' => 'title', 'aat_entity_id' => 'tt0110912' );
-	$_SERVER['REQUEST_URI'] = '/oscars/title/tt0110912/';
-	ob_start(); lunara_output_oscars_ledger_vars_css(); $vars = ob_get_clean();
-	ob_start(); lunara_output_oscars_ledger_critical_css(); $critical = ob_get_clean();
-	ob_start(); lunara_output_oscars_dossier_studio_css(); $studio = ob_get_clean();
-	echo json_encode( array( 'vars' => $vars, 'critical' => $critical, 'studio' => $studio ), JSON_UNESCAPED_SLASHES );
-	exit;
-}
-
 $report = array( 'cases' => array(), 'checks' => array() );
 
 $record_check = static function ( $name, $passed, $detail = null ) use ( &$report ) {

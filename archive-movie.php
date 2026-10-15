@@ -12,8 +12,8 @@ $total   = isset( $total->publish ) ? (int) $total->publish : 0;
 ?>
 <div id="primary" class="site-main lunara-entity-page lunara-entity-archive">
     <header class="lunara-entity-archive-head">
-        <h1 class="lunara-entity-title"><?php esc_html_e( 'Every Film in the Record', 'lunara-film' ); ?></h1>
         <p class="lunara-home-section-kicker"><?php esc_html_e( 'The Film Index', 'lunara-film' ); ?></p>
+        <h1 class="lunara-entity-title"><?php esc_html_e( 'Every Film in the Record', 'lunara-film' ); ?></h1>
         <p class="lunara-entity-archive-copy"><?php echo esc_html( sprintf( __( '%s films, every one wired to its Academy Award history.', 'lunara-film' ), number_format_i18n( $total ) ) ); ?></p>
         <nav class="lunara-entity-sort" aria-label="<?php esc_attr_e( 'Sort films', 'lunara-film' ); ?>">
             <a class="<?php echo 'year' === $sort ? 'is-current' : ''; ?>" href="<?php echo esc_url( $base ); ?>"><?php esc_html_e( 'Newest', 'lunara-film' ); ?></a>

@@ -20,7 +20,7 @@ if ( ! defined( 'LUNARA_JOURNAL_ARCHIVE_MIN_SOURCE_WIDTH' ) ) {
 
 if ( ! function_exists( 'lunara_journal_archive_card_is_visual_lead' ) ) {
 	/**
-	 * The visual lead belongs only to the newest edition of the main archive.
+	 * The visual lead belongs only to page one of the main Journal archive.
 	 *
 	 * @param int $card_index One-based card position in the current query.
 	 * @return bool
@@ -28,24 +28,22 @@ if ( ! function_exists( 'lunara_journal_archive_card_is_visual_lead' ) ) {
 	function lunara_journal_archive_card_is_visual_lead( $card_index ) {
 		return 1 === absint( $card_index )
 			&& is_post_type_archive( 'journal' )
-			&& ! is_paged()
-			&& ( ! function_exists( 'lunara_get_editorial_archive_sort' ) || 'date_desc' === lunara_get_editorial_archive_sort() );
+			&& ! is_paged();
 	}
 }
 
 if ( ! function_exists( 'lunara_journal_archive_card_image_sizes' ) ) {
 	/**
-	 * Match the route's 640/980px columns, 768px padding change and 1180px cap.
+	 * Match the route's 620/900px columns, 768px padding change and 1180px cap.
 	 *
-	 * The borderless edition has a two-column index and a wider desktop lead.
-	 * Minimum heights do not change that width. Resolve the same preview-aware
+	 * Sizes describes the image inside the card's two 1px borders. Card/media
+	 * minimum heights do not change that width. Resolve the same preview-aware
 	 * config as the route CSS once, rather than reloading it for every card.
 	 *
 	 * @param array|null $config Optional resolved config, otherwise current request.
-	 * @param string     $slot   regular, lead, supporting or index in an editorial edition.
 	 * @return string
 	 */
-	function lunara_journal_archive_card_image_sizes( $config = null, $slot = 'regular' ) {
+	function lunara_journal_archive_card_image_sizes( $config = null ) {
 		if ( null === $config ) {
 			static $public_config = null;
 			if ( null === $public_config ) {
@@ -63,10 +61,12 @@ if ( ! function_exists( 'lunara_journal_archive_card_image_sizes' ) ) {
 		$gaps = array( 'compact' => 16, 'editorial' => 24, 'showcase' => 30 );
 		$gap  = isset( $gaps[ $density ] ) ? $gaps[ $density ] : 24;
 
-		$content = 'min(100vw, 1180px) - clamp(40px, 8vw, 80px)';
-		$regular = sprintf( 'calc((%s - %dpx) / 2)', $content, $gap );
-		$desktop = 'lead' === $slot ? sprintf( 'min(calc(%s), 860px)', $content ) : $regular;
-		return sprintf( '(max-width: 640px) calc(100vw - 40px), (max-width: 768px) calc((100vw - %dpx) / 2), (max-width: 980px) %s, %s', 40 + $gap, $regular, $desktop );
+		return sprintf(
+			'(max-width: 620px) calc(100vw - 34px), (max-width: 768px) calc((100vw - %dpx) / 2 - 2px), (max-width: 900px) calc((92vw - %dpx) / 2 - 2px), calc((min(100vw, 1180px) - clamp(32px, 8vw, 80px) - %dpx) / 3 - 2px)',
+			32 + $gap,
+			$gap,
+			2 * $gap
+		);
 	}
 }
 
@@ -76,16 +76,15 @@ if ( ! function_exists( 'lunara_journal_archive_card_image_attributes' ) ) {
 	 *
 	 * @param bool   $is_visual_lead Whether this card owns page-one LCP priority.
 	 * @param string $alt            Editor-owned alt with post-title fallback.
-	 * @param string $slot           Image width within the edition's composition.
 	 * @return array<string,string>
 	 */
-	function lunara_journal_archive_card_image_attributes( $is_visual_lead, $alt, $slot = 'regular' ) {
+	function lunara_journal_archive_card_image_attributes( $is_visual_lead, $alt ) {
 		return array(
 			'class'         => 'lunara-review-grid-poster',
 			'loading'       => $is_visual_lead ? 'eager' : 'lazy',
 			'fetchpriority' => $is_visual_lead ? 'high' : 'auto',
 			'decoding'      => 'async',
-			'sizes'         => lunara_journal_archive_card_image_sizes( null, $slot ),
+			'sizes'         => lunara_journal_archive_card_image_sizes(),
 			'alt'           => trim( (string) $alt ),
 		);
 	}
