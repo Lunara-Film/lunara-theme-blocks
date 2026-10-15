@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Supabase Oscars Ledger plugin: tested, waiting for approval
+
+- **Shipped:** No Lunara repo code. Standalone plugin `lunara-oscars-supabase` 2.0.0 is a zip on Dalton's Desktop; its source is in `lunara work\lunara-oscars-supabase\`, not in a repo. Supabase project `cemoahbfkpbahudkuixw`: migration `revoke_unused_grants_oscars_records`, run at Dalton's request, leaves `anon` and `authenticated` with SELECT only on `oscars_records` (RLS on, one SELECT policy).
+- **Live:** lunarafilm.com unchanged. The Supabase grant change is live; the anonymous REST read still returns all 12,138 rows.
+- **Verified:** WordPress Playground (latest WordPress, PHP 8.3): the plugin activates, the shortcode renders, the 98th ceremony loads 144 records, and all-ceremony search, IMDb ID search, winners-only with a comma title and Load more work. No PHP notices, no console errors. lunarafilm.com sends no Content-Security-Policy header, so jsDelivr and supabase.co are not blocked.
+- **Holding:** Upload and activation of the zip, and a page with `[lunara_oscars_supabase]`, after this PARKING entry merges.
+- **Next:** Dalton merges this PR, uploads the plugin and publishes the page; an agent then checks the live page read-only.
+- **Found, not fixed:** Two copies of the Oscars data (Supabase and the Ledger's own) with nothing that keeps them in step. The plugin code is not under version control.
+
 ## 2026-10-15 — Pairing review availability in the editor and Site Studio
 
 - **Shipped:** Theme 3.2.112 local draft revision for existing PR #233. Authenticated read-only availability below canonical ACF film selectors, legacy pairing inputs and curated block IMDb controls. Site Studio's Method inspector reports the three saved roles and links to the source Review editor; no duplicated settings or content writes.
