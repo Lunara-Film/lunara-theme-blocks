@@ -9,10 +9,10 @@ function barrier(){let entered,release;const entry=new Promise(r=>{entered=r;}),
  const browser=await chromium.launch({headless:true,executablePath});
  const root=path.join(__dirname,'..');
  const rendered=spawnSync('php',[path.join(__dirname,'site-studio-runtime.php'),'--fixture=lunara-method'],{encoding:'utf8'});check(rendered.status===0,'Real PHP Method inspector renders.');
- const scripts=['lunara-editor-controls.js','lunara-site-studio-method.js','lunara-site-studio.js'].map(f=>fs.readFileSync(path.join(root,'assets/js',f),'utf8')).join('\n');
+ const scripts=['lunara-pairing-review-editor.js','lunara-editor-controls.js','lunara-site-studio-method.js','lunara-site-studio.js'].map(f=>fs.readFileSync(path.join(root,'assets/js',f),'utf8')).join('\n');
  const css=['lunara-site-studio.css','lunara-editor-controls.css'].map(f=>fs.readFileSync(path.join(root,'assets/css',f),'utf8')).join('\n');
  const publicCss=fs.readFileSync(path.join(root,'assets/css/lunara-review-components.css'),'utf8');
- const html=rendered.stdout.replace('</head>','<style>body{margin:0;font:14px/1.5 system-ui}button,input,select,textarea{font:inherit}'+css+'</style></head>').replace('</body>','<script>'+scripts+'</script></body>');
+ const html=rendered.stdout.replace('</head>','<style>body{margin:0;font:14px/1.5 system-ui}button,input,select,textarea{font:inherit}'+css+'</style></head>').replace('</body>','<script>window.wp={apiFetch:async function(o){var r=await fetch(o.path);if(!r.ok){throw Error();}return r.json();},url:{addQueryArgs:function(p,a){var u=new URL(p,location.origin);Object.keys(a).forEach(k=>u.searchParams.set(k,a[k]));return u.href;}}};'+scripts+'</script></body>');
  const page=await browser.newPage({viewport:{width:1440,height:1000}});page.setDefaultTimeout(10000);
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  let saved=null,submitted=null,previewed=null,failed=false,metadataHold=null,searchHold=null,previewHold=null,artVersion=1;
@@ -21,6 +21,7 @@ function barrier(){let entered,release;const entry=new Promise(r=>{entered=r;}),
   const url=new URL(route.request().url()),endpoint=url.searchParams.get('rest_route')||url.pathname;
   if(url.pathname==='/wp-admin/admin.php'){let body=html;if(saved){body=body.replace(/(<script[^>]+id="lunara-site-studio-state"[^>]*>)[\s\S]*?(<\/script>)/,(_m,a,b)=>a+JSON.stringify(saved)+b);}return route.fulfill({contentType:'text/html',body});}
   if(url.pathname==='/art.svg'){return route.fulfill({contentType:'image/svg+xml',body:fs.readFileSync(path.join(__dirname,'fixtures/home-carousel-art.svg'),'utf8')});}
+  if(endpoint.includes('/lunara-pairing-editor/v1/report')){return route.fulfill({json:{rows:[{label:'Theme Echo',status:'reviewed',url:'https://example.test/reviews/companion/'},{label:'Counter Program',status:'unreviewed',url:''},{label:'Career Context',status:'unidentified',url:''}],edit_url:'https://example.test/wp-admin/post.php?post='+url.searchParams.get('review_id')+'&action=edit'}});}
   if(endpoint.endsWith('/metadata')){check(route.request().headers()['x-wp-nonce']==='fixture-rest-nonce','Metadata sends the REST nonce.');const id=url.searchParams.get('mode')==='automatic'?7:Number(url.searchParams.get('review_id'));const payload={item:id?item(id):null,image_url:['44','77'].includes(url.searchParams.get('image_id'))?'https://example.test/art.svg?custom='+url.searchParams.get('image_id')+'&version='+artVersion:''};const hold=metadataHold;metadataHold=null;if(hold){hold.entered();await hold.wait;}return route.fulfill({json:payload});}
   if(endpoint.endsWith('/search')){check(route.request().headers()['x-wp-nonce']==='fixture-rest-nonce','Search sends the REST nonce.');const hold=searchHold;searchHold=null;if(hold){hold.entered();await hold.wait;}return route.fulfill({json:{items:[item(7),item(107)]}});}
   if(endpoint.endsWith('/preview')){previewed=route.request().postDataJSON().state;const hold=previewHold;previewHold=null;if(hold){hold.entered();await hold.wait;}return route.fulfill({json:{url:'https://example.test/?lunara_method_preview=123e4567-e89b-42d3-a456-426614174111'}});}
@@ -37,6 +38,10 @@ function barrier(){let entered,release;const entry=new Promise(r=>{entered=r;}),
   await page.goto('https://example.test/wp-admin/admin.php?page=lunara-site-studio&surface=lunara-method');await settled();await installMedia();
   await page.waitForFunction(()=>document.querySelector('[data-method-selected]').textContent.includes('Published Review 7'));
   check(await page.locator('[data-method-selected]').textContent().then(t=>t.includes('Sep 10, 2026')),'Selected item displays its published title and date.');
+  await page.getByRole('link',{name:'Read Lunara Review (opens in a new tab)',exact:true}).waitFor();
+  check((await page.locator('[data-method-selected]').textContent()).includes('Counter Program: No published Lunara review'),'Site Studio reports full pairing roles and availability.');
+  check((await page.getByRole('link',{name:'Edit this review and its pairings',exact:true}).getAttribute('href')).includes('post=7&action=edit'),'Site Studio links to the displayed source review editor.');
+  if(process.env.LUNARA_PAIRING_EDITOR_CAPTURE){await page.locator('[data-method-selected]').screenshot({path:process.env.LUNARA_PAIRING_EDITOR_CAPTURE});}
   check(await page.locator('.lunara-editor-image-stage').evaluate(n=>n.style.aspectRatio)==='1440 / 600','Image guide samples the actual desktop destination frame.');
   await page.selectOption('[data-method-mode]','manual');await page.waitForFunction(()=>document.querySelector('[data-method-selected]').textContent.includes('No Manual Review'));
   await page.fill('[data-method-search]','Published');await page.click('[data-method-search-button]');await page.getByRole('button',{name:'Select Published Review 107',exact:true}).click();

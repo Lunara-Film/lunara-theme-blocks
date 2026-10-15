@@ -4,6 +4,13 @@ Ideas that are not defects. Each needs three lines and Dalton's yes before any
 agent builds it; features batch into at most one release a quarter. Newest
 first.
 
+## Pairing review availability in existing editors — Dalton, 2026-10-15
+
+- Visitor gains: editors can recognize existing criticism and keep accurate companion-film review links.
+- Build cost: one shared authenticated read-only indicator for canonical/legacy/curated editors and the existing Site Studio Method inspector; focused PHP/browser checks.
+- Keep cost: reuse the public IMDb-to-review resolver and current canonical pairing fields; no new saved state, public scripts or external service.
+- Status: explicitly authorized in this chat. Site Studio remains integral; Dalton clarified this is a reminder to preserve the workflow, not a separate Studio redesign.
+
 ## Bespoke runtime and publishing boundaries — Dalton, 2026-10-11
 
 - Visitor gains: immediate readable editorial pages, reusable public navigation and a cached Oscars Explorer with complete server-rendered fallbacks.

@@ -216,6 +216,19 @@
 		);
 	}
 
+	function ReviewAvailability( props ) {
+		var ref = element.useRef( null );
+		useEffect( function () {
+			var editor = window.wp.data.select( 'core/editor' );
+			var cancel, timer = setTimeout( function () {
+				cancel = window.LunaraPairingReviewEditor.mount( ref.current, { imdb: props.imdb || '', review_id: editor && editor.getCurrentPostId ? Number( editor.getCurrentPostId() ) || 0 : 0 }, false );
+			}, 250 );
+			ref.current.textContent = __( 'Checking Lunara reviews…', 'lunara-film' );
+			return function () { clearTimeout( timer ); if ( cancel ) { cancel(); } };
+		}, [ props.imdb ] );
+		return el( 'p', { ref: ref, className: 'description' } );
+	}
+
 	function PairingEditor( props ) {
 		var attributes = props.attributes;
 		var setAttributes = props.setAttributes;
@@ -327,6 +340,7 @@
 							} )
 						)
 					),
+					el( ReviewAvailability, { imdb: pair.imdb } ),
 					el( TextareaControl, {
 						label: __( 'Note', 'lunara-film' ),
 						value: pair.note || '',

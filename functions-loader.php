@@ -49,6 +49,7 @@ if ( is_admin() ) {
 // Layer 2 — Shared hub (Debrief data adapters and legacy renderer).
 require_once $lunara_inc . 'debrief-resolver.php';
 require_once $lunara_inc . 'debrief.php';
+require_once $lunara_inc . 'pairing-review-editor.php';
 require_once $lunara_inc . 'debrief-public.php';
 require_once $lunara_inc . 'debrief-method.php'; // The Debrief Method explainer page + live pairing index.
 require_once $lunara_inc . 'shot-reel.php';   // The Still Gallery — [lunara_shot_reel] screening-room shot essays

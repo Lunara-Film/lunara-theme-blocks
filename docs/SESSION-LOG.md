@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-15 — Pairing review availability in the editor and Site Studio
+
+- **Shipped:** Theme 3.2.112 local draft revision for existing PR #233. Authenticated read-only availability below canonical ACF film selectors, legacy pairing inputs and curated block IMDb controls. Site Studio's Method inspector reports the three saved roles and links to the source Review editor; no duplicated settings or content writes.
+- **Live:** Unchanged; no merge, deployment, cache clear or production writes.
+- **Holding:** Existing editorial candidate remains the release vehicle. Site Studio is integral to daily editing; Dalton clarified that no separate Studio redesign was requested.
+- **Verified:** SQLite fixture executes the real review lookup SQL, checking whole-ID boundaries, draft/private/protected exclusion and source-review exclusion. PHP callbacks check nonce, edit capability, canonical/legacy reports and read-only routes. Browser tests cover selection changes, stale-response protection, failure/retry, mobile fit and Studio integration while preserving preview/Apply/history tests. Full CI pending final candidate.
+- **Next:** Review the editor addition with the public candidate; retain separate merge and deployment gates.
+- **Found, not fixed:** Full WordPress/ACF acceptance awaits the authorized release; local editor fixtures do not prove deployed behavior. No separate Studio expansion was undertaken.
+
 ## 2026-10-15 — Expose paired-film Lunara reviews beside IMDb
 
 - **Shipped:** Theme 3.2.112 draft revision, PR #233. Shared card source rows now expose `Read Lunara Review` when the existing published-review resolver finds the film, or reuse the already resolved review URL. Canonical/legacy public Debrief, Home/Reviews shared cards and curated pairing blocks use the same helper; IMDb and other destinations remain.

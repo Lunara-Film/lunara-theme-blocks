@@ -4,6 +4,17 @@ Lunara is a film publication and a living Oscar ledger. Its identity comes from
 specific criticism, real film imagery, the Lunara wordmark, Tiempos, midnight navy
 and restrained gold. This contract applies to the existing visitor features.
 
+## Editorial controls
+
+Lunara Site Studio is a first-class daily workspace. Public presentation changes
+must preserve its existing controls, saved settings, preview, Apply and history.
+Keep relevant content-editor destinations accessible from Studio; do not create
+competing settings stores or silently retire controls during visual refinements.
+Pairing editors show read-only published-review availability by complete IMDb
+identity. Unknown identity and failed lookup are distinct from no published
+review. Site Studio's featured-review inspector reports all three saved roles
+and links to the owning Review editor. This does not alter pairing content.
+
 ## Composition
 
 - Center each page frame, identity/title group, reading column and section heading

@@ -329,7 +329,7 @@ if ( ! function_exists( 'lunara_register_pairing_showcase_block' ) ) {
 			wp_register_script(
 				'lunara-pairing-showcase',
 				$asset['uri'],
-				array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-server-side-render', 'wp-api-fetch', 'wp-url' ),
+				array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-server-side-render', 'wp-api-fetch', 'wp-url', 'wp-data', 'lunara-pairing-review-editor' ),
 				function_exists( 'lunara_theme_asset_version' ) ? lunara_theme_asset_version( $asset['path'] ) : null,
 				true
 			);

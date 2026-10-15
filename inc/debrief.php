@@ -619,10 +619,12 @@ if ( ! function_exists( 'lunara_get_review_permalink_by_imdb_title_id' ) ) {
                 ON pm.post_id = p.ID
             WHERE p.post_type = 'review'
               AND p.post_status = 'publish'
+              AND p.post_password = ''
               AND pm.meta_key = '_lunara_imdb_title_id'
-              AND LOWER(pm.meta_value) LIKE %s
+              AND LOWER(pm.meta_value) REGEXP %s
         ";
-        $params          = array( '%' . $wpdb->esc_like( $tt ) . '%' );
+        // Match the whole ID, including when older metadata contains an IMDb URL.
+        $params          = array( '(^|[^a-z0-9])' . $tt . '([^0-9]|$)' );
 
         if ( $exclude_post_id > 0 ) {
             $sql      .= ' AND p.ID != %d';
