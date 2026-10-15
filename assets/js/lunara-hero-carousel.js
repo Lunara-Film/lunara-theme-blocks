@@ -71,7 +71,7 @@
 				lazyLoad: 'nearby',
 				preloadPages: 1,
 				arrows: true,
-				pagination: true,
+				pagination: false,
 				drag: true,
 				keyboard: 'focused',
 				autoplay: autoplay ? true : 'pause',
@@ -86,8 +86,6 @@
 					arrow: 'splide__arrow lunara-hero-arrow',
 					prev: 'splide__arrow--prev lunara-hero-arrow-prev',
 					next: 'splide__arrow--next lunara-hero-arrow-next',
-					pagination: 'splide__pagination lunara-hero-pagination',
-					page: 'splide__pagination__page lunara-hero-page'
 				}
 			});
 			cleanups.push(function () {
@@ -95,7 +93,7 @@
 				root.classList.remove('is-hero-mounted', 'is-hero-static');
 			});
 
-			// Pagination can jump beyond the prepared neighbors. Start its image
+			// Navigation can move beyond the prepared neighbors. Start its image
 			// request at the beginning of the fade, instead of waiting for moved.
 			splide.on('move', function () {
 				try {

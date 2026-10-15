@@ -20,7 +20,7 @@
  *                    mosaic where slot 1 spans large),
  *       • slider   → horizontal scroll-snap rail with peek + optional arrows,
  *       • carousel → one-at-a-time fading slides reusing the theme's existing
- *                    .lunara-carousel contract (autoplay, dots, swipe, keys).
+ *                    .lunara-carousel contract (autoplay, arrows, swipe, keys).
  *   - Frame dials: aspect ratio, gap, per-image caption,
  *     and where each image links (nowhere / the file / its attachment page).
  *   - Section header: per-instance kicker/heading/CTA, or no header at all.
@@ -58,6 +58,7 @@ if ( ! function_exists( 'lunara_media_showcase_attribute_schema' ) ) {
 			'autoplay'      => array( 'type' => 'boolean', 'default' => true ),
 			'autoplaySpeed' => array( 'type' => 'number', 'default' => 5000 ),
 			'showArrows'    => array( 'type' => 'boolean', 'default' => true ),
+			// Retained for saved-block compatibility; pagination is no longer rendered.
 			'showDots'      => array( 'type' => 'boolean', 'default' => true ),
 			'showHeader'    => array( 'type' => 'boolean', 'default' => false ),
 			'heading'       => array( 'type' => 'string', 'default' => '' ),
@@ -308,12 +309,6 @@ if ( ! function_exists( 'lunara_media_showcase_render_rail_or_grid' ) ) {
 		ob_start();
 		if ( $is_slider ) {
 			echo '<div class="lunara-media-slider" data-lunara-media-slider>';
-			if ( $show_arrows ) {
-				printf(
-					'<button type="button" class="lunara-media-arrow lunara-media-arrow-prev" data-dir="-1" aria-label="%s">&#8249;</button>',
-					esc_attr__( 'Previous', 'lunara-film' )
-				);
-			}
 		}
 		?>
 		<div class="<?php echo esc_attr( $track_class ); ?>">
@@ -338,10 +333,16 @@ if ( ! function_exists( 'lunara_media_showcase_render_rail_or_grid' ) ) {
 		<?php
 		if ( $is_slider ) {
 			if ( $show_arrows ) {
+				echo '<div class="lunara-slider-controls">';
+				printf(
+					'<button type="button" class="lunara-media-arrow lunara-media-arrow-prev" data-dir="-1" aria-label="%s">&#8249;</button>',
+					esc_attr__( 'Previous', 'lunara-film' )
+				);
 				printf(
 					'<button type="button" class="lunara-media-arrow lunara-media-arrow-next" data-dir="1" aria-label="%s">&#8250;</button>',
 					esc_attr__( 'Next', 'lunara-film' )
 				);
+				echo '</div>';
 			}
 			echo '</div>';
 		}
@@ -352,7 +353,7 @@ if ( ! function_exists( 'lunara_media_showcase_render_rail_or_grid' ) ) {
 if ( ! function_exists( 'lunara_media_showcase_render_carousel' ) ) {
 	/**
 	 * Carousel display — emits the theme's existing .lunara-carousel contract
-	 * so lunara-carousel.js drives autoplay, dots, swipe, and keyboard nav.
+	 * so lunara-carousel.js drives autoplay, arrows, swipe, and keyboard nav.
 	 *
 	 * @param int[]  $ids          Ordered attachment IDs.
 	 * @param array  $attrs        Block attributes.
@@ -366,7 +367,6 @@ if ( ! function_exists( 'lunara_media_showcase_render_carousel' ) ) {
 
 		$autoplay = ! isset( $attrs['autoplay'] ) || (bool) $attrs['autoplay'];
 		$speed    = isset( $attrs['autoplaySpeed'] ) ? max( 1500, min( 20000, (int) $attrs['autoplaySpeed'] ) ) : 5000;
-		$show_dots = ( ! isset( $attrs['showDots'] ) || (bool) $attrs['showDots'] ) && count( $ids ) > 1;
 
 		ob_start();
 		?>
@@ -397,12 +397,8 @@ if ( ! function_exists( 'lunara_media_showcase_render_carousel' ) ) {
 				</div>
 			<?php endforeach; ?>
 
-			<?php if ( $show_dots ) : ?>
-				<div class="lunara-carousel-dots">
-					<?php foreach ( $ids as $index => $id ) : ?>
-						<button class="lunara-carousel-dot <?php echo 0 === $index ? 'active' : ''; ?>" data-slide="<?php echo (int) $index; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: slide number. */ __( 'Go to slide %d', 'lunara-film' ), $index + 1 ) ); ?>"></button>
-					<?php endforeach; ?>
-				</div>
+			<?php if ( count( $ids ) > 1 ) : ?>
+				<div class="lunara-slider-controls"><div class="splide__arrows"><button type="button" class="splide__arrow splide__arrow--prev lunara-hero-arrow-prev" data-lunara-slide-prev aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><button type="button" class="splide__arrow splide__arrow--next lunara-hero-arrow-next" data-lunara-slide-next aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div><button type="button" class="lunara-slider-toggle" data-lunara-slide-toggle aria-label="Pause autoplay">Pause</button></div>
 			<?php endif; ?>
 		</div>
 		<?php

@@ -353,11 +353,7 @@ function lunara_carousel_shortcode( $atts ) {
         <?php endforeach; ?>
 
         <?php if ( count( $images ) > 1 ) : ?>
-            <div class="lunara-carousel-dots">
-                <?php foreach ( $images as $index => $image ) : ?>
-                    <button class="lunara-carousel-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
-                <?php endforeach; ?>
-            </div>
+            <div class="lunara-slider-controls"><div class="splide__arrows"><button type="button" class="splide__arrow splide__arrow--prev lunara-hero-arrow-prev" data-lunara-slide-prev aria-label="Previous slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><button type="button" class="splide__arrow splide__arrow--next lunara-hero-arrow-next" data-lunara-slide-next aria-label="Next slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div><button type="button" class="lunara-slider-toggle" data-lunara-slide-toggle aria-label="Pause autoplay">Pause</button></div>
         <?php endif; ?>
     </div>
     <?php

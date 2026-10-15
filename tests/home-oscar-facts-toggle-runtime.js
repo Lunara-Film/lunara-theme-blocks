@@ -55,10 +55,10 @@ function check(value, message) {
             const toggle = facts.locator('.lunara-home-carousel-toggle');
             check(await toggle.count() === 1, `${width}/${reducedMotion}: Facts must expose one toggle.`);
             const box = await toggle.boundingBox();
-            check(Boolean(box && box.width >= 44 && box.height >= 44), `${width}/${reducedMotion}: Facts toggle needs a 44px target.`);
+            check(reducedMotion === 'reduce' ? box === null : Boolean(box && box.width >= 44 && box.height >= 44), `${width}/${reducedMotion}: Facts toggle needs a 44px target.`);
             const initial = await toggle.evaluate(el => ({ label: el.getAttribute('aria-label') || '', play: getComputedStyle(el.querySelector('.splide__toggle__play')).display, pause: getComputedStyle(el.querySelector('.splide__toggle__pause')).display }));
             if (reducedMotion === 'reduce') {
-                check(initial.play !== 'none' && initial.pause === 'none', `${width}/${reducedMotion}: reduced motion must start in the Play state.`);
+                check(!(await toggle.isVisible()), `${width}/${reducedMotion}: reduced motion hides the automatic playback control.`);
                 check(await toggle.isDisabled(), `${width}/${reducedMotion}: autoplay toggle must be disabled when reduced motion is requested.`);
             } else {
                 check(initial.pause !== 'none' && initial.play === 'none', `${width}/${reducedMotion}: normal motion must start in the Pause state.`);

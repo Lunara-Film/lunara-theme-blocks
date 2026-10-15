@@ -3520,14 +3520,14 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-p
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-poster-carousel-btn {
     display: inline-grid !important;
     place-items: center !important;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
+    width: var(--lunara-slider-target, 44px) !important;
+    height: var(--lunara-slider-target, 44px) !important;
+    min-width: var(--lunara-slider-target, 44px) !important;
     padding: 0 !important;
-    border: 1px solid rgba(237, 210, 150, .44) !important;
+    border: 1px solid var(--lunara-slider-border, rgba(224,196,129,.32)) !important;
     border-radius: 0 !important;
-    background: rgba(7, 15, 26, .72) !important;
-    color: #ffe28b !important;
+    background: var(--lunara-slider-background, #07111b) !important;
+    color: var(--lunara-slider-color, #e0c481) !important;
     font-family: var(--lunara-font-body, "Tiempos Text", Georgia, serif) !important;
     font-size: 1rem !important;
     line-height: 1 !important;
@@ -3536,9 +3536,9 @@ body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-p
 
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-poster-carousel-btn:hover,
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-poster-carousel-btn:focus-visible {
-    border-color: rgba(255, 226, 139, .76) !important;
-    background: rgba(20, 35, 52, .96) !important;
-    outline: none !important;
+    border-color: var(--lunara-slider-color, #e0c481) !important;
+    background: var(--lunara-slider-hover, rgba(224,196,129,.16)) !important;
+    outline: 2px solid var(--lunara-slider-color, #e0c481) !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-rotating-winners-section .lunara-ledger-carousel-wrap {

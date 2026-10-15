@@ -287,11 +287,6 @@
 							step: 500,
 							onChange: set( 'autoplaySpeed' )
 						} ),
-						'carousel' === display && el( ToggleControl, {
-							label: __( 'Show dots', 'lunara-film' ),
-							checked: !! attributes.showDots,
-							onChange: set( 'showDots' )
-						} ),
 						'slider' === display && el( ToggleControl, {
 							label: __( 'Show arrows', 'lunara-film' ),
 							checked: !! attributes.showArrows,

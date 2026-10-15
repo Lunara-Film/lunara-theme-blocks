@@ -37,7 +37,7 @@
 			var carousel = new window.Splide(root, {
 				type: 'slide', rewind: true, perPage: 3, perMove: 1, gap: '24px',
 				breakpoints: { 980: { perPage: 2, gap: '18px' }, 640: { perPage: 1, gap: '14px' } },
-				arrows: true, pagination: true, drag: true, keyboard: 'focused',
+				arrows: true, pagination: false, drag: true, keyboard: 'focused',
 				autoplay: enabled && !motion.matches ? true : 'pause', interval: interval,
 				pauseOnHover: true, pauseOnFocus: true, speed: 500,
 				reducedMotion: { speed: 0, rewindSpeed: 0, autoplay: 'pause' }

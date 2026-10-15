@@ -35,15 +35,15 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             const page = await fixture(browser, { viewport:{width,height:1000}, reducedMotion:'no-preference' }, deferredHtml);
             await page.waitForSelector('.lunara-home-curated-hero.is-initialized');
             const toggleGeometry = () => page.locator('.lunara-home-curated-hero').evaluate(root=>{
-                const toggle=root.querySelector('.lunara-home-carousel-toggle'),r=root.getBoundingClientRect(),b=toggle.getBoundingClientRect(),track=root.querySelector('.splide__track').getBoundingClientRect();
+                const toggle=root.querySelector('.lunara-slider-controls'),r=root.getBoundingClientRect(),b=toggle.getBoundingClientRect(),track=root.querySelector('.splide__track').getBoundingClientRect();
                 return {position:getComputedStyle(toggle).position,width:b.width,height:b.height,axisDelta:Math.abs(b.left+b.width/2-r.left-r.width/2),bottomGap:r.bottom-b.bottom,top:b.top,trackBottom:track.bottom};
             });
             const initial = await toggleGeometry();
-            if(width>900)assert(initial.position==='absolute'&&initial.axisDelta<=1&&Math.abs(initial.bottomGap-64)<=1&&initial.width>0&&initial.width<160, `${width}px synchronous seed centers a compact out-of-flow toggle: ${JSON.stringify(initial)}`);
+            if(width>900)assert(initial.position==='absolute'&&initial.axisDelta<=1&&Math.abs(initial.bottomGap-32)<=1&&initial.width>0&&initial.width<220, `${width}px synchronous seed centers a compact out-of-flow toggle: ${JSON.stringify(initial)}`);
             else assert(initial.position==='static',`${width}px desktop seed must not position the phone/tablet toggle: ${JSON.stringify(initial)}`);
             await page.addStyleTag({url:'https://carousel.test/assets/css/lunara-home-carousels.css'});
             const final = await toggleGeometry();
-            if(width>900)assert(final.position==='absolute'&&final.axisDelta<=1&&Math.abs(final.bottomGap-64)<=1&&final.width>=44&&final.width<160&&final.height>=44,`${width}px stylesheet delivery preserves compact centered desktop controls: ${JSON.stringify(final)}`);
+            if(width>900)assert(final.position==='absolute'&&final.axisDelta<=1&&Math.abs(final.bottomGap-32)<=1&&final.width>=44&&final.width<220&&final.height>=44,`${width}px stylesheet delivery preserves compact centered desktop controls: ${JSON.stringify(final)}`);
             else assert(final.position==='static'&&final.axisDelta<=1&&final.top>=final.trackBottom&&final.width>=44&&final.height>=44,`${width}px stylesheet delivery keeps centered controls in flow below the story: ${JSON.stringify(final)}`);
             await page.close();
         }
@@ -51,6 +51,7 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             const page = await fixture(browser, { viewport: { width, height: 1000 } });
             await page.waitForSelector('[data-lunara-journal-carousel].is-initialized');
             await page.waitForFunction(expected => document.querySelectorAll('[data-lunara-journal-carousel] .is-visible').length === expected, columns);
+            assert(await page.locator(".splide__pagination,.lunara-carousel-dot").count() === 0, "No pagination markers are rendered by any Home carousel.");
             const metrics = await page.evaluate(() => ({
                 visible: document.querySelectorAll('[data-lunara-journal-carousel] .is-visible').length,
                 width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth,
@@ -69,7 +70,7 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
             assert(metrics.cards.every(card => Math.abs(card.height - metrics.cards[0].height) < 2), `${width}px news cards must have consistent heights.`);
             const centered = await page.evaluate(() => {
                 const hero=document.querySelector('.lunara-home-curated-hero .is-active'),title=hero.querySelector('.lunara-cinematic-hero-title'),a=hero.getBoundingClientRect(),b=title.getBoundingClientRect();
-                const journal=document.querySelector('[data-lunara-journal-carousel]'),p=journal.querySelector('.splide__pagination'),r=journal.getBoundingClientRect(),q=p.getBoundingClientRect();
+                const journal=document.querySelector('[data-lunara-journal-carousel]'),p=journal.querySelector('.lunara-slider-controls'),r=journal.getBoundingClientRect(),q=p.getBoundingClientRect();
                 return {hero:Math.abs(a.x+a.width/2-b.x-b.width/2),titleAlign:getComputedStyle(title).textAlign,pagination:Math.abs(r.x+r.width/2-q.x-q.width/2)};
             });
             assert(centered.hero<=1&&centered.titleAlign==='center'&&centered.pagination<=1,`${width}px hero title and Journal navigation must share their composition axis: ${JSON.stringify(centered)}`);
@@ -141,7 +142,7 @@ async function fixture(browser, options = {}, html = rendered.stdout) {
                     controls: [...arrows,pause].map(r => ({ top:r.top, width:r.width, height:r.height })),
                     pages: pages.map(r => ({ top:r.top,width:r.width,height:r.height })) };
             }));
-            assert(rows.every(row => row.controls.every(r => r.top >= row.trackBottom && r.width >= 44 && r.height >= 44) && row.pages.every(r => r.top >= Math.max(row.arrowBottom,row.pauseBottom) && r.width >= 44 && r.height >= 44)), `${width}px Hero and Journal controls must occupy separate rows clear of story copy with 44px targets: ${JSON.stringify(rows)}`);
+            assert(rows.every(row => row.controls.every(r => r.top >= row.trackBottom && r.width >= 44 && r.height >= 44) && row.pages.length === 0), `${width}px Hero and Journal controls must occupy separate rows clear of story copy with 44px targets: ${JSON.stringify(rows)}`);
             assert(rows[0].pauseBottom <= 844, `${width}px representative Hero Pause control must fit beneath the header in the first viewport.`);
             const composition = await page.evaluate(() => {
                 const slide = document.querySelector('.lunara-home-curated-hero .splide__slide.is-active');
