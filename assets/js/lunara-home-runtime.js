@@ -21,7 +21,8 @@
         var pips=stage.querySelectorAll('.lunara-hero-cinema-pip');
         if(slides.length<2)return;
         var current=0;
-        var interval=5500;
+        var sharedPace=document.querySelector('meta[name="lunara-slider-interval"]');
+        var interval=sharedPace?Math.max(8000,Math.min(30000,Number(sharedPace.content)||12000)):12000;
         var timer=null;
         var paused=false;
         function goTo(idx){
