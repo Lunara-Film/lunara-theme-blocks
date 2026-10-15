@@ -339,6 +339,11 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
 #primary.lunara-oscars-portal > .lunara-oscars-portal-hero:not(.has-backdrop) {
     background: transparent !important;
 }
+/* Retire shafts in a still-cached optimizer payload as well as current CSS. */
+#primary.lunara-oscars-portal > .lunara-oscars-portal-hero::before,
+#primary.lunara-oscars-portal > .lunara-oscars-portal-hero::after {
+    content: none !important;
+}
 #primary.lunara-oscars-portal .lunara-oscars-portal-hero-grid {
     display: grid !important;
     grid-template-columns: var(--lunara-oscars-portal-hero-columns, minmax(0,1.25fr) minmax(260px,clamp(300px,24vw,440px))) !important;

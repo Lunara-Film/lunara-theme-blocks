@@ -7,7 +7,9 @@ const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
 const {chromium} = require('playwright-core');
 const root = path.resolve(__dirname, '..');
-const css = ['style.css','assets/css/lunara-shell.css','assets/css/lunara-public-guardrails.css','assets/css/lunara-oscars-portal.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+const css = ['style.css','assets/css/lunara-shell.css','assets/css/lunara-public-guardrails.css','assets/css/lunara-oscars-portal.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n')
+    // Retained optimizer-era ornament delivered late must not restore the shafts.
+    + '\nbody.lunara-oscars-portal-page .lunara-oscars-portal-hero::before,body.lunara-oscars-portal-page .lunara-oscars-portal-hero::after{content:"";position:absolute;width:16%;height:100%;background:linear-gradient(gold,transparent)}';
 const seed = execFileSync('php',[path.join(__dirname,'oscars-portal-studio-runtime.php'),'--emit-portal-critical'],{encoding:'utf8'}).split('\n').slice(1).join('\n');
 (async()=>{
     const browser = await chromium.launch({headless:true,executablePath:process.env.LUNARA_BROWSER_EXECUTABLE || ['C:/Program Files/Google/Chrome/Application/chrome.exe','/usr/bin/google-chrome'].find(fs.existsSync)});
