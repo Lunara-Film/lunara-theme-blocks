@@ -4,6 +4,13 @@ Ideas that are not defects. Each needs three lines and Dalton's yes before any
 agent builds it; features batch into at most one release a quarter. Newest
 first.
 
+## Supabase Oscars Ledger shortcode — Dalton, 2026-10-15
+
+- Visitor gains: a searchable list of all 12,138 Oscars records (ceremonies 1–98), with ceremony, winners-only and IMDb ID filters, on any page that carries `[lunara_oscars_supabase]`.
+- Build cost: built. Standalone plugin `lunara-oscars-supabase` 2.0.0 (a zip, not in a repo), tested in a local WordPress on PHP 8.3 against the live Supabase data. Left: one upload, one activation, one page.
+- Keep cost: a second copy of the Oscars data (Supabase `oscars_records`) beside the Ledger's own data, which the yearly import must also update; one third-party script (supabase-js 2.45.4 from jsDelivr) and one external service in the visitor path; a yearly bump of `LUNARA_OSCARS_SB_LATEST_CEREMONY`.
+- Status: proposed. Dalton's merge of the PR that adds this entry is his yes.
+
 ## Pairing review availability in existing editors — Dalton, 2026-10-15
 
 - Visitor gains: editors can recognize existing criticism and keep accurate companion-film review links.
