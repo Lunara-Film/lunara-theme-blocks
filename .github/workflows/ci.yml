@@ -5,10 +5,14 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  ci:
+  checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -54,18 +58,57 @@ jobs:
             php "$t"
           done
 
+  browser:
+    name: Browser tests (${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+
+      # Browser fixtures render the real PHP components.
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install test dependencies
         run: npm ci
 
       - name: Browser behavior tests
         env:
           LUNARA_BROWSER_EXECUTABLE: /usr/bin/google-chrome
+          TEST_SHARD: ${{ matrix.shard }}/4
         run: |
           set -e
-          skip=$(grep -v '^#' tests/ci-skip.txt | awk 'NF {print $1}' | tr '\n' ' ')
+          tests=()
+          skip=$(awk '!/^#/ && NF {print $1}' tests/ci-skip.txt | tr '\n' ' ')
           for t in tests/*.js tests/*.cjs; do
             [ -e "$t" ] || continue
             case " $skip " in *" $(basename "$t") "*) echo "skip $t (tests/ci-skip.txt)"; continue ;; esac
-            echo "== $t"
-            node "$t"
+            tests+=("$t")
           done
+          # Explicit discovery includes new tests automatically. Each file runs
+          # once across the shards, in its own process, with one browser at a time.
+          test "${#tests[@]}" -gt 0
+          node --test --test-concurrency=1 --test-shard="$TEST_SHARD" "${tests[@]}"
+
+  # Keep the existing required check name. Failed, cancelled or skipped jobs
+  # must never make the aggregate green.
+  ci:
+    if: always()
+    needs: [checks, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require all checks and browser shards
+        env:
+          CHECKS_RESULT: ${{ needs.checks.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
+        run: test "$CHECKS_RESULT" = success && test "$BROWSER_RESULT" = success
