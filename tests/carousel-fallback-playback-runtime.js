@@ -14,7 +14,10 @@ function check(ok, message) { checks++; if (!ok) throw Error(message); }
         for (const width of [390, 1440]) {
           for (const pace of [12000, 18000]) {
             const page = await browser.newPage({ viewport: { width, height: 1000 } });
-            await page.clock.install();
+            // install() alone keeps time flowing between browser commands.
+            // Pause before navigation so setup/runner latency cannot consume reading time.
+            await page.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+            await page.clock.pauseAt(new Date('2026-01-01T00:01:00Z'));
             await page.route('https://fallback.test/**', route => {
                 const url = new URL(route.request().url());
                 if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head><meta name="lunara-slider-interval" content="${pace}"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/assets/css/lunara-home-modules.css"></head><body class="home"><main id="main">${markup}</main><script src="/assets/js/lunara-page-lifecycle.js"></script><script src="/assets/js/lunara-carousel.js"></script></body></html>` });
@@ -29,10 +32,10 @@ function check(ok, message) { checks++; if (!ok) throw Error(message); }
             const toggle = facts.locator('.splide__toggle');
             check(await facts.locator('.lunara-carousel-dot,.splide__pagination').count() === 0, 'Fallback has no markers.');
             const initial = await active();
-            await page.clock.runFor(interval - 100);
+            await page.clock.runFor(interval - 1);
             check(await active() === initial, 'Shared pace gives the full reading interval.');
-            await page.clock.runFor(150);
-            check(await active() !== initial, 'Autoplay advances the actual fallback slide.');
+            await page.clock.runFor(1);
+            check(await active() !== initial, 'Autoplay advances the actual fallback slide at the reading interval.');
             await toggle.dispatchEvent('click');
             const paused = await active();
             await facts.dispatchEvent('pointerenter', { pointerType: 'mouse' });
