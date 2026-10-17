@@ -28,6 +28,7 @@ there; `AGENTS.md` is the single canonical copy.)
 ## 2026-10-17 — Shorten theme and Ledger CI feedback
 
 - **Shipped:** Workflow-only candidates for Theme and Oscars Ledger; no runtime version changes. Theme runs every discovered JS/CJS test across four isolated browser jobs alongside syntax/PHP checks, retaining the required `ci` aggregate. Ledger downloads only the headless Chromium shell and runs two browser test files concurrently. Both cancel superseded PR runs.
+- **Correction during verification:** Ledger's first GitHub run passed with browser tests reduced from 35 to 25 seconds, but installation still consumed 31 seconds. The final Ledger candidate reuses the runner-provided Chrome already used by the Theme, removing that installation step.
 - **Live:** Unchanged; no deployment, merge, production setting or cache changes.
 - **Holding:** `codex/faster-workflow-tests` in both repositories, pending full GitHub Actions validation and review. No tests added to skip lists or assertions removed.
 - **Verified:** Baseline Theme run 39047113452 spent 464 of 497 job seconds in sequential browser tests; main run 38807120092 spent 449 of 483 seconds there. Ledger recent complete workflows took 83–154 seconds; the other five plugins took 16–25 seconds. Local Theme syntax and all PHP tests pass. Runner probes cover all 57 JS/CJS files exactly once across shards, propagate child failure, and reject failed/cancelled/skipped dependencies at the required check.
