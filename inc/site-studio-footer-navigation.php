@@ -21,6 +21,7 @@ function lunara_site_studio_footer_navigation_destinations() {
 		'home' => array( __( 'Home', 'lunara-film' ), home_url( '/' ) ),
 		'reviews' => array( __( 'Reviews', 'lunara-film' ), get_post_type_archive_link( 'review' ) ?: home_url( '/reviews/' ) ),
 		'journal' => array( __( 'Journal', 'lunara-film' ), get_post_type_archive_link( 'journal' ) ?: home_url( '/journal/' ) ),
+		'debrief' => array( __( 'Debrief', 'lunara-film' ), home_url( '/debrief/' ) ),
 		'about' => array( __( 'About', 'lunara-film' ), home_url( '/about/' ) ),
 		'editorial-policy' => array( __( 'Editorial Policy', 'lunara-film' ), home_url( '/editorial-policy/' ) ),
 		'oscars' => array( __( 'Oscars', 'lunara-film' ), home_url( '/oscars/' ) ),
@@ -40,8 +41,9 @@ function lunara_site_studio_footer_navigation_destinations() {
 /** The inherited public lists and editor seeds have one owner. */
 function lunara_site_studio_footer_navigation_inherited_columns() {
 	$destinations = lunara_site_studio_footer_navigation_destinations();
-	$groups = array( 'editorial' => array( 'home', 'reviews', 'journal', 'about', 'editorial-policy' ), 'oscars' => array( 'oscars', 'categories', 'ceremonies', 'ledger' ), 'utility' => array( 'search', 'contact', 'rss' ) );
-	if ( $destinations['privacy']['available'] ) { $groups['utility'][] = 'privacy'; }
+	// Preserve the existing storage groups for custom lists and exact History.
+	// The standard close is one ordered list; Privacy remains in the legal row.
+	$groups = array( 'editorial' => array( 'reviews', 'journal', 'oscars', 'debrief', 'contact' ), 'oscars' => array(), 'utility' => array() );
 	$columns = array();
 	foreach ( $groups as $column => $keys ) {
 		$columns[ $column ] = array();
@@ -67,7 +69,7 @@ function lunara_site_studio_footer_navigation_validate( $navigation ) {
 	if ( ! is_array( $navigation ) || array( 'mode', 'columns' ) !== array_keys( $navigation ) ) { return lunara_site_studio_footer_navigation_error( 'navigation', __( 'Reload the Footer editor to get every control.', 'lunara-film' ) ); }
 	if ( ! in_array( $navigation['mode'], array( 'inherited', 'custom' ), true ) ) { return lunara_site_studio_footer_navigation_error( 'navigation.mode' ); }
 	if ( ! is_array( $navigation['columns'] ) || array( 'editorial', 'oscars', 'utility' ) !== array_keys( $navigation['columns'] ) ) { return lunara_site_studio_footer_navigation_error( 'navigation.columns' ); }
-	$builtins = array( 'home', 'reviews', 'journal', 'about', 'editorial-policy', 'oscars', 'categories', 'ceremonies', 'ledger', 'search', 'contact', 'rss', 'privacy', 'custom' );
+	$builtins = array( 'home', 'reviews', 'journal', 'debrief', 'about', 'editorial-policy', 'oscars', 'categories', 'ceremonies', 'ledger', 'search', 'contact', 'rss', 'privacy', 'custom' );
 	$seen = array();
 	foreach ( $navigation['columns'] as $column => $rows ) {
 		$path = 'navigation.columns.' . $column;

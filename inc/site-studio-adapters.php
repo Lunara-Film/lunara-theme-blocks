@@ -1003,13 +1003,13 @@ if ( ! function_exists( 'lunara_site_studio_footer_spec' ) ) {
 	function lunara_site_studio_footer_spec() {
 		return array(
 			'brand' => array(
-				'show_logo' => array( 'mod' => 'lunara_footer_show_logo', 'type' => 'bool', 'default' => true ),
-				'tagline' => array( 'mod' => 'lunara_footer_tagline', 'type' => 'text', 'default' => 'Film criticism and a living Oscar ledger.', 'max_length' => 180 ),
+				'show_logo' => array( 'mod' => 'lunara_footer_show_logo', 'type' => 'bool', 'default' => false ),
+				'tagline' => array( 'mod' => 'lunara_footer_tagline', 'type' => 'text', 'default' => '', 'max_length' => 180 ),
 			),
 			'columns' => array(
-				'editorial' => array( 'mod' => 'lunara_footer_col1_heading', 'type' => 'text', 'default' => 'Editorial', 'max_length' => 60 ),
-				'oscars' => array( 'mod' => 'lunara_footer_col2_heading', 'type' => 'text', 'default' => 'Oscar Ledger', 'max_length' => 60 ),
-				'utility' => array( 'mod' => 'lunara_footer_col3_heading', 'type' => 'text', 'default' => 'Utility', 'max_length' => 60 ),
+				'editorial' => array( 'mod' => 'lunara_footer_col1_heading', 'type' => 'text', 'default' => '', 'max_length' => 60 ),
+				'oscars' => array( 'mod' => 'lunara_footer_col2_heading', 'type' => 'text', 'default' => '', 'max_length' => 60 ),
+				'utility' => array( 'mod' => 'lunara_footer_col3_heading', 'type' => 'text', 'default' => '', 'max_length' => 60 ),
 			),
 			'copyright' => array(
 				'name' => array( 'mod' => 'lunara_footer_copyright', 'type' => 'text', 'default' => 'Lunara Film', 'max_length' => 100 ),

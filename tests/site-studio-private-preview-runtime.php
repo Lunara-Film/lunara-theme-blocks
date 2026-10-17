@@ -130,7 +130,7 @@ function lunara_preview_candidate( $surface ) {
 	if ( 'journal-single' === $surface ) { $state['hero']['image_fit'] = 'contain'; $state['hero']['image_position_x'] = 17; $state['hero']['title_size'] = 100; $state['metadata']['show_byline'] = false; }
 	if ( 'review-single' === $surface ) { $state['review']['density'] = 'compact'; $state['pairing']['columns'] = 2; }
 	if ( 'utility-search' === $surface ) { $state['presentation']['density'] = 'compact'; $state['focus']['lead'] = 'journal'; $state['geometry']['section_gap'] = 34; }
-	if ( 'site-footer' === $surface ) { $state['brand']['show_logo'] = false; $state['brand']['tagline'] = 'Private footer preview'; }
+	if ( 'site-footer' === $surface ) { $state['brand']['show_logo'] = true; $state['brand']['tagline'] = 'Private footer preview'; }
 	return $state;
 }
 
@@ -311,7 +311,7 @@ foreach ( array( 'global-design', 'homepage-structure', 'lunara-method', 'review
 	if ( 'journal-single' === $surface ) { lunara_test_assert( 'contain' === get_theme_mod( 'lunara_journal_single_image_fit' ) && 17 === get_theme_mod( 'lunara_journal_single_image_position_x' ) && 100 === get_theme_mod( 'lunara_journal_single_hero_title_size' ) && false === get_theme_mod( 'lunara_journal_show_byline' ), 'Journal article preview installs framing, title and metadata only in the authorized request.' ); }
 	if ( 'review-single' === $surface ) { lunara_test_assert( 'compact' === get_theme_mod( 'lunara_review_single_density', 'editorial' ) && 2 === get_theme_mod( 'lunara_review_pair_with_columns', 1 ), 'Review Single must install its candidate mods only for the authorized request.' ); }
 	if ( 'utility-search' === $surface ) { lunara_test_assert( 'compact' === get_theme_mod( 'lunara_utility_search_density', 'editorial' ) && 'journal' === get_theme_mod( 'lunara_utility_search_lead_focus', 'balanced' ) && 34 === get_theme_mod( 'lunara_utility_section_gap', 42 ), 'Utility Search must install its candidate mods only for the authorized exact Search request.' ); }
-	if ( 'site-footer' === $surface ) { lunara_test_assert( false === get_theme_mod( 'lunara_footer_show_logo', true ) && 'Private footer preview' === get_theme_mod( 'lunara_footer_tagline', '' ), 'Footer must install its candidate mods only for the authorized front-page request.' ); }
+	if ( 'site-footer' === $surface ) { lunara_test_assert( true === get_theme_mod( 'lunara_footer_show_logo', false ) && 'Private footer preview' === get_theme_mod( 'lunara_footer_tagline', '' ), 'Footer must install its candidate mods only for the authorized front-page request.' ); }
 }
 
 // Every hardcoded preview owner must agree with the normalized registry owner.

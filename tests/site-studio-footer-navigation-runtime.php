@@ -12,17 +12,32 @@ $default = lunara_site_studio_footer_read_state();
 footer_assert( count( lunara_site_studio_footer_keys() ) === 7 && count( lunara_site_studio_mod_surface_keys( lunara_site_studio_footer_spec() ) ) === 6, 'Footer extends exactly seven keys without changing the frozen scalar spec.' );
 footer_assert( 'inherited' === $default['navigation']['mode'] && array() === $lunara_pilot_theme_mods, 'Reading standard links is not adoption and writes no missing defaults.' );
 $html = footer_fixture_render();
-footer_assert( 3 === preg_match_all( '~<h2 class="lunara-footer-col-heading">~', $html ) && false === strpos( $html, '<h4' ), 'The three footer navigation groups start at a coherent h2 level inside the labelled footer landmark.' );
+footer_assert( false === strpos( $html, 'lunara-footer-brand' ) && false === strpos( $html, 'lunara-footer-col-heading' ) && false === strpos( $html, '<img' ), 'The default closing strip emits no logo, tagline, group headings or empty branding.' );
 preg_match( '~<nav class="lunara-footer-nav-grid".*?</nav>~s', $html, $nav );
 preg_match_all( '~<a href="([^"]+)">([^<]+)</a>~', $nav[0], $links );
-footer_assert( array( 'Home', 'Reviews', 'Journal', 'About', 'Editorial Policy', 'Oscars', 'Categories', 'Ceremonies', 'Full Ledger', 'Search', 'Contact', 'RSS Feed', 'Privacy' ) === $links[2], 'Actual inherited footer retains every original label and its order.' );
-footer_assert( strpos( $html, 'lunara-footer-legal' ) !== false && substr_count( $html, '>Privacy</a>' ) === 2, 'Separate legal Privacy row remains outside list ownership.' );
+footer_assert( array( 'Reviews', 'Journal', 'Oscars', 'Debrief', 'Contact' ) === $links[2], 'The actual standard footer renders the approved five links in order.' );
+footer_assert( in_array( home_url( '/debrief/' ), $links[1], true ), 'Debrief uses the existing public route.' );
+footer_assert( strpos( $html, 'lunara-footer-legal' ) !== false && substr_count( $html, '>Privacy</a>' ) === 1, 'Configured Privacy is retained exactly once outside the standard five links.' );
 $GLOBALS['footer_privacy'] = '';
-footer_assert( strpos( footer_fixture_render(), '>Privacy</a>' ) === false, 'Unconfigured Privacy is omitted from both inherited row locations.' );
+footer_assert( strpos( footer_fixture_render(), '>Privacy</a>' ) === false, 'Unconfigured Privacy adds no link or placeholder.' );
 unset( $GLOBALS['footer_privacy'] );
 $copy = $default; $copy['brand']['tagline'] = 'A new closing line.';
 $save = lunara_site_studio_footer_save_state( $copy );
 footer_assert( ! is_wp_error( $save ) && ! array_key_exists( 'lunara_footer_navigation', $lunara_pilot_theme_mods ), 'Copy-only Apply does not adopt inherited lists.' );
+
+footer_fixture_reset();
+$candidate = footer_candidate(); $candidate['navigation']['columns']['editorial'] = array();
+$candidate['columns']['oscars'] = 'An empty group';
+lunara_site_studio_footer_save_state( $candidate );
+$html = footer_fixture_render();
+footer_assert( false === strpos( $html, '<nav' ) && false === strpos( $html, 'lunara-footer-nav-col' ) && false === strpos( $html, 'An empty group' ), 'An explicitly empty list omits the navigation and its otherwise empty group heading.' );
+$candidate['navigation']['columns']['utility'][] = footer_row( 'privacy', 'Our privacy policy', 'privacy', '' );
+$candidate['columns']['utility'] = 'Useful information';
+$candidate['brand']['show_logo'] = true;
+lunara_site_studio_footer_save_state( $candidate );
+$html = footer_fixture_render();
+footer_assert( 1 === substr_count( $html, '<h2' ) && strpos( $html, 'Useful information' ) !== false && strpos( $html, 'An empty group' ) === false && strpos( $html, 'lunara-footer-wordmark' ) !== false, 'Optional branding and headings render only populated groups.' );
+footer_assert( 1 === substr_count( $html, get_privacy_policy_url() ) && strpos( $html, 'lunara-footer-legal' ) === false, 'A selected Privacy destination does not produce a duplicate legal link.' );
 
 footer_fixture_reset();
 $lunara_pilot_theme_mods = array( 'lunara_footer_show_logo' => '1', 'lunara_footer_tagline' => '  Kept raw text  ', 'lunara_footer_col2_heading' => '', 'lunara_footer_copyright' => 'Lunara Film', 'footer-editorial-menu' => array( 123 ), 'unrelated' => 'untouched' );
@@ -94,7 +109,7 @@ footer_assert( array( '/new-reviews/', '/new-journal/', '/new-feed/' ) === array
 
 // Write/readback/revision failures must recover all seven raw entries.
 foreach ( array( 0, 3, 6 ) as $slot ) { foreach ( array( 'fail', 'mismatch', 'throw_after', 'read_throw_after' ) as $mode ) {
-	footer_fixture_reset(); $candidate = footer_candidate(); $candidate['brand'] = array( 'show_logo' => false, 'tagline' => 'Changed tagline' ); $candidate['columns'] = array( 'editorial' => 'A', 'oscars' => 'B', 'utility' => 'C' ); $candidate['copyright']['name'] = 'Changed name'; $before = footer_snapshot();
+	footer_fixture_reset(); $candidate = footer_candidate(); $candidate['brand'] = array( 'show_logo' => true, 'tagline' => 'Changed tagline' ); $candidate['columns'] = array( 'editorial' => 'A', 'oscars' => 'B', 'utility' => 'C' ); $candidate['copyright']['name'] = 'Changed name'; $before = footer_snapshot();
 	$lunara_pilot_mod_fault = array( 'key' => lunara_site_studio_footer_keys()[$slot], 'mode' => $mode, 'remaining' => 1 );
 	$error = lunara_site_studio_footer_save_state( $candidate );
 	footer_assert( is_wp_error( $error ) && $before === footer_snapshot(), 'Every key is recovered after write failure at slot ' . $slot . ': ' . $mode );
@@ -153,7 +168,7 @@ footer_assert( is_array( $context ) && ! empty( $GLOBALS['footer_no_store'] ) &&
 unset( $GLOBALS['footer_filters'] );
 $inherited = lunara_site_studio_footer_read_state(); $inherited['navigation']['mode'] = 'inherited';
 $token = lunara_site_studio_store_private_preview( 'site-footer', 'theme:site-footer', '/', $inherited ); footer_fixture_request( $token ); $before = serialize( $lunara_pilot_theme_mods );
-footer_assert( is_array( lunara_site_studio_resolve_private_preview() ) && strpos( footer_fixture_render(), '>Home</a>' ) !== false && $before === serialize( $lunara_pilot_theme_mods ), 'Explicit inherited private preview shows standard lists without deleting the public custom mod.' );
+footer_assert( is_array( lunara_site_studio_resolve_private_preview() ) && strpos( footer_fixture_render(), '>Debrief</a>' ) !== false && $before === serialize( $lunara_pilot_theme_mods ), 'Explicit inherited private preview shows standard lists without deleting the public custom mod.' );
 unset( $GLOBALS['footer_filters'] );
 footer_assert( ! is_wp_error( lunara_site_studio_footer_save_state( $inherited ) ) && ! array_key_exists( 'lunara_footer_navigation', $lunara_pilot_theme_mods ), 'Explicit inherited Apply removes only the navigation mod.' );
 

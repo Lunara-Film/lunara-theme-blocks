@@ -1532,17 +1532,33 @@ if ( ! function_exists( 'lunara_render_footer_link_list' ) ) {
  * The active Lunara footer shell and its canonical shared-editor link lists.
  */
 function lunara_render_custom_footer() {
-    $show_logo  = get_theme_mod( 'lunara_footer_show_logo', true );
-    $tagline    = get_theme_mod( 'lunara_footer_tagline', 'Film criticism and a living Oscar ledger.' );
-    $col1_head  = get_theme_mod( 'lunara_footer_col1_heading', 'Editorial' );
-    $col2_head  = get_theme_mod( 'lunara_footer_col2_heading', 'Oscar Ledger' );
-    $col3_head  = get_theme_mod( 'lunara_footer_col3_heading', 'Utility' );
-    $copyright  = get_theme_mod( 'lunara_footer_copyright', 'Lunara Film' );
+    $state      = lunara_site_studio_footer_read_state();
+    // Links-only edits preserve existing raw copy, including long legacy text.
+    // Use the same defaults as Studio without rewriting or truncating saved mods.
+    foreach ( lunara_site_studio_footer_spec() as $group => $fields ) {
+        foreach ( $fields as $key => $definition ) {
+            if ( 'text' !== $definition['type'] ) { continue; }
+            $raw = get_theme_mod( $definition['mod'], $definition['default'] );
+            if ( is_scalar( $raw ) ) { $state[ $group ][ $key ] = (string) $raw; }
+        }
+    }
+    $show_logo  = $state['brand']['show_logo'];
+    $tagline    = $state['brand']['tagline'];
+    $copyright = $state['copyright']['name'];
     $navigation = lunara_site_studio_footer_navigation_resolved_columns();
+    $links = array_merge( ...array_values( $navigation ) );
+    $grouped = false;
+    foreach ( $navigation as $key => $items ) {
+        if ( $items && '' !== $state['columns'][ $key ] ) { $grouped = true; }
+    }
+    $privacy_url = get_privacy_policy_url();
+    foreach ( $links as $link ) {
+        if ( rtrim( $link['url'], '/' ) === rtrim( $privacy_url, '/' ) ) { $privacy_url = ''; break; }
+    }
     ?>
     <footer class="lunara-site-footer" data-lunara-site-studio-section="footer" role="contentinfo">
         <div class="lunara-footer-inner">
-            <!-- Zone 1: Branded close -->
+            <?php if ( $show_logo || '' !== $tagline ) : ?>
             <div class="lunara-footer-brand">
                 <?php if ( $show_logo ) :
                     $custom_logo_id = get_theme_mod( 'custom_logo' );
@@ -1557,43 +1573,32 @@ function lunara_render_custom_footer() {
                         <span class="lunara-footer-wordmark"><?php bloginfo( 'name' ); ?></span>
                     <?php endif;
                 endif; ?>
-                <?php if ( $tagline ) : ?>
+                <?php if ( '' !== $tagline ) : ?>
                     <p class="lunara-footer-tagline"><?php echo esc_html( $tagline ); ?></p>
                 <?php endif; ?>
             </div>
+            <?php endif; ?>
 
-            <!-- Zone 2: Navigation columns -->
-            <nav class="lunara-footer-nav-grid" aria-label="<?php esc_attr_e( 'Footer navigation', 'lunara-film' ); ?>">
-                <div class="lunara-footer-nav-col">
-                    <?php if ( $col1_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col1_head ); ?></h2>
-                    <?php endif; ?>
-                    <?php
-                    lunara_render_footer_link_list( $navigation['editorial'] );
-                    ?>
-                </div>
-                <div class="lunara-footer-nav-col">
-                    <?php if ( $col2_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col2_head ); ?></h2>
-                    <?php endif; ?>
-                    <?php
-                    lunara_render_footer_link_list( $navigation['oscars'] );
-                    ?>
-                </div>
-                <div class="lunara-footer-nav-col">
-                    <?php if ( $col3_head ) : ?>
-                        <h2 class="lunara-footer-col-heading"><?php echo esc_html( $col3_head ); ?></h2>
-                    <?php endif; ?>
-                    <?php
-                    lunara_render_footer_link_list( $navigation['utility'] );
-                    ?>
-                </div>
+            <?php if ( $links ) : ?>
+            <nav class="lunara-footer-nav-grid<?php echo $grouped ? ' has-group-headings' : ''; ?>" aria-label="<?php esc_attr_e( 'Footer navigation', 'lunara-film' ); ?>">
+                <?php if ( $grouped ) : ?>
+                    <?php foreach ( $navigation as $key => $items ) : ?>
+                        <?php if ( ! $items ) { continue; } ?>
+                        <div class="lunara-footer-nav-col">
+                            <?php if ( '' !== $state['columns'][ $key ] ) : ?>
+                                <h2 class="lunara-footer-col-heading"><?php echo esc_html( $state['columns'][ $key ] ); ?></h2>
+                            <?php endif; ?>
+                            <?php lunara_render_footer_link_list( $items ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <?php lunara_render_footer_link_list( $links ); ?>
+                <?php endif; ?>
             </nav>
+            <?php endif; ?>
 
-            <!-- Zone 3: Utility row -->
             <div class="lunara-footer-utility">
                 <span class="lunara-footer-copyright">&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( $copyright ); ?></span>
-                <?php $privacy_url = get_privacy_policy_url(); ?>
                 <?php if ( $privacy_url ) : ?>
                     <span class="lunara-footer-legal">
                         <a href="<?php echo esc_url( $privacy_url ); ?>"><?php esc_html_e( 'Privacy', 'lunara-film' ); ?></a>

@@ -13,7 +13,7 @@ async function inspectPage(page) {
             return /radial-gradient|repeating-linear-gradient/.test(s.backgroundImage) || s.textShadow!=='none'
                 ? [{node:node.tagName+'.'+node.className,pseudo,background:s.backgroundImage,textShadow:s.textShadow}] : [];
         }));
-        const metadata = [...document.querySelectorAll('.lunara-footer-nav-col a,.lunara-journal-card-provenance,.lunara-journal-archive-desk-label,.lunara-oscar-pick-card-meta,.lunara-search-overlay-hint')].filter(visible).filter(node => parseFloat(getComputedStyle(node).fontSize)<13).map(node=>({text:node.textContent.trim(),size:getComputedStyle(node).fontSize}));
+        const metadata = [...document.querySelectorAll('.lunara-footer-nav-col a,.lunara-footer-curated-list a,.lunara-footer-utility a,.lunara-journal-card-provenance,.lunara-journal-archive-desk-label,.lunara-oscar-pick-card-meta,.lunara-search-overlay-hint')].filter(visible).filter(node => parseFloat(getComputedStyle(node).fontSize)<13).map(node=>({text:node.textContent.trim(),size:getComputedStyle(node).fontSize}));
         return {title:document.title,build:document.querySelector('meta[name="lunara-build"]')?.content||null,
             width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
             mainCount:document.querySelectorAll('main').length,

@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-17 — Approved five-link footer release candidate
+
+- **Shipped:** Theme 3.2.117 candidate now implements the approved small footer: Reviews, Journal, Oscars, Debrief and Contact, followed by a copyright signature. The shared PHP renderer and guardrails own every public route. Default logo, tagline and headings are blank/off; custom lists and optional branding remain owned by Site Studio. Empty groups collapse, and configured Privacy appears once. Removed obsolete curtain-reveal assets and styling.
+- **Live:** Read-only production inspection found zero `lunara_footer_*` overrides. No production settings, merge or deployment changes; the new defaults require no migration on the inspected site.
+- **Holding:** `codex/compact-footer`, existing PR #244, supersedes the earlier three-group candidate after Dalton's visual approval. Required CI on the final commit remains the release gate; this entry does not claim deployment.
+- **Verified:** 74 actual-template footer/Search/404 cases, 932 browser assertions at 320/390/480/640/768/1440 with no JavaScript; 134 Footer provider/revision checks; 90 Site Studio Footer/recovery interaction checks at phone/desktop. Editorial/private-preview suites, syntax, public geometry, design-watch and generated-shell checks pass. Evidence uses actual renderers with WordPress data/transport fixtures, not a deployed candidate.
+- **Next:** Complete required PR CI, then Dalton's merge and separate explicit manual deployment. Verify the deployed footer and Site Studio against the final commit; no cache workaround or settings rewrite. The approved 12-second shared slider pace is unchanged.
+- **Found, not fixed:** No new footer blockers. The previously recorded unrelated 641px Search input observation remains outside this correction.
+
 ## 2026-10-17 — Compact shared footer
 
 - **Shipped:** Theme 3.2.117 candidate replaces the tall three-row footer with three balanced desktop groups and a phone layout with Editorial above Oscar Ledger/Utility. Consolidated presentation in the shared guardrails stylesheet; removed obsolete base/shell rules and the 404-specific padding override. All saved links, headings, branding and Site Studio ownership remain intact.

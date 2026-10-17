@@ -16328,35 +16328,6 @@ body.home main.lunara-front-page > .lunara-home-section,
 }
 
 /* ============================================================================
-   THE "METHOD" FOOTER REVEAL (Design Spec 2.0 §7) — curtain effect.
-   lunara-footer-curtain.js arms these classes only on desktop when the
-   content stage is tall enough; the stage carries the exact body ambient
-   stack (attachment: fixed renders viewport-relative, so it is pixel-
-   identical to the body's own ground layers) and slides up over the
-   pinned footer.
-   ============================================================================ */
-@media (min-width: 901px) {
-    body.lunara-curtain-armed .lunara-curtain-stage {
-        position: relative;
-        z-index: 1;
-        margin-bottom: var(--lunara-footer-h, 0px);
-        background-color: var(--lunara-bg-primary);
-        background-image:
-            linear-gradient(180deg, var(--lunara-bg-primary) 0%, var(--lunara-bg-deep) 100%);
-        background-attachment: fixed;
-        box-shadow: 0 34px 70px rgba(0, 0, 0, 0.6);
-    }
-    body.lunara-curtain-armed footer.lunara-site-footer {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 0;
-        background: var(--lunara-bg-primary, #0a1520) !important;
-    }
-}
-
-/* ============================================================================
    ROTATING CINEMATIC HERO — Splide cross-fade carousel
    The theme bundles splide-core (no fade CSS), so the fade layout is supplied
    here, scoped to .lunara-cinematic-hero-carousel. Each slide reuses the

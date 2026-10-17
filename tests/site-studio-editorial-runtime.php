@@ -127,7 +127,7 @@ set_theme_mod( 'lunara_footer_tagline', array( 'not', 'plain', 'text' ) );
 $legacy_utility = lunara_site_studio_utility_search_adapter()->read_state();
 $legacy_footer  = lunara_site_studio_footer_adapter()->read_state();
 lunara_editorial_assert( 'editorial' === $legacy_utility['presentation']['density'] && 42 === $legacy_utility['geometry']['section_gap'], 'Invalid legacy select and number values must fall back to their safe defaults.' );
-lunara_editorial_assert( true === $legacy_footer['brand']['show_logo'] && 'Film criticism and a living Oscar ledger.' === $legacy_footer['brand']['tagline'], 'Invalid legacy boolean and text values must fall back to their safe defaults.' );
+lunara_editorial_assert( false === $legacy_footer['brand']['show_logo'] && '' === $legacy_footer['brand']['tagline'], 'Invalid legacy branding falls back to the quiet signature-only close.' );
 
 // Dotted UI paths are safe only when explicitly allowlisted; technical names remain redacted.
 $field_error = new WP_Error(
@@ -165,10 +165,10 @@ $footer_state   = $footer_adapter->read_state();
 lunara_editorial_assert( array( 'brand', 'columns', 'copyright', 'navigation' ) === array_keys( $footer_state ), 'Footer state must retain scalar groups and append ordered navigation.' );
 lunara_editorial_assert( lunara_editorial_expected_footer_keys() === lunara_site_studio_footer_keys(), 'Footer must own its six scalar mods and one canonical navigation mod.' );
 lunara_editorial_assert( false === strpos( wp_json_encode( $footer_state ), 'social' ) && ! lunara_editorial_state_has_technical_keys( $footer_state ), 'Footer state must not expose phantom social or technical keys.' );
-$footer_state['brand']['show_logo'] = false;
+$footer_state['brand']['show_logo'] = true;
 $footer_state['columns']['editorial'] = 'Criticism';
 $footer_save = $footer_adapter->save_state( $footer_state );
-lunara_editorial_assert( ! is_wp_error( $footer_save ) && false === get_theme_mod( 'lunara_footer_show_logo' ) && 'Criticism' === get_theme_mod( 'lunara_footer_col1_heading' ), 'Footer save must update its real live renderer values.' );
+lunara_editorial_assert( ! is_wp_error( $footer_save ) && true === get_theme_mod( 'lunara_footer_show_logo' ) && 'Criticism' === get_theme_mod( 'lunara_footer_col1_heading' ), 'Footer save must update its real live renderer values.' );
 lunara_editorial_assert( array() === array_diff( array_keys( $lunara_pilot_theme_mods ), lunara_editorial_expected_footer_keys() ), 'Footer save must remain inside its exact seven-key allowlist.' );
 
 // Theme preview tokens must bind to each registered route instead of the old root-only path.
