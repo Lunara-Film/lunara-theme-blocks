@@ -84,7 +84,7 @@ const cases = [
 		value: 'A sharper closing line.',
 		marker: 'footer',
 		markers: ['footer'],
-		handoff: 'Use these lists',
+		handoff: null,
 		booleanRemoval: 'brand.show_logo'
 	}
 ];
@@ -293,7 +293,14 @@ async function waitForFrame(page, expectedUrl) {
 			assert(initial.cards === 13 && initial.iframes === 1, `${testCase.surface} must render the complete map and exactly one preview.`, initial);
 			assert(JSON.stringify(initial.open) === JSON.stringify([testCase.surface==='utility-search'?'content':testCase.surface==='site-footer'?'navigation':'essentials']), `${testCase.surface} must open only its first inspector group.`, initial);
 			assert(initial.doc[1] <= initial.doc[0] + 1 && initial.columns === expectedColumns, `${testCase.surface} responsive shell failed at ${testCase.outerWidth}px.`, initial);
-			assert(!initial.technicalText && initial.labels && initial.handoffText.includes(testCase.handoff), `${testCase.surface} controls must remain plain-language, labeled, and provide the canonical handoff.`, initial);
+			assert(!initial.technicalText && initial.labels && (!testCase.handoff || initial.handoffText.includes(testCase.handoff)), `${testCase.surface} controls must remain plain-language, labeled, and provide any required canonical handoff.`, initial);
+			if (testCase.surface === 'site-footer') {
+				const firstLink = page.locator('[data-footer-row]').first();
+				assert(await page.locator('[data-footer-navigation]').isVisible() && await page.locator('[data-footer-command="adopt"]').isEnabled(), 'Footer link editing must be available within Site Studio.');
+				await firstLink.locator('summary').click();
+				assert(await firstLink.locator('[data-footer-field="label"]').isEditable() && await firstLink.locator('[data-footer-field="destination"]').isEnabled() && await firstLink.locator('[data-footer-field="enabled"]').isEnabled(), 'Footer labels, destinations and visibility must remain editable controls.');
+				await firstLink.locator('summary').click();
+			}
 
 			const field = `[data-field-path="${testCase.field}"]`;
 			await page.locator(field).evaluate(node=>{const group=node.closest('details');if(group){group.open=true;}});
@@ -331,6 +338,8 @@ async function waitForFrame(page, expectedUrl) {
 
 			if (testCase.booleanRemoval) {
 				const booleanControl = page.locator(`[data-field-path="${testCase.booleanRemoval}"]`);
+				assert(!(await booleanControl.isChecked()), 'The standard footer must start without a logo.');
+				await booleanControl.check();
 				await page.evaluate(() => { window.__removeConfirms = 0; window.confirm = () => { window.__removeConfirms += 1; return false; }; });
 				await booleanControl.click();
 				assert(await booleanControl.isChecked() && await page.evaluate(() => window.__removeConfirms) === 1, 'Footer logo removal must be atomic when cancelled.');
