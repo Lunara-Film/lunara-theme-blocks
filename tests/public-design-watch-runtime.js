@@ -6,10 +6,10 @@ const {inspectPage,failuresFor,ledgerFailuresFor}=require('./tools/lunara-public
     const browser=await chromium.launch({headless:true,...(process.env.LUNARA_BROWSER_EXECUTABLE?{executablePath:process.env.LUNARA_BROWSER_EXECUTABLE}:{channel:'chrome'})});
     try {
         const page=await browser.newPage({viewport:{width:390,height:844}});
-        await page.setContent('<!doctype html><meta name="lunara-build" content="candidate+fixture"><style>body{margin:20px;background:#0a1520;color:#fafbfc}.lunara-footer-nav-col a{font-size:14px}</style><main><h1>Lunara</h1><p>Film criticism.</p></main><footer><div class="lunara-footer-nav-col"><a href="/journal/">Journal</a></div></footer>');
+        await page.setContent('<!doctype html><meta name="lunara-build" content="candidate+fixture"><style>body{margin:20px;background:#0a1520;color:#fafbfc}.lunara-footer-curated-list a{font-size:14px}</style><main><h1>Lunara</h1><p>Film criticism.</p></main><footer><nav aria-label="Footer navigation"><ul class="lunara-footer-curated-list"><li><a href="/journal/">Journal</a></li></ul></nav></footer>');
         const baseline={status:200,pageErrors:[],...await inspectPage(page)};
         assert.deepEqual(failuresFor(baseline,'candidate'),[],'A readable flat candidate passes the same public probe.');
-        await page.addStyleTag({content:'body{background-image:radial-gradient(#c9a961,transparent)}.lunara-footer-nav-col a{font-size:9px}main{width:700px}'});
+        await page.addStyleTag({content:'body{background-image:radial-gradient(#c9a961,transparent)}.lunara-footer-curated-list a{font-size:9px}main{width:700px}'});
         const regression=failuresFor({status:200,pageErrors:[],...await inspectPage(page)},'candidate');
         assert.equal(regression.length,3,'The browser probe catches actual ornament, microtype and overflow regressions together.');
         assert.equal(failuresFor({...baseline,build:'previous+fixture'},'candidate').length,1,'A successful HTTP response cannot hide a stale build.');

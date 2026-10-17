@@ -18,7 +18,7 @@ utility_load_functions( dirname(__DIR__).'/inc/frontend.php', array(
 
 $fixtures = array();
 $long_title = 'The extraordinary, unfinished conversation between a filmmaker, a city, and everyone who still believes that cinema can change how we see the world';
-foreach ( array( 'search-blank', 'search-query', 'search-no-results', '404', '404-long', 'footer-zero', 'footer-one', 'footer-custom12' ) as $scenario ) {
+foreach ( array( 'search-blank', 'search-query', 'search-no-results', '404', '404-long', 'footer-standard', 'footer-brand', 'footer-zero', 'footer-one', 'footer-flat', 'footer-custom12' ) as $scenario ) {
     utility_reset();
     $GLOBALS['wp_query'] = new WP_Query();
     $footer_only = str_starts_with( $scenario, 'footer-' );
@@ -40,10 +40,16 @@ foreach ( array( 'search-blank', 'search-query', 'search-no-results', '404', '40
         $GLOBALS['lunara_pilot_theme_mods']['lunara_404_explanation'] = 'This page has moved, but the conversation continues. Return to the latest criticism, explore the Journal, or find a film, filmmaker, or Academy Awards record using the search below.';
         $GLOBALS['lunara_pilot_theme_mods']['lunara_404_reentry_title'] = 'Choose the next story, rediscover a favorite filmmaker, or start a completely unexpected journey through the archive.';
     }
-    $expected_columns = array(5,4,4);
-    if ( $footer_only ) {
+    $expected_lists = array(5);
+    $footer_labels = array( 'Reviews', 'Journal', 'Oscars', 'Debrief', 'Contact' );
+    $custom_footer = $footer_only && ! in_array( $scenario, array( 'footer-standard', 'footer-brand' ), true );
+    if ( 'footer-brand' === $scenario ) {
+        $GLOBALS['lunara_pilot_theme_mods']['lunara_footer_show_logo'] = true;
+        $GLOBALS['lunara_pilot_theme_mods']['lunara_footer_tagline'] = 'A deliberately chosen closing line that remains editable in Site Studio.';
+    }
+    if ( $custom_footer ) {
         $columns = array('editorial'=>array(),'oscars'=>array(),'utility'=>array());
-        $count = 'footer-zero' === $scenario ? 0 : ( 'footer-one' === $scenario ? 1 : 12 );
+        $count = 'footer-zero' === $scenario ? 0 : ( in_array( $scenario, array( 'footer-one', 'footer-flat' ), true ) ? 1 : 12 );
         foreach ( $columns as $key => &$rows ) {
             for ( $i=0; $i<$count; ++$i ) {
                 $label = $i===0 ? 'An exceptionally long footer destination for the complete film criticism archive' : ( $i===1 ? str_repeat('LongFilm',10) : ucfirst($key).' destination '.($i+1) );
@@ -55,17 +61,18 @@ foreach ( array( 'search-blank', 'search-query', 'search-no-results', '404', '40
         $validated = lunara_site_studio_footer_navigation_validate($navigation);
         if(is_wp_error($validated)){throw new RuntimeException('Invalid layout fixture navigation');}
         $GLOBALS['lunara_pilot_theme_mods']['lunara_footer_navigation'] = lunara_site_studio_footer_navigation_serialize($validated);
-        $expected_columns = array($count,$count,$count);
-        $GLOBALS['lunara_pilot_theme_mods']['lunara_footer_col1_heading'] = 'Editorial coverage from across the international film scene';
+        $expected_lists = 0 === $count ? array() : ( 'footer-flat' === $scenario ? array(3) : array($count,$count,$count) );
+        $footer_labels = array_merge(...array_map(static function($rows){return array_column($rows,'label');},array_values($columns)));
+        if ( 'footer-flat' !== $scenario ) { $GLOBALS['lunara_pilot_theme_mods']['lunara_footer_col1_heading'] = 'Editorial coverage from across the international film scene'; }
     }
     ob_start(); lunara_output_utility_search_studio_css(); $authority = ob_get_clean();
     if ( $footer_only ) { ob_start(); get_header(); get_footer(); $html=ob_get_clean(); }
     else { $html=utility_render($missing ? '404.php' : 'search.php'); }
     $fixtures[$scenario] = array(
         'html'=>$html,'authority'=>$authority,'body_class'=>$missing?'error404':($footer_only?'home':'search'),
-        'footer_only'=>$footer_only,'expected_columns'=>$expected_columns,
+        'footer_only'=>$footer_only,'expected_lists'=>$expected_lists,'compact_default'=>!$custom_footer && 'footer-brand'!==$scenario,
         'titles'=>'search-query'===$scenario?array_values($GLOBALS['layout_titles']):array(),
-        'footer_labels'=>$footer_only?array_merge(...array_map(static function($rows){return array_column($rows,'label');},array_values($columns))):null,
+        'footer_labels'=>$footer_labels,
         'saved_copy'=>'404-long'===$scenario?array($long_title,$GLOBALS['lunara_pilot_theme_mods']['lunara_404_explanation'],$GLOBALS['lunara_pilot_theme_mods']['lunara_404_reentry_title']):array(),
     );
 }

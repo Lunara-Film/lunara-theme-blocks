@@ -15,6 +15,7 @@ function esc_html_e( $value ) { echo esc_html( $value ); }
 function esc_attr_e( $value ) { echo esc_attr( $value ); }
 function absint( $value ) { return abs( (int) $value ); }
 function sanitize_title( $value ) { return strtolower( $value ); }
+function sanitize_text_field( $value ) { return trim( strip_tags( (string) $value ) ); }
 function sanitize_html_class( $value ) { return preg_replace( '/[^a-z0-9_-]/i', '', $value ); }
 function home_url( $path = '' ) { return 'https://example.test' . $path; }
 function get_header() {}
@@ -47,7 +48,7 @@ function get_post_thumbnail_id( $id ) { return 5 === $id ? 0 : 100 + $id; }
 function get_post_meta() { return 'Film image fixture'; }
 function get_theme_mod( $key, $default = false ) { return $GLOBALS['jp_mods'][ $key ] ?? $default; }
 function wp_get_theme() { return new class { public function get() { return 'local-candidate'; } }; }
-function get_bloginfo() { return 'Lunara Film'; }
+function get_bloginfo( $field = '' ) { return 'rss2_url' === $field ? home_url( '/feed/' ) : 'Lunara Film'; }
 function bloginfo() { echo 'Lunara Film'; }
 function get_privacy_policy_url() { return home_url( '/privacy-policy/' ); }
 function the_posts_pagination( $args ) { echo '<a href="' . esc_url( home_url( '/journal/page/2/' ) ) . '">' . esc_html( $args['pagination_next'] ?? $args['next_text'] ) . '</a>'; }
@@ -61,10 +62,6 @@ function is_paged() { return ! empty( $GLOBALS['jp_paged'] ); }
 function lunara_journal_archive_card_image_markup( $id, $attrs ) { return ! empty( $GLOBALS['jp_failed_media'] ) ? '' : '<img src="/tests/fixtures/home-carousel-landscape.svg" width="1280" height="800" alt="' . esc_attr( $attrs['alt'] ) . '">'; }
 require dirname( __DIR__ ) . '/inc/journal-archive-media.php';
 function lunara_get_journal_visual_context( $id ) { return array( 'has_provenance' => in_array( $id, array( 1, 2, 3, 4, 6 ), true ), 'source_label' => 6 === $id ? 'Deadline' : 'Dark Horizons', 'has_carousel' => false ); }
-function lunara_site_studio_footer_navigation_resolved_columns() {
-    $columns = array( 'editorial' => array( 'Home' => '/', 'Reviews' => '/reviews/', 'Journal' => '/journal/', 'About' => '/about/', 'Editorial Policy' => '/editorial-policy/' ), 'oscars' => array( 'Oscars' => '/oscars/', 'Categories' => '/oscars/categories/', 'Ceremonies' => '/oscars/ceremonies/', 'Full Ledger' => '/oscars/ledger/' ), 'utility' => array( 'Search' => '/search/', 'Contact' => '/contact/', 'RSS Feed' => '/feed/' ) );
-    foreach ( $columns as &$items ) { $items = array_map( static function ( $label, $path ) { return array( 'label' => $label, 'url' => home_url( $path ) ); }, array_keys( $items ), array_values( $items ) ); } return $columns;
-}
 function jp_extract( $file, $name ) {
     $tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/' . $file ) );
     foreach ( $tokens as $i => $token ) {
@@ -80,6 +77,8 @@ function jp_extract( $file, $name ) {
     } throw new RuntimeException( 'Missing function ' . $name );
 }
 foreach ( array( 'lunara_journal_archive_studio_defaults', 'lunara_journal_archive_studio_compose_retention_lane', 'lunara_journal_archive_studio_render_sections' ) as $fn ) { jp_extract( 'inc/journal-archive-studio.php', $fn ); }
+foreach ( array( 'lunara_site_studio_footer_spec', 'lunara_site_studio_mod_surface_read_state', 'lunara_site_studio_footer_read_state' ) as $fn ) { jp_extract( 'inc/site-studio-adapters.php', $fn ); }
+require dirname( __DIR__ ) . '/inc/site-studio-footer-navigation.php';
 foreach ( array( 'lunara_render_custom_footer', 'lunara_render_footer_link_list' ) as $fn ) { jp_extract( 'inc/frontend.php', $fn ); }
 jp_extract( 'functions.php', 'lunara_render_journal_card_provenance' );
 jp_extract( 'inc/trailers.php', 'lunara_render_trailer_card_badge' );

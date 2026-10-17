@@ -25,15 +25,25 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
-## 2026-10-17 — Shorten theme and Ledger CI feedback
+## 2026-10-17 — Approved five-link footer release candidate
 
-- **Shipped:** Workflow-only candidates for Theme and Oscars Ledger; no runtime version changes. Theme runs every discovered JS/CJS test across four isolated browser jobs alongside syntax/PHP checks, retaining the required `ci` aggregate. Ledger downloads only the headless Chromium shell and runs two browser test files concurrently. Both cancel superseded PR runs.
-- **Correction during verification:** Ledger's first GitHub run passed with browser tests reduced from 35 to 25 seconds, but installation still consumed 31 seconds. The final Ledger candidate reuses the runner-provided Chrome already used by the Theme, removing that installation step.
-- **Live:** Unchanged; no deployment, merge, production setting or cache changes.
-- **Holding:** `codex/faster-workflow-tests` in both repositories, pending full GitHub Actions validation and review. No tests added to skip lists or assertions removed.
-- **Verified:** Baseline Theme run 39047113452 spent 464 of 497 job seconds in sequential browser tests; main run 38807120092 spent 449 of 483 seconds there. Ledger recent complete workflows took 83–154 seconds; the other five plugins took 16–25 seconds. Local Theme syntax and all PHP tests pass. Runner probes cover all 57 JS/CJS files exactly once across shards, propagate child failure, and reject failed/cancelled/skipped dependencies at the required check.
-- **Next:** Measure the new PR runs, then Dalton merges the workflow changes. These changes need no WordPress deployment.
-- **Found, not fixed:** Theme's largest individual browser suite still limits shard duration. Other plugins are already fast; their workflows are unchanged.
+- **Workspace follow-up:** Required browser CI found an old Footer help-text expectation and a logo-removal scenario that assumed the logo starts enabled. The workspace test now exercises the real label/destination/visibility controls and explicitly enables the optional logo before checking cancellation. All five workspace surfaces and 55 Journal article assertions pass locally; no runtime change or test exclusion was needed.
+- **CI follow-up:** The first run exposed a stale Journal fixture that omitted the shared Footer settings provider and expected the retired three headings. It now loads the actual provider and verifies the five links, Debrief destination, one Privacy link and optional saved heading; all 30 Journal semantics checks pass locally. Required CI on the corrected candidate remains pending.
+- **Shipped:** Theme 3.2.117 candidate now implements the approved small footer: Reviews, Journal, Oscars, Debrief and Contact, followed by a copyright signature. The shared PHP renderer and guardrails own every public route. Default logo, tagline and headings are blank/off; custom lists and optional branding remain owned by Site Studio. Empty groups collapse, and configured Privacy appears once. Removed obsolete curtain-reveal assets and styling.
+- **Live:** Read-only production inspection found zero `lunara_footer_*` overrides. No production settings, merge or deployment changes; the new defaults require no migration on the inspected site.
+- **Holding:** `codex/compact-footer`, existing PR #244, supersedes the earlier three-group candidate after Dalton's visual approval. Required CI on the final commit remains the release gate; this entry does not claim deployment.
+- **Verified:** 74 actual-template footer/Search/404 cases, 932 browser assertions at 320/390/480/640/768/1440 with no JavaScript; 134 Footer provider/revision checks; 90 Site Studio Footer/recovery interaction checks at phone/desktop. Editorial/private-preview suites, syntax, public geometry, design-watch and generated-shell checks pass. Evidence uses actual renderers with WordPress data/transport fixtures, not a deployed candidate.
+- **Next:** Complete required PR CI, then Dalton's merge and separate explicit manual deployment. Verify the deployed footer and Site Studio against the final commit; no cache workaround or settings rewrite. The approved 12-second shared slider pace is unchanged.
+- **Found, not fixed:** No new footer blockers. The previously recorded unrelated 641px Search input observation remains outside this correction.
+
+## 2026-10-17 — Compact shared footer
+
+- **Shipped:** Theme 3.2.117 candidate replaces the tall three-row footer with three balanced desktop groups and a phone layout with Editorial above Oscar Ledger/Utility. Consolidated presentation in the shared guardrails stylesheet; removed obsolete base/shell rules and the 404-specific padding override. All saved links, headings, branding and Site Studio ownership remain intact.
+- **Live:** No deployment or production settings changes in this session. Main starts at `da9c1a7` (Theme 3.2.116); the current public footer was read for the local comparison.
+- **Holding:** `codex/compact-footer`; focused checks passed, required PR CI and visual review are the remaining candidate gates.
+- **Verified:** 48 actual-template Search/404/footer scenarios and 619 assertions with JavaScript disabled, including long custom labels and 0/1/12 links per group; 130 Footer editor/persistence checks; public geometry policy and generated-shell checks. Local component preview uses current public links/assets: 390px phone footer drops from about 509px to 315px, with 44px targets and no overflow; desktop candidate is about 181px. This is preview evidence, not deployed acceptance.
+- **Next:** Review the compact footer, complete required CI, then use the existing separate merge/deployment gates. Keep the accepted shared slider interval at 12 seconds.
+- **Found, not fixed:** An exploratory 641px recovery-template fixture showed an existing 42px-wide Search input; it is unrelated to the footer changes and outside this focused correction. The retained recovery coverage at 320/390/640/768/1440 passes.
 
 ## 2026-10-15 — Shared slider reading pace in Site Studio
 

@@ -2039,40 +2039,11 @@ body:not(.wp-admin) .lunara-archive-sort a {
     letter-spacing: 0.09em !important;
 }
 
-body:not(.wp-admin) .lunara-site-footer .menu a {
-    font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-    letter-spacing: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 8px 0 !important;
-    font-size: .875rem !important;
-    text-transform: none !important;
-    min-height: 44px !important;
-    box-shadow: none !important;
-    min-inline-size: 44px !important;
-}
-
 body:not(.wp-admin) .aat-btn,
 body:not(.wp-admin) .aat-decade-pill,
 body:not(.wp-admin) .aat-crossroad-pill,
 body:not(.wp-admin) .aat-winner-circle-action {
     font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-}
-
-body:not(.wp-admin) .lunara-site-footer .lunara-footer-nav-col a {
-    font-family: var(--lunara-font-label, "Tiempos Text", "Segoe UI", Arial, sans-serif) !important;
-    letter-spacing: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 8px 0 !important;
-    min-height: 44px !important;
-    font-size: .875rem !important;
-    text-transform: none !important;
-    transform: none !important;
-    box-shadow: none !important;
-    min-inline-size: 44px !important;
 }
 
 body.lunara-oscars-portal-page .lunara-oscars-portal {

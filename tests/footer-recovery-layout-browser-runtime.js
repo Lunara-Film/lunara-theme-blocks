@@ -15,7 +15,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
-        for (const width of [320, 390, 768, 1440]) {
+        for (const width of [320, 390, 480, 640, 768, 1440]) {
             const scenarios = Object.entries(fixtures);
             // A native input's intrinsic width depends on platform font metrics.
             // Exercise a larger HTML size hint, without replacing any layout CSS,
@@ -50,9 +50,9 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                         width:innerWidth,scrollWidth:document.documentElement.scrollWidth,overflow,clipped,controls,
                         main:document.querySelectorAll('main').length,h1:document.querySelectorAll('h1').length,
                         footer:document.querySelectorAll('footer.lunara-site-footer').length,
-                        columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>node.querySelectorAll('a').length),
-                        footerLabels:[...document.querySelectorAll('.lunara-footer-nav-col a')].map(node=>node.textContent),
-                        footerPresentation:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({
+                        lists:[...document.querySelectorAll('.lunara-footer-curated-list')].map(node=>node.querySelectorAll('a').length),
+                        footerLabels:[...document.querySelectorAll('.lunara-footer-nav-grid a')].map(node=>node.textContent),
+                        footerPresentation:[...document.querySelectorAll('.lunara-footer-nav-grid,.lunara-footer-nav-col')].map(node=>({
                             shadow:getComputedStyle(node).boxShadow,
                             background:getComputedStyle(node).backgroundImage,
                             labels:[...node.querySelectorAll('a,h2,h3,h4,p')].filter(visible).map(item=>parseFloat(getComputedStyle(item).fontSize))
@@ -70,9 +70,9 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                         footerBox:rect(document.querySelector('.lunara-site-footer')),
                         footerGeometry:{
                             frame:rect(document.querySelector('.lunara-footer-inner')),
-                            nav:rect(document.querySelector('.lunara-footer-nav-grid')),
-                            columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),list:rect(node.querySelector("ul")||node),links:[...node.querySelectorAll('a')].map(rect)})),
-                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-copyright,.lunara-footer-legal')].filter(visible).map(rect)
+                            nav:document.querySelector('.lunara-footer-nav-grid') ? rect(document.querySelector('.lunara-footer-nav-grid')) : null,
+                            lists:[...document.querySelectorAll('.lunara-footer-curated-list')].map(node=>({list:rect(node),links:[...node.querySelectorAll('a')].map(rect)})),
+                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-utility')].filter(visible).map(rect)
                         },
                     };
                 });
@@ -81,18 +81,21 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                 check(data.scrollWidth<=width+1&&data.overflow.length===0, `${tag}: no horizontal overflow`, data.overflow);
                 check(data.clipped.length===0, `${tag}: complete headings, labels and configured copy remain readable`, data.clipped);
                 check(data.controls.length>0&&data.controls.every(item=>item.height>=43.9&&item.width>=43.9), `${tag}: every public link, input and button has a44px target`, data.controls.filter(item=>item.height<43.9||item.width<43.9));
-                check(JSON.stringify(data.columns)===JSON.stringify(fixture.expected_columns), `${tag}: exact zero/one/twelve or inherited footer lists`, data.columns);
-                check(data.footerPresentation.every(group=>group.shadow==='none'&&group.background==='none'&&group.labels.every(size=>size>=13)), `${tag}: footer remains a flat directory with readable navigation`, data.footerPresentation);
+                check(JSON.stringify(data.lists)===JSON.stringify(fixture.expected_lists), `${tag}: exact standard/custom links with empty groups omitted`, data.lists);
+                check(data.footerPresentation.every(group=>group.shadow==='none'&&group.background==='none'&&group.labels.every(size=>size>=13)), `${tag}: footer remains flat with readable navigation`, data.footerPresentation);
                 const centered = (box,center) => Math.abs((box.left+box.right)/2-center)<=1;
                 const geometry=data.footerGeometry;
-                check(centered(geometry.frame,width/2)&&centered(geometry.nav,width/2)&&geometry.closing.every(box=>centered(box,width/2)), `${tag}: shared footer frame, brand and closing groups share the page center`, geometry);
-                check(geometry.columns.every(column=>{
-                    const rows=new Map();for(const link of column.links){const key=Math.round(link.top);rows.set(key,[...(rows.get(key)||[]),link]);}
-                    return [...rows.values()].every(row=>centered({left:Math.min(...row.map(x=>x.left)),right:Math.max(...row.map(x=>x.right))},(column.list.left+column.list.right)/2));
-                }), `${tag}: each wrapping footer row is centered in its directory`, geometry.columns);
-                if(!fixture.footer_only&&width>=768) check(data.footerBox.height<400,`${tag}: compact default footer stays below 400px`,data.footerBox);
-                check(width<=640 ? geometry.columns.every(column=>centered(column.box,width/2)) : Math.abs(geometry.columns[0].box.left-(width-geometry.columns[2].box.right))<=1&&Math.abs((geometry.columns[0].box.width)-(geometry.columns[2].box.width))<=1&&centered(geometry.columns[1].box,width/2), `${tag}: directory columns have symmetric gutters and a centered final phone stack`, geometry.columns);
-                if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
+                check(centered(geometry.frame,width/2)&&(!geometry.nav||centered(geometry.nav,width/2))&&geometry.closing.every(box=>centered(box,width/2)), `${tag}: shared footer frame, brand and closing groups share the page center`, geometry);
+                check(geometry.lists.every(list=>{
+                    const rows=new Map();for(const link of list.links){const key=Math.round(link.top);rows.set(key,[...(rows.get(key)||[]),link]);}
+                    return [...rows.values()].every(row=>centered({left:Math.min(...row.map(x=>x.left)),right:Math.max(...row.map(x=>x.right))},(list.list.left+list.list.right)/2));
+                }), `${tag}: each wrapping footer row remains centered`, geometry.lists);
+                if(fixture.compact_default) {
+                    check(data.footerBox.height<(width<=480?190:150),`${tag}: standard footer remains a small closing strip, including configured Privacy`,data.footerBox);
+                    const rows=new Map();for(const link of geometry.lists[0].links){const key=Math.round(link.top);rows.set(key,(rows.get(key)||0)+1);}
+                    check(JSON.stringify([...rows.values()])===JSON.stringify(width<=480?[3,2]:[5]),`${tag}: five standard links form balanced phone rows and one desktop row`,[...rows.values()]);
+                }
+                check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: all standard and complete custom labels retain their order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);
                 if (!fixture.footer_only) {
                     check(data.forms.length>0&&data.forms.every(form=>form.action==='https://example.test/search/'&&form.method==='get'&&form.input==='q'), `${tag}: recovery forms work without JavaScript`, data.forms);
@@ -110,7 +113,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                     fs.mkdirSync(process.env.LUNARA_FOOTER_RECOVERY_ARTIFACT_DIR,{recursive:true});
                     await page.screenshot({path:path.join(process.env.LUNARA_FOOTER_RECOVERY_ARTIFACT_DIR,`${name}-${width}.png`),fullPage:true});
                 }
-                metrics.push({case:tag,footer:data.footerBox,controls:data.controls.length,columns:data.columns});
+                metrics.push({case:tag,footer:data.footerBox,controls:data.controls.length,lists:data.lists});
                 await page.close();
             }
         }

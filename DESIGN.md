@@ -55,8 +55,8 @@ and links to the owning Review editor. This does not alter pairing content.
   targets and focus outlines. The Oscars portal has a centered masthead followed
   by its supporting Best Picture record, with no decorative light shafts.
 - Use whitespace, image proportions, typography and restrained separators for
-  hierarchy. Footer navigation is a publication directory, with the same links
-  and saved editing ownership.
+  hierarchy. Footer navigation is a brief closing strip, with Site Studio owning
+  its editable links and signature.
 - Section headings share `--lunara-type-section`, the display face, 600 weight
   and 1.18 leading. Reading copy uses the body face at regular weight. Embedded
   Ledger headings inherit those roles; do not introduce another Tiempos alias
@@ -71,8 +71,17 @@ and links to the owning Review editor. This does not alter pairing content.
 - Reviews has one continuous index after its lead. Do not split the next four
   records into a companion carousel or reintroduce retired companion labels.
 - Public sliders use previous/next arrows and Pause/Play for automatic playback; never render dot, notch or dash pagination. Keep controls in a compact centered row, square 44px arrow targets and a 76px playback button, with the same navy/gold treatment. Preserve swipe, keyboard access, user pause and reduced-motion behavior. Non-automatic galleries have arrows only. Site Studio previews use the public renderer; saved legacy showDots values cannot reinstate pagination.
-- The footer uses compact wrapping directory rows, not tall navigation towers.
-  Keep every saved link, readable group labels, 44px targets and symmetric rows.
+- The standard footer contains Reviews, Journal, Oscars, Debrief and Contact in
+  that order, followed by a small copyright signature. It has no default image
+  logo, tagline or group headings. Use one centered link row on desktop and
+  centered rows of three and two at 480px and below, retaining 44px targets.
+  Site Studio owns labels, destinations, visibility, order, Preview/Apply and
+  History. Custom saved lists and optional branding/headings remain editable;
+  groups without links and empty branding emit no space. With blank headings,
+  concatenate saved groups into one list, preserving every enabled destination.
+  Configured Privacy appears once, in navigation or beside the signature.
+  The shared guardrails stylesheet owns this layout; route emitters and base
+  styles must not add footer padding or reconstruct the retired directory.
 
 ## Slider reading pace
 
