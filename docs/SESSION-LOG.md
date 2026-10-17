@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-17 — Deterministic slider clock and GitHub reconciliation
+
+- **Shipped:** Test-only correction on `codex/stable-slider-timing-check`, based on current main `ae45213`. The fallback playback fixture now pauses its browser clock before navigation, so runner latency cannot consume the reading interval. It checks the slide one millisecond before and exactly at both 12-second and 18-second boundaries, on phone and desktop. No runtime files or release version change.
+- **Live:** No deployment, production setting or cache changes. The reported red GitHub status is not evidence of a deployed design failure.
+- **Holding:** Required CI on this correction is the integration gate. Preserve the four browser shards, strict aggregate `ci` check and branch protection; no retries, exclusions or relaxed timing assertions as a workaround.
+- **Verified:** Both failed runs on `ae45213` fail the same fallback timing assertion in shard 3, with their aggregate checks correctly red. A 300ms host delay reproduces the original failure; with the paused clock the same delay advances browser time by 0ms in all four scenarios and all 40 diagnostic assertions pass. The normal test passes 36 assertions. An in-memory probe shortening the real carousel interval by 100ms is still rejected by the corrected test; no production source was altered for this probe.
+- **Repository state:** Footer PR #244 and workflow PR #245 are already merged. Main `ae45213`, previously green main `2f13a22`, and remote footer branch `6ce48c6` have identical file trees. PRs #246–#248 merged these branches back and forth without changing files. The footer branch's extra commit is merge history, not missing functionality; do not merge it back again for an ahead/behind count.
+- **Next:** Integrate this focused correction through its protected PR after required CI passes, then verify the resulting main run. This documentation/test-only change needs no standalone Theme deployment. Keep future changes on new branches from current main.
+- **Found, not fixed:** Historical draft PRs and retained merged branches are not active release candidates; no branch deletion or unrelated proposal integration was performed.
+
 ## 2026-10-17 — Approved five-link footer release candidate
 
 - **Workspace follow-up:** Required browser CI found an old Footer help-text expectation and a logo-removal scenario that assumed the logo starts enabled. The workspace test now exercises the real label/destination/visibility controls and explicitly enables the optional logo before checking cancellation. All five workspace surfaces and 55 Journal article assertions pass locally; no runtime change or test exclusion was needed.
