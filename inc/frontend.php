@@ -5333,11 +5333,6 @@ function lunara_output_utility_search_studio_css() {
         margin-bottom: 0 !important;
     }
 
-    body.error404 .lunara-site-footer {
-        margin-top: clamp(30px, 4vw, 58px) !important;
-        padding-top: clamp(36px, 5vw, 62px) !important;
-    }
-
     body.search .lunara-search-page .lunara-home-section,
     body.error404 .lunara-404-page .lunara-home-section,
     body.search .lunara-search-oscar-shell,

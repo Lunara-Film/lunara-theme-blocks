@@ -15,7 +15,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
-        for (const width of [320, 390, 768, 1440]) {
+        for (const width of [320, 390, 640, 768, 1440]) {
             const scenarios = Object.entries(fixtures);
             // A native input's intrinsic width depends on platform font metrics.
             // Exercise a larger HTML size hint, without replacing any layout CSS,
@@ -72,7 +72,7 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                             frame:rect(document.querySelector('.lunara-footer-inner')),
                             nav:rect(document.querySelector('.lunara-footer-nav-grid')),
                             columns:[...document.querySelectorAll('.lunara-footer-nav-col')].map(node=>({box:rect(node),list:rect(node.querySelector("ul")||node),links:[...node.querySelectorAll('a')].map(rect)})),
-                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-copyright,.lunara-footer-legal')].filter(visible).map(rect)
+                            closing:[...document.querySelectorAll('.lunara-footer-brand,.lunara-footer-utility')].filter(visible).map(rect)
                         },
                     };
                 });
@@ -90,8 +90,12 @@ function check(condition, message, evidence) { checks++; if (!condition) failure
                     const rows=new Map();for(const link of column.links){const key=Math.round(link.top);rows.set(key,[...(rows.get(key)||[]),link]);}
                     return [...rows.values()].every(row=>centered({left:Math.min(...row.map(x=>x.left)),right:Math.max(...row.map(x=>x.right))},(column.list.left+column.list.right)/2));
                 }), `${tag}: each wrapping footer row is centered in its directory`, geometry.columns);
-                if(!fixture.footer_only&&width>=768) check(data.footerBox.height<400,`${tag}: compact default footer stays below 400px`,data.footerBox);
-                check(width<=640 ? geometry.columns.every(column=>centered(column.box,width/2)) : Math.abs(geometry.columns[0].box.left-(width-geometry.columns[2].box.right))<=1&&Math.abs((geometry.columns[0].box.width)-(geometry.columns[2].box.width))<=1&&centered(geometry.columns[1].box,width/2), `${tag}: directory columns have symmetric gutters and a centered final phone stack`, geometry.columns);
+                if(!fixture.footer_only) check(data.footerBox.height<(width===320?500:width<=640?400:300),`${tag}: default footer stays compact without clipping links`,data.footerBox);
+                const [editorial,oscars,utility]=geometry.columns.map(column=>column.box);
+                check(width<=640
+                    ? centered(editorial,width/2)&&Math.abs(oscars.top-utility.top)<=1&&oscars.top>=editorial.bottom-1&&Math.abs(oscars.left-(width-utility.right))<=1&&Math.abs(oscars.width-utility.width)<=1
+                    : Math.abs(editorial.left-(width-utility.right))<=1&&Math.abs(editorial.width-utility.width)<=1&&centered(oscars,width/2)&&Math.abs(editorial.top-utility.top)<=1&&Math.abs(editorial.top-oscars.top)<=1,
+                    `${tag}: balanced desktop groups and a symmetric two-column phone directory`,geometry.columns);
                 if (fixture.footer_only) check(JSON.stringify(data.footerLabels)===JSON.stringify(fixture.footer_labels), `${tag}: complete long labels retain their saved order`, data.footerLabels);
                 if (fixture.saved_copy.length) check(fixture.saved_copy.every(copy=>data.bodyText.includes(copy)), `${tag}: all customized recovery copy reaches the actual public template`);
                 if (!fixture.footer_only) {

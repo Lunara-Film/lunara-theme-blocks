@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-17 — Compact shared footer
+
+- **Shipped:** Theme 3.2.117 candidate replaces the tall three-row footer with three balanced desktop groups and a phone layout with Editorial above Oscar Ledger/Utility. Consolidated presentation in the shared guardrails stylesheet; removed obsolete base/shell rules and the 404-specific padding override. All saved links, headings, branding and Site Studio ownership remain intact.
+- **Live:** No deployment or production settings changes in this session. Main starts at `da9c1a7` (Theme 3.2.116); the current public footer was read for the local comparison.
+- **Holding:** `codex/compact-footer`; focused checks passed, required PR CI and visual review are the remaining candidate gates.
+- **Verified:** 48 actual-template Search/404/footer scenarios and 619 assertions with JavaScript disabled, including long custom labels and 0/1/12 links per group; 130 Footer editor/persistence checks; public geometry policy and generated-shell checks. Local component preview uses current public links/assets: 390px phone footer drops from about 509px to 315px, with 44px targets and no overflow; desktop candidate is about 181px. This is preview evidence, not deployed acceptance.
+- **Next:** Review the compact footer, complete required CI, then use the existing separate merge/deployment gates. Keep the accepted shared slider interval at 12 seconds.
+- **Found, not fixed:** An exploratory 641px recovery-template fixture showed an existing 42px-wide Search input; it is unrelated to the footer changes and outside this focused correction. The retained recovery coverage at 320/390/640/768/1440 passes.
+
 ## 2026-10-15 — Shared slider reading pace in Site Studio
 
 - **Shipped:** Theme 3.2.116 candidate replaces competing public autoplay intervals with a shared 12-second default. Global Design owns a bounded 8–30-second field, private Preview, Apply, Discard and History. Per-slider off states and visitor pause/reduced-motion protections remain intact. Obsolete independent timing UI points to its shared owner.

@@ -71,8 +71,12 @@ and links to the owning Review editor. This does not alter pairing content.
 - Reviews has one continuous index after its lead. Do not split the next four
   records into a companion carousel or reintroduce retired companion labels.
 - Public sliders use previous/next arrows and Pause/Play for automatic playback; never render dot, notch or dash pagination. Keep controls in a compact centered row, square 44px arrow targets and a 76px playback button, with the same navy/gold treatment. Preserve swipe, keyboard access, user pause and reduced-motion behavior. Non-automatic galleries have arrows only. Site Studio previews use the public renderer; saved legacy showDots values cannot reinstate pagination.
-- The footer uses compact wrapping directory rows, not tall navigation towers.
-  Keep every saved link, readable group labels, 44px targets and symmetric rows.
+- The footer is a compact closing strip. Three equal directory groups share a
+  row above 640px; phones place Editorial across the frame, with Oscar Ledger
+  and Utility balanced side by side below it. Links wrap naturally within each
+  group. Keep every saved link, readable labels and 44px targets. Brand and
+  copyright rows stay centered with short gaps. The shared guardrails stylesheet
+  owns this layout; route emitters and base styles must not add footer padding.
 
 ## Slider reading pace
 
