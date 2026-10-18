@@ -1,8 +1,11 @@
 # Lunara repository design and release alignment
 
-Effective 2026-10-15. This document records ownership; it does not authorize a
-deployment. The identical AGENTS.md in the seven active website repositories
-is the working agreement. Theme DESIGN.md and PUBLIC-GEOMETRY.md are the single
+Effective 2026-10-15; merge authority updated 2026-10-17. This document records
+ownership; it does not authorize a deployment. The identical AGENTS.md in the
+seven active website repositories is the working agreement. All ten Lunara
+repositories follow [agent merge authority](AGENT-MERGE-POLICY.md); the three
+secondary repositories have scoped agreements. Theme DESIGN.md and
+PUBLIC-GEOMETRY.md are the single
 public design contract. Resolve these files in the Theme checkout or
 [Theme repository](https://github.com/Lunara-Film/lunara-theme-blocks).
 
@@ -35,7 +38,10 @@ sanitization or a guarantee about previously generated articles.
 
 1. Prepare the PR and final candidate evidence. Reuse unchanged accepted checks;
    repeat affected checks after a substantive change, then required repository CI.
-2. Dalton merges. A merge is not a deployment. Keep automatic deployment off.
+2. The integrating agent merges the completed, verified PR under the shared
+   merge policy, without another routine merge approval. Confirm the exact
+   repository/base/head and passing checks. A merge is not a deployment. Keep
+   automatic deployment off.
 3. Record the merged commit and explicit release instruction. Inspect the
    existing deployment connection/destination instead of creating another one.
 4. Deploy runtime plugin changes before the Theme through the existing manual
@@ -63,7 +69,11 @@ All three GitHub deployment queries returned empty arrays. That proves only
 that GitHub exposed no deployment records, not that a third-party host is
 disconnected. Host-side activity for Engine/World remains unverified and is
 recorded rather than guessed. They are not counted as newly validated public
-consumers. No secondary repository or hosting configuration was mutated.
+consumers. No secondary repository or hosting configuration was mutated in that
+audit. The 2026-10-17 policy update adds scoped contributor agreements to all
+three secondary repositories without changing their runtime, hosting or data.
+World also labels obsolete deployment instructions as historical. Merge
+authority does not add these repositories to the active WordPress release set.
 
 ## Regression ownership
 

@@ -4,7 +4,8 @@ This is the implementation of Dalton's October 11 six-module package-boundary
 contract, following the editorial remediation candidates in Theme PR #230 and
 Ledger PR #54. It does not replace the original overlay register or erase its
 unresolved provenance items. This work is a local candidate until the release
-receipts below are filled and Dalton merges the reviewed PRs.
+receipts below are filled and the integrating agent merges the reviewed PRs
+under the current `AGENTS.md` gates.
 
 ## Direction and ownership
 
@@ -42,7 +43,7 @@ existing three-role contract rather than invented `pair_*` fields.
 | 3 — Medium, 1 day | Automated HTML can carry inline presentation into a carefully controlled theme. Sanitize only explicit ingestion entry points through Foundation; Dispatch reuses that contract. Keep semantic content, source identity, draft policy, metadata, idempotency and readback verification. | Foundation bridge; Dispatch Post Builder | Semantic DOM fixtures, unsafe content handling and existing ingestion/idempotency tests. No global save hook that rewrites human edits. No guessed model name or fabricated verification timestamp. |
 | 4 — Small, half day | The illustrative contract differs from existing canonical Debrief and artwork APIs. Retain the implemented three-role validation, public-renderer adoption gate, image-off/custom choices, native dimensions and portrait/backdrop geometry. | Core data; IMDb Guard integrity; Theme rendering | Reuse the existing canonical contract and artwork tests. Exercise both consumers when a contract changes. Do not migrate stored copy or artwork merely to match example code. |
 | 5 — Medium, half–one day | Broad asset removal can break block composition; duplicate animation delivery adds maintenance. Keep actual route-based assets, correct Home trimming to retain styles for unknown/core/third-party blocks, keep deterministic shell generation and pin the navigation bundle build. | Theme live enqueue functions and build tools | Known-section versus hybrid/preview behavior; build reproducibility; no parent/GSAP/global-style blanket deletion. Versioned assets and explicit script ownership prevent stale or uncontrolled delivery. |
-| 6 — Medium, half–one day | Repeated unbounded audits waste time and still confuse local, merged and live results. Record one scoped implementation batch, required CI, then one versioned public acceptance pass after release. | Integrating agent; Dalton merge/deploy | Failures trigger only their affected checks. No automatic score-chasing rescans. Carry original findings and open blockers forward unchanged until evidence closes them. |
+| 6 — Medium, half–one day | Repeated unbounded audits waste time and still confuse local, merged and live results. Record one scoped implementation batch, required CI, then one versioned public acceptance pass after release. | Integrating agent owns verified merges; deployment is separately authorized | Failures trigger only their affected checks. No automatic score-chasing rescans. Carry original findings and open blockers forward unchanged until evidence closes them. |
 
 Estimates describe engineering effort, not elapsed agent time, and overlap across
 parallel work. Existing implemented contracts should be verified, not rebuilt.
@@ -54,9 +55,10 @@ parallel work. Existing implemented contracts should be verified, not rebuilt.
    Dispatch changes target their current `main` branches.
 2. Foundation's shared sanitizer must be available before Dispatch relies on it.
    Newer Dispatch retains a guarded fallback if Foundation has not updated.
-3. Plugins deploy before Theme. Plugin merges can deploy automatically. Theme
-   currently needs Dalton's WordPress.com deploy click. No production changes
-   are authorized merely by passing a local test.
+3. Plugins deploy before Theme through the existing manual deployment path.
+   Automatic deployment remains off. Agents own verified merges; deployment
+   requires a separate explicit instruction under the current `AGENTS.md`.
+   No production changes are authorized merely by passing a local test.
 4. Confirm actual plugin/theme versions, server/CDN JSON compression and cache
    delivery, licensed-font behavior, route transitions and a complete Explorer
    filter cycle once on the released site. A `.gz` file alone does not prove

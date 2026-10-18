@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-17 — Agent-owned verified merges across Lunara repositories
+
+- **Shipped:** Dalton explicitly replaces the human-only merge rule. Agents now own commits, pushes, PRs and verified merges within the approved task without another routine merge confirmation. The shared merge policy covers the seven active website repositories and scoped agreements in Academy Awards SQL, Engine and legacy World. This documentation-only batch uses `codex/agent-merge-authority` in each repository; its PRs carry final CI and merge receipts. No runtime version changes.
+- **Verified:** GitHub access was checked for all ten repositories: the authenticated account has merge access. Theme's protected main requires `ci`; World requires up-to-date `Lint and Validate` and squash merging. Existing protections and repository settings are preserved. SQL and Engine have no CI workflow; their policy changes receive diff/link review rather than a fabricated CI result. All other repositories run their existing CI before integration.
+- **Release state:** Core #37 is already merged as `ae9a4ac4fa1cd71b68c35c444e2aa3fed933a8ed`; its 0.8.14 review-import verification record is merged through Theme #251 as `9c44880a6d70e122fd65e19ec502e89a3fbc3a2c`. Both resulting main CI runs passed. Core's quotes, accents and emoji candidate is in main.
+- **Live:** No deployment was performed by this policy session. A merge is not evidence of a live version. WordPress automatic deployments stay off.
+- **Holding:** Preserve unfinished Core #19 and Ledger #48. Merge authority does not authorize unfinished proposals, new features, production settings or deployment. Old handoffs remain historical; current contributor/release instructions point to the new agreement.
+- **Next:** Merge Theme's policy first so its shared links resolve, then integrate the other policy PRs through their normal checks. Verify merged commits/main checks and keep clean primary checkouts synchronized. Core's runtime release remains a separately authorized manual deployment of the verified candidate, followed by affected import verification.
+- **Found, not fixed:** SQL and Engine lack CI; no placeholder tests or unrelated workflow changes are introduced for policy documentation. World/Engine host connections remain unverified and outside the active WordPress release set. The separate Surrey repositories are outside this Lunara policy batch.
+
 ## 2026-10-17 — Core review-import text preservation prepared for release
 
 - **Shipped:** Prepared Core 0.8.14 in existing [Core PR #37](https://github.com/Lunara-Film/lunara-plugin-core/pull/37), candidate `e4383a07eea701738e8b9764170ad3ad0ce4ceb1`. Browser upload, full parser, Classic Editor Debrief harvesting and packaged HTML now preserve quotes, accents and complex Unicode. The original PR commit and current main are both ancestors; no force push or merge to main.
