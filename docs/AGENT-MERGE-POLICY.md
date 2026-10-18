@@ -39,7 +39,10 @@ Merging a proposal does not approve implementing the proposed feature.
    rerun unrelated accepted checks without a new change or failure. Repositories
    with no CI must explicitly record that fact and the relevant local checks;
    never invent a green CI result. Documentation-only edits need a diff/link
-   review and existing repository CI, not new placeholder tests.
+   review and existing repository CI, not new placeholder tests. Theme's
+   [documentation-only route](CI.md) is an explicit exception to runtime
+   retesting; the required `ci` result must still pass. Other repositories
+   retain their existing checks.
 4. **Merge through the PR.** Recheck the intended base, current head SHA and
    mergeability immediately before the merge. Use a supported merge method and
    an exact-head guard, for example `gh pr merge <number> --repo <owner/repo>
@@ -78,7 +81,7 @@ separate runtime/hosting responsibility before any deployment or data apply.
 
 ## Authority and maintenance
 
-The identical active-website `AGENTS.md` files summarize this policy. Secondary
+The active-website `AGENTS.md` files summarize this policy. Secondary
 repositories link here from their scoped `AGENTS.md`. Keep current contributor
 and release instructions consistent. Preserve dated logs and evidence as
 history; label obsolete operational instructions instead of rewriting receipts.

@@ -1,8 +1,9 @@
 # Working agreement — Lunara Film
 
 One owner, Dalton. Several AI agents: Claude, Codex, Gemini, Grok. No other
-humans touch these repos. This agreement is identical in the seven active
-website repos. Read it, then the top entry of `docs/SESSION-LOG.md` in
+humans touch these repos. This working agreement is shared across the seven
+active website repos; Theme-specific CI routing is described under Tests.
+Read it, then the top entry of `docs/SESSION-LOG.md` in
 `lunara-theme-blocks` (the shared log for all repos), then work.
 
 ## The loop
@@ -60,8 +61,13 @@ and other authorized agents. Follow the shared
 
 ## Tests
 
-- `tests/*.php` and `tests/*.js` are behavior tests. CI runs every one of them
-  on every PR (`*-cases.php` and `*-fixture.php` are helpers, not tests).
+- `tests/*.php` and `tests/*.js` are behavior tests. Full CI runs every one of
+  them (`*-cases.php` and `*-fixture.php` are helpers, not tests).
+- Theme CI validates routing on every PR and main push. Only the narrow
+  [documentation-only scope](docs/CI.md) skips runtime/browser jobs. Code,
+  tests, dependencies, workflow changes and uncertain comparisons require
+  the full suite and every browser shard. Other repositories retain their
+  existing CI until their own workflows explicitly adopt a scoped exception.
 - Change behavior → add or change a test. Remove behavior → delete its test.
 - No string-pin tests (a test that only checks a file contains some text).
   The PowerShell suite was retired on 2026-10-10 for that reason.
