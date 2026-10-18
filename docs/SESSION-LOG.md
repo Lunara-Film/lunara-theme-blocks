@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-17 — Core review-import text preservation prepared for release
+
+- **Shipped:** Prepared Core 0.8.14 in existing [Core PR #37](https://github.com/Lunara-Film/lunara-plugin-core/pull/37), candidate `e4383a07eea701738e8b9764170ad3ad0ce4ceb1`. Browser upload, full parser, Classic Editor Debrief harvesting and packaged HTML now preserve quotes, accents and complex Unicode. The original PR commit and current main are both ancestors; no force push or merge to main.
+- **Verified:** All 25 Core PHP behavior suites, 99 encoding checks, 94 checks without optional conversion functions, 305 browser assertions across 40 cases, syntax and CSS checks passed locally. Nine actual-review browser-to-PHP cases preserved Sirat and One Battle After Another article wording, metadata and all three pairing arguments through local modeled persistence. All 235 archival review outputs match the prior baseline; all 236 original files, including the formatting README, retain their hashes. Public REST re-exports were used for the successful imports; this is not deployed WordPress database acceptance.
+- **Live:** No production content, settings, deployment or cache changes. Theme runtime remains unchanged by this work; this entry is documentation only.
+- **Holding:** Core PR #37 contains the complete candidate; its GitHub CI and Dalton's merge remain release gates. Local evidence is under `C:\Users\silve\Local\Projects\lunara-maintenance\core-review-import-20261017`. Full review sources are excluded from Git.
+- **Next:** After green CI and Dalton's merge, record the merged Core commit and manually deploy that reviewed candidate under an explicit release instruction. Verify the live version and affected importer behavior. No Theme runtime deployment is needed for this Core fix.
+- **Found, not fixed:** Older archival REVIEW DETAILS / bare-Debrief layouts still need explicit format compatibility; their existing validation errors are unchanged. Previously lost characters require an intact original source. Emoji coverage is synthetic because the sampled originals contain no emoji.
+
 ## 2026-10-17 — Deterministic slider clock and GitHub reconciliation
 
 - **Shipped:** Test-only correction on `codex/stable-slider-timing-check`, based on current main `ae45213`. The fallback playback fixture now pauses its browser clock before navigation, so runner latency cannot consume the reading interval. It checks the slide one millisecond before and exactly at both 12-second and 18-second boundaries, on phone and desktop. No runtime files or release version change.
