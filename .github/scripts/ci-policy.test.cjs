@@ -38,8 +38,8 @@ function repository(t) {
 
 const push = (before, after) => ({ before, after });
 const pr = (base, head) => ({ pull_request: { base: { sha: base }, head: { sha: head } } });
-const results = (docsOnly, checks, browser, scope = 'success') => ({
-  scope: { result: scope, outputs: { docs_only: docsOnly } },
+const results = (docsOnly, checks, browser, scope = 'success', tested = 'false') => ({
+  scope: { result: scope, outputs: { docs_only: docsOnly, tested } },
   checks: { result: checks }, browser: { result: browser },
 });
 
@@ -112,15 +112,22 @@ test('empty, missing, invalid, unknown and unavailable comparisons default to fu
   ]) assert.equal(classify(name, event, r.cwd).docsOnly, false, JSON.stringify(event));
 });
 
-test('required gate accepts only verified docs skips or complete full-suite success', () => {
+test('required gate accepts only verified skips or complete full-suite success', () => {
   assert.doesNotThrow(() => requireSuccess(results('true', 'skipped', 'skipped')));
   assert.doesNotThrow(() => requireSuccess(results('false', 'success', 'success')));
+  assert.match(requireSuccess(results('false', 'skipped', 'skipped', 'success', 'true')), /already passed/);
   for (const docs of ['true', 'false', '', undefined, 'invalid']) {
-    for (const checks of ['success', 'failure', 'cancelled', 'skipped', undefined]) {
-      for (const browser of ['success', 'failure', 'cancelled', 'skipped', undefined]) {
-        const valid = (docs === 'true' && checks === 'skipped' && browser === 'skipped')
-          || (docs === 'false' && checks === 'success' && browser === 'success');
-        if (!valid) assert.throws(() => requireSuccess(results(docs, checks, browser)));
+    for (const tested of ['true', 'false', '', undefined]) {
+      for (const checks of ['success', 'failure', 'cancelled', 'skipped', undefined]) {
+        for (const browser of ['success', 'failure', 'cancelled', 'skipped', undefined]) {
+          const known = ['true', 'false'].includes(docs) && ['true', 'false'].includes(tested);
+          const skip = docs === 'true' || tested === 'true';
+          const valid = known && checks === browser && browser === (skip ? 'skipped' : 'success');
+          const needs = results(docs, checks, browser);
+          needs.scope.outputs.tested = tested;
+          if (valid) assert.doesNotThrow(() => requireSuccess(needs));
+          else assert.throws(() => requireSuccess(needs));
+        }
       }
     }
   }

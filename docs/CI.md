@@ -39,6 +39,22 @@ the old and new paths are considered: moving runtime code into `docs/` still
 requires full CI. Deleting or renaming documentation within the allowed scope
 remains documentation-only.
 
+## Main push after a tested pull request
+
+A pull request runs full CI on GitHub's merge of the branch with current
+`main`. When it passes, the final `ci` job records that exact Git tree as a
+small `ci-passed-tree-<tree>` artifact (kept 14 days). A later push to `main`
+with the identical tree skips the PHP/JS/CSS checks and browser shards, so the
+merge does not run the same suite twice. `CI scope` still runs, and `ci` still
+must pass.
+
+`.github/scripts/ci-reuse.cjs` accepts only a completed, successful
+`pull_request` run of this same workflow from this repository, never a fork.
+Any other tree runs the full route: for example, `main` moved and the branch
+was not updated, a pull request failed or is unfinished, the artifact expired,
+or the GitHub API was unavailable. The `CI scope` log names the reused run. The
+six plugin repositories use the same script in their own workflows.
+
 ## Browser shard balance
 
 The full route splits browser test files across the four shards by measured
@@ -58,18 +74,20 @@ gh run view <run-id> --repo Lunara-Film/lunara-theme-blocks --log \
 
 ## Changing or verifying the policy
 
-Run the routing and shard tests locally with no dependency installation:
+Run the routing, shard and reuse tests locally with no dependency installation:
 
 ```sh
-node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs
+node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs .github/scripts/ci-reuse.test.cjs
 ```
 
 These tests use temporary Git repositories for PR/push ranges, mixed changes,
 renames, deletions, large diffs and unavailable comparisons. They also exercise
-the Actions output and final required-check policy. Changing the policy or its
-tests always takes the full CI route. Inspect `CI scope` and the final `ci`
-job summary/log in Actions to see which route was selected.
+the Actions output, the reuse rules against a local fake GitHub API and the
+final required-check policy. Changing the policy or its tests always takes the
+full CI route. Inspect `CI scope` and the final `ci` job summary/log in Actions
+to see which route was selected.
 
-This exception belongs to the Theme repository. It does not change plugin CI
-or the separately dispatched public design acceptance workflow. CI/docs-only
-changes need no runtime version bump or site deployment.
+The documentation-only route belongs to the Theme repository; plugins keep
+their own full workflows on pull requests. Neither route changes the separately
+dispatched public design acceptance workflow. CI/docs-only changes need no
+runtime version bump or site deployment.
