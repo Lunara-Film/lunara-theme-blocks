@@ -68,6 +68,10 @@ and other authorized agents. Follow the shared
   tests, dependencies, workflow changes and uncertain comparisons require
   the full suite and every browser shard. Other repositories retain their
   existing CI until their own workflows explicitly adopt a scoped exception.
+- In every repo, a push to `main` skips the full jobs only when that exact
+  tree already passed them on a same-repository PR
+  ([main push reuse](docs/CI.md#main-push-after-a-tested-pull-request)).
+  Any other push runs the full workflow.
 - Change behavior → add or change a test. Remove behavior → delete its test.
 - No string-pin tests (a test that only checks a file contains some text).
   The PowerShell suite was retired on 2026-10-10 for that reason.

@@ -55,13 +55,17 @@ function requireSuccess(needs) {
   const scope = needs?.scope;
   if (scope?.result !== 'success') throw new Error('CI scope validation did not succeed.');
   const docsOnly = scope.outputs?.docs_only;
-  if (docsOnly !== 'true' && docsOnly !== 'false') throw new Error('CI scope output is missing or invalid.');
-  const expected = docsOnly === 'true' ? 'skipped' : 'success';
+  const tested = scope.outputs?.tested;
+  if (![docsOnly, tested].every((value) => value === 'true' || value === 'false')) {
+    throw new Error('CI scope output is missing or invalid.');
+  }
+  const expected = docsOnly === 'true' || tested === 'true' ? 'skipped' : 'success';
   for (const job of ['checks', 'browser']) {
     if (needs[job]?.result !== expected) throw new Error(`${job} must be ${expected} for this CI scope.`);
   }
-  return docsOnly === 'true'
-    ? 'Documentation-only CI passed; runtime checks intentionally skipped.'
+  if (docsOnly === 'true') return 'Documentation-only CI passed; runtime checks intentionally skipped.';
+  return tested === 'true'
+    ? 'This exact tree already passed full CI on its pull request; runtime checks intentionally skipped.'
     : 'Full CI passed, including every browser shard.';
 }
 

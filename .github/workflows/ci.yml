@@ -14,8 +14,12 @@ jobs:
     name: CI scope
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
     outputs:
       docs_only: ${{ steps.scope.outputs.docs_only }}
+      tested: ${{ steps.reuse.outputs.tested || 'false' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,16 +30,27 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Verify CI routing, required-check and shard policy
-        run: node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs
+      - name: Verify CI routing, required-check, shard and reuse policy
+        run: >-
+          node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs
+          .github/scripts/ci-reuse.test.cjs
 
       - name: Classify changed files
         id: scope
         run: node .github/scripts/ci-policy.cjs scope
 
+      # A main push skips the full jobs only when this exact tree already passed
+      # them on a same-repository pull request (docs/CI.md).
+      - name: Reuse the pull request result for an identical tree
+        id: reuse
+        if: steps.scope.outputs.docs_only == 'false'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node .github/scripts/ci-reuse.cjs check
+
   checks:
     needs: scope
-    if: needs.scope.outputs.docs_only != 'true'
+    if: needs.scope.outputs.docs_only != 'true' && needs.scope.outputs.tested != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -86,7 +101,7 @@ jobs:
   browser:
     name: Browser tests (${{ matrix.shard }}/4)
     needs: scope
-    if: needs.scope.outputs.docs_only != 'true'
+    if: needs.scope.outputs.docs_only != 'true' && needs.scope.outputs.tested != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -131,7 +146,8 @@ jobs:
           node --test --test-concurrency=1 "${shard[@]}"
 
   # Always report the existing required check. Only a successful documentation
-  # classification permits skipped runtime jobs; failures/cancellation fail CI.
+  # classification or a verified identical-tree result permits skipped runtime
+  # jobs; failures/cancellation fail CI.
   ci:
     if: always()
     needs: [scope, checks, browser]
@@ -148,3 +164,20 @@ jobs:
         env:
           CI_NEEDS: ${{ toJSON(needs) }}
         run: node .github/scripts/ci-policy.cjs gate
+
+      # Lets the merge to main reuse this result (.github/scripts/ci-reuse.cjs).
+      - name: Name the fully tested tree
+        if: github.event_name == 'pull_request' && needs.scope.outputs.docs_only == 'false'
+        run: |
+          echo "TESTED_TREE=$(git rev-parse HEAD^{tree})" >> "$GITHUB_ENV"
+          echo "$GITHUB_SHA" > "$RUNNER_TEMP/tested-tree.txt"
+
+      - name: Record the fully tested tree
+        if: github.event_name == 'pull_request' && needs.scope.outputs.docs_only == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-passed-tree-${{ env.TESTED_TREE }}
+          path: ${{ runner.temp }}/tested-tree.txt
+          retention-days: 14
+          overwrite: true
+          if-no-files-found: error
