@@ -10,7 +10,32 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  scope:
+    name: CI scope
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      docs_only: ${{ steps.scope.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Compare the whole PR/push, including renames and large file lists.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify CI routing and required-check policy
+        run: node --test .github/scripts/ci-policy.test.cjs
+
+      - name: Classify changed files
+        id: scope
+        run: node .github/scripts/ci-policy.cjs scope
+
   checks:
+    needs: scope
+    if: needs.scope.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -60,6 +85,8 @@ jobs:
 
   browser:
     name: Browser tests (${{ matrix.shard }}/4)
+    needs: scope
+    if: needs.scope.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -99,16 +126,21 @@ jobs:
           test "${#tests[@]}" -gt 0
           node --test --test-concurrency=1 --test-shard="$TEST_SHARD" "${tests[@]}"
 
-  # Keep the existing required check name. Failed, cancelled or skipped jobs
-  # must never make the aggregate green.
+  # Always report the existing required check. Only a successful documentation
+  # classification permits skipped runtime jobs; failures/cancellation fail CI.
   ci:
     if: always()
-    needs: [checks, browser]
+    needs: [scope, checks, browser]
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 2
     steps:
-      - name: Require all checks and browser shards
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Require the complete result for this scope
         env:
-          CHECKS_RESULT: ${{ needs.checks.result }}
-          BROWSER_RESULT: ${{ needs.browser.result }}
-        run: test "$CHECKS_RESULT" = success && test "$BROWSER_RESULT" = success
+          CI_NEEDS: ${{ toJSON(needs) }}
+        run: node .github/scripts/ci-policy.cjs gate
