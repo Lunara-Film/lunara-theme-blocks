@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-18 — Theme documentation-only CI without reducing code checks
+
+- **Shipped:** [Theme #256](https://github.com/Lunara-Film/lunara-theme-blocks/pull/256) merged as `45155a465379c1a7603ae13f02ba260208e99831`. Every PR and main push now validates the CI routing policy. Only named root documents and Markdown inside `docs/` skip runtime checks; code, tests, dependencies, workflows and uncertain comparisons retain the existing checks and all four browser shards. The required `ci` gate rejects failed/cancelled jobs, missing outputs and unexpected skips. See [CI scope](CI.md).
+- **Verified:** Eight behavioral groups pass using real temporary Git repositories, including PR merge bases, multi-commit pushes, renames/deletions, more than 300 changed files and fail-safe comparisons. Actionlint 1.7.12, JS syntax and diff checks pass. Parsed workflow comparison confirms the full jobs are unchanged except routing. [PR CI](https://github.com/Lunara-Film/lunara-theme-blocks/actions/runs/39132828319) and [resulting main CI](https://github.com/Lunara-Film/lunara-theme-blocks/actions/runs/39133131587) both passed every check and browser shard. The merged tree matches the verified candidate.
+- **Live:** GitHub uses the merged CI policy. No runtime source, theme version, production content/settings, deployment or cache change. Branch protection still requires successful `ci` on an up-to-date branch, including for administrators. Plugin CI and manually dispatched public design acceptance are unchanged.
+- **Holding:** This documentation-only release record is the final GitHub acceptance case for the short route; its required PR/main checks must pass before closeout. Unrelated unfinished branches remain preserved.
+- **Next:** Use the short route for release logs and documentation. Any later expansion to plugin CI must preserve each repository's own required checks and full code coverage.
+- **Found, not fixed:** No remaining defect identified within the Theme CI routing change.
+
 ## 2026-10-18 — Core 0.8.16 deployed; actual-review Preview verified live
 
 - **Shipped:** On Dalton's explicit deployment instruction, Core 0.8.16 / [#42](https://github.com/Lunara-Film/lunara-plugin-core/pull/42) was manually deployed from `main` commit `adfa733b6c73d16f9842d73fab0ce3158406c075`. The existing WordPress.com connection was verified as `Lunara-Film/lunara-plugin-core`, Simple deployment to `/wp-content/plugins/lunara-core`, with automatic deployment off. The [Core deployment history](https://my.wordpress.com/sites/lunarafilm.com/deployments?repository=Lunara-Film%2Flunara-plugin-core) reports completion in 43 seconds, starting at 08:08:33 UTC.
