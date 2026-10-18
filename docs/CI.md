@@ -39,12 +39,29 @@ the old and new paths are considered: moving runtime code into `docs/` still
 requires full CI. Deleting or renaming documentation within the allowed scope
 remains documentation-only.
 
-## Changing or verifying the policy
+## Browser shard balance
 
-Run the routing tests locally with no dependency installation:
+The full route splits browser test files across the four shards by measured
+run time, not by name order. `.github/scripts/browser-shards.cjs` gives the
+slowest files out first, each to the shard with the least planned time. Every
+shard computes the same plan, so each discovered file runs exactly once. New
+tests are included automatically at the median measured time; deleted tests
+are ignored. Each shard log prints its planned seconds.
+
+Stale times only make the shards uneven; they never skip a test. When one shard
+becomes much slower than the others, refresh the table from a recent full run:
 
 ```sh
-node --test .github/scripts/ci-policy.test.cjs
+gh run view <run-id> --repo Lunara-Film/lunara-theme-blocks --log \
+  | node .github/scripts/browser-shards.cjs timings > .github/scripts/browser-timings.json
+```
+
+## Changing or verifying the policy
+
+Run the routing and shard tests locally with no dependency installation:
+
+```sh
+node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs
 ```
 
 These tests use temporary Git repositories for PR/push ranges, mixed changes,
