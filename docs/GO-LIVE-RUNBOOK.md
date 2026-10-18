@@ -1,9 +1,11 @@
 > **Superseded on 2026-10-10.** The working agreement is now the one page in
-> `AGENTS.md`: branch, PR, passing CI, Dalton merges, then separately authorized
+> `AGENTS.md`: branch, PR, passing CI, the integrating agent merges, then separately authorized
 > manual deployment and live verification. Reverts also require deployment.
 > This runbook is kept for history and for the
 > canary script's usage notes; where it disagrees with `AGENTS.md`, `AGENTS.md`
 > wins.
+> Merge authority was updated by Dalton on 2026-10-17; see
+> [the shared policy](AGENT-MERGE-POLICY.md). No routine merge confirmation is required.
 
 # Go-Live Runbook
 

@@ -1,5 +1,10 @@
 # Editorial presentation candidate — 2026-10-11
 
+> Historical candidate record. The version-specific checklist below records the
+> policy at that time. Current merge and deployment authority is `AGENTS.md` and
+> [the shared merge policy](AGENT-MERGE-POLICY.md): agents merge verified work;
+> automatic deployment is off and deployment requires separate authorization.
+
 Theme 3.2.104 and Ledger 2.8.22 implement the public presentation corrections from the supplied Home/Journal overlays and the expanded page-type/state audit. This is a review candidate, not a statement that production has changed.
 
 ## What changed and why

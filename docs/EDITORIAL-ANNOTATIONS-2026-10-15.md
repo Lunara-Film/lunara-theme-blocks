@@ -1,5 +1,10 @@
 # Editorial annotation closure — 15 October 2026
 
+> Historical candidate record. Preserve these verification receipts; current
+> merge and deployment authority is `AGENTS.md` and
+> [the shared merge policy](AGENT-MERGE-POLICY.md). Agents merge verified work;
+> requested visual approval and deployment remain separate decisions.
+
 Scope: Dalton's fifteen browser annotations on the earlier candidate and live
 Reviews. Theme 3.2.112 draft revision; no production change. The screenshots
 identify the requested instances. The approved Ledger navigator is preserved.
