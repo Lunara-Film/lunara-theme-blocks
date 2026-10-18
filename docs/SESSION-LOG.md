@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-18 — Theme browser shards balanced by measured run time
+
+- **Shipped:** Claude Code took over maintenance from Codex; the handoff checkpoint verified (seven repositories at their recorded heads, clean, matching GitHub; Theme CI file hashes matched). [Theme #258](https://github.com/Lunara-Film/lunara-theme-blocks/pull/258) merged as `5805ce396abf48b5f009432c4d510c9a3ce87827`. Node's `--test-shard` split browser files by name order, so shard 1 held the two slowest files (66 s and 35 s) and took 178 s while the others took about 90 s. `.github/scripts/browser-shards.cjs` now plans the four shards from measured seconds in `.github/scripts/browser-timings.json`. See [CI scope](CI.md#browser-shard-balance).
+- **Verified:** 16/16 local routing and shard tests pass. [PR CI](https://github.com/Lunara-Film/lunara-theme-blocks/actions/runs/39169340192) passed all seven checks in 151 s (previous full PR runs: 209 s and 170 s); the shards took 111, 110, 105 and 126 s. All 57 browser files ran exactly once and the browser test count stayed at 61. This record merges only after the [resulting main CI](https://github.com/Lunara-Film/lunara-theme-blocks/actions/runs/39170840589) passes.
+- **Live:** GitHub uses the balanced shards. No runtime source, theme version, production content/settings, deployment or cache change. Required `ci`, the documentation-only route, `tests/ci-skip.txt`, concurrency 1 and the four shards are unchanged.
+- **Holding:** Nothing. Theme #48 and Ledger #48 remain preserved, unfinished drafts.
+- **Next:** Each merged code change still runs full Theme CI twice (PR, then main) on the same up-to-date tree. Whether agents must wait for the main run before moving on is a merge-policy decision for Dalton. Plugin documentation-only CI was measured and not built: plugin runs take 12–90 s, so a scope job would save little.
+- **Found, not fixed:** `tests/shell-css-variant.test.cjs` reports its tests without a file-level wrapper, so the `timings` command cannot measure it; the planner gives it the median time. Refresh `browser-timings.json` only when one shard becomes much slower than the others.
+
 ## 2026-10-18 — Theme documentation-only CI without reducing code checks
 
 - **Shipped:** [Theme #256](https://github.com/Lunara-Film/lunara-theme-blocks/pull/256) merged as `45155a465379c1a7603ae13f02ba260208e99831`. Every PR and main push now validates the CI routing policy. Only named root documents and Markdown inside `docs/` skip runtime checks; code, tests, dependencies, workflows and uncertain comparisons retain the existing checks and all four browser shards. The required `ci` gate rejects failed/cancelled jobs, missing outputs and unexpected skips. See [CI scope](CI.md).
