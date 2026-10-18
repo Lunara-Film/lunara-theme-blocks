@@ -26,8 +26,8 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Verify CI routing and required-check policy
-        run: node --test .github/scripts/ci-policy.test.cjs
+      - name: Verify CI routing, required-check and shard policy
+        run: node --test .github/scripts/ci-policy.test.cjs .github/scripts/browser-shards.test.cjs
 
       - name: Classify changed files
         id: scope
@@ -123,8 +123,12 @@ jobs:
           done
           # Explicit discovery includes new tests automatically. Each file runs
           # once across the shards, in its own process, with one browser at a time.
+          # Shards are balanced by measured seconds (docs/CI.md), not name order.
           test "${#tests[@]}" -gt 0
-          node --test --test-concurrency=1 --test-shard="$TEST_SHARD" "${tests[@]}"
+          list=$(node .github/scripts/browser-shards.cjs shard "$TEST_SHARD" "${tests[@]}")
+          test -n "$list"
+          mapfile -t shard <<< "$list"
+          node --test --test-concurrency=1 "${shard[@]}"
 
   # Always report the existing required check. Only a successful documentation
   # classification permits skipped runtime jobs; failures/cancellation fail CI.
