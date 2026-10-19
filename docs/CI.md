@@ -2,7 +2,7 @@
 
 CI runs on every pull request and every push to `main`. The required check
 remains **`ci`**, including for documentation-only changes. Branch protection,
-the full behavior suites, four browser shards and `tests/ci-skip.txt` are
+the full behavior suites, six browser shards and `tests/ci-skip.txt` are
 unchanged by this routing policy.
 
 ## Documentation-only route
@@ -22,7 +22,7 @@ Review the documentation diff and links as part of the normal PR review.
 
 ## Full route
 
-Any other path runs the existing checks and all four browser shards. This
+Any other path runs the existing checks and all six browser shards. This
 includes runtime code, styles, templates, assets, configuration, dependencies,
 lockfiles, test fixtures (even Markdown fixtures), CI scripts and workflows.
 Adding documentation to a code change does not reduce its checks.
@@ -57,7 +57,7 @@ six plugin repositories use the same script in their own workflows.
 
 ## Browser shard balance
 
-The full route splits browser test files across the four shards by measured
+The full route splits browser test files across the six shards by measured
 run time, not by name order. `.github/scripts/browser-shards.cjs` gives the
 slowest files out first, each to the shard with the least planned time. Every
 shard computes the same plan, so each discovered file runs exactly once. New

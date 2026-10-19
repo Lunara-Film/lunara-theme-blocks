@@ -99,7 +99,7 @@ jobs:
           done
 
   browser:
-    name: Browser tests (${{ matrix.shard }}/4)
+    name: Browser tests (${{ matrix.shard }}/6)
     needs: scope
     if: needs.scope.outputs.docs_only != 'true' && needs.scope.outputs.tested != 'true'
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6]
     steps:
       - uses: actions/checkout@v4
 
@@ -126,7 +126,7 @@ jobs:
       - name: Browser behavior tests
         env:
           LUNARA_BROWSER_EXECUTABLE: /usr/bin/google-chrome
-          TEST_SHARD: ${{ matrix.shard }}/4
+          TEST_SHARD: ${{ matrix.shard }}/6
         run: |
           set -e
           tests=()
