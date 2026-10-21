@@ -597,6 +597,13 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
             $card .= '' !== $tt ? ' data-pair-tt="' . esc_attr( $tt ) . '"' : '';
             $card .= '>' . $media . '<div class="lunara-pair-card-body">';
             $card .= '<p class="lunara-pair-card-role">' . esc_html( (string) $row['label'] ) . '</p>';
+            // The Method page owns each relationship's defining question; the
+            // card repeats it under the role so the row says what it answers.
+            $method_roles = function_exists( 'lunara_debrief_method_roles' ) ? lunara_debrief_method_roles() : array();
+            $question     = isset( $method_roles[ (string) $row['slug'] ]['question'] ) ? (string) $method_roles[ (string) $row['slug'] ]['question'] : '';
+            if ( '' !== $question ) {
+                $card .= '<p class="lunara-pair-card-question">' . esc_html( $question ) . '</p>';
+            }
             $card .= '<h3 class="lunara-pair-card-title">' . $title_html . '</h3>';
             if ( '' !== trim( $note ) ) {
                 $card .= '<p class="lunara-pair-card-note">' . esc_html( $note ) . '</p>';

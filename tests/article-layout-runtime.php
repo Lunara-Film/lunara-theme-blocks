@@ -159,6 +159,8 @@ foreach ( array( 'review', 'journal' ) as $type ) {
         $article_case = array( 'type' => $type, 'scenario' => $scenario, 'title' => 'The films we carry out of the theater', 'art' => 'review' === $type ? 'poster' : 'landscape' );
         $article_mods = array();
         $article_filters = array();
+        // A real Review headline: the film, a spaced en dash, then the take.
+        if ( 'review' === $type && 'with-rail' === $scenario ) { $article_case['title'] = 'The Social Reckoning – A Procedural Without a Pulse'; $article_case['art'] = 'landscape'; }
         if ( 'with-two-rail' === $scenario ) { $article_mods = array( 'lunara_review_single_density' => 'feature', 'lunara_review_single_rail_mode' => 'metadata-forward', 'lunara_review_single_pairing_density' => 'showcase' ); }
         if ( 'long-title' === $scenario ) { $article_case['title'] = 'A late summer conversation about the films that surprise us, the stories we revisit, and ' . str_repeat( 'Cinema', 14 ); $article_case['art'] = 'landscape'; }
         if ( 'missing' === $scenario ) { $article_case['art'] = 'missing'; }

@@ -197,15 +197,51 @@ if ( have_posts() ) :
         $show_detail_card = ! empty( $detail_items ) && ! $hide_detail_card && $show_details_default;
         $show_ledger_card = '' !== $ledger_pill;
         $display_label    = '' !== $review_label ? $review_label : $default_label;
+        // Direction D (3.2.118): the headline reads "Film – The take". The film
+        // name carries the display face and the take sits beneath it; the
+        // separator stays in the heading for assistive technology, so the h1
+        // text is unchanged.
+        $title_html  = get_the_title( $post_id );
+        $title_parts = preg_split( '/(\s+(?:&#8211;|&#8212;|–|—|-{1,2})\s+)/u', $title_html, 2, PREG_SPLIT_DELIM_CAPTURE );
+        // A landscape still opens the page at full frame width; a poster keeps
+        // its place inside the reading column.
+        $still_leads = '' !== trim( $hero_visual ) && false === strpos( $hero_visual, 'lunara-review-visual--poster-hero' );
+        $still_caption = implode(
+            '. ',
+            array_filter(
+                array(
+                    trim( wp_strip_all_tags( isset( $title_parts[0] ) ? $title_parts[0] : $title_html ) ) . ( '' !== $year ? ', ' . $year : '' ),
+                    $studio,
+                ),
+                'strlen'
+            )
+        );
         if ( $is_full_spoiler && '' === $review_label ) {
             $display_label = __( 'Full Spoiler Review', 'lunara-film' );
         }
         ?>
         <div id="primary" class="site-main lunara-archive-page lunara-review-single-page<?php echo $is_full_spoiler ? ' lunara-review-single-page--full-spoiler' : ''; ?>">
             <article <?php post_class( 'lunara-journal-single lunara-review-single' . ( $is_full_spoiler ? ' lunara-review-single--full-spoiler' : '' ) ); ?>>
+                <?php if ( $still_leads ) : ?>
+                <section class="lunara-review-single-still">
+                    <div class="lunara-review-single-cinematic-hero">
+                        <?php echo $hero_visual; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                    <?php if ( '' !== $still_caption ) : ?>
+                        <p class="lunara-review-single-still-caption"><?php echo esc_html( $still_caption ); ?></p>
+                    <?php endif; ?>
+                </section>
+                <?php endif; ?>
                 <section class="lunara-review-single-hero" data-lunara-site-studio-section="hero">
                     <div class="lunara-review-single-hero-inner">
-                        <h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
+                        <h1 class="lunara-review-single-title"><?php
+                        // No whitespace inside the heading: its text is exactly the title.
+                        if ( 3 === count( $title_parts ) ) {
+                            echo '<span class="lunara-review-single-title-film">' . wp_kses_post( $title_parts[0] ) . '</span><span class="lunara-screen-reader-text">' . wp_kses_post( $title_parts[1] ) . '</span><span class="lunara-review-single-title-take">' . wp_kses_post( $title_parts[2] ) . '</span>';
+                        } else {
+                            echo '<span class="lunara-review-single-title-film">' . wp_kses_post( $title_html ) . '</span>';
+                        }
+                        ?></h1>
                         <p class="lunara-archive-hero-kicker"><?php echo esc_html( $display_label ); ?></p>
 
                         <?php if ( '' !== trim( $excerpt ) ) : ?>
@@ -218,8 +254,11 @@ if ( have_posts() ) :
                                 // The director's name is the review's one route to the director archive.
                                 $review_meta_year = trim( (string) get_post_meta( $post_id, '_lunara_year', true ) );
                                 ?>
-                                <?php if ( '' !== $director_url && '' !== $director ) : ?>
-                                    <span><?php echo '' !== $review_meta_year ? esc_html( $review_meta_year ) . '&nbsp;/&nbsp;' : ''; // Non-breaking: the meta line lays its pieces out in a way that drops plain spaces before the link. ?><a class="lunara-review-single-director-link" href="<?php echo esc_url( $director_url ); ?>"><?php echo esc_html( $director ); ?></a></span>
+                                <?php if ( '' !== $director ) : ?>
+                                    <span class="lunara-review-single-credit"><?php esc_html_e( 'Directed by', 'lunara-film' ); ?>&nbsp;<?php if ( '' !== $director_url ) : ?><a class="lunara-review-single-director-link" href="<?php echo esc_url( $director_url ); ?>"><?php echo esc_html( $director ); ?></a><?php else : ?><?php echo esc_html( $director ); ?><?php endif; ?></span>
+                                    <?php if ( '' !== $review_meta_year ) : ?>
+                                        <span><?php echo esc_html( $review_meta_year ); ?></span>
+                                    <?php endif; ?>
                                 <?php else : ?>
                                     <span><?php echo esc_html( $review_meta_line ); ?></span>
                                 <?php endif; ?>
@@ -235,7 +274,7 @@ if ( have_posts() ) :
                 <section class="lunara-review-single-body" data-lunara-site-studio-section="criticism">
                     <div class="lunara-review-single-body-grid">
                         <div class="lunara-review-single-content">
-                            <?php if ( '' !== trim( $hero_visual ) ) : ?>
+                            <?php if ( '' !== trim( $hero_visual ) && ! $still_leads ) : ?>
                                 <div class="lunara-review-single-cinematic-hero">
                                     <?php echo $hero_visual; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 </div>

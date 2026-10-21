@@ -1991,10 +1991,17 @@ body:not(.wp-admin) .entry-title,
 body:not(.wp-admin) .page-title,
 body:not(.wp-admin) .lunara-home-hero-title,
 body:not(.wp-admin) .lunara-home-section-title,
-body:not(.wp-admin) .lunara-archive-hero-title,
-body:not(.wp-admin) .lunara-review-single-title {
+body:not(.wp-admin) .lunara-archive-hero-title {
     font-family:var(--lunara-font-display) !important;
     font-weight:600 !important;
+    letter-spacing: 0 !important;
+    text-wrap: balance !important;
+}
+
+/* Review titles carry the signature face (3.2.118, DESIGN.md). */
+body:not(.wp-admin) .lunara-review-single-title {
+    font-family:var(--lunara-font-signature) !important;
+    font-weight:400 !important;
     letter-spacing: 0 !important;
     text-wrap: balance !important;
 }

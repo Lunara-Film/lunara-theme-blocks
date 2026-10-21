@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-21 — Review page in direction D (Theme 3.2.118)
+
+- **Shipped:** Theme 3.2.118 PR (this entry rides in it): the Review page in the direction Dalton picked on the "Lunara Redesign Directions" canvas. GT Sectra Display subsets, the film/take headline split, a leading landscape still at the Studio hero width, the "Directed by" credit line, GT Sectra pull quotes, and Pair It With rows that carry the Method question. DESIGN.md updated with his three rulings (GT Sectra for Review titles and pull quotes; credits centered under the title; no ordinal numerals). See the 3.2.118 changelog entry. Earlier the same week, outside this repo: IMDb Guard 0.4.2 (#9) now looks up the film title, not the headline with its take, and is live; Misty Green filled its IMDb ID, poster and still on the next run.
+- **Verified:** all PHP tests pass locally; `article-layout-browser-runtime.js` 1,144 assertions (100 new), `debrief-lifecycle-runtime.js` 49, `review-reading-font-browser-runtime.js` 240, `site-studio-editorial-workspace-runtime.js` all pass. PR CI is the gate.
+- **Live:** Nothing changed live. Deploy needs Dalton's click **and** the three subset files in `/wp-content/uploads/lunara-fonts/v1/`: `GTSectraDisplayLCG-Regular.subset.woff2`, `GTSectraDisplayLCG-RegularItalic.subset.woff2`, `GTSectraDisplayLCG-Medium.subset.woff2` (licensed; never in Git).
+- **Holding:** The Home page in direction D (next PR). Theme #48 and Ledger #48 remain preserved, unfinished drafts.
+- **Next:** Home in direction D. Then the queued items from Dalton's 2026-10-19 decision sheet: public Press & Accreditation page, Ledger structured data (Dataset/ItemList), Typefully thread drafts on review publish.
+- **Found, not fixed:** No field stores cinematographer, editor or composer, so Review credits show only the director. A broad rule sets Tiempos Text on spans inside the Review title area; the new film span overrides it directly rather than tracing that rule. The live theme moved from 3.2.100 (2026-10-08) to 3.2.117 by 2026-10-21; the Done plan's freeze is not in effect.
+
 ## 2026-10-18 — Theme browser tests in six balanced shards
 
 - **Shipped:** On Dalton's instruction, [Theme #262](https://github.com/Lunara-Film/lunara-theme-blocks/pull/262) merged as `7e476f03c4e8abb3f1333bb6f62d31b4a96b2832`. The browser matrix runs six time-balanced shards instead of four (about 75 s planned per shard instead of 112 s). The repository is public, so the extra runners cost no Actions minutes. The required check is still only `ci`.
