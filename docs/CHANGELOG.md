@@ -12,6 +12,20 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-21 — Theme 3.2.118: the Review page, direction D
+
+Dalton chose direction D on the "Lunara Redesign Directions" canvas (the printed-program presentation over the image-first layout), then ruled on three conflicts with DESIGN.md: GT Sectra carries Review titles and pull quotes, credits sit centered under the title, no ordinal numerals. Corners stay square.
+
+- **GT Sectra Display replaces the Fine cut** at 400 and 500 and adds the italic. The three files are subset to Western Latin, curly quotes, dashes and the rating star: 78 → 15 KB, 83 → 17 KB, 78 → 15 KB. They are licensed, so they live in `uploads/lunara-fonts/v1/` beside Tiempos, not in this public repository. **Deploy needs those three files uploaded first**, or the titles fall back to Tiempos Headline.
+- **The headline splits into film and take.** `single-review.php` splits the title at the first spaced dash (en dash, em dash or spaced hyphen; entities included). The film name is GT Sectra; the take is Tiempos Text italic beneath it. The separator stays in the `<h1>` as screen-reader text, so the heading's text is unchanged. A title without a dash stays whole.
+- **A landscape still opens the page** above the title, at the Review Studio hero width (`--lunara-review-single-hero-max`: Standard 980, Poster-forward 760, Wide-forward 1180), with a caption (film, year, studio). Poster artwork stays in the reading column as before. The still keeps its native proportion.
+- **Credit line:** "Directed by {director}" (linked to the director archive) then the year, replacing "{year} / {director}".
+- **Pull quotes** in Review copy use GT Sectra italic in light gold.
+- **Pair It With:** the section and film titles use GT Sectra; the role name is set in spaced capitals (its text is unchanged); each row adds the role's question from the Method page (`lunara_debrief_method_roles()`), so the Review and the Method page say the same thing.
+- **Shell:** `.lunara-review-single-title` leaves the Tiempos Headline group in `lunara-shell.css` for the signature face; `lunara-shell-non-portal.css` rebuilt.
+- **Tests:** `article-layout-browser-runtime.js` now covers the leading still (landscape leads, poster stays, missing emits none), the film/take split and its faces, and the Method question on every pairing row; the `with-rail` Review fixture uses a real headline with a take. The pairing harness loads the Method roles, as production does. 1,144 assertions (was 1,044).
+- **Not in this release:** cinematographer, editor and composer credits. No field stores them today; adding them touches Lunara Core and the review import. The Home page in direction D comes next.
+
 ## 2026-10-10 — Theme 3.2.103: the hero film loop is gone
 
 - **The `/oscars/` hero no longer plays video** (Dalton's call, 2026-10-10 22:44 CT). The 3.2.98 loop (Wings and Sunrise, 1927, public domain) played on any screen wider than 820px, which included phones held sideways and tablets, and it was never the point of the page. Removed: the reel markup in `page-oscars.php`, the enqueue and `lunara_oscars_hero_reel_url()` in `inc/frontend.php`, `assets/js/lunara-oscars-hero-reel.js`, the 1.2 MB `assets/video/oscars-hero-loop.mp4`, and the reel rules in `lunara-oscars-portal.css`. The hero is the Best Picture backdrop and the poster card at every width; on phones the 3.2.100 band stays as it was. The loop lives in git history (3.2.98) if it is ever wanted back.

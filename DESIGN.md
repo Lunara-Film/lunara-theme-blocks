@@ -36,6 +36,11 @@ and links to the owning Review editor. This does not alter pairing content.
   film links. Home and archive summaries use editorial columns. A full Review
   gives each pairing its own row: poster beside the complete argument, stacking
   at 640px and below. Neither layout uses a painted container inside another.
+- A Review with landscape artwork opens with that still at the Review Studio
+  hero width, above the centered title group, with a one-line caption. Poster
+  artwork stays in the reading column. Credits read as one centered line under
+  the title ("Directed by …"), never as a side rail. Each pairing row states
+  its Method question beneath the role name.
 - Single Reviews own a centered 760px reading frame and below-article navigation.
   Pairing rows use a centered 860px frame. Route CSS owns that geometry; late
   Studio output may change supported presentation choices without restoring a
@@ -119,6 +124,9 @@ and links to the owning Review editor. This does not alter pairing content.
 - Ground: `#0a1520`; reading text: near-white; accent: `#c9a961` or `#e0c481`.
   Saved valid color choices must keep their intended semantics and contrast.
 - Tiempos Headline carries editorial headings; Tiempos Text carries reading.
+  GT Sectra Display (the Display optical size) carries the film name in a
+  Review title, Review pull quotes and Pair It With film titles (Dalton,
+  2026-10-21). The take after the title's dash reads in Tiempos Text italic.
   Licensed font files stay in `/wp-content/uploads/lunara-fonts/v1/`, outside Git.
   Font fallback must preserve readable geometry.
 - Ordinary reading/card copy is normally 16–18px; functional metadata and controls

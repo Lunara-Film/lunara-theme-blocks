@@ -88,6 +88,22 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                         if(expectedCards===2) assert(width<=640?layout.railCards[1].top>=layout.railCards[0].bottom:Math.abs(layout.railCards[1].top-layout.railCards[0].top)<=1, `${label}: both record cards follow the expected visual reading order`, layout);
                     } else assert(data.rail===null, `${label}: no empty rail is emitted`, layout);
                 }
+                if (fixture.type === 'review') {
+                    // Direction D: landscape art opens the page above the title; a poster
+                    // stays in the reading column. The headline splits into film and take
+                    // without changing the heading's text.
+                    const d = await page.evaluate(() => {
+                        const still = document.querySelector('.lunara-review-single-still'), hero = document.querySelector('.lunara-review-single-hero');
+                        const film = document.querySelector('.lunara-review-single-title-film'), take = document.querySelector('.lunara-review-single-title-take');
+                        return { still: !!still, stillFirst: !!still && !!(still.compareDocumentPosition(hero) & Node.DOCUMENT_POSITION_FOLLOWING), heroInColumn: !!document.querySelector('.lunara-review-single-content .lunara-review-single-cinematic-hero'), film: film && film.textContent, take: take && take.textContent, filmFont: film && getComputedStyle(film).fontFamily, takeStyle: take && getComputedStyle(take).fontStyle };
+                    });
+                    if (fixture.art === 'landscape') assert(d.still && d.stillFirst && !d.heroInColumn, `${label}: a landscape still opens the page above the title`, d);
+                    else if (fixture.art === 'poster') assert(!d.still && d.heroInColumn, `${label}: a poster keeps its place in the reading column`, d);
+                    else assert(!d.still && !d.heroInColumn, `${label}: missing artwork emits no still`, d);
+                    assert(d.film && d.filmFont.startsWith('"GT Sectra Display"'), `${label}: the film name carries the signature face`, d);
+                    if (fixture.title.includes(' – ')) assert(d.film === fixture.title.split(' – ')[0] && d.take === fixture.title.split(' – ')[1] && d.takeStyle === 'italic', `${label}: the take line sits beneath the film name in reading italic`, d);
+                    else assert(d.take === null && d.film === fixture.title, `${label}: a title without a take stays whole`, d);
+                }
                 if (data.adjacent.length === 1) assert(centered(data.adjacent[0]), `${label}: one adjacent story centers without a vacant companion cell`, data.adjacent);
                 assert(data.paragraphSize >= 16, `${label}: phone body text stays at least16px`, data);
                 assert(!data.duplicateMetaDots, `${label}: metadata uses one separator between items`, data);
@@ -164,6 +180,8 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                 if(width<=640) assert(pairs.every(card=>Math.abs(card.poster.width-card.box.width)<=1&&card.poster.height<=340&&card.body.top>=card.poster.bottom-1&&(!card.imageFit||card.imageFit==='cover')), `Pairings ${index}@${width}: phones stack full-width posters with a340px cap above the entire argument`, pairs);
                 else assert(pairs.every(card=>Math.abs(card.poster.width-170)<=1&&Math.abs(card.poster.width/card.poster.height-2/3)<.01&&card.poster.right<=card.body.left+1&&Math.abs(card.poster.top-card.body.top)<=1), `Pairings ${index}@${width}: desktop rows place170px native-ratio posters to the left of the copy`, pairs);
                 if(index===1) assert(pairs.some(card=>card.fallback), `Pairings ${index}@${width}: missing optional artwork retains its real title plate`, pairs);
+                const questions=await fullHeadingMetrics(page,'.lunara-pair-card-question');
+                assert(questions.length===3&&new Set(questions.map(q=>q.text)).size===3&&questions.every(q=>q.text.endsWith('?')&&q.visible&&q.fits&&q.align==='center'&&q.fontSize>=13), `Pairings ${index}@${width}: each row states its Method question beneath the role`, questions);
                 await page.close();
             }
             if(reviewOnly||selectedArticle||[640,641].includes(width)) continue;

@@ -296,6 +296,19 @@ function wp_remote_get( $url, $args = array() ) {
 
 require dirname( __DIR__, 2 ) . '/inc/debrief-public.php';
 
+// Production loads the Method page right after the renderer; its role
+// definitions supply each pairing row's question. Hook registration is inert here.
+if ( ! function_exists( 'add_action' ) ) {
+    function add_action() { return true; }
+}
+if ( ! function_exists( 'add_filter' ) ) {
+    function add_filter() { return true; }
+}
+if ( ! function_exists( 'add_shortcode' ) ) {
+    function add_shortcode() { return true; }
+}
+require dirname( __DIR__, 2 ) . '/inc/debrief-method.php';
+
 // Production cannot be enabled, even by the filter.
 lunara_test_reset( 101 );
 lunara_test_prime_legacy_meta( 101 );
