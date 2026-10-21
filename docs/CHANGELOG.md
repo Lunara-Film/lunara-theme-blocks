@@ -12,6 +12,17 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-21 — Theme 3.2.119: the Home masthead as a program
+
+The first Home step of direction D. The Front Desk masthead becomes the program's front page; the sections below it (latest reviews, Method, Journal, Forecast, Facts) are unchanged and still Studio-ordered.
+
+- **New `inc/home-front-desk.php`** owns the masthead (moved out of `inc/frontend.php`). Order: a dateline (Dallas, the month, the published review count) with the Search Command opener; the wordmark and dek; **Now Showing**: the lead story with its landscape still in a 16:9 frame, the headline split into film (GT Sectra) and take (Tiempos Text italic), excerpt and call to action; two companion reviews (the newest that are not the lead) with their stills, lazy-loaded; the three section doors. A review without a still is a text companion, never an empty frame. The lead still stays the eager, `fetchpriority=high` LCP candidate.
+- **Retired:** the "Live" signal bar and the Journal Pulse / Oscar Ledger signal cards and inline search form. Journal and the Ledger keep their doors and their own sections. Their CSS and the shell rule that styled them are removed.
+- **Settings kept:** every logo size, masthead padding and gap, density and route-door prominence setting still applies; `#lunara-home-front-door-vars` is unchanged.
+- **Shared headline splitter:** `lunara_split_review_headline()` in `inc/helpers.php` (film, separator, take at the first spaced dash; entities decoded). The Review template now uses it.
+- **Tests:** new `tests/home-front-desk-runtime.php` (render contract: order, dateline, lead LCP image, split headlines, companions skip the lead, lazy companions, no-still and no-companion states, the splitter) and `tests/home-front-desk-browser-runtime.js` (real cascade at 320–1440: no overflow, section order, 16:9 frames, faces, 44px search, companions beside on desktop and below on phones, square corners). 30 browser checks.
+- **Next on Home:** the running-order poster wall, a Stills that Rhyme pair (needs a small Studio-editable store; nothing like it exists yet), and a Ledger band in the empty `ledger` registry slot.
+
 ## 2026-10-21 — Theme 3.2.118: the Review page, direction D
 
 Dalton chose direction D on the "Lunara Redesign Directions" canvas (the printed-program presentation over the image-first layout), then ruled on three conflicts with DESIGN.md: GT Sectra carries Review titles and pull quotes, credits sit centered under the title, no ordinal numerals. Corners stay square.

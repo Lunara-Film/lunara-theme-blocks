@@ -2014,13 +2014,20 @@ body:not(.wp-admin) .aat-category-history-title {
     text-wrap: balance !important;
 }
 
-body:not(.wp-admin) .lunara-home-front-desk-title,
 body:not(.wp-admin) .lunara-home-masthead-logo-fallback {
     font-family: var(--lunara-font-signature, var(--lunara-font-display, Georgia, "Times New Roman", serif)) !important;
     font-weight: 500 !important;
 }
 
-body:not(.wp-admin) .lunara-home-front-desk-signal strong,
+/* Now Showing titles read as the Review page does: the film in the
+   signature face at regular weight, the take beneath it. */
+body:not(.wp-admin) .lunara-home-front-desk-title,
+body:not(.wp-admin) .lunara-home-front-desk-companion-title,
+body:not(.wp-admin) .lunara-home-front-desk-film {
+    font-family: var(--lunara-font-signature, var(--lunara-font-display, Georgia, "Times New Roman", serif)) !important;
+    font-weight: 400 !important;
+}
+
 body:not(.wp-admin) .lunara-home-masthead-route strong {
     font-family: var(--lunara-font-display, Georgia, "Times New Roman", serif) !important;
 }

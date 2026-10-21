@@ -202,7 +202,7 @@ if ( have_posts() ) :
         // separator stays in the heading for assistive technology, so the h1
         // text is unchanged.
         $title_html  = get_the_title( $post_id );
-        $title_parts = preg_split( '/(\s+(?:&#8211;|&#8212;|–|—|-{1,2})\s+)/u', $title_html, 2, PREG_SPLIT_DELIM_CAPTURE );
+        $title_parts = function_exists( 'lunara_split_review_headline' ) ? lunara_split_review_headline( $title_html ) : array( html_entity_decode( $title_html, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
         // A landscape still opens the page at full frame width; a poster keeps
         // its place inside the reading column.
         $still_leads = '' !== trim( $hero_visual ) && false === strpos( $hero_visual, 'lunara-review-visual--poster-hero' );
@@ -210,7 +210,7 @@ if ( have_posts() ) :
             '. ',
             array_filter(
                 array(
-                    trim( wp_strip_all_tags( isset( $title_parts[0] ) ? $title_parts[0] : $title_html ) ) . ( '' !== $year ? ', ' . $year : '' ),
+                    trim( wp_strip_all_tags( $title_parts[0] ) ) . ( '' !== $year ? ', ' . $year : '' ),
                     $studio,
                 ),
                 'strlen'
@@ -237,9 +237,9 @@ if ( have_posts() ) :
                         <h1 class="lunara-review-single-title"><?php
                         // No whitespace inside the heading: its text is exactly the title.
                         if ( 3 === count( $title_parts ) ) {
-                            echo '<span class="lunara-review-single-title-film">' . wp_kses_post( $title_parts[0] ) . '</span><span class="lunara-screen-reader-text">' . wp_kses_post( $title_parts[1] ) . '</span><span class="lunara-review-single-title-take">' . wp_kses_post( $title_parts[2] ) . '</span>';
+                            echo '<span class="lunara-review-single-title-film">' . esc_html( $title_parts[0] ) . '</span><span class="lunara-screen-reader-text">' . esc_html( $title_parts[1] ) . '</span><span class="lunara-review-single-title-take">' . esc_html( $title_parts[2] ) . '</span>';
                         } else {
-                            echo '<span class="lunara-review-single-title-film">' . wp_kses_post( $title_html ) . '</span>';
+                            echo '<span class="lunara-review-single-title-film">' . esc_html( $title_parts[0] ) . '</span>';
                         }
                         ?></h1>
                         <p class="lunara-archive-hero-kicker"><?php echo esc_html( $display_label ); ?></p>

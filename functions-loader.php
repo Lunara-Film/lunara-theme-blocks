@@ -76,6 +76,7 @@ require_once $lunara_inc . 'journal-archive-critical.php';
 require_once $lunara_inc . 'oscars-portal-critical.php';
 require_once $lunara_inc . 'oscars-ledger-critical.php'; // Ledger route seed + Dossier variable assembly + label-face marker.
 require_once $lunara_inc . 'frontend.php';
+require_once $lunara_inc . 'home-front-desk.php'; // The Home masthead as a printed program (3.2.119).
 require_once $lunara_inc . 'cinematic-home.php';
 
 // Layer 8 — Admin tools (admin-only; no front-end dependencies).

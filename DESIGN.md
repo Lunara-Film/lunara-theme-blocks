@@ -36,6 +36,12 @@ and links to the owning Review editor. This does not alter pairing content.
   film links. Home and archive summaries use editorial columns. A full Review
   gives each pairing its own row: poster beside the complete argument, stacking
   at 640px and below. Neither layout uses a painted container inside another.
+- The Home masthead reads as a printed program: a dateline (place, month,
+  review count) with Search, the mark and dek, then "Now Showing": the lead
+  story's landscape still, film and take, beside two companion reviews with
+  their stills, then the three section doors. Image, label and headline form
+  one unit, not a painted card. The former live signal bar and the Journal and
+  Ledger signal cards are retired; those sections keep their own modules.
 - A Review with landscape artwork opens with that still at the Review Studio
   hero width, above the centered title group, with a one-line caption. Poster
   artwork stays in the reading column. Credits read as one centered line under

@@ -14,6 +14,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array<string,string>
  */
+/**
+ * Split a review headline into the film name and the take.
+ *
+ * Headlines read "Film – The Take". The split happens at the first spaced
+ * dash: en dash, em dash or a spaced hyphen, as a character or an HTML
+ * entity. Returns three parts (film, separator, take) or one (the whole
+ * title) when there is no take. Each part is plain, decoded text.
+ *
+ * @param string $title Review headline.
+ * @return array<int,string>
+ */
+function lunara_split_review_headline( $title ) {
+	$title = html_entity_decode( (string) $title, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	$parts = preg_split( '/(\s+[\x{2013}\x{2014}-]{1,2}\s+)/u', $title, 2, PREG_SPLIT_DELIM_CAPTURE );
+	if ( ! is_array( $parts ) || 3 !== count( $parts ) || '' === trim( $parts[0] ) || '' === trim( $parts[2] ) ) {
+		return array( $title );
+	}
+
+	return array( trim( $parts[0] ), $parts[1], trim( $parts[2] ) );
+}
+
 function lunara_home_pairing_desk_copy_defaults() {
     return array(
         'kicker' => __( 'The Lunara Method', 'lunara-film' ),
