@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-21 — Home masthead as a program (Theme 3.2.119)
+
+- **Shipped:** Theme 3.2.118 merged as `35a12cdf870c65ce53c3f4f92689588ce66c6e4f` (PR #264; main CI reused the PR result and passed). Theme 3.2.119 PR: the Home masthead rebuilt as the program's front page in `inc/home-front-desk.php` (dateline, mark, Now Showing with the lead still and two companion stills, doors); signal bar and signal cards retired; shared `lunara_split_review_headline()`. See the 3.2.119 changelog entry.
+- **Verified:** all PHP tests; new `home-front-desk-runtime.php`; new `home-front-desk-browser-runtime.js` 30 checks; `home-mobile-panels` 310, `home-carousels-browser` 144, `article-layout-browser` 1,144, `public-design-watch`, `site-studio-navigation` 296: pass. PR CI is the gate.
+- **Live:** Nothing changed live. 3.2.118 and 3.2.119 both wait on Dalton's deploy click, and 3.2.118 needs the three GT Sectra subset files in `uploads/lunara-fonts/v1/` first (sent to him in chat).
+- **Holding:** Home in direction D continues: poster wall, Stills that Rhyme, Ledger band. Theme #48 and Ledger #48 remain preserved, unfinished drafts.
+- **Next:** those three Home sections, then the decision-sheet items (Press & Accreditation page, Ledger structured data, Typefully drafts on publish).
+- **Found, not fixed:** The saved Home mobile section order is never applied on the public site (its only consumer is a dead `functions.php` duplicate). Registry slugs `featured`, `oscar-spotlight`, `database`, `ledger`, `deep-cuts` have toggles but no renderer. The masthead lead and the registry hero both read the same slide, so the lead story can appear twice when the hero section is enabled.
+
 ## 2026-10-21 — Review page in direction D (Theme 3.2.118)
 
 - **Shipped:** Theme 3.2.118 PR (this entry rides in it): the Review page in the direction Dalton picked on the "Lunara Redesign Directions" canvas. GT Sectra Display subsets, the film/take headline split, a leading landscape still at the Studio hero width, the "Directed by" credit line, GT Sectra pull quotes, and Pair It With rows that carry the Method question. DESIGN.md updated with his three rulings (GT Sectra for Review titles and pull quotes; credits centered under the title; no ordinal numerals). See the 3.2.118 changelog entry. Earlier the same week, outside this repo: IMDb Guard 0.4.2 (#9) now looks up the film title, not the headline with its take, and is live; Misty Green filled its IMDb ID, poster and still on the next run.

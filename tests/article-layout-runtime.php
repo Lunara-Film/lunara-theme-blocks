@@ -146,6 +146,8 @@ foreach ( array( 'lunara_home_brand_number_setting', 'lunara_home_select_setting
     article_fixture_function( $root . '/inc/frontend.php', $review_helper );
 }
 require_once $root . '/inc/site-studio-journal-single.php';
+// The Review template splits its headline with the shared helper (3.2.119).
+if ( ! function_exists( 'lunara_split_review_headline' ) ) { require_once $root . '/inc/helpers.php'; }
 article_fixture_function( $root . '/inc/site-studio-adapters.php', 'lunara_site_studio_mod_surface_read_state' );
 article_fixture_function( $root . '/inc/site-studio-adapters.php', 'lunara_site_studio_mod_surface_desired_snapshot' );
 // Request authorization and schema rejection have their own provider runtime.
