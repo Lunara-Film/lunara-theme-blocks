@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.120
+Version: 3.2.121
 Template: blocksy
 Requires at least: 6.2
 Tested up to: 6.4
@@ -5304,13 +5304,6 @@ footer.site-footer .lunara-footer-copyright {
     display: grid;
     gap: var(--lunara-home-gap, 72px);
 }
-.lunara-home-slot-hero{order:1}
-.lunara-home-slot-featured{order:2}
-.lunara-home-slot-dispatch{order:3}
-.lunara-home-slot-database{order:4}
-.lunara-home-slot-oscar-spotlight{order:5}
-.lunara-home-slot-deep-cuts{order:6}
-.lunara-home-slot-latest-reviews{order:7}
 .lunara-front-page .lunara-home-section {
     margin: 0;
 }
@@ -13578,30 +13571,17 @@ body.home .lunara-home-hero-review-head {
 /* ============================================================================
  * HOMEPAGE FINAL ORDER + LEAD CARD TAMING (added 2026-05-10)
  *
- * 1. Force section order via CSS so picks + facts land at the END of the
- *    homepage flow, not the top. This is belt-and-suspenders alongside the
- *    PHP slug list update.
+ * 1. (Removed in 3.2.121) CSS section order. The PHP Section Order owns it.
  * 2. Tame the .is-lead journal card — 21:9 aspect-ratio at viewport width
  *    rendered as a giant banner. Cap to 16:9 and limit the lead card height.
  * 3. Hide any empty homepage section markup defensively.
  * ============================================================================ */
 
-/* --- Section order using flex-order on the .lunara-front-page or main wrapper.
-   Sections are <section class="lunara-home-section lunara-home-slot-X">. --- */
+/* --- Section order (3.2.121): the saved Section Order decides, in PHP
+   (front-page.php sorts the slots before it renders them). The CSS order
+   overrides that lived here since 2026-05-10 are gone; they put Featured and
+   the Ledger last whatever the Studio said. The column wrapper stays. --- */
 
-body.home .lunara-home-slot-hero            { order: 1 !important; }
-body.home .lunara-home-slot-latest-reviews  { order: 2 !important; }
-body.home .lunara-home-slot-dispatch        { order: 3 !important; }
-body.home .lunara-home-slot-oscar-picks     { order: 4 !important; }
-body.home .lunara-home-slot-oscar-facts     { order: 5 !important; }
-body.home .lunara-home-slot-featured        { order: 6 !important; }
-body.home .lunara-home-slot-oscar-spotlight { order: 7 !important; }
-body.home .lunara-home-slot-database        { order: 8 !important; }
-body.home .lunara-home-slot-ledger          { order: 9 !important; }
-body.home .lunara-home-slot-deep-cuts       { order: 10 !important; }
-
-/* CSS order requires the parent to be flex/grid. Force the homepage main
-   wrapper into flex column so order works. */
 body.home .lunara-front-page,
 body.home main.lunara-front-page,
 body.home .ct-container-full > .ct-content,

@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Home in direction D complete: three sections and the order fix (Theme 3.2.121)
+
+- **Shipped:** Theme 3.2.120 PR #266 passed CI (9/9) and waits on Dalton's merge; the merge call was blocked on my side twice. Theme 3.2.121 PR: Stills that Rhyme, The Running Order and the Oscar Ledger band, built by three parallel builders on their own branches from the 3.2.120 seam and merged here, plus the section-order fix (CSS `order` overrides removed; the Editorial default preset is the Direction D order; a chosen preset decides at render time). See the 3.2.121 changelog entry.
+- **Verified:** whole PHP suite (0 failures); browser: front desk 30, Running Order 60, Stills 36, Ledger band 40, section order 12, carousels 144, mobile panels 310, geometry policy, design watch, square surfaces. The order browser test fails against main's `style.css`, so it guards the fix. PR CI is the gate.
+- **Live:** Theme 3.2.119. Home still opens with the carousel until 3.2.120 or 3.2.121 deploys. Both wait on Dalton's deploy click; nothing else is needed.
+- **Holding:** Dalton's visual review of Home once deployed. The Running Order count (12) and the Stills pair (Theme Echo of the lead) are code defaults with filters, not Studio controls yet.
+- **Next:** After his review: a Studio control for the Stills pair (the `lunara_home_stills_that_rhyme_pair` filter is the seam), a `<link rel=preload>` for the masthead's lead still, then the decision-sheet items (Press & Accreditation page — needs his headshot and press contact; Ledger structured data; Typefully drafts on publish — needs an API key on the site; mega menu; GutenKit module diet).
+- **Found, not fixed:** `lunara_get_home_front_door_lead()` re-runs the hero-feed queries that the masthead already ran; a per-request static cache would save a pass. Single reviews have no Debrief anchor id, so a partner link falls back to the review permalink. The pairing-desk registry label still says "Pairing Desk (Pair It With)". The Homepage Studio visibility list comes from the block map, so `featured` and `ledger` still have no toggle there, and `featured` has no setting at all. The Oscars snapshot has no nominee count, so the band's record line uses hub totals. The Homepage Studio still writes `lunara_home_section_mobile_order`, which nothing public reads.
+
 ## 2026-10-23 — The program masthead opens Home (Theme 3.2.120)
 
 - **Shipped:** Theme 3.2.119 merged as `e5f7f5f1` (PR #265) and deployed by Dalton; the three GT Sectra subsets are in `uploads/lunara-fonts/v1/` (200). Theme 3.2.120 PR: the opener gate moves from the orphaned Hero Command mod to `lunara_home_opener_style` (default `program`); `front-page.php` drops the legacy hero under any front door; the `featured`, `pairing-desk` and `ledger` slots are wired to three new `inc/home-*.php` modules (stubs). See the 3.2.120 changelog entry.
