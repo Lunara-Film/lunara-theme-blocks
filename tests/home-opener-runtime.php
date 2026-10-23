@@ -97,6 +97,9 @@ function lunara_render_homepage_journal_lane() { return '<section class="lunara-
 function lunara_render_oscar_picks_carousel() { return '<section class="lunara-home-slot-oscar-picks">picks</section>'; }
 function lunara_render_oscar_facts_carousel() { return '<section class="lunara-home-slot-oscar-facts">facts</section>'; }
 function lunara_render_home_pairing_desk() { return '<section class="lunara-home-slot-pairing-desk">pair-it-with</section>'; }
+// No published reviews here: The Running Order (its own contract is
+// tests/home-running-order-runtime.php) has nothing to show and adds nothing.
+class WP_Query { public $posts = array(); public function __construct( array $args = array() ) {} }
 
 // The Direction D slot modules load the way functions-loader.php loads them.
 require dirname( __DIR__ ) . '/inc/home-running-order.php';
@@ -133,8 +136,8 @@ lunara_test_assert( 'hero' === ( lunara_test_slot_order( $html )[0] ?? '' ), 'wi
 lunara_test_assert( false !== strpos( $html, '<h1 class="screen-reader-text lunara-screen-reader-text">Lunara Film</h1>' ), 'with no front door Home still carries a semantic H1' );
 
 // Direction D slots: pairing-desk hands back the Pair It With desk until the
-// stills renderer lands; featured and ledger render nothing until theirs do,
-// and their toggles stay honored.
+// stills renderer lands; featured has no reviews to show here and ledger
+// renders nothing until its renderer does, and their toggles stay honored.
 $GLOBALS['lunara_test']['front_door'] = '<section class="lunara-home-masthead lunara-home-program">masthead</section>';
 $html = lunara_test_render_front_page();
 lunara_test_assert( false !== strpos( $html, '>pair-it-with<' ), 'the pairing-desk slot still renders the Pair It With desk through the Stills that Rhyme module' );

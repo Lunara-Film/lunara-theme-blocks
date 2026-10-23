@@ -2020,10 +2020,12 @@ body:not(.wp-admin) .lunara-home-masthead-logo-fallback {
 }
 
 /* Now Showing titles read as the Review page does: the film in the
-   signature face at regular weight, the take beneath it. */
+   signature face at regular weight, the take beneath it. The Running Order's
+   title line (3.2.120) shares the face. */
 body:not(.wp-admin) .lunara-home-front-desk-title,
 body:not(.wp-admin) .lunara-home-front-desk-companion-title,
-body:not(.wp-admin) .lunara-home-front-desk-film {
+body:not(.wp-admin) .lunara-home-front-desk-film,
+body:not(.wp-admin) .lunara-home-running-order-title {
     font-family: var(--lunara-font-signature, var(--lunara-font-display, Georgia, "Times New Roman", serif)) !important;
     font-weight: 400 !important;
 }
