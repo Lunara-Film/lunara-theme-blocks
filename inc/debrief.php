@@ -710,6 +710,48 @@ if ( ! function_exists( 'lunara_poster_html_with_sizes' ) ) {
     }
 }
 
+if ( ! function_exists( 'lunara_title_poster_trace' ) ) {
+    /**
+     * Record one step of a poster lookup for the editor-only trace (3.2.128).
+     * Nothing is recorded unless the request carries ?lunara_poster_trace=1
+     * and the visitor can edit the theme; the trace prints in wp_footer as an
+     * HTML comment, so a plate can be diagnosed from view-source instead of
+     * guessed at from the outside.
+     *
+     * @param string $tt   IMDb title id.
+     * @param string $step Step name.
+     * @param string $note What the step found.
+     */
+    function lunara_title_poster_trace( $tt, $step, $note = '' ) {
+        if ( ! lunara_title_poster_trace_enabled() ) {
+            return;
+        }
+        if ( ! isset( $GLOBALS['lunara_title_poster_trace'] ) ) {
+            $GLOBALS['lunara_title_poster_trace'] = array();
+        }
+        $GLOBALS['lunara_title_poster_trace'][] = array( (string) $tt, (string) $step, (string) $note );
+    }
+
+    function lunara_title_poster_trace_enabled() {
+        return isset( $_GET['lunara_poster_trace'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only diagnostic, editor-gated.
+            && function_exists( 'current_user_can' ) && current_user_can( 'edit_theme_options' );
+    }
+
+    function lunara_title_poster_trace_print() {
+        if ( empty( $GLOBALS['lunara_title_poster_trace'] ) || ! lunara_title_poster_trace_enabled() ) {
+            return;
+        }
+        $lines = array();
+        foreach ( $GLOBALS['lunara_title_poster_trace'] as $row ) {
+            $lines[] = str_replace( '--', '- -', implode( ' | ', array_map( 'sanitize_text_field', $row ) ) );
+        }
+        echo "\n<!-- lunara-title-poster-trace\n" . esc_html( implode( "\n", $lines ) ) . "\n-->\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+    if ( function_exists( 'add_action' ) ) {
+        add_action( 'wp_footer', 'lunara_title_poster_trace_print', 999 );
+    }
+}
+
 if ( ! function_exists( 'lunara_get_title_poster_url_from_site' ) ) {
     /**
      * A poster the site already holds for an IMDb id (3.2.125): the TMDB
@@ -837,10 +879,12 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
         };
 
         $site_poster = function_exists( 'lunara_get_title_poster_url_from_site' ) ? lunara_get_title_poster_url_from_site( $tt ) : '';
+        lunara_title_poster_trace( $tt, 'site', '' !== $site_poster ? 'found' : 'none' );
         if ( '' !== $site_poster ) {
             return lunara_poster_html_with_sizes( $build_img( $site_poster, $title ), $sizes, $loading );
         }
 
+        lunara_title_poster_trace( $tt, 'ledger', class_exists( 'Academy_Awards_Table' ) ? 'asked' : 'class absent' );
         if ( class_exists( 'Academy_Awards_Table' ) ) {
             $aat = Academy_Awards_Table::get_instance();
 
@@ -915,6 +959,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
             }
         }
 
+        lunara_title_poster_trace( $tt, 'gateway', class_exists( 'Lunara_Movie_Provider_Gateway' ) ? 'class loaded' : ( defined( 'LUNARA_CORE_DIR' ) ? 'class missing after load from ' . LUNARA_CORE_DIR : 'LUNARA_CORE_DIR undefined' ) );
         if ( class_exists( 'Lunara_Movie_Provider_Gateway' ) ) {
             $gateway_cache_key = 'lunara_title_poster_gw_' . md5( $tt );
             $gateway_url       = function_exists( 'get_transient' ) ? get_transient( $gateway_cache_key ) : false;
@@ -922,9 +967,21 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                 $gateway_url = '';
                 try {
                     $gateway = new Lunara_Movie_Provider_Gateway();
+                    if ( method_exists( $gateway, 'credentials_status' ) ) {
+                        $status = $gateway->credentials_status();
+                        lunara_title_poster_trace( $tt, 'gateway credentials', 'tmdb=' . ( ! empty( $status['tmdb'] ) ? 'yes' : 'no' ) );
+                    }
                     $artwork = method_exists( $gateway, 'get_artwork_by_imdb' ) ? $gateway->get_artwork_by_imdb( $tt ) : null;
                 } catch ( \Throwable $e ) {
                     $artwork = null;
+                    lunara_title_poster_trace( $tt, 'gateway threw', get_class( $e ) );
+                }
+                if ( is_object( $artwork ) && method_exists( $artwork, 'get_error_code' ) ) {
+                    lunara_title_poster_trace( $tt, 'gateway error', (string) $artwork->get_error_code() );
+                } elseif ( is_array( $artwork ) ) {
+                    lunara_title_poster_trace( $tt, 'gateway answer', ! empty( $artwork['poster_path'] ) ? 'poster' : 'no poster_path' );
+                } else {
+                    lunara_title_poster_trace( $tt, 'gateway answer', 'none' );
                 }
                 if ( is_array( $artwork ) && ! empty( $artwork['poster_path'] ) ) {
                     $gateway_url = 'https://image.tmdb.org/t/p/w500/' . ltrim( (string) $artwork['poster_path'], '/' );
@@ -941,6 +998,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
             }
         }
 
+        lunara_title_poster_trace( $tt, 'theme tmdb', defined( 'AAT_TMDB_API_KEY' ) ? 'key constant defined' : 'no key constant' );
         if ( defined( 'AAT_TMDB_API_KEY' ) ) {
             // v2 (3.2.125): the key moved so the week-long "no poster" entries
             // written by the old negative cache stop answering; they expire alone.
