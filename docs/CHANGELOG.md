@@ -12,6 +12,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.123: Home polish after Dalton's first look
+
+Dalton reviewed 3.2.121 live and named three things: the masthead wordmark rendered like a second header, the site header logo was cut to "LUNA", and the sections ran together.
+
+- **Masthead wordmark:** the program masthead now sets the wordmark at a fixed, modest scale (`max-height` 64–104px by viewport, at most 560px wide, 48–72px on phones), with the frame growing to the image, no drop shadow, and the dek beneath it. The Brand console logo sizes (written for the Living Pulse masthead: 1180×312) still apply as upper bounds, so they can shrink the mark but no longer enlarge it. The overlap came from a 254px frame holding a 300px image.
+- **Header logo:** `lunara_header_brand_markup()` reads the attachment's real dimensions and requests the CDN image at the wordmark's own proportions (420×124 and 840×248 for the 1663×490 mark) instead of a fixed 420×236 crop; the stylesheet contains the image (`object-fit: contain`, auto width, 64px tall; 48px on phones) instead of covering the box with it.
+- **Section delineation:** each Home section after the masthead opens on the one-pixel gold hairline (the `::before` slot the polish pass had left transparent) with the same breathing room; the Home grid gap and section padding follow the program's rhythm; section titles use the signature face at 400 (shell exemption added, non-portal shell regenerated). The Oscar Ledger band keeps its own full-bleed rules.
+- **Tests:** `header-navigation-runtime.php` asserts the proportional requests and the contain rule (69 checks); `home-front-desk-browser-runtime.js` renders the live wordmark markup and asserts the cap, the centering, the dek below the mark and the section hairline with a signature-face title (45 checks; it fails against 3.2.122's stylesheet). Whole PHP suite and the home, header, geometry and design-watch browser suites pass.
+
 ## 2026-10-23 — Theme 3.2.122: the Direction D sections reach the block-mode Home
 
 3.2.121 wired the three sections into `front-page.php`'s registry loop, but the live Home has been in **block mode** since 3.1.50 (the Home page carries Lunara section blocks, and the blocks are the page). So after deploy the masthead led, the carousel block still rendered beneath it, and the new sections did not appear. This release carries them into block mode.
