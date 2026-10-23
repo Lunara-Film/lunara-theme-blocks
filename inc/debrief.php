@@ -841,7 +841,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
      *                        the largest source.
      * @return string
      */
-    function lunara_get_title_poster_html( $tt, $size = 'medium', $class = 'lunara-debrief-thumb', $title = '', $loading = 'lazy', $sizes = '' ) {
+    function lunara_get_title_poster_html( $tt, $size = 'medium', $class = 'lunara-debrief-thumb', $title = '', $loading = 'lazy', $sizes = '', $year = '' ) {
         $tt      = strtolower( trim( (string) $tt ) );
         $size    = trim( (string) $size );
         $class   = trim( (string) $class );
@@ -1017,6 +1017,12 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                 // "no poster" for seven days — the blank plate under Rustin on the
                 // Debrief page. A genuine empty result is kept for six hours.
                 $answered = ! is_wp_error( $tmdb_response ) && 200 === (int) wp_remote_retrieve_response_code( $tmdb_response );
+                if ( is_wp_error( $tmdb_response ) ) {
+                    lunara_title_poster_trace( $tt, 'theme tmdb find', 'error ' . $tmdb_response->get_error_code() );
+                } else {
+                    $probe = json_decode( wp_remote_retrieve_body( $tmdb_response ), true );
+                    lunara_title_poster_trace( $tt, 'theme tmdb find', 'http ' . (int) wp_remote_retrieve_response_code( $tmdb_response ) . ' movies=' . ( is_array( $probe ) && isset( $probe['movie_results'] ) ? count( (array) $probe['movie_results'] ) : 'n/a' ) . ( is_array( $probe ) && ! empty( $probe['status_message'] ) ? ' ' . $probe['status_message'] : '' ) );
+                }
                 if ( $answered ) {
                     $tmdb_body = json_decode( wp_remote_retrieve_body( $tmdb_response ), true );
                     $results   = ! empty( $tmdb_body['movie_results'] ) ? $tmdb_body['movie_results'] : ( ! empty( $tmdb_body['tv_results'] ) ? $tmdb_body['tv_results'] : array() );
@@ -1038,9 +1044,80 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
             if ( '' !== $cached_url ) {
                 return $build_img( $cached_url, $title );
             }
+
+            // Last resort (3.2.129): when no provider knows the IMDb id, search
+            // TMDB by title and year. A poster is an image, not an identity, so
+            // a title-and-year match is enough here; the strict identity paths
+            // above still come first.
+            $search_url = lunara_get_title_poster_url_by_search( $title, $year );
+            if ( '' !== $search_url ) {
+                return lunara_poster_html_with_sizes( $build_img( $search_url, $title ), $sizes, $loading );
+            }
         }
 
         return '';
+    }
+}
+
+if ( ! function_exists( 'lunara_get_title_poster_url_by_search' ) ) {
+    /**
+     * A TMDB poster by title and year (3.2.129), for a film whose IMDb id no
+     * provider resolves. Requires the Ledger's key constant. The first result
+     * whose release year matches (or any result when no year is known) wins.
+     * Found posters are kept a week; a genuine miss six hours; a failed
+     * request is not cached.
+     *
+     * @param string $title Film title.
+     * @param string $year  Release year, may be ''.
+     * @return string Poster URL or ''.
+     */
+    function lunara_get_title_poster_url_by_search( $title, $year = '' ) {
+        $title = trim( (string) $title );
+        $year  = preg_match( '/^(19|20)\d{2}$/', trim( (string) $year ) ) ? trim( (string) $year ) : '';
+        if ( '' === $title || ! defined( 'AAT_TMDB_API_KEY' ) || '' === AAT_TMDB_API_KEY || ! function_exists( 'wp_remote_get' ) ) {
+            lunara_title_poster_trace( $title, 'theme tmdb search', '' === $title ? 'no title' : 'no key' );
+            return '';
+        }
+
+        $cache_key = 'lunara_title_poster_search_' . md5( strtolower( $title ) . '|' . $year );
+        $cached    = get_transient( $cache_key );
+        if ( false !== $cached ) {
+            lunara_title_poster_trace( $title, 'theme tmdb search', '' !== $cached ? 'remembered' : 'remembered miss' );
+            return (string) $cached;
+        }
+
+        $query = array(
+            'api_key'       => AAT_TMDB_API_KEY,
+            'query'         => $title,
+            'include_adult' => 'false',
+        );
+        if ( '' !== $year ) {
+            $query['year'] = $year;
+        }
+        $response = wp_remote_get( add_query_arg( $query, 'https://api.themoviedb.org/3/search/movie' ), array( 'timeout' => 6 ) );
+        if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+            lunara_title_poster_trace( $title, 'theme tmdb search', is_wp_error( $response ) ? 'error ' . $response->get_error_code() : 'http ' . (int) wp_remote_retrieve_response_code( $response ) );
+            return '';
+        }
+
+        $body    = json_decode( wp_remote_retrieve_body( $response ), true );
+        $results = is_array( $body ) && ! empty( $body['results'] ) && is_array( $body['results'] ) ? $body['results'] : array();
+        $url     = '';
+        foreach ( $results as $movie ) {
+            if ( ! is_array( $movie ) || empty( $movie['poster_path'] ) ) {
+                continue;
+            }
+            $release = isset( $movie['release_date'] ) ? substr( (string) $movie['release_date'], 0, 4 ) : '';
+            if ( '' !== $year && $release !== $year ) {
+                continue;
+            }
+            $url = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
+            break;
+        }
+        lunara_title_poster_trace( $title, 'theme tmdb search', 'results=' . count( $results ) . ( '' !== $url ? ' poster' : ' no match' ) );
+        set_transient( $cache_key, $url, '' !== $url ? 7 * DAY_IN_SECONDS : 6 * HOUR_IN_SECONDS );
+
+        return $url;
     }
 }
 
