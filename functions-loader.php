@@ -77,6 +77,11 @@ require_once $lunara_inc . 'oscars-portal-critical.php';
 require_once $lunara_inc . 'oscars-ledger-critical.php'; // Ledger route seed + Dossier variable assembly + label-face marker.
 require_once $lunara_inc . 'frontend.php';
 require_once $lunara_inc . 'home-front-desk.php'; // The Home masthead as a printed program (3.2.119).
+// Direction D Home sections (3.2.120): each owns one homepage slot, its own
+// renderer and its own stylesheet. front-page.php wires slot => renderer.
+require_once $lunara_inc . 'home-running-order.php';
+require_once $lunara_inc . 'home-stills-that-rhyme.php';
+require_once $lunara_inc . 'home-ledger-band.php';
 require_once $lunara_inc . 'cinematic-home.php';
 
 // Layer 8 — Admin tools (admin-only; no front-end dependencies).

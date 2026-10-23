@@ -9,8 +9,8 @@
  * snippets required.
  *
  * Only registry slugs that have a real homepage renderer are wired here. The
- * data-only slugs (featured, oscar-spotlight, database, ledger, deep-cuts) are
- * intentionally skipped until renderers exist, so their toggles stay inert
+ * data-only slugs (oscar-spotlight, database, deep-cuts) are intentionally
+ * skipped until renderers exist, so their toggles stay inert
  * rather than fataling.
  *
  * History: replaced the 2026-05-10 "Path B" template, which rendered frozen
@@ -100,18 +100,20 @@ get_header();
 	 */
 	$lunara_section_renderers = array(
 		'hero'           => 'lunara_render_cinematic_hero_carousel',
+		'featured'       => 'lunara_render_home_running_order',
 		'latest-reviews' => 'lunara_render_homepage_latest_reviews',
-		'pairing-desk'   => 'lunara_render_home_pairing_desk',
+		'pairing-desk'   => 'lunara_render_home_stills_that_rhyme',
+		'ledger'         => 'lunara_render_home_ledger_band',
 		'dispatch'       => 'lunara_render_homepage_journal_lane',
 		'oscar-picks'    => 'lunara_render_oscar_picks_carousel',
 		'oscar-facts'    => 'lunara_render_oscar_facts_carousel',
 	);
 
-	// The cinematic front-door wrapper already contains the canonical Home
-	// hero. Do not render the legacy Customizer hero a second time beneath it.
-	// A non-cinematic Front Desk keeps the legacy hero available, preserving
-	// the existing fallback when the cinematic front door is disabled.
-	if ( $lunara_front_door_has_canonical_hero ) {
+	// Any rendered front door is the canonical Home hero: the cinematic wrapper
+	// carries the carousel, and the program masthead (3.2.120) carries the lead
+	// story. Rendering the legacy Customizer hero beneath either repeats the
+	// lead, so the hero slot only renders when there is no front door at all.
+	if ( '' !== $lunara_front_door ) {
 		unset( $lunara_section_renderers['hero'] );
 	}
 
