@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Home polish after Dalton's first look (Theme 3.2.123)
+
+- **Shipped:** Theme 3.2.123 PR, stacked on #269 (3.2.122): the masthead wordmark capped to a modest centered mark with the dek below it, the header logo requested and contained at its own proportions (no more "LUNA" crop), and every Home section opening on the gold hairline with signature-face titles. See the 3.2.123 changelog entry.
+- **Verified:** whole PHP suite (0 failures); header 69 PHP + 114 browser; front desk 45; Running Order 60; Stills 36; Ledger band 40; section order 12; mobile panels 310; carousels 144; geometry policy; design watch; square surfaces; shell variant 16. The new front-desk checks fail against the previous stylesheet. PR CI is the gate.
+- **Live:** Theme 3.2.121 at the time of writing. 3.2.122 (#269, green) and 3.2.123 wait on Dalton's merge and deploy clicks, in that order.
+- **Holding:** Dalton's second look once 3.2.123 is live. His standalone-theme question: audit done this session (Blocksy enters in `header.php`/`footer.php` only: 7 calls, 12 no-op hooks, 26 CSS lines; the live header and footer are already Lunara's). Estimate given: one session to build and pass CI, a 12-route staging sweep as the gate; theme folder name unchanged so settings, mods and revisions survive.
+- **Next:** Standalone theme on his "go standalone". Then the decision-sheet items.
+- **Found, not fixed:** The Method, Journal and Picks section heads still center their titles and carry their own kicker styles from the Living Pulse era; D's left-aligned kicker row (as in The Running Order) is not applied to them yet. The Brand console still offers the four Living Pulse logo-size controls, which now only cap the program wordmark. `lunara-home-modules.css` carries three generations of masthead rules (`.lunara-home-masthead-panel`, `.lunara-home-front-desk`, `.lunara-home-program`); the older two are dead weight once the program masthead is final.
+
 ## 2026-10-23 — The Direction D sections reach the block-mode Home (Theme 3.2.122)
 
 - **Shipped:** Dalton merged #266 (3.2.120) and #267 (3.2.121) and deployed 3.2.121 at 13:5x CT. The live check found the miss: the live Home is in block mode, so the masthead led but the carousel block still rendered under it and the three sections did not appear. Theme 3.2.122 PR: the two missing blocks, pairing-desk rendering Stills that Rhyme, the hero block excluded under any front door, and a one-time recomposition of the Home page on the next wp-admin load. See the 3.2.122 changelog entry.

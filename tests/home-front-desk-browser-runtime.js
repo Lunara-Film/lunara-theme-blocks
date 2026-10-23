@@ -16,7 +16,12 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
     try {
         for (const width of [320, 390, 768, 1100, 1440]) {
             const page = await browser.newPage({ viewport: { width, height: 1000 }, javaScriptEnabled: false });
-            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style></head><body class="home"><main class="lunara-front-page">${masthead.replace(/src="https:[^"]+"/g, `src="${still}"`)}</main></body></html>`, { waitUntil: 'load' });
+            // The live masthead carries the 1663x490 wordmark with the inline
+            // sizing the renderer emits for the Living Pulse logo settings
+            // (1180x312); Direction D must cap it and keep the dek below it.
+            const wordmark = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1663" height="490"><rect width="1663" height="490" fill="#c9a961"/></svg>');
+            const withLogo = masthead.replace(/src="https:[^"]+"/g, `src="${still}"`).replace(/<span class="lunara-home-masthead-logo-fallback">[^<]*<\/span>/, `<img width="1663" height="490" src="${wordmark}" class="lunara-home-masthead-logo" alt="" style="display:block;width:var(--lunara-masthead-logo-w,min(100%,1180px));height:auto;max-height:var(--lunara-masthead-logo-cap,clamp(118px,22vw,312px));object-fit:contain;">`);
+            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style></head><body class="home"><main class="lunara-front-page">${withLogo}<section class="lunara-home-section lunara-home-slot-dispatch"><h2 class="lunara-home-section-title">Journal</h2></section></main></body></html>`, { waitUntil: 'load' });
             const d = await page.evaluate(() => {
                 const r = s => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height }; };
                 const film = document.querySelector('.lunara-home-front-desk-title .lunara-home-front-desk-film'), take = document.querySelector('.lunara-home-front-desk-title .lunara-home-front-desk-take');
@@ -30,6 +35,8 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     datelineSize: Math.min(...[...document.querySelectorAll('.lunara-home-program-dateline-items span')].map(e => parseFloat(getComputedStyle(e).fontSize))),
                     searchBox: r('.lunara-home-program-search'), compsBelowEachOther: comps.length === 2 && comps[1].top >= comps[0].bottom - 1,
                     emptyFrames: [...document.querySelectorAll('.lunara-home-front-desk-frame')].filter(f => !f.querySelector('img')).length,
+                    logo: r('.lunara-home-masthead-logo'), dek: r('.lunara-home-masthead-dek'),
+                    sectionRule: (() => { const s = document.querySelector('.lunara-home-section'); const cs = getComputedStyle(s, '::before'); return { bg: cs.backgroundColor, h: parseFloat(cs.height), titleFont: getComputedStyle(s.querySelector('.lunara-home-section-title')).fontFamily, titleWeight: getComputedStyle(s.querySelector('.lunara-home-section-title')).fontWeight }; })(),
                 };
             });
             const label = `front desk@${width}`;
@@ -38,6 +45,9 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(Math.abs(d.leadFrame.width / d.leadFrame.height - 16 / 9) < .02 && Math.abs(d.compFrame.width / d.compFrame.height - 16 / 9) < .02 && d.emptyFrames === 0, `${label}: stills sit in 16:9 frames and no frame is empty`, d);
             assert(d.filmFont.startsWith('"GT Sectra Display"') && d.takeStyle === 'italic' && d.takeFont.startsWith('"Tiempos Text"') && d.filmSize >= 32, `${label}: the film name is GT Sectra and the take is reading italic`, d);
             assert(d.datelineSize >= 13 && d.searchBox.height >= 44, `${label}: dateline is at least 13px and Search keeps a 44px target`, d);
+            assert(d.logo.height <= (width > 820 ? 104.5 : 72.5) && d.logo.height >= 40 && d.logo.width <= Math.min(width, 560) + 1 && Math.abs((d.logo.left + d.logo.right) / 2 - width / 2) <= 2, `${label}: the wordmark is a modest centered mark, not a second header`, d);
+            assert(d.dek.top >= d.logo.bottom - 1, `${label}: the dek sits below the wordmark, never on it`, d);
+            assert(d.sectionRule.bg === 'rgba(201, 169, 97, 0.28)' && Math.abs(d.sectionRule.h - 1) < .6 && d.sectionRule.titleFont.startsWith('"GT Sectra Display"') && d.sectionRule.titleWeight === '400', `${label}: a Home section opens on the gold hairline with a signature-face title`, d);
             if (width > 1100) assert(d.stack.left >= d.lead.right - 1 && Math.abs(d.stack.top - d.lead.top) <= 1 && d.compsBelowEachOther, `${label}: companions stand beside the lead on desktop`, d);
             else assert(d.stack.top >= d.lead.bottom - 1 && Math.abs(d.lead.width - d.stack.width) <= 1 && d.lead.left >= 16, `${label}: companions follow the lead on narrow screens`, d);
             await assertSquareSurfaces(page, label);

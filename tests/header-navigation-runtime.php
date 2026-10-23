@@ -15,9 +15,14 @@ function esc_attr($value) { return esc_html($value); }
 function esc_url($value) { return esc_html($value); }
 function esc_attr_e($value, $domain = '') { echo esc_attr($value); }
 function esc_html_e($value, $domain = '') { echo esc_html($value); }
-function get_theme_mod($key, $fallback = false) { return $fallback; }
+function get_theme_mod($key, $fallback = false) { return $GLOBALS['mods'][$key] ?? $fallback; }
+function wp_get_attachment_image_url($id, $size = 'full') { return 'https://lunara.test/wp-content/uploads/lunara.png'; }
+function wp_get_attachment_image_src($id, $size = 'full') { return array('https://lunara.test/wp-content/uploads/lunara.png', 1663, 490); }
+function get_post_meta($id, $key = '', $single = false) { return ''; }
+function lunara_resize_wpcom_image_url($url, $w, $h) { return $url . '?resize=' . $w . ',' . $h; }
 function get_bloginfo($key) { return 'Lunara Film'; }
 function is_admin() { return false; }
+function is_front_page() { return false; }
 function wp_get_theme() { return new class { public function parent() { return false; } }; }
 function post_type_exists($type) { return false; }
 function has_nav_menu($location) { return $GLOBALS['use_saved_menu'] ?? true; }
@@ -69,6 +74,25 @@ verify_header(substr_count($markup, 'data-lunara-search-open') === 1, 'Single se
 verify_header(str_contains($markup, '<a class="lunara-header-search" href="https://lunara.test/search/"'), 'Search works as a link without scripts');
 verify_header(str_contains($markup, '<noscript>'), 'Mobile navigation has a no-script presentation');
 ob_start(); lunara_header_command_css(); $css = ob_get_clean();
+// The header logo keeps the wordmark's own proportions (3.2.123): a 1663x490
+// mark is requested at 420x124 and 840x248, never as a 420x236 crop, and the
+// box the stylesheet gives it contains the image instead of covering with it.
+$GLOBALS['mods'] = array('custom_logo' => 77);
+$brand = lunara_header_brand_markup();
+$GLOBALS['mods'] = array();
+foreach (array(
+    'resize=420,124' => 'the small logo request keeps the 1663x490 proportions',
+    'resize=840,248' => 'the retina logo request keeps the 1663x490 proportions',
+    'width="420" height="124"' => 'the img carries the proportional dimensions',
+) as $needle => $why) {
+    if (false === strpos($brand, $needle)) { fwrite(STDERR, "FAIL: $why\n"); exit(1); }
+    ++$checks;
+}
+if (false !== strpos($brand, '236')) { fwrite(STDERR, "FAIL: the old 420x236 crop must not be requested\n"); exit(1); }
+++$checks;
+if (!preg_match('/\.lunara-header-logo\s*\{[^}]*object-fit:\s*contain/', $css) || preg_match('/\.lunara-header-logo\s*\{[^}]*object-fit:\s*cover/', $css)) { fwrite(STDERR, "FAIL: the header logo box contains the wordmark, it does not cover with it\n"); exit(1); }
+++$checks;
+
 if (in_array('--fixture', $argv, true)) {
     echo json_encode(array('html'=>$markup,'css'=>$css,'checks'=>$checks));
 } else {
