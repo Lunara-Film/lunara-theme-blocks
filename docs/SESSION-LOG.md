@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Posters through Core's gateway (Theme 3.2.126)
+
+- **Shipped:** 3.2.125 merged (#274) and deployed by me; live Home shows the three-film module in posters media for The Social Reckoning: She Said (plate), The Social Network, The Trial of the Chicago 7. The plate is the same fault as Rustin: non-Ledger films never reached TMDB because the theme's call knows only the Ledger key constant, and the live credentials are Core's. Theme 3.2.126 PR: poster lookups go through `Lunara_Movie_Provider_Gateway` before the theme's own call. See the 3.2.126 changelog entry. Merged and deployed by me on his standing instruction when CI is green.
+- **Verified:** `title-poster-runtime.php` (gateway answer, remembered once, fall-through); whole PHP suite 0 failures; pairing editor 16; design watch.
+- **Live:** Theme 3.2.125; 3.2.126 follows on CI. After deploy, She Said on Home and Rustin on the Debrief page should fill on the first page load that reaches TMDB.
+- **Holding:** Dalton's orbit-on-Home idea; the standalone theme.
+- **Next:** Verify both plates fill live. Then the orbit variant or the standalone theme on his word.
+- **Found, not fixed:** The theme's direct TMDB call (`AAT_TMDB_API_KEY`) is now a dead path on the live site unless that constant is set; it stays as the last fallback. The gateway's `CACHE_TTL` and the theme's week-long transient are two caches for one answer.
+
 ## 2026-10-23 — The Debrief is three films (Theme 3.2.125)
 
 - **Shipped:** 3.2.124 merged (#273) and deployed by me; verified live (Stills section rendering, one hairline per section, phones in the program order). Then Dalton corrected the module: the Debrief is three films, always; the Home version had cut it to one pair since 3.2.121. He also flagged the blank *Rustin* plate on the Debrief page. Theme 3.2.125 PR: the reviewed film and its three (posters by default, stills as the option when every film has one), posters resolved from the site first, and the TMDB negative cache fixed (failures never cached; key versioned). See the 3.2.125 changelog entry. On his standing instruction I merge and deploy it when CI is green.
