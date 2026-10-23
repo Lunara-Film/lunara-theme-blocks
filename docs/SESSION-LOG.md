@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — The gateway class on the public page (Theme 3.2.127)
+
+- **Shipped:** 3.2.126 merged (#275) and deployed by me; She Said and Rustin stayed plates because Core only loads the gateway class with its importer. Theme 3.2.127 PR: the theme loads the gateway's file from `LUNARA_CORE_DIR` on the public page when the class is absent. See the 3.2.127 changelog entry. Merged and deployed by me on his standing instruction when CI is green.
+- **Verified:** `title-poster-runtime.php` (class absent before, loaded after, answer used); whole PHP suite 0 failures.
+- **Live:** Theme 3.2.126; 3.2.127 follows on CI.
+- **Holding / Next / Found, not fixed:** as the 3.2.126 entry. One more: the theme now depends on a Core file path (`includes/class-lunara-movie-provider-gateway.php`); a public Core function that exposes title artwork by IMDb id would be the cleaner seam, and belongs in Core.
+
 ## 2026-10-23 — Posters through Core's gateway (Theme 3.2.126)
 
 - **Shipped:** 3.2.125 merged (#274) and deployed by me; live Home shows the three-film module in posters media for The Social Reckoning: She Said (plate), The Social Network, The Trial of the Chicago 7. The plate is the same fault as Rustin: non-Ledger films never reached TMDB because the theme's call knows only the Ledger key constant, and the live credentials are Core's. Theme 3.2.126 PR: poster lookups go through `Lunara_Movie_Provider_Gateway` before the theme's own call. See the 3.2.126 changelog entry. Merged and deployed by me on his standing instruction when CI is green.

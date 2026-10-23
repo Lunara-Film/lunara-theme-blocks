@@ -905,6 +905,16 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
         // the shared key), its own cache and rate limits. The theme's direct call
         // below only knows the Ledger's key constant, which is why non-Ledger
         // films (She Said, Rustin) came back as plates on the live site.
+        // Core loads the gateway class only with its importer (admin, cron and
+        // its own REST route), so on a public page the class is absent until the
+        // theme loads its file. The file defines one class and nothing else.
+        if ( ! class_exists( 'Lunara_Movie_Provider_Gateway' ) && defined( 'LUNARA_CORE_DIR' ) ) {
+            $gateway_file = rtrim( (string) LUNARA_CORE_DIR, '/\\' ) . '/includes/class-lunara-movie-provider-gateway.php';
+            if ( is_readable( $gateway_file ) ) {
+                require_once $gateway_file;
+            }
+        }
+
         if ( class_exists( 'Lunara_Movie_Provider_Gateway' ) ) {
             $gateway_cache_key = 'lunara_title_poster_gw_' . md5( $tt );
             $gateway_url       = function_exists( 'get_transient' ) ? get_transient( $gateway_cache_key ) : false;
