@@ -900,6 +900,37 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
             }
         }
 
+        // Lunara Core's movie gateway (3.2.125): the same TMDB access that
+        // hydrates review artwork, with the credentials Core reads (a v4 token or
+        // the shared key), its own cache and rate limits. The theme's direct call
+        // below only knows the Ledger's key constant, which is why non-Ledger
+        // films (She Said, Rustin) came back as plates on the live site.
+        if ( class_exists( 'Lunara_Movie_Provider_Gateway' ) ) {
+            $gateway_cache_key = 'lunara_title_poster_gw_' . md5( $tt );
+            $gateway_url       = function_exists( 'get_transient' ) ? get_transient( $gateway_cache_key ) : false;
+            if ( false === $gateway_url ) {
+                $gateway_url = '';
+                try {
+                    $gateway = new Lunara_Movie_Provider_Gateway();
+                    $artwork = method_exists( $gateway, 'get_artwork_by_imdb' ) ? $gateway->get_artwork_by_imdb( $tt ) : null;
+                } catch ( \Throwable $e ) {
+                    $artwork = null;
+                }
+                if ( is_array( $artwork ) && ! empty( $artwork['poster_path'] ) ) {
+                    $gateway_url = 'https://image.tmdb.org/t/p/w500/' . ltrim( (string) $artwork['poster_path'], '/' );
+                    if ( '' === $title && ! empty( $artwork['title'] ) ) {
+                        $title = (string) $artwork['title'];
+                    }
+                    if ( function_exists( 'set_transient' ) ) {
+                        set_transient( $gateway_cache_key, $gateway_url, 7 * DAY_IN_SECONDS );
+                    }
+                }
+            }
+            if ( is_string( $gateway_url ) && '' !== $gateway_url ) {
+                return lunara_poster_html_with_sizes( $build_img( $gateway_url, $title ), $sizes, $loading );
+            }
+        }
+
         if ( defined( 'AAT_TMDB_API_KEY' ) ) {
             // v2 (3.2.125): the key moved so the week-long "no poster" entries
             // written by the old negative cache stop answering; they expire alone.

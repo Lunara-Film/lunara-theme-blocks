@@ -27,6 +27,8 @@ function lunara_test_reset(): void {
 		'set'        => array(),
 		'remote'     => array( 'error' => false, 'code' => 200, 'body' => '{}' ),
 		'requests'   => 0,
+		'gateway'    => new WP_Error(),
+		'gateway_calls' => 0,
 	);
 }
 
@@ -90,6 +92,14 @@ function lunara_test_load_function( string $name ): void {
 	}
 	throw new RuntimeException( 'Missing function: ' . $name );
 }
+// Lunara Core's gateway, as the theme sees it: configurable answers, counted.
+class Lunara_Movie_Provider_Gateway {
+	public function get_artwork_by_imdb( $tt ) {
+		++$GLOBALS['lunara_test']['gateway_calls'];
+		$answer = $GLOBALS['lunara_test']['gateway'] ?? null;
+		return is_callable( $answer ) ? $answer( $tt ) : $answer;
+	}
+}
 lunara_test_load_function( 'lunara_poster_html_with_sizes' );
 lunara_test_load_function( 'lunara_get_title_poster_url_from_site' );
 lunara_test_load_function( 'lunara_get_title_poster_html' );
@@ -111,6 +121,19 @@ lunara_test_assert( false !== strpos( lunara_get_title_poster_html( 'tt13959828'
 lunara_test_reset();
 $GLOBALS['lunara_test']['posts']['movie'] = array( array( 'id' => 501, 'meta' => array( 'imdb_title_id' => 'tt13959828', 'tmdb_poster_url' => 'https://image.tmdb.org/t/p/original/rustin-movie.jpg' ) ) );
 lunara_test_assert( false !== strpos( lunara_get_title_poster_html( 'tt13959828' ), 'rustin-movie.jpg' ) && 0 === $GLOBALS['lunara_test']['requests'], 'the movie entity poster stands in, still without a request' );
+
+// ---- Lunara Core's gateway answers before the theme's own TMDB call ----
+lunara_test_reset();
+$GLOBALS['lunara_test']['gateway'] = array( 'title' => 'She Said', 'poster_path' => '/shesaid.jpg' );
+$html = lunara_get_title_poster_html( 'tt14807308' );
+lunara_test_assert( false !== strpos( $html, 'src="https://image.tmdb.org/t/p/w500/shesaid.jpg"' ) && false !== strpos( $html, 'alt="She Said poster"' ) && 1 === $GLOBALS['lunara_test']['gateway_calls'] && 0 === $GLOBALS['lunara_test']['requests'], 'the Core gateway supplies the poster and the title; the theme makes no request of its own' );
+lunara_get_title_poster_html( 'tt14807308' );
+lunara_test_assert( 1 === $GLOBALS['lunara_test']['gateway_calls'], 'a gateway answer is remembered, so the gateway is asked once' );
+lunara_test_reset();
+$GLOBALS['lunara_test']['gateway'] = new WP_Error(); // not configured, circuit open, not found…
+$GLOBALS['lunara_test']['remote']['body'] = $tmdb_body;
+$html = lunara_get_title_poster_html( 'tt13959828' );
+lunara_test_assert( false !== strpos( $html, '/rustin.jpg' ) && 1 === $GLOBALS['lunara_test']['gateway_calls'] && 1 === $GLOBALS['lunara_test']['requests'], 'when the gateway has no answer the theme falls through to its own TMDB call' );
 
 // ---- TMDB answers when the site holds nothing; the answer is cached a week ----
 lunara_test_reset();

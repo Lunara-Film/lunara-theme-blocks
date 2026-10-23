@@ -12,6 +12,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.126: posters through Lunara Core's TMDB gateway
+
+3.2.125 went live with the three-film module, and *She Said* (Theme Echo of The Social Reckoning) still rendered as a plate, as *Rustin* does on the Debrief page. Both are non-Ledger films. The theme's own TMDB call only knows the Ledger's `AAT_TMDB_API_KEY` constant; the live site's TMDB credentials are the ones Lunara Core reads (`LUNARA_TMDB_API_TOKEN` / `LUNARA_TMDB_API_KEY`, with the Ledger key and option as fallbacks), which is how review artwork gets hydrated.
+
+- `lunara_get_title_poster_html()` now asks `Lunara_Movie_Provider_Gateway::get_artwork_by_imdb()` after the site and the Ledger and before its own TMDB call: the same gateway that hydrates review artwork, with its credentials, cache, rate limits and circuit breaker. A found poster is kept a week under `lunara_title_poster_gw_<hash>`; a gateway error (not configured, circuit open, not found) falls through to the existing path.
+- Tests: `title-poster-runtime.php` covers the gateway answer (poster and title, asked once, no theme request) and the fall-through.
+
 ## 2026-10-23 — Theme 3.2.125: the Debrief is three films; posters by default, stills as the option; the Rustin plate
 
 Dalton's correction, in his words: the entire point of the Debrief module is that it is three films. 3.2.121–3.2.124 cut the Home module to one pair. And the blank plate under *Rustin* on the Debrief page is a bug, not a design.
