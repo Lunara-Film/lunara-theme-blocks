@@ -42,6 +42,14 @@ and links to the owning Review editor. This does not alter pairing content.
   their stills, then the three section doors. Image, label and headline form
   one unit, not a painted card. The former live signal bar and the Journal and
   Ledger signal cards are retired; those sections keep their own modules.
+  The wordmark in the masthead is a modest centered mark (at most about 104px
+  tall on desktop, 72px on phones, never wider than 560px), not a second
+  header; the Brand console logo sizes can shrink it, never enlarge it, and
+  the dek always sits below it. The site header shows the wordmark at its own
+  proportions, contained, never cropped.
+- Every Home section after the masthead opens on the one-pixel gold hairline
+  with the same breathing room, and its title is set in the signature face at
+  regular weight. The Oscar Ledger band keeps its own full-bleed rules.
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.

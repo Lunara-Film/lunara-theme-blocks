@@ -186,11 +186,19 @@ if ( ! function_exists( 'lunara_header_brand_markup' ) ) {
 			$source = (string) wp_get_attachment_image_url( $logo_id, 'full' );
 
 			if ( '' !== $source ) {
+				// The wordmark keeps its own proportions (3.2.123). A fixed 420x236
+				// request made the image CDN crop a wide logo to its middle, and the
+				// header then covered the box with it: the visitor saw "LUNA".
+				$dims  = wp_get_attachment_image_src( $logo_id, 'full' );
+				$ratio = is_array( $dims ) && ! empty( $dims[1] ) && ! empty( $dims[2] ) ? (float) $dims[2] / (float) $dims[1] : 236 / 420;
+				$ratio = $ratio > 0 ? $ratio : 236 / 420;
+				$h420  = max( 1, (int) round( 420 * $ratio ) );
+				$h840  = max( 1, (int) round( 840 * $ratio ) );
 				$logo_420 = function_exists( 'lunara_resize_wpcom_image_url' )
-					? lunara_resize_wpcom_image_url( $source, 420, 236 )
+					? lunara_resize_wpcom_image_url( $source, 420, $h420 )
 					: $source;
 				$logo_840 = function_exists( 'lunara_resize_wpcom_image_url' )
-					? lunara_resize_wpcom_image_url( $source, 840, 472 )
+					? lunara_resize_wpcom_image_url( $source, 840, $h840 )
 					: '';
 				$alt      = trim( (string) get_post_meta( $logo_id, '_wp_attachment_image_alt', true ) );
 
@@ -212,11 +220,12 @@ if ( ! function_exists( 'lunara_header_brand_markup' ) ) {
 					: ( is_front_page() ? 'auto' : 'high' );
 
 				return sprintf(
-					'<img class="lunara-header-logo skip-lazy no-lazy" src="%1$s"%2$s sizes="(max-width: 720px) 96px, 150px" width="420" height="236" alt="%3$s" loading="eager" decoding="async" fetchpriority="%4$s" data-no-lazy="1" data-skip-lazy="1">',
+					'<img class="lunara-header-logo skip-lazy no-lazy" src="%1$s"%2$s sizes="(max-width: 720px) 134px, 248px" width="420" height="%5$d" alt="%3$s" loading="eager" decoding="async" fetchpriority="%4$s" data-no-lazy="1" data-skip-lazy="1">',
 					esc_url( $logo_420 ),
 					$srcset, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_attr( $alt ),
-					esc_attr( $fetchpriority )
+					esc_attr( $fetchpriority ),
+					$h420
 				);
 			}
 		}
@@ -345,8 +354,8 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			overflow: hidden; text-decoration: none;
 		}
 		.lunara-header-logo {
-			display: block; width: clamp(205px, 16vw, 248px); height: 64px;
-			max-width: 100%; object-fit: cover; object-position: center;
+			display: block; width: auto; height: 64px;
+			max-width: clamp(205px, 16vw, 248px); object-fit: contain; object-position: left center;
 		}
 		.lunara-header-brand-word {
 			color: var(--lunara-gold, #c9a961);
@@ -423,7 +432,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			.lunara-header-actions { display: contents; }
 			.lunara-header-search { grid-column: 1; grid-row: 1; }
 			.lunara-header-burger { grid-column: 3; grid-row: 1; }
-			.lunara-header-logo { width: 134px; height: 48px; }
+			.lunara-header-logo { width: auto; max-width: 134px; height: 48px; }
 
 			/* --- Mobile fix (2026-10): plain header + no colour bleed ------
 			   1. HEADER. On phones the header was position:fixed with an

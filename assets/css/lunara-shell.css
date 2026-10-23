@@ -2025,7 +2025,8 @@ body:not(.wp-admin) .lunara-home-masthead-logo-fallback {
 body:not(.wp-admin) .lunara-home-front-desk-title,
 body:not(.wp-admin) .lunara-home-front-desk-companion-title,
 body:not(.wp-admin) .lunara-home-front-desk-film,
-body:not(.wp-admin) .lunara-home-running-order-title {
+body:not(.wp-admin) .lunara-home-running-order-title,
+body:not(.wp-admin) .lunara-front-page .lunara-home-section-title {
     font-family: var(--lunara-font-signature, var(--lunara-font-display, Georgia, "Times New Roman", serif)) !important;
     font-weight: 400 !important;
 }
