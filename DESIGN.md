@@ -42,6 +42,9 @@ and links to the owning Review editor. This does not alter pairing content.
   their stills, then the three section doors. Image, label and headline form
   one unit, not a painted card. The former live signal bar and the Journal and
   Ledger signal cards are retired; those sections keep their own modules.
+  The program masthead is Home's opener. The hero carousel is a stored
+  alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
+  whichever opener renders, the lead story appears once: no second hero below.
 - A Review with landscape artwork opens with that still at the Review Studio
   hero width, above the centered title group, with a one-line caption. Poster
   artwork stays in the reading column. Credits read as one centered line under

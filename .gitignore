@@ -35,3 +35,6 @@ node_modules/
 *.bak-*
 *.orig
 *.rej
+
+# Local agent worktrees and session files
+.claude/

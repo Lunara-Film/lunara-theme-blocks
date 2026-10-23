@@ -12,6 +12,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.120: the program masthead opens Home; Direction D slots wired
+
+3.2.119 shipped the masthead but Home kept showing the carousel. The cinematic gate read the Hero Command checkbox (`lunara_home_cinematic_front_door_enabled`), and once the hero carousel was adopted in Site Studio, Hero Command redirected away, so no screen could untick it. This release fixes the gate in code and prepares the three remaining Home sections.
+
+- **Opener:** `lunara_home_opener_style()` in `inc/cinematic-home.php` decides: `program` (default) renders the masthead; `cinematic` renders the Splide hero carousel. The orphaned Hero Command mod is ignored. The `lunara_home_cinematic_front_door_enabled` filter keeps the final say, so a snippet can force either. The carousel's saved slides still feed the masthead's lead story.
+- **No second hero:** `front-page.php` removes the legacy Customizer hero from the section loop whenever any front door renders (it used to key off the carousel marker only), so the lead story cannot appear twice beneath the masthead. The hero slot is the fallback only when there is no front door at all.
+- **Slots wired:** `featured` → `lunara_render_home_running_order()` (`inc/home-running-order.php`), `pairing-desk` → `lunara_render_home_stills_that_rhyme()` (`inc/home-stills-that-rhyme.php`), `ledger` → `lunara_render_home_ledger_band()` (`inc/home-ledger-band.php`). The modules are stubs in this release: Running Order and the Ledger band render nothing yet; Stills that Rhyme hands back the Pair It With desk, so the live module is unchanged. Each module owns its own stylesheet when it lands.
+- **Tests:** new `tests/home-opener-runtime.php` renders `front-page.php` against stubbed WordPress: default opener, the orphaned mod, the mod and filter overrides, the hero slot out under either front door and first with none, the saved order kept, an off toggle honored.
+- **Deploy note:** Home changes on deploy: the masthead leads and the carousel block beneath it is gone. Rollback without a redeploy: `set_theme_mod( 'lunara_home_opener_style', 'cinematic' )`.
+
 ## 2026-10-21 — Theme 3.2.119: the Home masthead as a program
 
 The first Home step of direction D. The Front Desk masthead becomes the program's front page; the sections below it (latest reviews, Method, Journal, Forecast, Facts) are unchanged and still Studio-ordered.

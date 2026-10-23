@@ -13,11 +13,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Which opener Home leads with: 'program' (the printed-program masthead with
+ * the lead story, 3.2.120) or 'cinematic' (the Splide hero carousel).
+ *
+ * The opener used to follow the legacy Hero Command checkbox
+ * (lunara_home_cinematic_front_door_enabled). Once the hero carousel was
+ * adopted in Site Studio, Hero Command redirected away, so no screen could
+ * change that mod any more and Home was stuck on the carousel. The program
+ * masthead is the chosen direction, so it is the default; the carousel stays
+ * one mod away: set_theme_mod( 'lunara_home_opener_style', 'cinematic' ).
+ *
+ * @return string 'program' or 'cinematic'.
+ */
+function lunara_home_opener_style() {
+	$style = sanitize_key( (string) get_theme_mod( 'lunara_home_opener_style', 'program' ) );
+
+	return in_array( $style, array( 'program', 'cinematic' ), true ) ? $style : 'program';
+}
+
+/**
  * Whether the current homepage front door should be replaced by the cinematic
- * wrapper. Defaults off so the branch can ship without surprising production.
+ * wrapper. The lunara_home_cinematic_front_door_enabled filter still has the
+ * final say, so a snippet can force either opener.
  */
 function lunara_home_cinematic_front_door_is_enabled() {
-	$enabled = (bool) get_theme_mod( 'lunara_home_cinematic_front_door_enabled', false );
+	$enabled = 'cinematic' === lunara_home_opener_style();
 
 	return (bool) apply_filters( 'lunara_home_cinematic_front_door_enabled', $enabled );
 }

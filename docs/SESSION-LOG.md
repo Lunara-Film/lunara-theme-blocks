@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — The program masthead opens Home (Theme 3.2.120)
+
+- **Shipped:** Theme 3.2.119 merged as `e5f7f5f1` (PR #265) and deployed by Dalton; the three GT Sectra subsets are in `uploads/lunara-fonts/v1/` (200). Theme 3.2.120 PR: the opener gate moves from the orphaned Hero Command mod to `lunara_home_opener_style` (default `program`); `front-page.php` drops the legacy hero under any front door; the `featured`, `pairing-desk` and `ledger` slots are wired to three new `inc/home-*.php` modules (stubs). See the 3.2.120 changelog entry.
+- **Verified:** all PHP tests locally, including new `tests/home-opener-runtime.php`. PR CI is the gate.
+- **Live:** Theme 3.2.119 is live. Home still shows the carousel until 3.2.120 deploys, because the live gate reads a mod no screen can change (Hero Command redirects to Site Studio once the hero carousel is adopted). 3.2.120 waits on Dalton's deploy click; nothing else is needed for it.
+- **Holding:** Three builders run in parallel on their own branches, one per slot: Running Order poster wall, Stills that Rhyme, the Oscar Ledger band. They land as one integration PR (3.2.121) after this one.
+- **Next:** Integrate and merge the three sections. Then the decision-sheet items: Press & Accreditation page (needs Dalton's headshot and press contact), Ledger structured data, Typefully thread drafts on review publish (needs a Typefully API key on the site), mega menu, GutenKit module diet.
+- **Found, not fixed:** Homepage Studio shows "Latest Reviews Grid" as on, yet no latest-reviews section renders on the live Home (the slot's renderer returns nothing, or the adopted reviews carousel is empty). The Homepage Studio visibility list is built from `lunara_home_section_block_map()`, so `featured` and `ledger` have no toggle there even now that they render; `featured` has no setting at all and is always on. The hero image preload in `inc/hero-delivery.php` only runs for the cinematic opener; the masthead's lead still has no `<link rel=preload>` yet.
+
 ## 2026-10-21 — Home masthead as a program (Theme 3.2.119)
 
 - **Shipped:** Theme 3.2.118 merged as `35a12cdf870c65ce53c3f4f92689588ce66c6e4f` (PR #264; main CI reused the PR result and passed). Theme 3.2.119 PR: the Home masthead rebuilt as the program's front page in `inc/home-front-desk.php` (dateline, mark, Now Showing with the lead still and two companion stills, doors); signal bar and signal cards retired; shared `lunara_split_review_headline()`. See the 3.2.119 changelog entry.
