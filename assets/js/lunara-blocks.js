@@ -489,9 +489,23 @@
 
     sectionBlock(
         'lunara/pairing-desk',
-        __( 'Homepage: Pairing Desk', 'lunara-film' ),
+        __( 'Homepage: Stills that Rhyme', 'lunara-film' ),
         'screenoptions',
-        __( 'The signature Pair It With showcase — three films in conversation with the newest paired review.', 'lunara-film' )
+        __( 'Two films, one image idea: the lead review\'s still beside its Theme Echo film\'s. Falls back to the Pair It With desk.', 'lunara-film' )
+    );
+
+    sectionBlock(
+        'lunara/running-order',
+        __( 'Homepage: The Running Order', 'lunara-film' ),
+        'grid-view',
+        __( 'The poster wall: every review, newest first, after the three Now Showing carries.', 'lunara-film' )
+    );
+
+    sectionBlock(
+        'lunara/ledger-band',
+        __( 'Homepage: The Oscar Ledger', 'lunara-film' ),
+        'awards',
+        __( 'The intermission band: live ceremony count, Ledger totals, the door to the portal, five Best Picture posters.', 'lunara-film' )
     );
 
     /* ── End homepage section kit ─────────────────────────────────────── */

@@ -36,8 +36,11 @@ get_header();
 	$lunara_front_door_has_canonical_hero = '' !== $lunara_front_door && false !== strpos( $lunara_front_door, 'data-lunara-home-hero-source=' );
 
 	$lunara_uses_block_composition = function_exists( 'lunara_home_uses_block_composition' ) && lunara_home_uses_block_composition();
+	// Any rendered front door is the Home hero (the carousel wrapper or, since
+	// 3.2.120, the program masthead), so the hero block never renders beneath
+	// it. Keyed off the carousel marker alone, the masthead got a second hero.
 	$lunara_block_composition      = $lunara_uses_block_composition && function_exists( 'lunara_render_home_block_composition' )
-		? (string) lunara_render_home_block_composition( $lunara_front_door_has_canonical_hero ? array( 'lunara/cinematic-hero' ) : array() )
+		? (string) lunara_render_home_block_composition( '' !== $lunara_front_door ? array( 'lunara/cinematic-hero' ) : array() )
 		: '';
 
 	// Keep Home from shipping without a semantic H1, independent of whichever

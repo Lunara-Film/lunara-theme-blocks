@@ -12,6 +12,17 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.122: the Direction D sections reach the block-mode Home
+
+3.2.121 wired the three sections into `front-page.php`'s registry loop, but the live Home has been in **block mode** since 3.1.50 (the Home page carries Lunara section blocks, and the blocks are the page). So after deploy the masthead led, the carousel block still rendered beneath it, and the new sections did not appear. This release carries them into block mode.
+
+- **Blocks:** `lunara/running-order` (featured slot) and `lunara/ledger-band` (ledger slot) are registered in `inc/home-blocks.php` with server render callbacks to the slot renderers; `lunara/pairing-desk` now renders Stills that Rhyme (which falls back to the Pair It With desk); the editor cards and the block hub list follow. `lunara_home_section_block_map()` maps `featured` and `ledger`, so Homepage Studio and Site Studio manage eight lanes (the six, plus these two) and never the historical preset-only lanes.
+- **No second hero in block mode:** `front-page.php` excludes `lunara/cinematic-hero` from the composition whenever any front door renders, not only when the carousel marker is present.
+- **One-time recomposition:** `lunara_home_migrate_block_composition()` runs on `admin_init` for a theme editor, once per `lunara_home_composition_revision()` (now 2): in block mode it performs the same write Homepage Studio does on save, so the Home page gains the new blocks in the saved order without an editor visit; a registry-mode Home is left alone; a failed write stays due. The first wp-admin page load after deploy does it.
+- **Tests:** `home-opener-runtime.php` now renders `front-page.php` in block mode too (hero block out under either front door, in with none); `home-block-composition-runtime.php` covers the block map and the recomposition (editor gate, registry no-op, write once, content and attributes preserved, failure stays due); `site-studio-pilot-runtime.php` manages eight lanes and its fault matrix is asserted equal to `lunara_site_studio_homepage_mod_keys()`.
+- **Correction:** the 3.2.120 and 3.2.121 notes said `featured` had no setting. It has one, `lunara_home_show_featured`; what it lacked was a block, so the Studio never listed it.
+- **Deploy note:** theme files only. After deploy, open any wp-admin page once (the deploy itself happens in the Control Desk, so this is automatic); Home then shows masthead, Stills that Rhyme, The Running Order, the Ledger band, Journal, Picks.
+
 ## 2026-10-23 — Theme 3.2.121: Home in direction D — Stills that Rhyme, The Running Order, the Oscar Ledger band
 
 The three Home sections that complete direction D, built in parallel on their own branches and integrated here, plus the section order fix they both ran into.
