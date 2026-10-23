@@ -1,28 +1,33 @@
 <?php
 /**
- * Home — Stills that Rhyme (Direction D, 3.2.121).
+ * Home — Stills that Rhyme (Direction D, 3.2.125).
  *
- * Two films, one image idea: the lead review's landscape still beside the
- * still of its Theme Echo pairing from the Debrief, each captioned "Film,
- * Year." Rendered into the `pairing-desk` homepage slot (front-page.php) in
- * place of the Pair It With desk. Owns assets/css/lunara-home-stills-that-rhyme.css.
+ * The reviewed film and its three. The lead review's landscape still, then
+ * the stills of all three Debrief pairings — Theme Echo, Counter Program,
+ * Career Context — each under its full role name with the film, the year and
+ * the Method question. The Debrief is three films; that trio is the module's
+ * point, so it is never cut to one pair (3.2.121–3.2.124 did; Dalton
+ * corrected it). Rendered into the `pairing-desk` homepage slot
+ * (front-page.php) in place of the Pair It With desk. Owns
+ * assets/css/lunara-home-stills-that-rhyme.css.
  *
- * The pair is read from the same data the Pair It With cards read, in the
+ * Pairings are read from the same data the Pair It With cards read, in the
  * same precedence: the Relational Trinity movie entity on the review
  * (`theme_echo_movie`, `counter_program_movie`, `career_context_movie`),
  * then the legacy text field (`_lunara_theme_echo`, …) through the shared
- * parser, via lunara_debrief_method_read_pairing(). Theme Echo is the "same
- * image idea" role; when it has no still the other roles are tried in Method
- * order. A partner still comes from the linked movie's `tmdb_backdrop_url`
- * (the Film Dossier hero), else the hero still of a published Lunara review
- * of that film, else the Oscars Ledger's TMDB backdrop for its IMDb id. Both
- * stills pass through lunara_rightsize_backdrop_url(), the masthead's 16:9
- * crop.
+ * parser, via lunara_debrief_method_read_pairing(). A pairing's still comes
+ * from the linked movie's `tmdb_backdrop_url` (the Film Dossier hero), else
+ * the hero still of a published Lunara review of that film, else the Oscars
+ * Ledger's TMDB backdrop for its IMDb id. Stills pass through
+ * lunara_rightsize_backdrop_url(), the masthead's 16:9 crop. A pairing
+ * without a still renders as a typographic card on the surface colour; it is
+ * never dropped and never an empty frame.
  *
- * When the lead has no pairing, or either still is missing, the module hands
- * back the legacy Pair It With desk: never an empty frame, never a
- * placeholder image. The resolved pair passes through the
- * `lunara_home_stills_that_rhyme_pair` filter before rendering so a Studio
+ * The set comes from the first candidate review that has a still and all
+ * three pairings: the lead story, then the review the Pair It With desk
+ * shows, then the newest reviews. When no review qualifies the legacy desk
+ * renders. The resolved set passes through the
+ * `lunara_home_stills_that_rhyme_set` filter before rendering so a Studio
  * control can supply or replace it later.
  *
  * @package Lunara_Film
@@ -161,14 +166,40 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_review' ) ) {
 			? (string) lunara_get_review_hero_image_url( $review_id )
 			: '';
 
+		$poster = trim( (string) get_post_meta( $review_id, '_lunara_tmdb_poster_url', true ) );
+		if ( '' === $poster && function_exists( 'get_the_post_thumbnail_url' ) ) {
+			$poster = trim( (string) get_the_post_thumbnail_url( $review_id, 'large' ) );
+		}
+
 		return array(
-			'id'    => $review_id,
-			'film'  => trim( (string) ( $parts[0] ?? '' ) ),
-			'take'  => 3 === count( $parts ) ? trim( (string) $parts[2] ) : '',
-			'year'  => lunara_home_stills_that_rhyme_year( get_post_meta( $review_id, '_lunara_year', true ) ),
-			'url'   => (string) get_permalink( $review_id ),
-			'still' => lunara_home_stills_that_rhyme_rightsize( $still ),
+			'id'     => $review_id,
+			'film'   => trim( (string) ( $parts[0] ?? '' ) ),
+			'take'   => 3 === count( $parts ) ? trim( (string) $parts[2] ) : '',
+			'year'   => lunara_home_stills_that_rhyme_year( get_post_meta( $review_id, '_lunara_year', true ) ),
+			'url'    => (string) get_permalink( $review_id ),
+			'still'  => lunara_home_stills_that_rhyme_rightsize( $still ),
+			'poster' => lunara_home_stills_that_rhyme_poster_size( $poster ),
 		);
+	}
+}
+
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_poster_size' ) ) {
+	/**
+	 * A poster URL at the card size: TMDB posters at w342, anything else as is.
+	 *
+	 * @param string $url Poster URL.
+	 * @return string
+	 */
+	function lunara_home_stills_that_rhyme_poster_size( $url ) {
+		$url = trim( (string) $url );
+		if ( '' === $url ) {
+			return '';
+		}
+		if ( function_exists( 'lunara_resize_tmdb_image_url' ) && false !== strpos( $url, 'image.tmdb.org' ) ) {
+			$sized = (string) lunara_resize_tmdb_image_url( $url, 'w342' );
+			return '' !== $sized ? $sized : $url;
+		}
+		return $url;
 	}
 }
 
@@ -262,53 +293,122 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_partner' ) ) {
 			$url = (string) get_permalink( $review_id );
 		}
 
+		// The poster: the Debrief's canonical face for a film. Movie entity
+		// meta, then the poster hydrated on a Lunara review of the film, then
+		// the shared poster helper by IMDb id (site, Ledger, TMDB).
+		$poster      = $movie_id ? trim( (string) get_post_meta( $movie_id, 'tmdb_poster_url', true ) ) : '';
+		$poster_html = '';
+		if ( '' === $poster && $partner_review_id ) {
+			$poster = trim( (string) get_post_meta( $partner_review_id, '_lunara_tmdb_poster_url', true ) );
+		}
+		if ( '' === $poster && '' !== $tt && function_exists( 'lunara_get_title_poster_html' ) ) {
+			$poster_html = trim( (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-home-stills-media', trim( (string) $pairing['title'] ), 'lazy', '(max-width: 759px) 46vw, 220px' ) );
+		}
+
 		return array(
-			'title'     => trim( (string) $pairing['title'] ),
-			'year'      => lunara_home_stills_that_rhyme_year( $pairing['year'] ?? '' ),
-			'tt'        => $tt,
-			'movie_id'  => $movie_id,
-			'review_id' => $partner_review_id,
-			'url'       => $url,
-			'still'     => lunara_home_stills_that_rhyme_rightsize( $still ),
+			'title'       => trim( (string) $pairing['title'] ),
+			'year'        => lunara_home_stills_that_rhyme_year( $pairing['year'] ?? '' ),
+			'tt'          => $tt,
+			'movie_id'    => $movie_id,
+			'review_id'   => $partner_review_id,
+			'url'         => $url,
+			'still'       => lunara_home_stills_that_rhyme_rightsize( $still ),
+			'poster'      => lunara_home_stills_that_rhyme_poster_size( $poster ),
+			'poster_html' => $poster_html,
 		);
 	}
 }
 
-if ( ! function_exists( 'lunara_home_stills_that_rhyme_pair' ) ) {
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_set' ) ) {
 	/**
-	 * Resolve the pair: the lead review and the first Method role, Theme Echo
-	 * first, whose paired film has a landscape still.
+	 * Resolve the set: the first candidate review with a still and all three
+	 * Debrief pairings, with each pairing's still when one exists.
 	 *
-	 * @return array<string,mixed>|null Null when no complete pair exists.
+	 * @return array<string,mixed>|null review (id, film, take, year, url,
+	 *         still) and pairings (role slug => role (slug, label, question)
+	 *         + partner (title, year, tt, movie_id, review_id, url, still));
+	 *         null when no review qualifies.
 	 */
-	function lunara_home_stills_that_rhyme_pair() {
+	function lunara_home_stills_that_rhyme_set() {
 		if ( ! function_exists( 'lunara_debrief_method_roles' ) || ! function_exists( 'lunara_debrief_method_read_pairing' ) || ! function_exists( 'get_post_meta' ) || ! function_exists( 'get_permalink' ) || ! function_exists( 'get_the_title' ) ) {
+			return null;
+		}
+
+		$roles = lunara_debrief_method_roles();
+		if ( ! is_array( $roles ) || empty( $roles ) ) {
 			return null;
 		}
 
 		foreach ( lunara_home_stills_that_rhyme_candidate_review_ids() as $review_id ) {
 			$review = lunara_home_stills_that_rhyme_review( $review_id );
-			if ( '' === $review['still'] || '' === $review['film'] ) {
+			if ( '' === $review['film'] ) {
 				continue;
 			}
 
-			foreach ( lunara_debrief_method_roles() as $slug => $role ) {
+			$pairings = array();
+			foreach ( $roles as $slug => $role ) {
 				$partner = lunara_home_stills_that_rhyme_partner( $review_id, $role );
-				if ( is_array( $partner ) && '' !== $partner['still'] ) {
-					return array(
-						'role'    => array(
-							'slug'     => (string) $slug,
-							'label'    => (string) ( $role['label'] ?? '' ),
-							'question' => (string) ( $role['question'] ?? '' ),
-						),
-						'review'  => $review,
-						'partner' => $partner,
-					);
+				if ( ! is_array( $partner ) ) {
+					$pairings = array();
+					break;
 				}
+				$pairings[ (string) $slug ] = array(
+					'role'    => array(
+						'slug'     => (string) $slug,
+						'label'    => (string) ( $role['label'] ?? '' ),
+						'question' => (string) ( $role['question'] ?? '' ),
+					),
+					'partner' => $partner,
+				);
+			}
+
+			if ( count( $pairings ) === count( $roles ) ) {
+				$set          = array(
+					'review'   => $review,
+					'pairings' => $pairings,
+				);
+				$set['media'] = lunara_home_stills_that_rhyme_media( $set );
+				return $set;
 			}
 		}
 
 		return null;
+	}
+}
+
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_media' ) ) {
+	/**
+	 * Which face the set shows (3.2.125). Posters are the Debrief's default:
+	 * three films, three posters, always. Stills are the option, taken only
+	 * when the reviewed film and all three pairings have one — a film that
+	 * has been widely released long enough to have stills. The
+	 * `lunara_home_stills_that_rhyme_media` filter can ask for 'posters' or
+	 * 'stills'; a request for stills the set cannot honour falls back to
+	 * posters.
+	 *
+	 * @param array<string,mixed> $set Resolved set.
+	 * @return string 'posters' or 'stills'.
+	 */
+	function lunara_home_stills_that_rhyme_media( $set ) {
+		$all_stills = '' !== trim( (string) ( $set['review']['still'] ?? '' ) );
+		foreach ( (array) ( $set['pairings'] ?? array() ) as $pairing ) {
+			if ( '' === trim( (string) ( $pairing['partner']['still'] ?? '' ) ) ) {
+				$all_stills = false;
+				break;
+			}
+		}
+
+		$media = $all_stills ? 'stills' : 'posters';
+		if ( function_exists( 'apply_filters' ) ) {
+			$asked = sanitize_key( (string) apply_filters( 'lunara_home_stills_that_rhyme_media', $media, $set ) );
+			if ( 'posters' === $asked ) {
+				$media = 'posters';
+			} elseif ( 'stills' === $asked && $all_stills ) {
+				$media = 'stills';
+			}
+		}
+
+		return $media;
 	}
 }
 
@@ -363,24 +463,38 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) )
 	}
 }
 
-if ( ! function_exists( 'lunara_home_stills_that_rhyme_pair_is_complete' ) ) {
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_set_is_complete' ) ) {
 	/**
-	 * Whether a pair (resolved or filtered in) has everything the frames need.
+	 * Whether a set (resolved or filtered in) has what the frames need: a
+	 * reviewed film with a still and a link, and one pairing per Method role,
+	 * each with a title and a link. Pairing stills are optional.
 	 *
-	 * @param mixed $pair Candidate pair.
+	 * @param mixed $set Candidate set.
 	 * @return bool
 	 */
-	function lunara_home_stills_that_rhyme_pair_is_complete( $pair ) {
-		if ( ! is_array( $pair ) || empty( $pair['review'] ) || empty( $pair['partner'] ) || ! is_array( $pair['review'] ) || ! is_array( $pair['partner'] ) ) {
+	function lunara_home_stills_that_rhyme_set_is_complete( $set ) {
+		if ( ! is_array( $set ) || empty( $set['review'] ) || ! is_array( $set['review'] ) || empty( $set['pairings'] ) || ! is_array( $set['pairings'] ) ) {
 			return false;
 		}
-		foreach ( array( $pair['review'], $pair['partner'] ) as $side ) {
-			if ( '' === trim( (string) ( $side['still'] ?? '' ) ) || '' === trim( (string) ( $side['url'] ?? '' ) ) ) {
+		$review = $set['review'];
+		if ( '' === trim( (string) ( $review['url'] ?? '' ) ) || '' === trim( (string) ( $review['film'] ?? '' ) ) ) {
+			return false;
+		}
+		if ( 'stills' === (string) ( $set['media'] ?? 'posters' ) && '' === trim( (string) ( $review['still'] ?? '' ) ) ) {
+			return false;
+		}
+		$roles = function_exists( 'lunara_debrief_method_roles' ) ? (array) lunara_debrief_method_roles() : array();
+		if ( ! empty( $roles ) && count( $set['pairings'] ) !== count( $roles ) ) {
+			return false;
+		}
+		foreach ( $set['pairings'] as $pairing ) {
+			$partner = is_array( $pairing ) && isset( $pairing['partner'] ) && is_array( $pairing['partner'] ) ? $pairing['partner'] : array();
+			if ( '' === trim( (string) ( $partner['title'] ?? '' ) ) || '' === trim( (string) ( $partner['url'] ?? '' ) ) ) {
 				return false;
 			}
 		}
 
-		return '' !== trim( (string) ( $pair['review']['film'] ?? '' ) ) && '' !== trim( (string) ( $pair['partner']['title'] ?? '' ) );
+		return true;
 	}
 }
 
@@ -442,61 +556,85 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_still_html' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_face_html' ) ) {
+	/**
+	 * A film's face in the chosen media: a 16:9 still, a 2:3 poster, or a
+	 * typographic plate on the surface colour when the film has neither.
+	 *
+	 * @param array<string,mixed> $film  review or partner array.
+	 * @param string              $media 'posters' or 'stills'.
+	 * @param string              $title The film title for the plate.
+	 * @return string
+	 */
+	function lunara_home_stills_that_rhyme_face_html( $film, $media, $title ) {
+		$title = trim( (string) $title );
+		if ( 'stills' === $media ) {
+			$still = trim( (string) ( $film['still'] ?? '' ) );
+			if ( '' !== $still ) {
+				return '<span class="lunara-home-stills-frame is-still">' . lunara_home_stills_that_rhyme_still_html( $still ) . '</span>';
+			}
+		} else {
+			$poster = trim( (string) ( $film['poster'] ?? '' ) );
+			if ( '' !== $poster ) {
+				return '<span class="lunara-home-stills-frame is-poster"><img class="lunara-home-stills-media" src="' . esc_url( $poster ) . '" alt="" width="342" height="513" loading="lazy" decoding="async"></span>';
+			}
+			$poster_html = trim( (string) ( $film['poster_html'] ?? '' ) );
+			if ( '' !== $poster_html ) {
+				return '<span class="lunara-home-stills-frame is-poster">' . $poster_html . '</span>';
+			}
+		}
+
+		return '<span class="lunara-home-stills-frame is-text' . ( 'stills' === $media ? ' is-still' : ' is-poster' ) . '"><span class="lunara-home-stills-text-title">' . esc_html( $title ) . '</span></span>';
+	}
+}
+
 if ( ! function_exists( 'lunara_render_home_stills_that_rhyme' ) ) {
 	/**
-	 * Render Stills that Rhyme, or the legacy Pair It With desk when no
-	 * complete pair exists.
+	 * Render Stills that Rhyme — the reviewed film and its three — or the
+	 * legacy Pair It With desk when no review qualifies.
 	 *
 	 * @return string
 	 */
 	function lunara_render_home_stills_that_rhyme() {
-		$pair = lunara_home_stills_that_rhyme_pair();
+		$set = lunara_home_stills_that_rhyme_set();
 
 		/**
-		 * Filter the resolved pair before it renders.
+		 * Filter the resolved set before it renders.
 		 *
-		 * @param array<string,mixed>|null $pair role (slug, label, question),
-		 *        review (id, film, take, year, url, still) and partner (title,
-		 *        year, tt, movie_id, review_id, url, still); null when nothing
-		 *        resolved. Return an incomplete value to fall back to the desk.
+		 * @param array<string,mixed>|null $set review (id, film, take, year,
+		 *        url, still) and pairings (role slug => role + partner); null
+		 *        when nothing resolved. Return an incomplete value to fall back
+		 *        to the desk.
 		 */
 		if ( function_exists( 'apply_filters' ) ) {
-			$pair = apply_filters( 'lunara_home_stills_that_rhyme_pair', $pair );
+			$set = apply_filters( 'lunara_home_stills_that_rhyme_set', $set );
 		}
 
-		if ( ! lunara_home_stills_that_rhyme_pair_is_complete( $pair ) ) {
+		if ( ! lunara_home_stills_that_rhyme_set_is_complete( $set ) ) {
 			return function_exists( 'lunara_render_home_pairing_desk' ) ? (string) lunara_render_home_pairing_desk() : '';
 		}
 
-		$role     = is_array( $pair['role'] ?? null ) ? $pair['role'] : array();
-		$label    = trim( (string) ( $role['label'] ?? '' ) );
-		$question = trim( (string) ( $role['question'] ?? '' ) );
-		$review   = $pair['review'];
-		$partner  = $pair['partner'];
-		$take     = trim( (string) ( $review['take'] ?? '' ) );
+		$review = $set['review'];
+		$media  = 'stills' === (string) ( $set['media'] ?? '' ) ? 'stills' : 'posters';
+		$take   = trim( (string) ( $review['take'] ?? '' ) );
+		$title  = trim( (string) ( $review['film'] ?? '' ) );
+		if ( '' !== $take ) {
+			$title .= ' – ' . $take;
+		}
 
 		ob_start();
 		?>
-		<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme<?php echo '' !== (string) ( $role['slug'] ?? '' ) ? ' is-role-' . esc_attr( sanitize_key( (string) $role['slug'] ) ) : ''; ?>" data-lunara-site-studio-section="pairing-desk" aria-label="<?php esc_attr_e( 'Stills that Rhyme', 'lunara-film' ); ?>">
+		<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme is-media-<?php echo esc_attr( $media ); ?>" data-lunara-site-studio-section="pairing-desk" data-lunara-stills-media="<?php echo esc_attr( $media ); ?>" aria-label="<?php esc_attr_e( 'Stills that Rhyme', 'lunara-film' ); ?>">
 			<div class="lunara-home-stills-inner">
 				<header class="lunara-home-stills-head">
 					<p class="lunara-home-stills-kicker"><?php esc_html_e( 'Stills that Rhyme', 'lunara-film' ); ?></p>
-					<h2 class="lunara-home-stills-title"><?php esc_html_e( 'Two films, one image idea.', 'lunara-film' ); ?></h2>
-					<?php if ( '' !== $label || '' !== $question ) : ?>
-						<p class="lunara-home-stills-question">
-							<?php if ( '' !== $label ) : ?>
-								<span class="lunara-home-stills-role"><?php echo esc_html( $label ); ?></span>
-							<?php endif; ?>
-							<?php if ( '' !== $question ) : ?>
-								<em class="lunara-home-stills-question-text"><?php echo esc_html( $question ); ?></em>
-							<?php endif; ?>
-						</p>
-					<?php endif; ?>
+					<h2 class="lunara-home-stills-title"><?php esc_html_e( 'Every review ends with three more films.', 'lunara-film' ); ?></h2>
+					<p class="lunara-home-stills-source"><?php esc_html_e( 'Fresh from the debrief of', 'lunara-film' ); ?> <a href="<?php echo esc_url( $review['url'] ); ?>"><?php echo esc_html( $title ); ?></a></p>
 				</header>
 
 				<div class="lunara-home-stills-grid">
 					<a class="lunara-home-stills-item is-review" href="<?php echo esc_url( $review['url'] ); ?>">
-						<span class="lunara-home-stills-frame"><?php echo lunara_home_stills_that_rhyme_still_html( $review['still'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+						<?php echo lunara_home_stills_that_rhyme_face_html( $review, $media, $review['film'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						<span class="lunara-home-stills-caption">
 							<span class="lunara-home-stills-film"><?php echo esc_html( lunara_home_stills_that_rhyme_caption( $review['film'], $review['year'] ?? '' ) ); ?></span>
 							<?php if ( '' !== $take ) : ?>
@@ -504,12 +642,30 @@ if ( ! function_exists( 'lunara_render_home_stills_that_rhyme' ) ) {
 							<?php endif; ?>
 						</span>
 					</a>
-					<a class="lunara-home-stills-item is-partner" href="<?php echo esc_url( $partner['url'] ); ?>">
-						<span class="lunara-home-stills-frame"><?php echo lunara_home_stills_that_rhyme_still_html( $partner['still'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-						<span class="lunara-home-stills-caption">
-							<span class="lunara-home-stills-film"><?php echo esc_html( lunara_home_stills_that_rhyme_caption( $partner['title'], $partner['year'] ?? '' ) ); ?></span>
-						</span>
-					</a>
+					<div class="lunara-home-stills-three" role="list">
+						<?php foreach ( $set['pairings'] as $pairing ) : ?>
+							<?php
+							$role     = is_array( $pairing['role'] ?? null ) ? $pairing['role'] : array();
+							$partner  = $pairing['partner'];
+							$slug     = sanitize_key( (string) ( $role['slug'] ?? '' ) );
+							$label    = trim( (string) ( $role['label'] ?? '' ) );
+							$question = trim( (string) ( $role['question'] ?? '' ) );
+							$face     = lunara_home_stills_that_rhyme_face_html( $partner, $media, $partner['title'] );
+							?>
+							<a class="lunara-home-stills-item is-pairing<?php echo '' !== $slug ? ' is-role-' . esc_attr( $slug ) : ''; ?><?php echo false !== strpos( $face, 'is-text' ) ? ' has-no-art' : ''; ?>" href="<?php echo esc_url( $partner['url'] ); ?>" role="listitem">
+								<?php if ( '' !== $label ) : ?>
+									<span class="lunara-home-stills-role"><?php echo esc_html( $label ); ?></span>
+								<?php endif; ?>
+								<?php echo $face; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<span class="lunara-home-stills-caption">
+									<span class="lunara-home-stills-film"><?php echo esc_html( lunara_home_stills_that_rhyme_caption( $partner['title'], $partner['year'] ?? '' ) ); ?></span>
+									<?php if ( '' !== $question ) : ?>
+										<em class="lunara-home-stills-question-text"><?php echo esc_html( $question ); ?></em>
+									<?php endif; ?>
+								</span>
+							</a>
+						<?php endforeach; ?>
+					</div>
 				</div>
 			</div>
 		</section>

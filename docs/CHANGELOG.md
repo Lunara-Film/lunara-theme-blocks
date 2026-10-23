@@ -12,6 +12,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.125: the Debrief is three films; posters by default, stills as the option; the Rustin plate
+
+Dalton's correction, in his words: the entire point of the Debrief module is that it is three films. 3.2.121–3.2.124 cut the Home module to one pair. And the blank plate under *Rustin* on the Debrief page is a bug, not a design.
+
+- **Stills that Rhyme is the reviewed film and its three.** `lunara_home_stills_that_rhyme_set()` resolves the first candidate review that carries all three Debrief pairings (lead story, then the Pair It With desk's review, then the newest reviews); the renderer shows the reviewed film's face centered over the three pairings' faces in one row, each under its full role name with "Film, Year." and the Method question. A review with two pairings is not the Debrief: the desk renders instead. The `lunara_home_stills_that_rhyme_pair` filter is replaced by `lunara_home_stills_that_rhyme_set`.
+- **Posters by default, stills as the option.** `lunara_home_stills_that_rhyme_media()` chooses `posters` unless the reviewed film and all three pairings have a still, when it chooses `stills`; the `lunara_home_stills_that_rhyme_media` filter can hold posters or ask for stills (honoured only when the set can). Posters: 2:3, the reviewed film at 260px, the three at up to 220px, three across at every width. Stills: 16:9, one row from 760px, stacked below. A film with no art is a typographic plate (`has-no-art`), never dropped.
+- **Posters resolve from the site first.** New `lunara_get_title_poster_url_from_site()` in `inc/debrief.php`: the TMDB poster hydrated on a published Lunara review of the film, that review's featured image, the movie entity's poster meta or featured image; `lunara_get_title_poster_html()` tries it before the Ledger and TMDB. The Home module also reads the movie entity's `tmdb_poster_url` and the partner review's `_lunara_tmdb_poster_url` directly.
+- **The Rustin plate.** The TMDB lookup cached a failed request as "no poster" for seven days, so a five-second blip left a blank plate for a week. A failed or non-200 request is no longer cached; a genuine empty answer is kept six hours; the cache key moved to `lunara_title_poster_v2_` so the old week-long blanks stop answering. *Rustin* (tt13959828, Misty Green's Career Context) will fill on the next page load that reaches TMDB.
+- **Tests:** `home-stills-that-rhyme-runtime.php` rewritten around the three-film set (posters default, stills option, media filter, plates, IMDb-only pairings, the walk, the set filter); `home-stills-that-rhyme-browser-runtime.js` renders both faces at 320/390/768/1366 (96 checks); new `title-poster-runtime.php` (site first, TMDB cached a week, failures never cached, empty answers six hours). Whole PHP suite and the home, pairing-editor, geometry and design-watch suites pass.
+
 ## 2026-10-23 — Theme 3.2.124: the rhythm takes, phones follow the program, the stills walk
 
 Three corrections after verifying 3.2.123 live.

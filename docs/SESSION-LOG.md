@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — The Debrief is three films (Theme 3.2.125)
+
+- **Shipped:** 3.2.124 merged (#273) and deployed by me; verified live (Stills section rendering, one hairline per section, phones in the program order). Then Dalton corrected the module: the Debrief is three films, always; the Home version had cut it to one pair since 3.2.121. He also flagged the blank *Rustin* plate on the Debrief page. Theme 3.2.125 PR: the reviewed film and its three (posters by default, stills as the option when every film has one), posters resolved from the site first, and the TMDB negative cache fixed (failures never cached; key versioned). See the 3.2.125 changelog entry. On his standing instruction I merge and deploy it when CI is green.
+- **Verified:** whole PHP suite (0 failures); stills browser 96 checks in both faces; front desk 50; section order 12; pairing editor 16; geometry policy; design watch; square surfaces; new `title-poster-runtime.php`.
+- **Live:** Theme 3.2.124 at the time of writing; 3.2.125 follows on CI.
+- **Holding:** Dalton's idea for the Home module: the Debrief page's rotating constellation (`lunara_debrief_method_orbit_*` + `assets/js/lunara-debrief-orbit.js`) on Home with stills in place of posters where the films have them. The orbit is reusable code; a stills variant is the next Home step if he wants it.
+- **Next:** 3.2.125 merge and deploy; verify *Rustin* fills on the Debrief page; the orbit variant on his word; the standalone theme on his "go standalone".
+- **Found, not fixed:** The Debrief page orbit still shows a typographic plate when `lunara_get_title_poster_html()` finds nothing; with the site-first source and the cache fix that should be rare, but a pairing with no IMDb id, no movie entity and no Lunara review has no poster path at all. Misty Green's pairings are legacy text fields (`_lunara_theme_echo` …), not Relational Trinity movie links, so the entity poster path does not apply to them. The hairline colour on Home follows `--lunara-border`, which the live token set renders in faint white rather than the program's gold; still due.
+
 ## 2026-10-23 — 3.2.123 live; the rhythm, the phone order and the stills walk (Theme 3.2.124)
 
 - **Shipped:** On Dalton's instruction ("I would really like it for you to be able to merge and deploy") I merged #271 (3.2.123) and #272 (CI on Node 24 actions) and deployed 3.2.123 from WordPress.com → Deployments (the manual trigger for `lunara-theme-blocks` main). I also turned the Ledger lane on in Homepage Studio (it was saved off from before it had a renderer) and saved; the band appeared at once. Theme 3.2.124 PR: the section rule corrected to the real wrapper selector with one hairline per seam, phones following the preset, and the stills pair walking past an unpaired lead. See the 3.2.124 changelog entry.
