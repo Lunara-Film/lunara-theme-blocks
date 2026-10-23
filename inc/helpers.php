@@ -213,6 +213,39 @@ function lunara_get_home_section_order_map() {
 }
 
 /**
+ * Resolve the phone section order into a slug => order map. header.php prints
+ * it as the ≤820px order rules. A chosen preset decides here too (3.2.124);
+ * before, phones kept the saved string from the old editorial default, so the
+ * Running Order sat below Journal and Picks on a phone while desktop ran the
+ * program's order. Without a preset the saved custom mobile order decides.
+ */
+function lunara_get_home_section_mobile_order_map() {
+    $defaults = lunara_get_home_section_slugs();
+    $fallback = array( 'hero', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts', 'featured', 'oscar-spotlight', 'database', 'ledger', 'deep-cuts' );
+    $raw      = lunara_get_home_section_order_raw( 'mobile' );
+    if ( '' === $raw ) {
+        $raw = (string) get_theme_mod( 'lunara_home_section_mobile_order', implode( ',', $fallback ) );
+    }
+    $ordered  = explode( ',', lunara_sanitize_home_section_order( $raw ) );
+
+    foreach ( $defaults as $default_slug ) {
+        if ( '' !== $default_slug && ! in_array( $default_slug, $ordered, true ) ) {
+            $ordered[] = $default_slug;
+        }
+    }
+
+    $map = array();
+    foreach ( $ordered as $index => $slug ) {
+        if ( '' === $slug ) {
+            continue;
+        }
+        $map[ $slug ] = $index + 1;
+    }
+
+    return $map;
+}
+
+/**
  * The section order a chosen Homepage Studio preset dictates, as the preset is
  * defined in code today, or '' when no preset is chosen (a custom order) or
  * the preset code is not loaded.

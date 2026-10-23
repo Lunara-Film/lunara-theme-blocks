@@ -49,7 +49,13 @@ and links to the owning Review editor. This does not alter pairing content.
   proportions, contained, never cropped.
 - Every Home section after the masthead opens on the one-pixel gold hairline
   with the same breathing room, and its title is set in the signature face at
-  regular weight. The Oscar Ledger band keeps its own full-bleed rules.
+  regular weight. One rule per seam: no second border from a section's own
+  styles and none under the masthead. The Oscar Ledger band keeps its own
+  full-bleed rules. The saved Section Order decides on phones as it does on
+  desktop; the inline order rules the header prints follow the same map.
+- Stills that Rhyme reads from the lead story first, then the review the
+  Pair It With desk shows, then the newest reviews, and renders the first
+  complete pair; a lead without a Debrief pairing does not cost the section.
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.

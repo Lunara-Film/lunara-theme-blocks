@@ -182,7 +182,7 @@
             width: 100% !important;
             max-width: none !important;
             padding-inline: clamp(16px, 4vw, 48px) !important;
-            gap: clamp(48px, 6vw, 86px) !important;
+            gap: clamp(40px, 4.5vw, 64px) !important; /* the program's rhythm (3.2.124) */
         }
 
         <?php
