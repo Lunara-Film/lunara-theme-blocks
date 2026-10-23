@@ -21,12 +21,12 @@ jobs:
       docs_only: ${{ steps.scope.outputs.docs_only }}
       tested: ${{ steps.reuse.outputs.tested || 'false' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Compare the whole PR/push, including renames and large file lists.
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -54,13 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -109,14 +109,14 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4, 5, 6]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Browser fixtures render the real PHP components.
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -154,9 +154,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -174,7 +174,7 @@ jobs:
 
       - name: Record the fully tested tree
         if: github.event_name == 'pull_request' && needs.scope.outputs.docs_only == 'false'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ci-passed-tree-${{ env.TESTED_TREE }}
           path: ${{ runner.temp }}/tested-tree.txt
