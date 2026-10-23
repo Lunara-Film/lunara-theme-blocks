@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - run: npm ci
@@ -31,7 +31,7 @@ jobs:
           LUNARA_EXPECTED_THEME_VERSION: ${{ inputs.expected_theme_version }}
           LUNARA_EXPECTED_LEDGER_VERSION: ${{ inputs.expected_ledger_version }}
         run: node tests/tools/lunara-public-design-watch.cjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: public-design-acceptance
