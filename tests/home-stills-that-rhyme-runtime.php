@@ -98,6 +98,8 @@ function lunara_get_latest_review_post() { $id = (int) $GLOBALS['lunara_test']['
 function lunara_get_review_hero_image_url( $id ) { return (string) ( $GLOBALS['lunara_test']['stills'][ (int) $id ] ?? '' ); }
 function lunara_rightsize_backdrop_url( $url ) { return str_replace( '/original/', '/w1280/', (string) $url ); }
 function lunara_entity_review_for_movie( $movie_id ) { return $GLOBALS['lunara_test']['review_for_movie'][ (int) $movie_id ] ?? null; }
+class WP_Query { public $posts = array(); public function __construct( array $args = array() ) { $this->posts = array_map( 'intval', (array) ( $GLOBALS['lunara_test']['recent'] ?? array() ) ); } }
+function lunara_get_pairing_desk_review_id() { foreach ( (array) ( $GLOBALS['lunara_test']['recent'] ?? array() ) as $id ) { $post = lunara_test_post( (int) $id ); if ( $post && ( ! empty( $post['meta']['theme_echo_movie'] ) || ! empty( $GLOBALS['lunara_test']['pairings'][ (int) $id ] ) ) ) { return (int) $id; } } return 0; }
 function lunara_render_home_pairing_desk() { return '<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-pairing-desk-section">legacy-pair-it-with-desk</section>'; }
 function lunara_debrief_method_roles() {
 	return array(
@@ -185,10 +187,25 @@ $GLOBALS['lunara_test']['ledger']['tt1000009'] = array( 'poster_url' => 'https:/
 $html = lunara_render_home_stills_that_rhyme();
 lunara_test_assert( 1 === preg_match( '#is-partner" href="https://example.test/reviews/harbor-light/">\s*<span class="lunara-home-stills-frame"><img class="lunara-home-stills-media" src="https://image.tmdb.org/t/p/w1280/quiet-backdrop.jpg"#s', $html ) && false === strpos( $html, 'imdb.com' ) && false !== strpos( $html, 'Quiet Harbor, 1961.' ), 'the Ledger backdrop stands in by IMDb id, never the poster, and an external source links back to the lead review' );
 
+// ---- The pair walks past a lead without a pairing (3.2.124) ----
+// Harbor Light leads and has no Debrief pairing; Night Ferry (22) is the
+// newest review with one, so the stills come from it, lead still first in
+// the candidate order, no empty frame and no desk.
+lunara_test_reset();
+$GLOBALS['lunara_test']['posts'][22]['meta']['theme_echo_movie'] = 503;
+$GLOBALS['lunara_test']['recent']                                = array( 21, 22, 23 );
+$html = lunara_render_home_stills_that_rhyme();
+lunara_test_assert( array( 21, 22, 23 ) === lunara_home_stills_that_rhyme_candidate_review_ids(), 'candidates run lead first, then the desk review, then the newest reviews, without repeats' );
+lunara_test_assert( false === strpos( $html, 'legacy-pair-it-with-desk' ) && false !== strpos( $html, 'lunara-home-stills-that-rhyme' ) && false !== strpos( $html, 'Night Ferry' ) && false !== strpos( $html, 'Dry Season, 2011.' ) && false === strpos( $html, 'Harbor Light' ), 'a lead without a pairing hands the section to the newest review that has one' );
+lunara_test_reset();
+$GLOBALS['lunara_test']['recent'] = array( 21, 22, 23 );
+add_filter( 'lunara_home_stills_that_rhyme_candidates', static function ( $ids ) { return array( 23 ); } );
+lunara_test_assert( array( 23 ) === lunara_home_stills_that_rhyme_candidate_review_ids(), 'the candidate list is filterable' );
+
 // ---- Legacy desk: missing still or missing pairing, never an empty frame ----
 lunara_test_reset();
 $html = lunara_render_home_stills_that_rhyme();
-lunara_test_assert( '<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-pairing-desk-section">legacy-pair-it-with-desk</section>' === $html, 'a lead with no pairing hands back the legacy desk untouched' );
+lunara_test_assert( '<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-pairing-desk-section">legacy-pair-it-with-desk</section>' === $html, 'with no paired review anywhere the legacy desk renders untouched' );
 
 lunara_test_reset();
 $GLOBALS['lunara_test']['posts'][21]['meta']['theme_echo_movie'] = 501;

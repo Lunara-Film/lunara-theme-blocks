@@ -286,32 +286,80 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_pair' ) ) {
 			return null;
 		}
 
-		$review_id = lunara_home_stills_that_rhyme_lead_review_id();
-		if ( $review_id <= 0 ) {
-			return null;
-		}
+		foreach ( lunara_home_stills_that_rhyme_candidate_review_ids() as $review_id ) {
+			$review = lunara_home_stills_that_rhyme_review( $review_id );
+			if ( '' === $review['still'] || '' === $review['film'] ) {
+				continue;
+			}
 
-		$review = lunara_home_stills_that_rhyme_review( $review_id );
-		if ( '' === $review['still'] || '' === $review['film'] ) {
-			return null;
-		}
-
-		foreach ( lunara_debrief_method_roles() as $slug => $role ) {
-			$partner = lunara_home_stills_that_rhyme_partner( $review_id, $role );
-			if ( is_array( $partner ) && '' !== $partner['still'] ) {
-				return array(
-					'role'    => array(
-						'slug'     => (string) $slug,
-						'label'    => (string) ( $role['label'] ?? '' ),
-						'question' => (string) ( $role['question'] ?? '' ),
-					),
-					'review'  => $review,
-					'partner' => $partner,
-				);
+			foreach ( lunara_debrief_method_roles() as $slug => $role ) {
+				$partner = lunara_home_stills_that_rhyme_partner( $review_id, $role );
+				if ( is_array( $partner ) && '' !== $partner['still'] ) {
+					return array(
+						'role'    => array(
+							'slug'     => (string) $slug,
+							'label'    => (string) ( $role['label'] ?? '' ),
+							'question' => (string) ( $role['question'] ?? '' ),
+						),
+						'review'  => $review,
+						'partner' => $partner,
+					);
+				}
 			}
 		}
 
 		return null;
+	}
+}
+
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) ) {
+	/**
+	 * The reviews the pair may come from, in order (3.2.124): the lead story
+	 * first; then the review the Pair It With desk shows (the Studio's manual
+	 * pick, or the newest review with pairings); then the newest published
+	 * reviews. A lead without a Debrief pairing no longer costs the section;
+	 * the pair walks to the newest review that has one. Filterable.
+	 *
+	 * @return int[] Distinct published review IDs, lead first.
+	 */
+	function lunara_home_stills_that_rhyme_candidate_review_ids() {
+		$ids = array( lunara_home_stills_that_rhyme_lead_review_id() );
+
+		if ( function_exists( 'lunara_get_pairing_desk_review_id' ) ) {
+			$ids[] = (int) lunara_get_pairing_desk_review_id();
+		}
+
+		if ( class_exists( 'WP_Query' ) ) {
+			$recent = new WP_Query(
+				array(
+					'post_type'              => 'review',
+					'post_status'            => 'publish',
+					'posts_per_page'         => 8,
+					'orderby'                => 'date',
+					'order'                  => 'DESC',
+					'fields'                 => 'ids',
+					'no_found_rows'          => true,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
+				)
+			);
+			foreach ( (array) $recent->posts as $post ) {
+				$ids[] = is_object( $post ) ? (int) $post->ID : (int) $post;
+			}
+		}
+
+		$ids = array_values( array_unique( array_filter( array_map( 'intval', $ids ), static function ( $id ) {
+			return $id > 0 && lunara_home_stills_that_rhyme_is_published( $id, 'review' );
+		} ) ) );
+
+		if ( function_exists( 'apply_filters' ) ) {
+			$filtered = apply_filters( 'lunara_home_stills_that_rhyme_candidates', $ids );
+			if ( is_array( $filtered ) ) {
+				$ids = array_values( array_unique( array_filter( array_map( 'intval', $filtered ) ) ) );
+			}
+		}
+
+		return $ids;
 	}
 }
 

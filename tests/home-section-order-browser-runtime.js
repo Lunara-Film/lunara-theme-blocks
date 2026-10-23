@@ -22,8 +22,8 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
     try {
         for (const width of [320, 390, 768, 1366]) {
             const page = await browser.newPage({ viewport: { width, height: 1000 }, javaScriptEnabled: false });
-            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style></head><body class="home"><main id="primary" class="site-main lunara-front-page">${sections}</main></body></html>`, { waitUntil: 'load' });
-            const d = await page.evaluate(() => [...document.querySelectorAll('main > section')].map(e => ({ slot: e.dataset.slot, top: e.getBoundingClientRect().top, height: e.getBoundingClientRect().height, order: getComputedStyle(e).order })));
+            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style></head><body class="home"><div id="primary" class="site-main lunara-front-page">${sections}</div></body></html>`, { waitUntil: 'load' });
+            const d = await page.evaluate(() => [...document.querySelectorAll('#primary > section')].map(e => ({ slot: e.dataset.slot, top: e.getBoundingClientRect().top, height: e.getBoundingClientRect().height, order: getComputedStyle(e).order })));
             const label = `section order@${width}`;
             assert(d.every(s => s.height > 0), `${label}: every section has height`, d);
             assert(d.every(s => s.order === '0'), `${label}: no slot carries a CSS order override`, d);

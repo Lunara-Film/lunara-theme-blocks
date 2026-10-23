@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — 3.2.123 live; the rhythm, the phone order and the stills walk (Theme 3.2.124)
+
+- **Shipped:** On Dalton's instruction ("I would really like it for you to be able to merge and deploy") I merged #271 (3.2.123) and #272 (CI on Node 24 actions) and deployed 3.2.123 from WordPress.com → Deployments (the manual trigger for `lunara-theme-blocks` main). I also turned the Ledger lane on in Homepage Studio (it was saved off from before it had a renderer) and saved; the band appeared at once. Theme 3.2.124 PR: the section rule corrected to the real wrapper selector with one hairline per seam, phones following the preset, and the stills pair walking past an unpaired lead. See the 3.2.124 changelog entry.
+- **Verified:** live 3.2.123 by curl and in Chrome: header logo requests 420×124/840×248 and shows the whole wordmark; masthead wordmark modest with the dek below; sections in order masthead → Method desk (fallback) → Running Order (12 posters, "All 261 reviews") → Ledger band ("Walk 98 ceremonies through their posters", five posters) → Journal → Picks; no hero block. Locally for 3.2.124: whole PHP suite 0 failures; front desk 50, stills 36, Running Order 60, Ledger band 40, section order 12, header 114, mobile panels 310, carousels 144, geometry policy, design watch, square surfaces.
+- **Live:** Theme 3.2.123. 3.2.124 waits on CI, then I merge and deploy (Dalton's standing instruction from this session).
+- **Holding:** Dalton's phone review of Home. The standalone-theme build on his "go standalone".
+- **Next:** 3.2.124 merge and deploy; the Method, Journal and Picks heads in the D kicker row; the Living Pulse masthead rules cleanup; the standalone theme; the decision-sheet items.
+- **Found, not fixed:** `header.php` prints the section order as inline `!important` rules from the PHP maps, so the Section Order has two carriers (DOM order and inline CSS) that agree only because both read the same maps. #270 was an empty PR from the stale `claude/home-d-sections` branch that Dalton merged; it changed nothing (same tree). Two test fixtures rendered `<main class="lunara-front-page">` while production renders a `div#primary`; both now match production, and the other home fixtures should be checked for the same drift.
+
 ## 2026-10-23 — Home polish after Dalton's first look (Theme 3.2.123)
 
 - **Shipped:** Theme 3.2.123 PR, stacked on #269 (3.2.122): the masthead wordmark capped to a modest centered mark with the dek below it, the header logo requested and contained at its own proportions (no more "LUNA" crop), and every Home section opening on the gold hairline with signature-face titles. See the 3.2.123 changelog entry.

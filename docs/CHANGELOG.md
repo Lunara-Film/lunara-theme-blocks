@@ -12,6 +12,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.124: the rhythm takes, phones follow the program, the stills walk
+
+Three corrections after verifying 3.2.123 live.
+
+- **The section rule did not take on the live page.** The Home wrapper is `<div id="primary" class="site-main lunara-front-page">`; the 3.2.123 rules named `main.lunara-front-page`, so the lines a reader saw were the sections' own legacy borders (the Running Order had none, the masthead panel had a stray one with 127px of air beneath it). The rules now name the class alone: one gold hairline on every section's `::before`, equal padding under it, the legacy `border-top` and the masthead panel's `border-bottom` removed, `header.php`'s flex gap tightened to the program's rhythm (40–64px). The Ledger band keeps its own rules and padding. The front-desk and section-order browser fixtures now render the real wrapper markup, and the front-desk contract asserts the single hairline, no panel border, the padding band and the masthead-to-section distance.
+- **Phones follow the preset.** `lunara_get_home_section_mobile_order_map()` moves to `inc/helpers.php` and reads the chosen preset first (via `lunara_get_home_section_order_raw( 'mobile' )`), as the desktop map does since 3.2.121; the saved string still decides without a preset. Before this, the ≤820px rules `header.php` prints kept the old editorial default, which put the Running Order below Journal and Picks on a phone. Correction to the 3.2.119 note: the saved mobile order *is* applied, by those inline rules.
+- **Stills that Rhyme walks.** `lunara_home_stills_that_rhyme_candidate_review_ids()` tries the lead story, then the review the Pair It With desk shows (the Studio's manual pick or the newest with pairings), then the eight newest reviews, and the pair comes from the first with a complete pair; filterable via `lunara_home_stills_that_rhyme_candidates`. Live, the lead (The Social Reckoning) has no Debrief pairing, so the section had fallen back to the desk.
+- **Tests:** front desk 50 (was 45), stills 36 with the hairline read from `::before`, section order PHP covers the phone map, stills PHP covers the walk and the filter; whole PHP suite and the home, header, geometry, design-watch suites pass.
+
 ## 2026-10-23 — Theme 3.2.123: Home polish after Dalton's first look
 
 Dalton reviewed 3.2.121 live and named three things: the masthead wordmark rendered like a second header, the site header logo was cut to "LUNA", and the sections ran together.

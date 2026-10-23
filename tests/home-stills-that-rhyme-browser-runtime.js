@@ -33,7 +33,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     questionStyle: style('.lunara-home-stills-question-text', 'fontStyle'), questionFont: style('.lunara-home-stills-question-text', 'fontFamily'),
                     filmFont: style('.lunara-home-stills-film', 'fontFamily'), filmSize: parseFloat(style('.lunara-home-stills-film', 'fontSize')), filmStyle: style('.lunara-home-stills-film', 'fontStyle'),
                     takeStyle: style('.lunara-home-stills-take', 'fontStyle'), takeFont: style('.lunara-home-stills-take', 'fontFamily'),
-                    sectionTopBorder: parseFloat(style('.lunara-home-stills-that-rhyme', 'borderTopWidth')),
+                    sectionTopBorder: parseFloat(getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme')).borderTopWidth), hairline: (() => { const b = getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme'), '::before'); return { h: parseFloat(b.height), bg: b.backgroundColor }; })(),
                 };
             });
             const label = `stills that rhyme@${width}`;
@@ -44,7 +44,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.kickerSize >= 13 && d.roleSize >= 13 && d.roleText === 'Theme Echo', `${label}: kicker and the full role name are at least 13px`, d);
             assert(d.questionStyle === 'italic' && d.questionFont.startsWith('"Tiempos Text"'), `${label}: the Method question is reading italic`, d);
             assert(d.filmFont.startsWith('"Tiempos Text"') && d.filmSize >= 16 && d.filmStyle === 'normal' && d.takeStyle === 'italic' && d.takeFont.startsWith('"Tiempos Text"'), `${label}: captions are Tiempos with the take in italic`, d);
-            assert(d.sectionTopBorder === 1, `${label}: the section opens with a single hairline rule`, d);
+            assert(d.sectionTopBorder === 0 && Math.abs(d.hairline.h - 1) < .6 && d.hairline.bg === 'rgba(201, 169, 97, 0.28)', `${label}: the section opens with the program's single hairline rule (no border of its own)`, d);
             if (width >= 760) assert(d.partner.left >= d.review.right - 1 && Math.abs(d.partner.top - d.review.top) <= 1 && Math.abs(d.partner.width - d.review.width) <= 1, `${label}: the two stills stand side by side`, d);
             else assert(d.partner.top >= d.review.bottom - 1 && Math.abs(d.partner.width - d.review.width) <= 1 && d.review.left >= 16 && d.review.right <= width - 16, `${label}: the stills stack with a 16px gutter on phones`, d);
             await assertSquareSurfaces(page, label);
