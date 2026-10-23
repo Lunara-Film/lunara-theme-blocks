@@ -39,7 +39,7 @@ function lunara_test_assert( $condition, string $message ): void {
 	}
 }
 
-class WP_Error {}
+class WP_Error { public function get_error_code() { return 'lunara_test_error'; } }
 function is_wp_error( $v ) { return $v instanceof WP_Error; }
 function __( $t, $d = null ) { return $t; }
 function esc_attr( $t ) { return htmlspecialchars( (string) $t, ENT_QUOTES, 'UTF-8' ); }
@@ -100,6 +100,7 @@ $lunara_test_core_dir = sys_get_temp_dir() . '/lunara-core-' . getmypid() . '/';
 file_put_contents( $lunara_test_core_dir . 'includes/class-lunara-movie-provider-gateway.php', <<<'PHP'
 <?php
 final class Lunara_Movie_Provider_Gateway {
+	public function credentials_status() { return array( 'omdb' => true, 'tmdb' => true, 'ready' => true ); }
 	public function get_artwork_by_imdb( $tt ) {
 		++$GLOBALS['lunara_test']['gateway_calls'];
 		$answer = $GLOBALS['lunara_test']['gateway'] ?? null;
@@ -109,6 +110,12 @@ final class Lunara_Movie_Provider_Gateway {
 PHP
 );
 define( 'LUNARA_CORE_DIR', $lunara_test_core_dir );
+function current_user_can( $cap ) { return ! empty( $GLOBALS['lunara_test']['editor'] ); }
+function sanitize_text_field( $v ) { return trim( strip_tags( (string) $v ) ); }
+function esc_html( $t ) { return htmlspecialchars( (string) $t, ENT_QUOTES, 'UTF-8' ); }
+lunara_test_load_function( 'lunara_title_poster_trace_enabled' );
+lunara_test_load_function( 'lunara_title_poster_trace' );
+lunara_test_load_function( 'lunara_title_poster_trace_print' );
 lunara_test_load_function( 'lunara_poster_html_with_sizes' );
 lunara_test_load_function( 'lunara_get_title_poster_url_from_site' );
 lunara_test_load_function( 'lunara_get_title_poster_html' );
@@ -168,6 +175,19 @@ lunara_test_assert( false !== strpos( lunara_get_title_poster_html( 'tt13959828'
 lunara_test_reset();
 $GLOBALS['lunara_test']['remote']['body'] = json_encode( array( 'movie_results' => array() ) );
 lunara_test_assert( '' === lunara_get_title_poster_html( 'tt13959828' ) && 1 === count( $GLOBALS['lunara_test']['set'] ) && '' === $GLOBALS['lunara_test']['set'][0][1] && 6 * HOUR_IN_SECONDS === $GLOBALS['lunara_test']['set'][0][2], 'a real empty answer is remembered for six hours' );
+
+// ---- The editor-only trace names every step a plate went through ----
+lunara_test_reset();
+$_GET['lunara_poster_trace'] = '1';
+$GLOBALS['lunara_test']['editor'] = true;
+$GLOBALS['lunara_test']['gateway'] = new WP_Error();
+$GLOBALS['lunara_test']['remote'] = array( 'error' => false, 'code' => 200, 'body' => json_encode( array( 'movie_results' => array() ) ) );
+lunara_get_title_poster_html( 'tt14807308' );
+$steps = array_map( static function ( $row ) { return $row[1] . '=' . $row[2]; }, $GLOBALS['lunara_title_poster_trace'] ?? array() );
+lunara_test_assert( in_array( 'site=none', $steps, true ) && in_array( 'gateway=class loaded', $steps, true ) && in_array( 'gateway credentials=tmdb=yes', $steps, true ) && in_array( 'gateway error=lunara_test_error', $steps, true ) && in_array( 'theme tmdb=key constant defined', $steps, true ), 'the trace records the site, gateway and theme steps for an editor who asked for it: ' . implode( ' / ', $steps ) );
+ob_start(); lunara_title_poster_trace_print(); $printed = ob_get_clean();
+lunara_test_assert( false !== strpos( $printed, '<!-- lunara-title-poster-trace' ) && false !== strpos( $printed, 'tt14807308 | site | none' ), 'the trace prints as one footer comment' );
+unset( $_GET['lunara_poster_trace'] );
 
 // ---- Only real IMDb ids are looked up ----
 lunara_test_reset();

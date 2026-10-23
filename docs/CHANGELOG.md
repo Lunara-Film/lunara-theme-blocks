@@ -12,6 +12,10 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.128: an editor-only trace for poster lookups
+
+She Said and Rustin stayed plates after 3.2.127, and from outside the site there was no way to see which step failed. `lunara_get_title_poster_html()` now records each step (site, Ledger, gateway class, gateway credentials, gateway answer or error code, theme TMDB key) and prints the record in `wp_footer` as one HTML comment — only when the request carries `?lunara_poster_trace=1` and the visitor can edit the theme. Visitors never see it. `title-poster-runtime.php` covers the recording and the print.
+
 ## 2026-10-23 — Theme 3.2.127: the gateway class is loaded on the public page
 
 3.2.126 went live and *She Said* and *Rustin* were still plates. Lunara Core loads `Lunara_Movie_Provider_Gateway` only with its importer (admin, cron, its own REST route), so on a public page `class_exists()` was false and the new path was skipped. `lunara_get_title_poster_html()` now loads the class file from `LUNARA_CORE_DIR` when it is absent (the file defines one class and nothing else), then asks it. `title-poster-runtime.php` asserts the class is absent before the call and present after.

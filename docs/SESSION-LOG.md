@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — A trace for the plates (Theme 3.2.128)
+
+- **Shipped:** 3.2.127 merged (#276) and deployed by me; She Said and Rustin still plates. The live Core is 0.8.16 (= main), the gateway file is on the server, and the Review Artwork Audit screen shows TMDb credentials ready in admin, so the failure is somewhere the public render can see and I cannot. Theme 3.2.128 PR: an editor-only, opt-in trace (`?lunara_poster_trace=1`) printed in the footer. See the 3.2.128 changelog entry. Merged and deployed by me when CI is green; then I read the trace in Dalton's Chrome and fix the real cause.
+- **Verified:** `title-poster-runtime.php` (trace records the steps, prints once); whole PHP suite 0 failures.
+- **Live:** Theme 3.2.127; 3.2.128 follows on CI.
+- **Holding / Next / Found, not fixed:** as the 3.2.127 entry.
+
 ## 2026-10-23 — The gateway class on the public page (Theme 3.2.127)
 
 - **Shipped:** 3.2.126 merged (#275) and deployed by me; She Said and Rustin stayed plates because Core only loads the gateway class with its importer. Theme 3.2.127 PR: the theme loads the gateway's file from `LUNARA_CORE_DIR` on the public page when the class is absent. See the 3.2.127 changelog entry. Merged and deployed by me on his standing instruction when CI is green.
