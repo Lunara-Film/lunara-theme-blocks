@@ -710,6 +710,80 @@ if ( ! function_exists( 'lunara_poster_html_with_sizes' ) ) {
     }
 }
 
+if ( ! function_exists( 'lunara_get_title_poster_url_from_site' ) ) {
+    /**
+     * A poster the site already holds for an IMDb id (3.2.125): the TMDB
+     * poster hydrated on a published Lunara review of the film, that review's
+     * featured image, or the movie entity's poster meta or featured image.
+     * Local first: it is the site's own knowledge, costs no request and never
+     * goes stale behind a transient.
+     *
+     * @param string $tt Lowercase IMDb title id.
+     * @return string Poster URL or ''.
+     */
+    function lunara_get_title_poster_url_from_site( $tt ) {
+        $tt = strtolower( trim( (string) $tt ) );
+        if ( ! preg_match( '/^tt\d{7,8}$/', $tt ) || ! function_exists( 'get_posts' ) ) {
+            return '';
+        }
+
+        $use_cache = function_exists( 'wp_cache_get' ) && function_exists( 'wp_cache_set' );
+        if ( $use_cache ) {
+            $found  = false;
+            $cached = wp_cache_get( $tt, 'lunara_title_poster_site', false, $found );
+            if ( $found && is_string( $cached ) ) {
+                return $cached;
+            }
+        }
+
+        $url = '';
+        $lookups = array(
+            array( 'review', '_lunara_imdb_title_id', array( '_lunara_tmdb_poster_url' ) ),
+            array( 'movie', 'imdb_title_id', array( 'tmdb_poster_url', 'poster_url' ) ),
+        );
+        foreach ( $lookups as $lookup ) {
+            list( $type, $meta_key, $poster_keys ) = $lookup;
+            if ( function_exists( 'post_type_exists' ) && ! post_type_exists( $type ) ) {
+                continue;
+            }
+            $ids = get_posts(
+                array(
+                    'post_type'      => $type,
+                    'post_status'    => 'publish',
+                    'posts_per_page' => 1,
+                    'fields'         => 'ids',
+                    'no_found_rows'  => true,
+                    'meta_key'       => $meta_key,
+                    'meta_value'     => $tt,
+                )
+            );
+            if ( empty( $ids ) ) {
+                continue;
+            }
+            $post_id = (int) $ids[0];
+            foreach ( $poster_keys as $poster_key ) {
+                $candidate = trim( (string) get_post_meta( $post_id, $poster_key, true ) );
+                if ( '' !== $candidate ) {
+                    $url = $candidate;
+                    break 2;
+                }
+            }
+            if ( function_exists( 'get_the_post_thumbnail_url' ) ) {
+                $thumb = (string) get_the_post_thumbnail_url( $post_id, 'large' );
+                if ( '' !== $thumb ) {
+                    $url = $thumb;
+                    break;
+                }
+            }
+        }
+
+        if ( $use_cache ) {
+            wp_cache_set( $tt, $url, 'lunara_title_poster_site' );
+        }
+        return $url;
+    }
+}
+
 if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
     /**
      * Poster <img> for an IMDb title, resolved through the Oscars Ledger.
@@ -761,6 +835,11 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                 esc_attr( $loading )
             );
         };
+
+        $site_poster = function_exists( 'lunara_get_title_poster_url_from_site' ) ? lunara_get_title_poster_url_from_site( $tt ) : '';
+        if ( '' !== $site_poster ) {
+            return lunara_poster_html_with_sizes( $build_img( $site_poster, $title ), $sizes, $loading );
+        }
 
         if ( class_exists( 'Academy_Awards_Table' ) ) {
             $aat = Academy_Awards_Table::get_instance();
@@ -822,7 +901,9 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
         }
 
         if ( defined( 'AAT_TMDB_API_KEY' ) ) {
-            $tmdb_cache_key = 'lunara_title_poster_' . md5( $tt . '|' . $size );
+            // v2 (3.2.125): the key moved so the week-long "no poster" entries
+            // written by the old negative cache stop answering; they expire alone.
+            $tmdb_cache_key = 'lunara_title_poster_v2_' . md5( $tt . '|' . $size );
             $cached_url     = get_transient( $tmdb_cache_key );
 
             if ( false === $cached_url ) {
@@ -832,7 +913,12 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                     array( 'timeout' => 5 )
                 );
 
-                if ( ! is_wp_error( $tmdb_response ) ) {
+                // A failed request (network error, non-200) is not an answer: do
+                // not cache it. Before 3.2.125 a 5-second blip was remembered as
+                // "no poster" for seven days — the blank plate under Rustin on the
+                // Debrief page. A genuine empty result is kept for six hours.
+                $answered = ! is_wp_error( $tmdb_response ) && 200 === (int) wp_remote_retrieve_response_code( $tmdb_response );
+                if ( $answered ) {
                     $tmdb_body = json_decode( wp_remote_retrieve_body( $tmdb_response ), true );
                     $results   = ! empty( $tmdb_body['movie_results'] ) ? $tmdb_body['movie_results'] : ( ! empty( $tmdb_body['tv_results'] ) ? $tmdb_body['tv_results'] : array() );
 
@@ -845,9 +931,9 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
                             $title = (string) $results[0]['name'];
                         }
                     }
-                }
 
-                set_transient( $tmdb_cache_key, $cached_url, 7 * DAY_IN_SECONDS );
+                    set_transient( $tmdb_cache_key, $cached_url, '' !== $cached_url ? 7 * DAY_IN_SECONDS : 6 * HOUR_IN_SECONDS );
+                }
             }
 
             if ( '' !== $cached_url ) {

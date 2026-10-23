@@ -1,5 +1,14 @@
 /**
- * Stills that Rhyme (3.2.121): two 16:9 stills, one image idea.
+ * Stills that Rhyme (3.2.125): the reviewed film and its three.
+ *
+ * Posters are the default face (2:3, centered, three across even on phones);
+ * stills (16:9) are the option when every film in the set has one.
+ *
+ * The lead review's 16:9 still at the pairing-frame width (860px), then the
+ * three Debrief pairings in one row of 16:9 frames — Theme Echo, Counter
+ * Program, Career Context — each under its full role name. The row stacks
+ * at 759px and below. A pairing without a still is a typographic card on
+ * the surface colour, never an empty frame.
  *
  * Printed by inc/home-stills-that-rhyme.php on the front page after the Home
  * module styles. Same stage as the program masthead: the section spans the
@@ -14,9 +23,21 @@ body.home .lunara-home-stills-title{margin:0;max-width:22ch;min-width:0;overflow
 body.home .lunara-home-stills-question{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 14px;max-width:64ch;min-width:0;margin:0;color:var(--lunara-stills-muted);font-family:var(--lunara-font-body,Georgia,serif);font-size:1.02rem;font-style:normal;line-height:1.5;}
 body.home .lunara-home-stills-role{color:var(--lunara-stills-gold-light);font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif);font-size:.8125rem;font-style:normal;letter-spacing:.14em;line-height:1.3;text-transform:uppercase;}
 body.home .lunara-home-stills-question-text{font-style:italic;}
-body.home .lunara-home-stills-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,24px);min-width:0;}
+body.home .lunara-home-stills-source{margin:0;color:var(--lunara-stills-muted);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;line-height:1.45;}
+body.home .lunara-home-stills-source a{color:var(--lunara-stills-gold-light);text-decoration:underline;text-underline-offset:4px;}
+body.home .lunara-home-stills-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:clamp(18px,2.6vw,32px);min-width:0;}
+body.home .lunara-home-stills-item.is-review{width:min(100%,860px);}
+body.home .lunara-home-stills-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,24px);width:100%;min-width:0;}
+body.home .lunara-home-stills-item.is-pairing .lunara-home-stills-role{display:block;margin-bottom:2px;}
+body.home .lunara-home-stills-frame.is-text{display:grid;place-items:center;padding:12px;text-align:center;}
+body.home .lunara-home-stills-text-title{color:var(--lunara-stills-gold-light);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,serif));font-size:clamp(1.1rem,1.6vw,1.5rem);font-weight:400;line-height:1.15;text-wrap:balance;}
+body.home .lunara-home-stills-item.is-pairing .lunara-home-stills-question-text{display:block;margin-top:2px;color:var(--lunara-stills-muted);font-size:.9375rem;line-height:1.4;}
 body.home .lunara-home-stills-item{display:grid;gap:10px;align-content:start;min-width:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--lunara-stills-text)!important;text-decoration:none!important;}
 body.home .lunara-home-stills-frame{display:block;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:0;background:var(--lunara-stills-surface);}
+body.home .lunara-home-stills-frame.is-poster{aspect-ratio:2/3;}
+body.home .is-media-posters .lunara-home-stills-item.is-review{width:min(100%,260px);}
+body.home .is-media-posters .lunara-home-stills-three{grid-template-columns:repeat(3,minmax(0,220px));justify-content:center;}
+body.home .is-media-posters .lunara-home-stills-item.is-pairing{text-align:center;}
 body.home .lunara-home-stills-media{display:block;width:100%;height:100%;border-radius:0;object-fit:cover;object-position:center;}
 body.home .lunara-home-stills-caption{display:block;min-width:0;overflow-wrap:anywhere;color:var(--lunara-stills-text);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;font-weight:400;line-height:1.45;}
 body.home .lunara-home-stills-film{display:block;color:var(--lunara-stills-text);}
@@ -24,4 +45,4 @@ body.home .lunara-home-stills-take{display:block;margin-top:2px;color:var(--luna
 body.home .lunara-home-stills-item:hover .lunara-home-stills-film,body.home .lunara-home-stills-item:focus-visible .lunara-home-stills-film{color:var(--lunara-stills-gold-light);text-decoration:underline;text-underline-offset:4px;}
 body.home .lunara-home-stills-item:focus-visible{outline:2px solid var(--lunara-stills-gold-light);outline-offset:4px;}
 @media(max-width:820px){body.home .lunara-home-stills-that-rhyme{padding:24px 16px;}body.home .lunara-home-stills-inner{gap:18px;}body.home .lunara-home-stills-title{font-size:1.9rem!important;}}
-@media(max-width:759px){body.home .lunara-home-stills-grid{grid-template-columns:minmax(0,1fr);gap:20px;}}
+@media(max-width:759px){body.home .lunara-home-stills-grid{gap:20px;}body.home .lunara-home-stills-three{grid-template-columns:minmax(0,1fr);gap:20px;}body.home .is-media-posters .lunara-home-stills-three{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}body.home .is-media-posters .lunara-home-stills-item.is-review{width:min(100%,200px);}}

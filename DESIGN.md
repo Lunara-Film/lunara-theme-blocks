@@ -55,7 +55,7 @@ and links to the owning Review editor. This does not alter pairing content.
   desktop; the inline order rules the header prints follow the same map.
 - Stills that Rhyme reads from the lead story first, then the review the
   Pair It With desk shows, then the newest reviews, and renders the first
-  complete pair; a lead without a Debrief pairing does not cost the section.
+  review that carries all three pairings.
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.
@@ -64,15 +64,21 @@ and links to the owning Review editor. This does not alter pairing content.
   Oscar lanes. The saved Section Order (a Studio preset, or a custom order)
   decides that order in PHP; no stylesheet reorders the sections. Phones read
   the same order as desktop.
-- Stills that Rhyme fills the pairing-desk slot: a kicker, the GT Sectra line
-  "Two films, one image idea.", the full pairing role name with its Method
-  question, then two 16:9 stills in square frames: the lead review's beside
-  its Theme Echo film's (Counter Program, then Career Context, when Theme Echo
-  has no still). Each still is captioned "Film, Year." in Tiempos, the
-  review's with its take in italic. Two columns from 760px, one below, on the
-  masthead's stage and gutters. Image and caption form one unit, not a
-  painted card. Without a pairing, or a landscape still for both films, the
-  legacy Pair It With desk renders; never an empty frame or placeholder image.
+- Stills that Rhyme fills the pairing-desk slot with the Debrief as the
+  Debrief is: the reviewed film and its three. A kicker, the line "Every
+  review ends with three more films.", the source review, then the reviewed
+  film's face centered over the three pairings' faces in one row, each under
+  its full role name — Theme Echo, Counter Program, Career Context — with
+  "Film, Year." and the Method question. Posters (2:3) are the default face,
+  three across at every width. Stills (16:9) are the option, taken only when
+  the reviewed film and all three pairings have one; the row then stacks on
+  phones. A film with no art is a typographic plate on the surface colour,
+  never dropped and never an empty frame. The set is never cut to one pair.
+  Without a review that carries all three, the legacy Pair It With desk
+  renders.
+- A film's poster comes from what the site already holds first (a Lunara
+  review of the film, the movie entity), then the Oscars Ledger, then TMDB. A
+  failed lookup is never remembered as "no poster".
 - The Running Order follows: a gold letterspaced kicker, the GT Sectra line
   "Every review, newest first." and an "All N reviews" link over a wall of 2:3
   poster frames, newest first, skipping the three reviews Now Showing carries.
