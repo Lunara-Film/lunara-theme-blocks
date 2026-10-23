@@ -198,7 +198,10 @@ function lunara_sanitize_home_section_order( $value ) {
  */
 function lunara_get_home_section_order_map() {
     $defaults = lunara_get_home_section_slugs();
-    $raw      = (string) get_theme_mod( 'lunara_home_section_order', implode( ',', $defaults ) );
+    $raw      = lunara_get_home_section_order_raw( 'desktop' );
+    if ( '' === $raw ) {
+        $raw = (string) get_theme_mod( 'lunara_home_section_order', implode( ',', $defaults ) );
+    }
     $ordered  = explode( ',', lunara_sanitize_home_section_order( $raw ) );
     $map      = array();
 
@@ -207,6 +210,37 @@ function lunara_get_home_section_order_map() {
     }
 
     return $map;
+}
+
+/**
+ * The section order a chosen Homepage Studio preset dictates, as the preset is
+ * defined in code today, or '' when no preset is chosen (a custom order) or
+ * the preset code is not loaded.
+ *
+ * A preset is a named order, not a snapshot: when the code behind a preset
+ * changes (3.2.121 made the editorial default the Direction D running order),
+ * the public site follows without the preset being saved again. The stored
+ * lunara_home_section_order string is the custom order and still decides when
+ * no preset is chosen.
+ *
+ * @param string $context 'desktop' or 'mobile'.
+ * @return string Comma-separated slugs, or ''.
+ */
+function lunara_get_home_section_order_raw( $context = 'desktop' ) {
+    $preset = sanitize_key( (string) get_theme_mod( 'lunara_home_section_order_preset', '' ) );
+    if ( '' === $preset || ! function_exists( 'lunara_control_desk_homepage_order_preset_specs' ) ) {
+        return '';
+    }
+
+    $specs = lunara_control_desk_homepage_order_preset_specs();
+    if ( ! isset( $specs[ $preset ] ) ) {
+        return '';
+    }
+
+    $key   = ( 'mobile' === $context ? 'mobile' : 'desktop' ) . '_order';
+    $order = isset( $specs[ $preset ][ $key ] ) ? (array) $specs[ $preset ][ $key ] : array();
+
+    return implode( ',', array_map( 'strval', $order ) );
 }
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Behavior contract for Home — Stills that Rhyme (Direction D, 3.2.120).
+ * Behavior contract for Home — Stills that Rhyme (Direction D, 3.2.121).
  *
  * Renders inc/home-stills-that-rhyme.php against stubbed WordPress and a
  * stubbed Debrief layer (the exact functions the module calls, with fixture

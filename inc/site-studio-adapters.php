@@ -801,8 +801,9 @@ if ( ! function_exists( 'lunara_site_studio_homepage_public_state_from_snapshot'
 		if ( ! isset( $specs[ $preset ] ) ) { $preset = ''; }
 		$default_desktop = $preset ? $specs[ $preset ]['desktop_order'] : lunara_site_studio_homepage_slugs();
 		$default_mobile = $preset ? $specs[ $preset ]['mobile_order'] : lunara_site_studio_homepage_slugs();
-		$desktop = lunara_site_studio_homepage_filtered_order( get_theme_mod( 'lunara_home_section_order', implode( ',', $default_desktop ) ) );
-		$mobile = lunara_site_studio_homepage_filtered_order( get_theme_mod( 'lunara_home_section_mobile_order', implode( ',', $default_mobile ) ) );
+		// A chosen preset is a named order, not a snapshot: the public site follows the preset's code (3.2.121), so the Studio shows that, not a stale saved string.
+		$desktop = lunara_site_studio_homepage_filtered_order( $preset ? implode( ',', $default_desktop ) : get_theme_mod( 'lunara_home_section_order', implode( ',', $default_desktop ) ) );
+		$mobile = lunara_site_studio_homepage_filtered_order( $preset ? implode( ',', $default_mobile ) : get_theme_mod( 'lunara_home_section_mobile_order', implode( ',', $default_mobile ) ) );
 		$visibility = array();
 		foreach ( lunara_site_studio_homepage_slugs() as $slug ) { $visibility[ $slug ] = '0' !== (string) get_theme_mod( 'lunara_home_show_' . str_replace( '-', '_', $slug ), '1' ); }
 		return array( 'mode' => $snapshot['composition_mode'], 'front_page_id' => absint( $snapshot['front_page_id'] ), 'preset' => $preset, 'desktop_order' => $desktop, 'mobile_order' => $mobile, 'visibility' => $visibility );

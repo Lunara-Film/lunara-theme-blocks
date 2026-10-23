@@ -1,6 +1,6 @@
 <?php
 /**
- * Behavior contract for The Running Order (Direction D, 3.2.120).
+ * Behavior contract for The Running Order (Direction D, 3.2.121).
  *
  * Renders inc/home-running-order.php against stubbed WordPress and asserts
  * what a visitor gets: one section, the newest reviews first minus the three

@@ -45,6 +45,36 @@ and links to the owning Review editor. This does not alter pairing content.
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.
+- Home runs in the program's order: the masthead, Stills that Rhyme, The
+  Running Order, the Oscar Ledger intermission, then the Journal lane and the
+  Oscar lanes. The saved Section Order (a Studio preset, or a custom order)
+  decides that order in PHP; no stylesheet reorders the sections. Phones read
+  the same order as desktop.
+- Stills that Rhyme fills the pairing-desk slot: a kicker, the GT Sectra line
+  "Two films, one image idea.", the full pairing role name with its Method
+  question, then two 16:9 stills in square frames: the lead review's beside
+  its Theme Echo film's (Counter Program, then Career Context, when Theme Echo
+  has no still). Each still is captioned "Film, Year." in Tiempos, the
+  review's with its take in italic. Two columns from 760px, one below, on the
+  masthead's stage and gutters. Image and caption form one unit, not a
+  painted card. Without a pairing, or a landscape still for both films, the
+  legacy Pair It With desk renders; never an empty frame or placeholder image.
+- The Running Order follows: a gold letterspaced kicker, the GT Sectra line
+  "Every review, newest first." and an "All N reviews" link over a wall of 2:3
+  poster frames, newest first, skipping the three reviews Now Showing carries.
+  Each poster is one link: film in GT Sectra Display, take in Tiempos Text
+  italic, score beneath. A review without a poster is a typographic card on
+  the surface color, never an empty frame. Six across from 1200px, four from
+  760px, three on phones; the wall shares the masthead's frame and edges. No
+  ordinal numerals.
+- The Oscar Ledger band is a full-bleed intermission on the surface navy with
+  one gold rule above and one below: the kicker, a GT Sectra headline carrying
+  the live ceremony count as digits, a Tiempos record line of Ledger totals,
+  and a square gold-ruled door to the portal, beside a strip of five 2:3 Best
+  Picture posters, newest ceremony first, each captioned and linking to its
+  ceremony. Copy stands beside the strip from 1000px and above it below;
+  phones show three posters. A winner without a poster is skipped, never
+  framed empty; under three posters the band renders without the strip.
 - A Review with landscape artwork opens with that still at the Review Studio
   hero width, above the centered title group, with a one-line caption. Poster
   artwork stays in the reading column. Credits read as one centered line under

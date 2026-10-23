@@ -1,6 +1,6 @@
 <?php
 /**
- * Behavior contract for the Home Oscar Ledger band (Direction D, 3.2.120).
+ * Behavior contract for the Home Oscar Ledger band (Direction D, 3.2.121).
  *
  * Renders inc/home-ledger-band.php against stubbed WordPress and a stubbed
  * Oscars data layer (the snapshot, the reader, the right-sizers) and asserts
