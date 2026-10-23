@@ -93,13 +93,22 @@ function lunara_test_load_function( string $name ): void {
 	throw new RuntimeException( 'Missing function: ' . $name );
 }
 // Lunara Core's gateway, as the theme sees it: configurable answers, counted.
-class Lunara_Movie_Provider_Gateway {
+// On a public page Core has not loaded the class, so the theme must load it
+// from LUNARA_CORE_DIR itself; this stand-in file plays that part.
+$lunara_test_core_dir = sys_get_temp_dir() . '/lunara-core-' . getmypid() . '/';
+@mkdir( $lunara_test_core_dir . 'includes', 0777, true );
+file_put_contents( $lunara_test_core_dir . 'includes/class-lunara-movie-provider-gateway.php', <<<'PHP'
+<?php
+final class Lunara_Movie_Provider_Gateway {
 	public function get_artwork_by_imdb( $tt ) {
 		++$GLOBALS['lunara_test']['gateway_calls'];
 		$answer = $GLOBALS['lunara_test']['gateway'] ?? null;
 		return is_callable( $answer ) ? $answer( $tt ) : $answer;
 	}
 }
+PHP
+);
+define( 'LUNARA_CORE_DIR', $lunara_test_core_dir );
 lunara_test_load_function( 'lunara_poster_html_with_sizes' );
 lunara_test_load_function( 'lunara_get_title_poster_url_from_site' );
 lunara_test_load_function( 'lunara_get_title_poster_html' );
@@ -124,8 +133,10 @@ lunara_test_assert( false !== strpos( lunara_get_title_poster_html( 'tt13959828'
 
 // ---- Lunara Core's gateway answers before the theme's own TMDB call ----
 lunara_test_reset();
+lunara_test_assert( ! class_exists( 'Lunara_Movie_Provider_Gateway', false ), 'on a public page the gateway class is not loaded before the theme asks' );
 $GLOBALS['lunara_test']['gateway'] = array( 'title' => 'She Said', 'poster_path' => '/shesaid.jpg' );
 $html = lunara_get_title_poster_html( 'tt14807308' );
+lunara_test_assert( class_exists( 'Lunara_Movie_Provider_Gateway', false ), 'the theme loads the gateway class from LUNARA_CORE_DIR' );
 lunara_test_assert( false !== strpos( $html, 'src="https://image.tmdb.org/t/p/w500/shesaid.jpg"' ) && false !== strpos( $html, 'alt="She Said poster"' ) && 1 === $GLOBALS['lunara_test']['gateway_calls'] && 0 === $GLOBALS['lunara_test']['requests'], 'the Core gateway supplies the poster and the title; the theme makes no request of its own' );
 lunara_get_title_poster_html( 'tt14807308' );
 lunara_test_assert( 1 === $GLOBALS['lunara_test']['gateway_calls'], 'a gateway answer is remembered, so the gateway is asked once' );
