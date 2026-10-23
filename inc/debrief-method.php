@@ -1035,7 +1035,7 @@ if ( ! function_exists( 'lunara_debrief_method_orbit_html' ) ) {
 				}
 				$pair   = $entry['pairs'][ $slug ];
 				$poster = ( '' !== (string) $pair['tt'] && function_exists( 'lunara_get_title_poster_html' ) )
-					? (string) lunara_get_title_poster_html( $pair['tt'], 'medium', 'lunara-debrief-orbit-img', $pair['title'], 'lazy', '(min-width: 760px) 150px, 26vw' )
+					? (string) lunara_get_title_poster_html( $pair['tt'], 'medium', 'lunara-debrief-orbit-img', $pair['title'], 'lazy', '(min-width: 760px) 150px, 26vw', (string) $pair['year'] )
 					: '';
 				if ( '' === trim( $poster ) ) {
 					$poster = lunara_debrief_method_poster_plate( $pair['title'] );

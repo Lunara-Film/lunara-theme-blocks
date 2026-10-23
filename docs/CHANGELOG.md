@@ -12,6 +12,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.129: the trace reads "not found"; a title-and-year search is the last resort
+
+The 3.2.128 trace on the live Home, for She Said (tt14807308): site none; Ledger asked; gateway class loaded, credentials tmdb=yes, answer `lunara_movie_provider_not_found`; theme TMDB key constant defined and its own find also empty. So TMDB's find-by-IMDb-id returns no movie for an id IMDb itself resolves. Rather than depend on one lookup method:
+
+- `lunara_get_title_poster_url_by_search()`: when no provider knows the id, search TMDB by title and year (the Ledger key), take the first result whose release year matches (any result when no year is known); hits kept a week, misses six hours, failed requests not cached.
+- `lunara_get_title_poster_html()` gains a `$year` parameter; the Debrief orbit and the Home module pass the pairing's year.
+- The trace now records the theme's own find answer (HTTP status, result count, TMDB status message) and the search outcome.
+- Tests: `title-poster-runtime.php` covers the year-matched pick, the week-long memory, the rejected other-year result, the no-year pick and the uncached failure.
+
 ## 2026-10-23 — Theme 3.2.128: an editor-only trace for poster lookups
 
 She Said and Rustin stayed plates after 3.2.127, and from outside the site there was no way to see which step failed. `lunara_get_title_poster_html()` now records each step (site, Ledger, gateway class, gateway credentials, gateway answer or error code, theme TMDB key) and prints the record in `wp_footer` as one HTML comment — only when the request carries `?lunara_poster_trace=1` and the visitor can edit the theme. Visitors never see it. `title-poster-runtime.php` covers the recording and the print.

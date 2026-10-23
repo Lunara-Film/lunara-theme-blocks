@@ -302,7 +302,7 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_partner' ) ) {
 			$poster = trim( (string) get_post_meta( $partner_review_id, '_lunara_tmdb_poster_url', true ) );
 		}
 		if ( '' === $poster && '' !== $tt && function_exists( 'lunara_get_title_poster_html' ) ) {
-			$poster_html = trim( (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-home-stills-media', trim( (string) $pairing['title'] ), 'lazy', '(max-width: 759px) 46vw, 220px' ) );
+			$poster_html = trim( (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-home-stills-media', trim( (string) $pairing['title'] ), 'lazy', '(max-width: 759px) 46vw, 220px', (string) ( $pairing['year'] ?? '' ) ) );
 		}
 
 		return array(

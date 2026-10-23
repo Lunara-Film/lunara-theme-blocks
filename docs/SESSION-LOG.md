@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — "Not found", so search by title (Theme 3.2.129)
+
+- **Shipped:** 3.2.128 merged (#277) and deployed by me; the trace read in Dalton's Chrome: for She Said the gateway has TMDb credentials and answers `not_found`, and the theme's own find is empty too. Theme 3.2.129 PR: a title-and-year TMDB search as the last resort, the year threaded from the Debrief orbit and the Home module, and the trace extended with the find answer. See the 3.2.129 changelog entry. Merged and deployed by me when CI is green; then I read the trace again.
+- **Verified:** `title-poster-runtime.php`; whole PHP suite 0 failures.
+- **Live:** Theme 3.2.128; 3.2.129 follows on CI.
+- **Found, not fixed:** Why TMDB's find returns nothing for tt14807308 and tt13959828 is still open; the extended trace should say (HTTP status and status message). If it is the ids on TMDB's side, the search covers it; if it is the request, the trace shows it.
+
 ## 2026-10-23 — A trace for the plates (Theme 3.2.128)
 
 - **Shipped:** 3.2.127 merged (#276) and deployed by me; She Said and Rustin still plates. The live Core is 0.8.16 (= main), the gateway file is on the server, and the Review Artwork Audit screen shows TMDb credentials ready in admin, so the failure is somewhere the public render can see and I cannot. Theme 3.2.128 PR: an editor-only, opt-in trace (`?lunara_poster_trace=1`) printed in the footer. See the 3.2.128 changelog entry. Merged and deployed by me when CI is green; then I read the trace in Dalton's Chrome and fix the real cause.

@@ -29,7 +29,9 @@ function lunara_test_reset(): void {
 		'requests'   => 0,
 		'gateway'    => new WP_Error(),
 		'gateway_calls' => 0,
+		'urls'       => array(),
 	);
+	unset( $GLOBALS['lunara_test']['search'] );
 }
 
 function lunara_test_assert( $condition, string $message ): void {
@@ -68,9 +70,14 @@ function get_transient( $key ) { return $GLOBALS['lunara_test']['transients'][ $
 function set_transient( $key, $value, $ttl = 0 ) { $GLOBALS['lunara_test']['transients'][ $key ] = $value; $GLOBALS['lunara_test']['set'][] = array( $key, $value, $ttl ); return true; }
 function wp_remote_get( $url, $args = array() ) {
 	++$GLOBALS['lunara_test']['requests'];
+	$GLOBALS['lunara_test']['urls'][] = $url;
 	$r = $GLOBALS['lunara_test']['remote'];
+	if ( false !== strpos( $url, '/3/search/movie' ) && isset( $GLOBALS['lunara_test']['search'] ) ) {
+		$r = $GLOBALS['lunara_test']['search'];
+	}
 	return $r['error'] ? new WP_Error() : array( 'response' => array( 'code' => $r['code'] ), 'body' => $r['body'] );
 }
+function add_query_arg( $args, $url ) { return $url . '?' . http_build_query( $args ); }
 function wp_remote_retrieve_response_code( $r ) { return is_array( $r ) ? (int) $r['response']['code'] : 0; }
 function wp_remote_retrieve_body( $r ) { return is_array( $r ) ? (string) $r['body'] : ''; }
 
@@ -118,6 +125,7 @@ lunara_test_load_function( 'lunara_title_poster_trace' );
 lunara_test_load_function( 'lunara_title_poster_trace_print' );
 lunara_test_load_function( 'lunara_poster_html_with_sizes' );
 lunara_test_load_function( 'lunara_get_title_poster_url_from_site' );
+lunara_test_load_function( 'lunara_get_title_poster_url_by_search' );
 lunara_test_load_function( 'lunara_get_title_poster_html' );
 
 $tmdb_body = json_encode( array( 'movie_results' => array( array( 'title' => 'Rustin', 'poster_path' => '/rustin.jpg' ) ) ) );
@@ -188,6 +196,31 @@ lunara_test_assert( in_array( 'site=none', $steps, true ) && in_array( 'gateway=
 ob_start(); lunara_title_poster_trace_print(); $printed = ob_get_clean();
 lunara_test_assert( false !== strpos( $printed, '<!-- lunara-title-poster-trace' ) && false !== strpos( $printed, 'tt14807308 | site | none' ), 'the trace prints as one footer comment' );
 unset( $_GET['lunara_poster_trace'] );
+
+// ---- Title and year search is the last resort, and only with a year match ----
+lunara_test_reset();
+$GLOBALS['lunara_test']['remote']['body'] = json_encode( array( 'movie_results' => array() ) ); // find knows nothing
+$GLOBALS['lunara_test']['search'] = array( 'error' => false, 'code' => 200, 'body' => json_encode( array( 'results' => array(
+	array( 'title' => 'She Said', 'release_date' => '2013-05-01', 'poster_path' => '/wrong-year.jpg' ),
+	array( 'title' => 'She Said', 'release_date' => '2022-11-18', 'poster_path' => '/shesaid-2022.jpg' ),
+) ) ) );
+$html = lunara_get_title_poster_html( 'tt14807308', 'medium', 'poster', 'She Said', 'lazy', '', '2022' );
+lunara_test_assert( false !== strpos( $html, 'src="https://image.tmdb.org/t/p/w500/shesaid-2022.jpg"' ) && false === strpos( $html, 'wrong-year' ), 'when no provider knows the id, a title search picks the result whose year matches' );
+lunara_test_assert( 2 === $GLOBALS['lunara_test']['requests'] && false !== strpos( end( $GLOBALS['lunara_test']['urls'] ), '/3/search/movie' ) && false !== strpos( end( $GLOBALS['lunara_test']['urls'] ), 'year=2022' ), 'the search runs after the find and carries the year' );
+$found = array_filter( $GLOBALS['lunara_test']['set'], static function ( $row ) { return 0 === strpos( $row[0], 'lunara_title_poster_search_' ); } );
+lunara_test_assert( 1 === count( $found ) && 7 * DAY_IN_SECONDS === array_values( $found )[0][2], 'a search hit is remembered for a week' );
+lunara_get_title_poster_html( 'tt14807308', 'medium', 'poster', 'She Said', 'lazy', '', '2022' );
+lunara_test_assert( 2 === $GLOBALS['lunara_test']['requests'], 'the remembered find miss and search answer spare both requests the second time' );
+
+lunara_test_reset();
+$GLOBALS['lunara_test']['remote']['body'] = json_encode( array( 'movie_results' => array() ) );
+$GLOBALS['lunara_test']['search'] = array( 'error' => false, 'code' => 200, 'body' => json_encode( array( 'results' => array( array( 'title' => 'She Said', 'release_date' => '2013-05-01', 'poster_path' => '/wrong-year.jpg' ) ) ) ) );
+lunara_test_assert( '' === lunara_get_title_poster_html( 'tt14807308', 'medium', 'poster', 'She Said', 'lazy', '', '2022' ), 'a search result from another year is not taken' );
+lunara_test_assert( false !== strpos( lunara_get_title_poster_html( 'tt14807309', 'medium', 'poster', 'She Said' ), 'wrong-year.jpg' ), 'with no year known the first poster result is taken' );
+lunara_test_reset();
+$GLOBALS['lunara_test']['remote']['body'] = json_encode( array( 'movie_results' => array() ) );
+$GLOBALS['lunara_test']['search'] = array( 'error' => true, 'code' => 0, 'body' => '' );
+lunara_test_assert( '' === lunara_get_title_poster_html( 'tt14807308', 'medium', 'poster', 'She Said', 'lazy', '', '2022' ) && 0 === count( array_filter( $GLOBALS['lunara_test']['set'], static function ( $row ) { return 0 === strpos( $row[0], 'lunara_title_poster_search_' ); } ) ), 'a failed search is not remembered' );
 
 // ---- Only real IMDb ids are looked up ----
 lunara_test_reset();
