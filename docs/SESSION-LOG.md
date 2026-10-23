@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — The Direction D sections reach the block-mode Home (Theme 3.2.122)
+
+- **Shipped:** Dalton merged #266 (3.2.120) and #267 (3.2.121) and deployed 3.2.121 at 13:5x CT. The live check found the miss: the live Home is in block mode, so the masthead led but the carousel block still rendered under it and the three sections did not appear. Theme 3.2.122 PR: the two missing blocks, pairing-desk rendering Stills that Rhyme, the hero block excluded under any front door, and a one-time recomposition of the Home page on the next wp-admin load. See the 3.2.122 changelog entry.
+- **Verified:** whole PHP suite (0 failures) including the extended opener, composition and pilot contracts; carousel editor 236, editorial workspace, section order 12, front desk 30, square surfaces. PR CI is the gate. The live check that caught the miss: the rendered Home carried `lunara-home-slot-hero` after the masthead and none of the three new module classes.
+- **Live:** Theme 3.2.121: masthead opener, carousel block beneath it, Pair It With desk, Journal, Picks. 3.2.122 waits on Dalton's merge and deploy click; then one wp-admin page load.
+- **Holding:** Dalton's visual review of Home after 3.2.122. The custom-theme (off Blocksy) estimate he asked for: audit in progress this session.
+- **Next:** Fix anything his review turns up. Then the decision-sheet items and, if he says go, the standalone theme plan.
+- **Found, not fixed:** The home-opener contract stubbed block mode off, which is how 3.2.120/3.2.121 missed the live path; it now covers both. Site Studio's revision snapshots now carry two more mods (`lunara_home_show_featured`, `lunara_home_show_ledger`); older snapshots lack them and restore as absent, which `lunara_home_section_is_enabled` reads as on. Correction to the 3.2.120 and 3.2.121 entries below: `featured` does have a setting (`lunara_home_show_featured`); it lacked a block, so the Studio never listed it.
+
 ## 2026-10-23 — Home in direction D complete: three sections and the order fix (Theme 3.2.121)
 
 - **Shipped:** Theme 3.2.120 PR #266 passed CI (9/9) and waits on Dalton's merge; the merge call was blocked on my side twice. Theme 3.2.121 PR: Stills that Rhyme, The Running Order and the Oscar Ledger band, built by three parallel builders on their own branches from the 3.2.120 seam and merged here, plus the section-order fix (CSS `order` overrides removed; the Editorial default preset is the Direction D order; a chosen preset decides at render time). See the 3.2.121 changelog entry.

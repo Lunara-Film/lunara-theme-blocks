@@ -485,11 +485,12 @@ lunara_pilot_reset( '<!-- wp:core/paragraph -->Registry only<!-- /wp:core/paragr
 $lunara_pilot_theme_mods['lunara_home_section_order_preset'] = 'oscars-forward';
 $homepage = lunara_site_studio_homepage_structure_adapter();
 $home_state = $homepage->read_state();
-$six = array( 'hero', 'latest-reviews', 'pairing-desk', 'dispatch', 'oscar-picks', 'oscar-facts' );
+// The managed slugs are the block-mapped ones, in block-map order: the six lanes plus the two Direction D sections (3.2.122), never the historical preset-only lanes.
+$six = array( 'hero', 'pairing-desk', 'featured', 'ledger', 'latest-reviews', 'dispatch', 'oscar-picks', 'oscar-facts' );
 lunara_pilot_assert( array( 'mode', 'front_page_id', 'preset', 'desktop_order', 'mobile_order', 'visibility' ) === array_keys( $home_state ), 'Homepage public state must expose exactly the locked human/concurrency fields.' );
 $desktop_inventory = $home_state['desktop_order']; sort( $desktop_inventory ); $six_inventory = $six; sort( $six_inventory );
-lunara_pilot_assert( $six_inventory === $desktop_inventory && $six === array_keys( $home_state['visibility'] ), 'Homepage public state must contain the exact six canonical managed slugs without historical preset lanes.' );
-lunara_pilot_assert( 'oscars-forward' === $home_state['preset'] && array( 'hero', 'oscar-facts', 'oscar-picks', 'latest-reviews', 'pairing-desk', 'dispatch' ) === $home_state['desktop_order'] && array( 'hero', 'oscar-facts', 'oscar-picks', 'dispatch', 'latest-reviews', 'pairing-desk' ) === $home_state['mobile_order'], 'Homepage must project the live 11-slug preset arrays down to exactly the six managed lanes in provider order.' );
+lunara_pilot_assert( $six_inventory === $desktop_inventory && $six === array_keys( $home_state['visibility'] ), 'Homepage public state must contain exactly the block-mapped managed slugs without historical preset lanes.' );
+lunara_pilot_assert( 'oscars-forward' === $home_state['preset'] && array( 'hero', 'oscar-facts', 'oscar-picks', 'ledger', 'latest-reviews', 'pairing-desk', 'dispatch', 'featured' ) === $home_state['desktop_order'] && array( 'hero', 'oscar-facts', 'oscar-picks', 'dispatch', 'latest-reviews', 'pairing-desk', 'ledger', 'featured' ) === $home_state['mobile_order'], 'Homepage must project the live 11-slug preset arrays down to exactly the managed lanes in provider order.' );
 $bad_home = $home_state; $bad_home['desktop_order'][5] = 'hero';
 $invalid_home = $homepage->validate_state( $bad_home );
 lunara_pilot_assert( is_wp_error( $invalid_home ) && 'site_studio_homepage_invalid' === $invalid_home->get_error_code() && array( 'desktop_order' ) === array_keys( lunara_pilot_error_fields( $invalid_home ) ), 'Homepage must return the exact desktop_order field for duplicate/missing inventory.' );
@@ -505,15 +506,15 @@ $bad_home = $home_state; $bad_home['mode'] = 'blocks';
 lunara_pilot_assert( is_wp_error( $homepage->validate_state( $bad_home ) ), 'Homepage mode must act as a concurrency assertion, not a writable setting.' );
 $registry_save = $homepage->save_state( $home_state );
 lunara_pilot_assert( ! is_wp_error( $registry_save ) && array() === $lunara_pilot_post_writes && 'registry' === $registry_save['state']['mode'], 'Registry-mode Homepage save must never write or convert post_content.' );
-lunara_pilot_assert( array( 'hero', 'latest-reviews', 'pairing-desk', 'dispatch', 'oscar-picks', 'oscar-facts' ) === $registry_save['changed_sections'], 'Homepage save must report the exact six managed sections.' );
+lunara_pilot_assert( $six === $registry_save['changed_sections'], 'Homepage save must report exactly the managed sections.' );
 echo "pilot case homepage-registry-mode: passed.\n";
 
 // Homepage block-mode composition and exact rollback at every boundary.
 lunara_pilot_reset( lunara_pilot_block_content() );
 $homepage = lunara_site_studio_homepage_structure_adapter();
 $candidate = $homepage->read_state();
-$candidate['desktop_order'] = array( 'latest-reviews', 'hero', 'pairing-desk', 'dispatch', 'oscar-picks', 'oscar-facts' );
-$candidate['mobile_order'] = array( 'hero', 'dispatch', 'latest-reviews', 'pairing-desk', 'oscar-picks', 'oscar-facts' );
+$candidate['desktop_order'] = array( 'latest-reviews', 'hero', 'pairing-desk', 'featured', 'ledger', 'dispatch', 'oscar-picks', 'oscar-facts' );
+$candidate['mobile_order'] = array( 'hero', 'dispatch', 'latest-reviews', 'pairing-desk', 'featured', 'ledger', 'oscar-picks', 'oscar-facts' );
 $candidate['visibility']['pairing-desk'] = false;
 $block_save = $homepage->save_state( $candidate );
 $written_content = get_post_field( 'post_content', 101 );
@@ -526,7 +527,7 @@ $candidate = $homepage->read_state();
 foreach ( $candidate['visibility'] as $slug => $visible ) { $candidate['visibility'][ $slug ] = false; }
 $all_disabled = $homepage->save_state( $candidate );
 $registry_content = '<!-- wp:core/heading {"level":2} -->Before<!-- /wp:core/heading -->' . "\n\n" . '<!-- wp:plugin/kept {"path":"C:\\\\Cinema","secret":"attribute"} /-->' . "\n\n" . '<!-- wp:core/paragraph -->After<!-- /wp:core/paragraph -->';
-lunara_pilot_assert( ! is_wp_error( $all_disabled ) && 'registry' === $all_disabled['state']['mode'] && $registry_content === get_post_field( 'post_content', 101 ) && false === strpos( get_post_field( 'post_content', 101 ), '<!-- wp:lunara/' ), 'Disabling all six managed lanes must transition blocks to registry mode while preserving every unknown block byte-for-byte.' );
+lunara_pilot_assert( ! is_wp_error( $all_disabled ) && 'registry' === $all_disabled['state']['mode'] && $registry_content === get_post_field( 'post_content', 101 ) && false === strpos( get_post_field( 'post_content', 101 ), '<!-- wp:lunara/' ), 'Disabling all managed lanes must transition blocks to registry mode while preserving every unknown block byte-for-byte.' );
 $post_writes_after_transition = count( $lunara_pilot_post_writes );
 $registry_candidate = $homepage->read_state();
 $registry_candidate['preset'] = 'journal-first';
@@ -535,8 +536,9 @@ lunara_pilot_assert( ! is_wp_error( $registry_resave ) && 'registry' === $regist
 
 $managed_mods = array(
 	'lunara_home_section_order_preset', 'lunara_home_section_order', 'lunara_home_section_mobile_order',
-	'lunara_home_show_hero', 'lunara_home_show_latest_reviews', 'lunara_home_show_pairing_desk', 'lunara_home_show_dispatch', 'lunara_home_show_oscar_picks', 'lunara_home_show_oscar_facts',
+	'lunara_home_show_hero', 'lunara_home_show_pairing_desk', 'lunara_home_show_featured', 'lunara_home_show_ledger', 'lunara_home_show_latest_reviews', 'lunara_home_show_dispatch', 'lunara_home_show_oscar_picks', 'lunara_home_show_oscar_facts',
 );
+lunara_pilot_assert( $managed_mods === lunara_site_studio_homepage_mod_keys(), 'The fault matrix must cover every mod the Homepage adapter manages.' );
 foreach ( $managed_mods as $fault_key ) {
 	lunara_pilot_reset( lunara_pilot_block_content() );
 	$lunara_pilot_theme_mods = array( 'lunara_home_section_order_preset' => 'journal-first', 'lunara_home_show_pairing_desk' => '0' );

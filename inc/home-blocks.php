@@ -30,13 +30,113 @@ if ( ! function_exists( 'lunara_home_section_block_map' ) ) {
 	function lunara_home_section_block_map() {
 		return array(
 			'hero'           => 'lunara/cinematic-hero',
-			'latest-reviews' => 'lunara/latest-reviews',
 			'pairing-desk'   => 'lunara/pairing-desk',
+			'featured'       => 'lunara/running-order',
+			'ledger'         => 'lunara/ledger-band',
+			'latest-reviews' => 'lunara/latest-reviews',
 			'dispatch'       => 'lunara/journal-lane',
 			'oscar-picks'    => 'lunara/oscar-picks',
 			'oscar-facts'    => 'lunara/oscar-facts',
 		);
 	}
+}
+
+if ( ! function_exists( 'lunara_register_direction_d_homepage_blocks' ) ) {
+	/**
+	 * The two Direction D sections that had no block (3.2.122): The Running
+	 * Order (featured slot) and the Oscar Ledger band (ledger slot). Server
+	 * render only, like the other section blocks; the editor card lives in
+	 * assets/js/lunara-blocks.js. Stills that Rhyme reuses lunara/pairing-desk.
+	 */
+	function lunara_register_direction_d_homepage_blocks() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+			return;
+		}
+
+		$common = array(
+			'api_version'   => 3,
+			'category'      => 'lunara',
+			'editor_script' => 'lunara-blocks',
+			'supports'      => array( 'html' => false, 'reusable' => false, 'multiple' => false, 'inserter' => true ),
+		);
+
+		$blocks = array(
+			'lunara/running-order' => array(
+				'title'           => __( 'Homepage: The Running Order', 'lunara-film' ),
+				'icon'            => 'grid-view',
+				'description'     => __( 'The poster wall: every review, newest first, after the three Now Showing carries.', 'lunara-film' ),
+				'render_callback' => static function () {
+					return function_exists( 'lunara_render_home_running_order' ) ? (string) lunara_render_home_running_order() : '';
+				},
+			),
+			'lunara/ledger-band'   => array(
+				'title'           => __( 'Homepage: The Oscar Ledger', 'lunara-film' ),
+				'icon'            => 'awards',
+				'description'     => __( 'The intermission band: the live ceremony count, Ledger totals, the door to the portal and five Best Picture posters.', 'lunara-film' ),
+				'render_callback' => static function () {
+					return function_exists( 'lunara_render_home_ledger_band' ) ? (string) lunara_render_home_ledger_band() : '';
+				},
+			),
+		);
+
+		$registry = class_exists( 'WP_Block_Type_Registry' ) ? WP_Block_Type_Registry::get_instance() : null;
+		foreach ( $blocks as $name => $args ) {
+			if ( $registry && $registry->is_registered( $name ) ) {
+				continue;
+			}
+			register_block_type( $name, array_merge( $common, $args ) );
+		}
+	}
+	add_action( 'init', 'lunara_register_direction_d_homepage_blocks', 101 );
+}
+
+if ( ! function_exists( 'lunara_home_composition_revision' ) ) {
+	/**
+	 * The composition the Home page blocks must carry. Bump when the block map
+	 * gains a section that an existing block-mode Home page needs written in.
+	 *   2 — 3.2.122: lunara/running-order and lunara/ledger-band (Direction D).
+	 */
+	function lunara_home_composition_revision() {
+		return 2;
+	}
+}
+
+if ( ! function_exists( 'lunara_home_migrate_block_composition' ) ) {
+	/**
+	 * One-time write-through after a deploy that added section blocks: in
+	 * block mode, recompose the Home page from the saved order and visibility
+	 * (the same write Homepage Studio performs on save), so the new sections
+	 * appear without an editor visit. Runs on admin_init for a theme editor,
+	 * once per composition revision; a registry-mode Home is left alone.
+	 *
+	 * @return bool|WP_Error True when the page changed, false when nothing
+	 *                       needed doing, or the write error.
+	 */
+	function lunara_home_migrate_block_composition() {
+		$target = lunara_home_composition_revision();
+		$done   = (int) get_option( 'lunara_home_composition_revision', 0 );
+		if ( $done >= $target ) {
+			return false;
+		}
+
+		if ( ! current_user_can( 'edit_theme_options' ) ) {
+			return false;
+		}
+
+		if ( ! lunara_home_uses_block_composition() ) {
+			update_option( 'lunara_home_composition_revision', $target, false );
+			return false;
+		}
+
+		$result = lunara_sync_home_section_blocks_from_settings();
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		update_option( 'lunara_home_composition_revision', $target, false );
+		return $result;
+	}
+	add_action( 'admin_init', 'lunara_home_migrate_block_composition', 20 );
 }
 
 if ( ! function_exists( 'lunara_home_front_page_id' ) ) {

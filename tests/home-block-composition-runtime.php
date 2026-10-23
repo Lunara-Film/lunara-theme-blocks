@@ -24,15 +24,32 @@ function lunara_home_test_assert( $condition, $message ) {
 	}
 }
 
-function get_option( $key ) {
+$lunara_home_test_options = array();
+$lunara_home_test_can_edit = false;
+
+function get_option( $key, $default = false ) {
+	global $lunara_home_test_options;
 	if ( 'show_on_front' === $key ) {
 		return 'page';
 	}
 	if ( 'page_on_front' === $key ) {
 		return 4055;
 	}
-	return null;
+	return array_key_exists( $key, $lunara_home_test_options ) ? $lunara_home_test_options[ $key ] : $default;
 }
+
+function update_option( $key, $value, $autoload = null ) {
+	global $lunara_home_test_options;
+	$lunara_home_test_options[ $key ] = $value;
+	return true;
+}
+
+function current_user_can( $cap ) {
+	global $lunara_home_test_can_edit;
+	return $lunara_home_test_can_edit && 'edit_theme_options' === $cap;
+}
+
+function add_action( ...$args ) {}
 
 function get_post_field( $field, $post_id ) {
 	global $lunara_home_test_content;
@@ -123,5 +140,46 @@ lunara_home_test_assert( is_wp_error( $failure ) && 'injected_home_update_failur
 $lunara_home_test_has_blocks = true;
 $sync_failure = lunara_sync_home_section_blocks_from_settings();
 lunara_home_test_assert( is_wp_error( $sync_failure ) && 'injected_home_update_failure' === $sync_failure->get_error_code(), 'Legacy Homepage synchronization must propagate the exact writer error to its Control Desk callers.' );
+
+/*
+ * The block map carries the Direction D slots, and the one-time recomposition
+ * (3.2.122) writes their blocks into a block-mode Home page exactly once.
+ */
+$map = lunara_home_section_block_map();
+lunara_home_test_assert( 'lunara/running-order' === ( $map['featured'] ?? '' ) && 'lunara/ledger-band' === ( $map['ledger'] ?? '' ) && 'lunara/pairing-desk' === ( $map['pairing-desk'] ?? '' ), 'The block map maps featured, ledger and pairing-desk to their Direction D blocks.' );
+
+$lunara_home_test_update_error = false;
+$lunara_home_test_update       = null;
+$lunara_home_test_has_blocks   = true;
+
+// Not a theme editor: nothing happens, nothing is recorded.
+$lunara_home_test_can_edit = false;
+lunara_home_test_assert( false === lunara_home_migrate_block_composition() && null === $lunara_home_test_update && ! isset( $lunara_home_test_options['lunara_home_composition_revision'] ), 'The recomposition waits for a theme editor and records nothing before one arrives.' );
+
+// A registry-mode Home is left alone, and the revision is recorded so it is not retried.
+$lunara_home_test_can_edit   = true;
+$lunara_home_test_has_blocks = false;
+lunara_home_test_assert( false === lunara_home_migrate_block_composition() && null === $lunara_home_test_update && lunara_home_composition_revision() === $lunara_home_test_options['lunara_home_composition_revision'], 'A registry-mode Home is not converted; the revision is recorded.' );
+
+// A block-mode Home gets the new blocks written in, once.
+$lunara_home_test_options    = array();
+$lunara_home_test_has_blocks = true;
+$lunara_home_test_content    = $expected;
+$migrated = lunara_home_migrate_block_composition();
+lunara_home_test_assert( true === $migrated && is_array( $lunara_home_test_update ), 'A block-mode Home is recomposed from the saved order and visibility.' );
+$written = (string) $lunara_home_test_update['post_content'];
+lunara_home_test_assert( false !== strpos( $written, '<!-- wp:lunara/running-order /-->' ) && false !== strpos( $written, '<!-- wp:lunara/ledger-band /-->' ) && false !== strpos( $written, '<!-- wp:lunara/pairing-desk /-->' ), 'The recomposition writes the Running Order, Ledger band and pairing-desk blocks into the page.' );
+lunara_home_test_assert( false !== strpos( $written, 'Keep me after lanes.' ) && false !== strpos( $written, 'Keep C:\\\\Cinema between lanes.' ) && false !== strpos( $written, '{"overrideTitle":"Stored hero"}' ), 'Editorial content and stored block attributes survive the recomposition.' );
+lunara_home_test_assert( lunara_home_composition_revision() === $lunara_home_test_options['lunara_home_composition_revision'], 'The composition revision is recorded after the write.' );
+
+$lunara_home_test_update = null;
+lunara_home_test_assert( false === lunara_home_migrate_block_composition() && null === $lunara_home_test_update, 'The recomposition does not run twice for the same revision.' );
+
+// A write failure is surfaced and the revision is not recorded, so the next admin load retries.
+$lunara_home_test_options      = array();
+$lunara_home_test_content      = $expected;
+$lunara_home_test_update_error = true;
+$failed = lunara_home_migrate_block_composition();
+lunara_home_test_assert( is_wp_error( $failed ) && ! isset( $lunara_home_test_options['lunara_home_composition_revision'] ), 'A failed recomposition is reported and stays due.' );
 
 echo "home-block composition runtime: all assertions passed.\n";

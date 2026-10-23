@@ -85,7 +85,13 @@ function get_bloginfo( $what ) { return 'Lunara Film'; }
 function __( $text, $domain = null ) { return $text; }
 function esc_html( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
 function wp_reset_postdata() {}
-function lunara_home_uses_block_composition() { return false; }
+function lunara_home_uses_block_composition() { return ! empty( $GLOBALS['lunara_test']['block_mode'] ); }
+function lunara_render_home_block_composition( $excluded = array() ) {
+	$GLOBALS['lunara_test']['excluded'] = array_values( (array) $excluded );
+	$blocks = array( 'lunara/cinematic-hero' => '<section class="lunara-home-hero lunara-home-slot-hero">hero block</section>', 'lunara/pairing-desk' => '<section class="lunara-home-slot-pairing-desk">stills block</section>', 'lunara/running-order' => '<section class="lunara-home-slot-featured">running order block</section>' );
+	foreach ( $GLOBALS['lunara_test']['excluded'] as $name ) { unset( $blocks[ $name ] ); }
+	return implode( '', $blocks );
+}
 function lunara_render_home_front_door() { return (string) $GLOBALS['lunara_test']['front_door']; }
 function lunara_get_home_section_order_map() {
 	return array( 'hero' => 1, 'featured' => 2, 'pairing-desk' => 3, 'ledger' => 4, 'dispatch' => 5, 'latest-reviews' => 6, 'oscar-picks' => 7, 'oscar-facts' => 8 );
@@ -146,4 +152,20 @@ $GLOBALS['lunara_test']['enabled']['pairing-desk'] = false;
 $html = lunara_test_render_front_page();
 lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'an off toggle hides the pairing-desk slot' );
 
-fwrite( STDOUT, "Home opener: program masthead leads, hero never repeats, Direction D slots wired.\n" );
+// Block mode (the live Home since 3.1.50): the blocks are the page, and the
+// hero block stays out under any front door, not only under the carousel.
+$GLOBALS['lunara_test']['block_mode'] = true;
+$GLOBALS['lunara_test']['enabled']    = array();
+$GLOBALS['lunara_test']['front_door'] = '<section class="lunara-home-masthead lunara-home-program">masthead</section>';
+$html = lunara_test_render_front_page();
+lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the program masthead keeps the hero block out of the composition' );
+lunara_test_assert( false === strpos( $html, 'hero block' ) && false !== strpos( $html, 'stills block' ) && false !== strpos( $html, 'running order block' ) && 1 === substr_count( $html, 'lunara-home-program' ), 'the masthead renders once and the section blocks follow it' );
+lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'the registry loop does not run beneath the block composition' );
+$GLOBALS['lunara_test']['front_door'] = '<section data-lunara-home-hero-source="site-studio">carousel</section>';
+lunara_test_render_front_page();
+lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the carousel wrapper keeps the hero block out too' );
+$GLOBALS['lunara_test']['front_door'] = '';
+$html = lunara_test_render_front_page();
+lunara_test_assert( array() === $GLOBALS['lunara_test']['excluded'] && false !== strpos( $html, 'hero block' ), 'with no front door the hero block is the opener' );
+
+fwrite( STDOUT, "Home opener: program masthead leads, hero never repeats, Direction D slots wired (registry and block mode).\n" );

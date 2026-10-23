@@ -15680,10 +15680,13 @@ if ( ! function_exists( 'lunara_register_homepage_blocks' ) ) {
 		) ) );
 
 		register_block_type( 'lunara/pairing-desk', array_merge( $common, array(
-			'title'           => __( 'Homepage: Pairing Desk', 'lunara-film' ),
+			'title'           => __( 'Homepage: Stills that Rhyme', 'lunara-film' ),
 			'icon'            => 'screenoptions',
-			'description'     => __( 'The signature Pair It With showcase — three films in conversation with the newest paired review. Copy is editable in Control Desk.', 'lunara-film' ),
+			'description'     => __( 'Two films, one image idea: the lead review\'s still beside its Theme Echo film\'s, with the Method question. Falls back to the Pair It With desk when a still is missing.', 'lunara-film' ),
 			'render_callback' => function () {
+				if ( function_exists( 'lunara_render_home_stills_that_rhyme' ) ) {
+					return lunara_render_home_stills_that_rhyme();
+				}
 				return function_exists( 'lunara_render_home_pairing_desk' ) ? lunara_render_home_pairing_desk() : '';
 			},
 		) ) );
