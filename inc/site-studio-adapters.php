@@ -781,7 +781,7 @@ if ( ! function_exists( 'lunara_site_studio_homepage_slugs' ) ) {
 }
 if ( ! function_exists( 'lunara_site_studio_homepage_mod_keys' ) ) {
 	function lunara_site_studio_homepage_mod_keys() {
-		return array( 'lunara_home_section_order_preset', 'lunara_home_section_order', 'lunara_home_section_mobile_order', 'lunara_home_show_hero', 'lunara_home_show_latest_reviews', 'lunara_home_show_pairing_desk', 'lunara_home_show_dispatch', 'lunara_home_show_oscar_picks', 'lunara_home_show_oscar_facts' );
+		return array( 'lunara_home_section_order_preset', 'lunara_home_section_order', 'lunara_home_section_mobile_order', 'lunara_home_show_hero', 'lunara_home_show_pairing_desk', 'lunara_home_show_featured', 'lunara_home_show_ledger', 'lunara_home_show_latest_reviews', 'lunara_home_show_dispatch', 'lunara_home_show_oscar_picks', 'lunara_home_show_oscar_facts' );
 	}
 }
 if ( ! function_exists( 'lunara_site_studio_homepage_filtered_order' ) ) {

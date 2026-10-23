@@ -48,7 +48,9 @@
 				{ name: 'lunara/journal-lane', label: __( 'Journal Lane', 'lunara-film' ), desc: __( 'The homepage Journal lead and supporting cards.', 'lunara-film' ), icon: 'editor-ul' },
 				{ name: 'lunara/oscar-picks', label: __( 'Oscar Picks', 'lunara-film' ), desc: __( 'A horizontal carousel of Oscar picks.', 'lunara-film' ), icon: 'awards' },
 				{ name: 'lunara/oscar-facts', label: __( 'Oscar Facts', 'lunara-film' ), desc: __( 'Text-forward Oscar fact cards.', 'lunara-film' ), icon: 'lightbulb' },
-				{ name: 'lunara/pairing-desk', label: __( 'Pairing Desk', 'lunara-film' ), desc: __( 'The signature three-film Pair It With section.', 'lunara-film' ), icon: 'screenoptions' }
+				{ name: 'lunara/pairing-desk', label: __( 'Stills that Rhyme', 'lunara-film' ), desc: __( 'The lead review\'s still beside its Theme Echo film\'s.', 'lunara-film' ), icon: 'screenoptions' },
+				{ name: 'lunara/running-order', label: __( 'The Running Order', 'lunara-film' ), desc: __( 'The poster wall, newest first.', 'lunara-film' ), icon: 'grid-view' },
+				{ name: 'lunara/ledger-band', label: __( 'The Oscar Ledger', 'lunara-film' ), desc: __( 'The intermission band and door to the Ledger.', 'lunara-film' ), icon: 'awards' }
 			]
 		}
 	];
