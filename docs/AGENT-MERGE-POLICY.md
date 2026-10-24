@@ -1,10 +1,27 @@
-# Agent merge authority
+# Agent release authority
 
 Effective 2026-10-17, by Dalton's explicit instruction. This is the shared merge
 policy for the seven active Lunara website repositories and the three secondary
 Lunara repositories listed in [repository alignment](REPOSITORY-ALIGNMENT.md).
 It replaces earlier instructions reserving merges to Dalton or requiring
 another confirmation for an already authorized task.
+
+## Dalton's confirmation — effective 2026-10-23
+
+Dalton's confirmation of a website implementation task (for example "yes",
+"go ahead", "do it" or "begin/create it") authorizes the requested work through
+task-branch commits, PRs, passing checks, agent merge, manual deployment and
+live verification. Do not ask for a second deployment confirmation or require
+a new approval naming the final version. Reuse the confirmation in the current
+conversation; instructions to hold, prepare only, leave a draft, or not deploy
+take precedence. Ask only about a real missing decision, access, changed
+destination or work beyond that confirmed scope.
+
+Keep branch protections, required CI and exact-head PR merges. Manual
+deployment means the agent uses the existing host action; it does not mean
+Dalton must click it. Auto-deploy stays off unless he specifically changes it.
+A confirmation never makes a merge evidence of deployment: verify and report
+both states separately.
 
 ## Standing authorization
 
@@ -15,10 +32,12 @@ work requested as "get it ready for release." Finish the merge and report the
 result; do not hand Dalton a routine merge-click task. Respect an explicit
 instruction to leave a particular PR unmerged.
 
-This is source-control authority. Editorial/design approval where requested,
-new-feature approval, publishing content, applying SQL to a database,
-production settings and deployment retain their own authorization boundaries.
-Merging a proposal does not approve implementing the proposed feature.
+Dalton's task confirmation covers the requested implementation through release,
+including deployment, without a second version-specific permission request.
+It covers only that scope. Editorial publication, database application,
+credential/access changes and unrelated production settings must be included
+in his actual instruction; approval to implement a proposal is not permission
+to perform unrelated actions. Respect explicit draft-only or no-deploy limits.
 
 ## Required merge procedure
 
@@ -64,12 +83,13 @@ choice may need Dalton. Routine PR creation, green-CI merging and branch
 coordination do not. Each agent environment must use its own authorized
 GitHub connection; this policy does not distribute credentials.
 
-## Deployment remains separate
+## Deploy within Dalton's confirmed task
 
 Automatic deployment remains off for the active WordPress Theme and plugins.
-After a merge, obtain or use an existing explicit deployment instruction for
-the identified candidate; do not ask again if that instruction is already
-present. Verify the existing host connection, intended branch and destination.
+After the verified merge, use Dalton's confirmation of the requested
+implementation to deploy it; do not require a second instruction naming the
+final candidate. An explicit hold, prepare-only or no-deploy instruction wins.
+Verify the existing host connection, intended branch and destination.
 Deploy changed runtime plugins before the Theme, then verify deployment
 completion, exact live identity and affected behavior. A merge or green CI
 alone is never evidence that the site has changed.
