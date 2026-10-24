@@ -611,7 +611,7 @@ function lunara_control_desk_homepage_order_preset_specs() {
                 __( 'Route cards', 'lunara-film' ),
                 __( 'Journal lane', 'lunara-film' ),
                 __( 'Latest Reviews', 'lunara-film' ),
-                __( 'Lunara Method', 'lunara-film' ),
+                __( 'Lunara Film Debrief', 'lunara-film' ),
                 __( 'Oscar Facts', 'lunara-film' ),
             ),
             'mobile'  => array(
@@ -619,7 +619,7 @@ function lunara_control_desk_homepage_order_preset_specs() {
                 __( 'Route cards', 'lunara-film' ),
                 __( 'Journal lane', 'lunara-film' ),
                 __( 'Latest Reviews', 'lunara-film' ),
-                __( 'Lunara Method', 'lunara-film' ),
+                __( 'Lunara Film Debrief', 'lunara-film' ),
                 __( 'Oscar Facts', 'lunara-film' ),
             ),
         ),
@@ -634,7 +634,7 @@ function lunara_control_desk_homepage_order_preset_specs() {
                 __( 'Oscar Facts', 'lunara-film' ),
                 __( 'Oscar Picks', 'lunara-film' ),
                 __( 'Oscar Spotlight', 'lunara-film' ),
-                __( 'Lunara Method', 'lunara-film' ),
+                __( 'Lunara Film Debrief', 'lunara-film' ),
             ),
             'mobile'  => array(
                 __( 'Identity masthead', 'lunara-film' ),
@@ -642,7 +642,7 @@ function lunara_control_desk_homepage_order_preset_specs() {
                 __( 'Oscar Facts', 'lunara-film' ),
                 __( 'Oscar Picks', 'lunara-film' ),
                 __( 'Journal lane', 'lunara-film' ),
-                __( 'Lunara Method', 'lunara-film' ),
+                __( 'Lunara Film Debrief', 'lunara-film' ),
             ),
         ),
     );
@@ -14757,7 +14757,7 @@ function lunara_control_desk_render_homepage_lane( $label, $description, $posts,
 }
 
 /**
- * Render the one canonical Lunara Method / Pairing Desk editor.
+ * Render the one canonical Lunara Film Debrief / Pairing Desk editor.
  *
  * Both the legacy Homepage Board and the focused Site Studio call this
  * renderer, so the public theme mods, validation, and save action stay
@@ -14767,7 +14767,7 @@ function lunara_control_desk_render_homepage_lane( $label, $description, $posts,
  * @return void
  */
 function lunara_control_desk_render_pairing_desk_form( $context = 'control-desk' ) {
-    echo '<p>The Lunara Method presentation is managed in Site Studio.</p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=lunara-site-studio&surface=lunara-method' ) ) . '">Open Method editor</a>';
+    echo '<p>The Lunara Film Debrief presentation is managed in Site Studio.</p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=lunara-site-studio&surface=lunara-method' ) ) . '">Open Method editor</a>';
 }
 
 function lunara_control_desk_render_homepage_board_tab( $rows ) {

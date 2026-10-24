@@ -24,6 +24,8 @@ body.home .lunara-home-stills-question{display:flex;flex-wrap:wrap;justify-conte
 body.home .lunara-home-stills-role{color:var(--lunara-stills-gold-light);font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif);font-size:.8125rem;font-style:normal;letter-spacing:.14em;line-height:1.3;text-transform:uppercase;}
 body.home .lunara-home-stills-question-text{font-style:italic;}
 body.home .lunara-home-stills-source{margin:0;color:var(--lunara-stills-muted);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;line-height:1.45;}
+/* 3.2.132: the Debrief editor's supporting copy, between the headline and the source line. */
+body.home .lunara-home-stills-copy{max-width:60ch;margin:0;color:var(--lunara-stills-muted);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;line-height:1.55;text-wrap:pretty;}
 body.home .lunara-home-stills-source a{color:var(--lunara-stills-gold-light);text-decoration:underline;text-underline-offset:4px;}
 body.home .lunara-home-stills-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:clamp(18px,2.6vw,32px);min-width:0;}
 body.home .lunara-home-stills-item.is-review{width:min(100%,860px);}

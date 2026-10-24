@@ -10,7 +10,7 @@ function lunara_site_studio_page_groups() {
 			'hero-carousel' => __( 'Hero stories', 'lunara-film' ),
 			'reviews-carousel' => __( 'Latest Reviews', 'lunara-film' ),
 			'journal-carousel' => __( 'Journal stories', 'lunara-film' ),
-			'lunara-method' => __( 'Lunara Method', 'lunara-film' ),
+			'lunara-method' => __( 'Lunara Film Debrief', 'lunara-film' ),
 			'home-oscar-picks' => __( 'Oscar Picks', 'lunara-film' ),
 			'home-oscar-facts' => __( 'Oscar Facts', 'lunara-film' ),
 		) ),

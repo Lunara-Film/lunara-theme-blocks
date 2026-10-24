@@ -166,7 +166,7 @@ function lunara_homepage_editor_section_config() {
         } elseif ( $is_reviews_carousel ) {
             $edit_label = __( 'Edit Latest Reviews', 'lunara-film' );
         } elseif ( 'pairing-desk' === $slug ) {
-            $edit_label = __( 'Edit Lunara Method', 'lunara-film' );
+            $edit_label = __( 'Edit Lunara Film Debrief', 'lunara-film' );
         } else {
             $edit_label = __( 'Open Homepage Structure', 'lunara-film' );
         }
