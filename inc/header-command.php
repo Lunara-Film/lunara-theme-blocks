@@ -232,6 +232,11 @@ if ( ! function_exists( 'lunara_header_brand_markup' ) ) {
 				$fetchpriority = function_exists( 'lunara_custom_logo_fetch_priority' )
 					? lunara_custom_logo_fetch_priority()
 					: ( is_front_page() ? 'auto' : 'high' );
+				// On the cover the header logo is hidden at load: never let it
+				// compete with the lead still for the first bytes.
+				if ( function_exists( 'lunara_header_is_cover' ) && lunara_header_is_cover() ) {
+					$fetchpriority = 'low';
+				}
 
 				return sprintf(
 					'<img class="lunara-header-logo skip-lazy no-lazy" src="%1$s"%2$s sizes="(max-width: 720px) 134px, 248px" width="420" height="%5$d" alt="%3$s" loading="eager" decoding="async" fetchpriority="%4$s" data-no-lazy="1" data-skip-lazy="1">',
@@ -257,11 +262,10 @@ if ( ! function_exists( 'lunara_render_header_command' ) ) {
 		?>
 		<header class="lunara-header<?php echo $cover ? ' is-cover' : ''; ?>" data-lunara-header>
 			<div class="lunara-header-inner">
-				<?php if ( ! $cover ) : ?>
-				<a class="lunara-header-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+				<?php // On the cover the brand waits, hidden, until the masthead's wordmark scrolls under the bar (3.2.131). ?>
+				<a class="lunara-header-brand<?php echo $cover ? ' is-cover-brand' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 					<?php echo lunara_header_brand_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</a>
-				<?php endif; ?>
 				<nav class="lunara-header-nav" aria-label="<?php esc_attr_e( 'Primary', 'lunara-film' ); ?>">
 					<?php echo lunara_header_nav_markup( 'header-nav' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</nav>
@@ -446,6 +450,19 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		   starts that much higher. */
 		body.lunara-header-cover.lunara-header-takeover { padding-top: 64px; }
 		.lunara-header.is-cover .lunara-header-inner { height: 64px; }
+		/* 3.2.131: the cover header's brand is hidden while the masthead's
+		   wordmark is on screen, and returns, smaller, once it scrolls under
+		   the bar (assets/js/lunara-header.js sets is-brand-revealed). Desktop
+		   only: on phones the header scrolls away with the page. */
+		.lunara-header.is-cover .lunara-header-brand {
+			visibility: hidden; opacity: 0; transform: translateY(-4px);
+			transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+		}
+		.lunara-header.is-cover.is-brand-revealed .lunara-header-brand {
+			visibility: visible; opacity: 1; transform: none;
+			transition: opacity .22s ease, transform .22s ease, visibility 0s;
+		}
+		.lunara-header.is-cover .lunara-header-logo { height: 44px; }
 		@media (max-width: 1020px) {
 			.lunara-header-nav { display: none; }
 			body.lunara-header-takeover { padding-top: 68px; }
@@ -457,6 +474,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			.lunara-header-logo { width: auto; max-width: 134px; height: 48px; }
 			body.lunara-header-cover.lunara-header-takeover { padding-top: 56px; }
 			.lunara-header.is-cover .lunara-header-inner { height: 56px; }
+			.lunara-header.is-cover.is-brand-revealed .lunara-header-brand { visibility: hidden; opacity: 0; }
 
 			/* --- Mobile fix (2026-10): plain header + no colour bleed ------
 			   1. HEADER. On phones the header was position:fixed with an
@@ -541,7 +559,9 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		}
 		@media (prefers-reduced-motion: reduce) {
 			.lunara-offcanvas-veil, .lunara-offcanvas-panel,
-			.lunara-offcanvas-nav a, .lunara-header-nav a { transition: none; }
+			.lunara-offcanvas-nav a, .lunara-header-nav a,
+			.lunara-header.is-cover .lunara-header-brand,
+			.lunara-header.is-cover.is-brand-revealed .lunara-header-brand { transition: none; }
 		}
 		</style>
 		<?php

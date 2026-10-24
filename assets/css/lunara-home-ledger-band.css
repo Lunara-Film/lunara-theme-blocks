@@ -24,7 +24,7 @@ body.home main.lunara-front-page > .lunara-home-section.lunara-home-ledger-band 
 	--lunara-ledger-band-gold-light: var(--lunara-gold-light, #e0c481);
 	--lunara-ledger-band-text: var(--lunara-text, #fafbfc);
 	--lunara-ledger-band-muted: var(--lunara-text-muted, #a8a8b8);
-	--lunara-ledger-band-border: var(--lunara-border, rgba(201, 169, 97, .28));
+	--lunara-ledger-band-border: var(--lunara-home-rule, rgba(201, 169, 97, .28));
 	--lunara-ledger-band-gutter: min(5vw, 76px);
 	box-sizing: border-box;
 	position: relative;

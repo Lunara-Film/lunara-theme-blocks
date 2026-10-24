@@ -868,7 +868,7 @@ body.home .lunara-front-page>.lunara-home-masthead{margin-bottom:0!important;}
 body.home .lunara-home-program .lunara-home-masthead-panel{border-bottom:0!important;}
 body.home .lunara-front-page>.lunara-home-section{margin-top:0!important;margin-bottom:0!important;}
 body.home .lunara-front-page>.lunara-home-section:not(.lunara-home-ledger-band){padding-top:clamp(32px,3.5vw,48px)!important;padding-bottom:0!important;border-top:0!important;}
-body.home .lunara-front-page>.lunara-home-section:not(.lunara-home-hero):not(.lunara-home-ledger-band)::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:var(--lunara-border,rgba(201,169,97,.28));pointer-events:none;}
+body.home .lunara-front-page>.lunara-home-section:not(.lunara-home-hero):not(.lunara-home-ledger-band)::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:var(--lunara-home-rule,rgba(201,169,97,.28));pointer-events:none;}
 body.home .lunara-front-page .lunara-home-section-title{font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,serif));font-weight:400;letter-spacing:0;}
 
 /* The Home cover (3.2.130). The header above carries no wordmark on Home, so
@@ -889,3 +889,24 @@ body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items{font
 body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items span:not(:last-child)::after{margin:0 .6em;}
 body.home .lunara-home-program.is-cover .lunara-home-masthead-dek{max-width:36ch!important;font-size:.94rem!important;line-height:1.48!important;}
 }
+
+/* One gold rule for the program (3.2.131). The Customizer's runtime CSS sets
+   --lunara-border for the whole site (white at .24 on the live site), and
+   the Home seams read it, so they rendered white. The program's rules (the
+   section hairline above, the Running Order and Ledger band rules, the lane
+   heads below) read --lunara-home-rule instead, gold by definition. */
+body.home{--lunara-home-rule:rgba(201,169,97,.28);}
+
+/* Lane heads in the program's voice (3.2.131). The Journal, Oscar Picks,
+   Oscar Facts and Latest Reviews heads keep the Composition rule (heading,
+   summary and action centered on the page axis, the action beneath) and the
+   shared section typography, and take the program's voice: a saved kicker
+   in the gold spaced caps of the Stills that Rhyme kicker, the summary in
+   muted reading type, the action in the Running Order's gold italic link
+   with a 44px target. No second rule under the head: the section hairline
+   is the seam. */
+body.home .lunara-front-page>.lunara-home-section .lunara-home-section-head{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center!important;align-items:start!important;row-gap:10px!important;min-height:0!important;margin:0 auto clamp(16px,1.8vw,24px)!important;padding:0!important;border:0!important;text-align:center!important;}
+body.home .lunara-front-page>.lunara-home-section .lunara-home-section-head>div{display:grid;justify-items:center!important;gap:6px;min-width:0;text-align:center!important;}
+body.home .lunara-front-page>.lunara-home-section .lunara-home-section-kicker{margin:0!important;color:var(--lunara-gold,#c9a961)!important;font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif)!important;font-size:.8125rem!important;font-weight:400!important;letter-spacing:.16em!important;line-height:1.3!important;text-transform:uppercase!important;opacity:1!important;transform:none!important;}
+body.home .lunara-front-page>.lunara-home-section .lunara-home-section-summary{max-width:62ch;margin:2px auto 0!important;color:var(--lunara-text-muted,#a8a8b8)!important;text-align:center!important;}
+body.home .lunara-front-page>.lunara-home-section .lunara-home-section-head>.lunara-section-link{display:inline-flex!important;width:auto!important;justify-content:center!important;justify-self:center!important;align-items:center;min-height:44px;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--lunara-gold-light,#e0c481)!important;font-family:var(--lunara-font-body,Georgia,serif)!important;font-size:1rem!important;font-style:italic!important;font-weight:400!important;letter-spacing:0!important;line-height:1.3!important;text-transform:none!important;text-decoration:underline!important;text-underline-offset:4px;white-space:nowrap;}

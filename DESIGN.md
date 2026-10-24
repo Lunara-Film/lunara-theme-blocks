@@ -47,9 +47,12 @@ and links to the owning Review editor. This does not alter pairing content.
   header; the Brand console logo sizes can shrink it, never enlarge it, and
   the dek always sits below it. On inner pages the site header shows the
   wordmark at its own proportions, contained, never cropped.
-- Home is a cover: one wordmark on the page, the masthead's. The site header
-  on Home drops its brand and slims to a 64px bar (56px on phones) with
-  search and the menu, and the masthead prints no second Search. The
+- Home is a cover: one wordmark on screen, the masthead's. The site header
+  on Home hides its brand and slims to a 64px bar (56px on phones) with
+  search and the menu, and the masthead prints no second Search. On desktop,
+  where the header stays fixed, its brand returns, at 44px, once the
+  masthead's wordmark has scrolled under the bar, and hides again when the
+  wordmark is back on screen; on phones the header scrolls away instead. The
   masthead spends as little height as it can before the lead story: the
   dateline on one centered line with middle dots, the mark at its cap, the
   dek, then Now Showing. The lead still starts within 300px of the top of
@@ -62,6 +65,15 @@ and links to the owning Review editor. This does not alter pairing content.
   styles and none under the masthead. The Oscar Ledger band keeps its own
   full-bleed rules. The saved Section Order decides on phones as it does on
   desktop; the inline order rules the header prints follow the same map.
+  The program's rules (the section hairline, the Running Order and Ledger
+  band rules, the lane-head rule) are gold by their own token,
+  `--lunara-home-rule`, never the site-wide `--lunara-border` the Customizer
+  sets. Every lane head (Journal, Oscar Picks, Oscar Facts, Latest Reviews)
+  keeps the Composition rule and the shared section typography and takes the
+  program's voice: a saved kicker in the gold spaced caps of the Stills that
+  Rhyme kicker, the summary in muted reading type, the action beneath in the
+  Running Order's gold italic link. No kicker is added where the heading
+  already names the lane, and no second rule runs under a head.
 - Stills that Rhyme reads from the lead story first, then the review the
   Pair It With desk shows, then the newest reviews, and renders the first
   review that carries all three pairings.

@@ -8,7 +8,7 @@
    no ornamental numerals anywhere. */
 body.home .lunara-home-running-order{box-sizing:border-box;width:100%;padding:0 min(5vw,76px);border:0;border-radius:0;background:transparent;box-shadow:none;}
 body.home .lunara-home-running-order-inner{display:grid;gap:clamp(18px,2vw,26px);width:min(100%,1320px);min-width:0;margin-inline:auto;}
-body.home .lunara-home-running-order-head{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"kicker all" "title all";align-items:end;column-gap:24px;row-gap:6px;min-width:0;padding:0 0 12px;border-bottom:1px solid var(--lunara-border,rgba(201,169,97,.28));}
+body.home .lunara-home-running-order-head{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"kicker all" "title all";align-items:end;column-gap:24px;row-gap:6px;min-width:0;padding:0 0 12px;border-bottom:1px solid var(--lunara-home-rule,rgba(201,169,97,.28));}
 body.home .lunara-home-running-order-kicker{grid-area:kicker;margin:0;color:var(--lunara-gold,#c9a961);font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif);font-size:0.8125rem;font-weight:400;letter-spacing:.24em;line-height:1.3;text-transform:uppercase;}
 body.home .lunara-home-running-order-title{grid-area:title;margin:0;min-width:0;overflow-wrap:anywhere;color:var(--lunara-text,#fafbfc);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(1.55rem,2.4vw,2.3rem);font-weight:400;line-height:1.08;letter-spacing:0;text-wrap:balance;}
 body.home .lunara-home-running-order-all{grid-area:all;display:inline-flex;align-items:center;align-self:end;min-height:44px;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;font-style:italic;line-height:1.3;text-decoration:underline;text-underline-offset:4px;white-space:nowrap;}
@@ -17,7 +17,7 @@ body.home .lunara-home-running-order-item{min-width:0;margin:0;padding:0;}
 body.home .lunara-home-running-order-card{display:grid;gap:8px;align-content:start;min-width:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--lunara-text,#fafbfc)!important;text-decoration:none!important;}
 body.home .lunara-home-running-order-frame{display:block;box-sizing:border-box;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:0;background:var(--lunara-bg-secondary,#0f1d2e);}
 body.home .lunara-home-running-order-poster{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:0;}
-body.home .lunara-home-running-order-frame.is-text{display:grid;place-content:center;padding:12px;border:1px solid var(--lunara-border,rgba(201,169,97,.28));text-align:center;}
+body.home .lunara-home-running-order-frame.is-text{display:grid;place-content:center;padding:12px;border:1px solid var(--lunara-home-rule,rgba(201,169,97,.28));text-align:center;}
 body.home .lunara-home-running-order-headline{display:block;min-width:0;overflow-wrap:anywhere;}
 body.home .lunara-home-running-order-film,body.home .lunara-home-running-order-take{display:block;}
 body.home .lunara-home-running-order-film{color:var(--lunara-text,#fafbfc);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(1rem,1.1vw,1.15rem);font-weight:400;line-height:1.15;letter-spacing:0;text-wrap:balance;}

@@ -16,6 +16,9 @@ const header = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-navi
 // the cover is measured as a scripted reader meets it.
 const coverHeader = header.cover_html.replace(/<noscript>[\s\S]*?<\/noscript>/, '');
 const css = ['style.css', 'assets/css/lunara-shell.css', 'assets/css/lunara-home-modules.css', 'assets/css/lunara-public-guardrails.css'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
+// The live site's Customizer runtime CSS sets the site-wide border token to
+// white (lunara-runtime-customizer-css). Home's gold rules must hold against it.
+const liveTokens = ':root{--lunara-border:rgba(255,255,255,0.24)}';
 const still = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"><rect width="1920" height="1080" fill="#1c2633"/></svg>');
 let checks = 0;
 const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSON.stringify(detail, null, 1)); throw new Error(message); } };
@@ -29,7 +32,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             // (1180x312); Direction D must cap it and keep the dek below it.
             const wordmark = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1663" height="490"><rect width="1663" height="490" fill="#c9a961"/></svg>');
             const withLogo = masthead.replace(/src="https:[^"]+"/g, `src="${still}"`).replace(/<span class="lunara-home-masthead-logo-fallback">[^<]*<\/span>/, `<img width="1663" height="490" src="${wordmark}" class="lunara-home-masthead-logo" alt="" style="display:block;width:var(--lunara-masthead-logo-w,min(100%,1180px));height:auto;max-height:var(--lunara-masthead-logo-cap,clamp(118px,22vw,312px));object-fit:contain;">`);
-            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style>${header.css}</head><body class="home lunara-home-cover lunara-header-takeover lunara-header-cover">${coverHeader}<div id="primary" class="site-main lunara-front-page">${withLogo}<section class="lunara-home-section lunara-home-slot-dispatch"><h2 class="lunara-home-section-title">Journal</h2></section></div></body></html>`, { waitUntil: 'load' });
+            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style><style>${liveTokens}</style>${header.css}</head><body class="home lunara-home-cover lunara-header-takeover lunara-header-cover">${coverHeader}<div id="primary" class="site-main lunara-front-page">${withLogo}<section class="lunara-home-section lunara-home-slot-dispatch"><h2 class="lunara-home-section-title">Journal</h2></section></div></body></html>`, { waitUntil: 'load' });
             const d = await page.evaluate(() => {
                 const r = s => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height }; };
                 const film = document.querySelector('.lunara-home-front-desk-title .lunara-home-front-desk-film'), take = document.querySelector('.lunara-home-front-desk-title .lunara-home-front-desk-take');
@@ -38,7 +41,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                 const datelineSpans = [...document.querySelectorAll('.lunara-home-program-dateline-items span')].map(e => e.getBoundingClientRect());
                 return {
                     scroll: document.documentElement.scrollWidth,
-                    header: r('.lunara-header'), headerBrand: r('.lunara-header-brand'), headerSearch: r('.lunara-header-search'), headerMenu: r('.lunara-header-burger'), searchControls: document.querySelectorAll('[data-lunara-search-open]').length,
+                    header: r('.lunara-header'), headerBrand: (() => { const e = document.querySelector('.lunara-header-brand'); return e ? getComputedStyle(e).visibility : null; })(), headerSearch: r('.lunara-header-search'), headerMenu: r('.lunara-header-burger'), searchControls: document.querySelectorAll('[data-lunara-search-open]').length,
                     dateline: r('.lunara-home-program-dateline'), identity: r('.lunara-home-masthead-identity'), lead, stack, routes: r('.lunara-home-masthead-routes'),
                     leadFrame: r('.lunara-home-front-desk-lead .lunara-home-front-desk-frame'), compFrame: r('.lunara-home-front-desk-companion.has-image .lunara-home-front-desk-frame'),
                     filmFont: getComputedStyle(film).fontFamily, filmSize: parseFloat(getComputedStyle(film).fontSize), takeStyle: getComputedStyle(take).fontStyle, takeFont: getComputedStyle(take).fontFamily,
@@ -60,7 +63,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             // The cover: one wordmark on the page (the masthead's), a slim header
             // with search and the menu, one dateline line with middle dots, and the
             // lead still inside a tight budget from the top of the page.
-            assert(d.headerBrand === null && d.searchBox === null && d.searchControls === 1 && d.headerSearch.height >= 44 && d.headerMenu.height >= 44, `${label}: the header carries no wordmark on the cover, and the one Search control is the header's`, d);
+            assert(d.headerBrand !== 'visible' && d.searchBox === null && d.searchControls === 1 && d.headerSearch.height >= 44 && d.headerMenu.height >= 44, `${label}: the header shows no wordmark at the top of the cover, and the one Search control is the header's`, d);
             assert(d.header.height >= (width > 1020 ? 64 : 56) && d.header.height <= (width > 1020 ? 64 : 56) + 1 && d.dateline.top >= d.header.bottom - .6, `${label}: the cover header is a ${width > 1020 ? 64 : 56}px bar (plus its hairline) and the masthead starts under it`, d);
             assert(d.datelineSize >= (width > 820 ? 13 : 12) && (width < 360 || d.datelineLines === 1) && Math.abs(d.datelineCenter - width / 2) <= 2 && d.datelineDots.slice(0, -1).every(c => c.includes('·')) && !d.datelineDots.at(-1).includes('·'), `${label}: the dateline is one centered line with middle dots between its items`, d);
             process.stdout.write(`${label}: header ${d.header.height}px, lead still at ${Math.round(d.leadFrame.top)}px from the top of the page\n`);

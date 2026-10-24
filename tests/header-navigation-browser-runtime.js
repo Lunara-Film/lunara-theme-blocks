@@ -74,20 +74,38 @@ const fixture = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-nav
                 });
                 assert.ok(fullMenu.scroll<=width&&Math.abs((fullMenu.nav.left+fullMenu.nav.right)/2-width/2)<=1&&fullMenu.brand.right<=fullMenu.nav.left+1&&fullMenu.nav.right<=fullMenu.search.left+1, `Logo and five-section menu stay centered without collisions at ${width}`);++checks;
             }
-            // The Home cover (3.2.130): the same bar with no brand link, 64px on
+            // The Home cover (3.2.130, reveal 3.2.131): the same bar, 64px on
             // desktop and 56px on phones, search and menu still 44px targets,
-            // navigation still centered on desktop.
-            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#09151e;color:#f4efe3}main{padding:20px}</style>${fixture.css}</head><body class="home lunara-header-takeover lunara-header-cover">${fixture.cover_html}<main><h1>The cover</h1></main>${scripts?'<script>'+fs.readFileSync(path.join(root,'assets/js/lunara-header.js'),'utf8')+'</script>':''}</body></html>`);
-            const cover = await page.evaluate(() => {
-                const box = selector => { const e=document.querySelector(selector); if(!e) return null; const r=e.getBoundingClientRect(); return {left:r.left,right:r.right,center:(r.left+r.right)/2,width:r.width,height:r.height}; };
-                return {scroll:document.documentElement.scrollWidth, brand:box('.lunara-header-brand'), header:box('.lunara-header'), nav:box('.lunara-header-nav'), search:box('.lunara-header-search'), menu:box('.lunara-header-burger'), bodyPad:parseFloat(getComputedStyle(document.body).paddingTop)};
+            // navigation still centered on desktop. Its brand is hidden while
+            // the masthead's wordmark is on screen; on desktop it returns once
+            // that wordmark scrolls under the bar and hides again on the way
+            // back. On phones the header scrolls away, so it stays hidden.
+            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#09151e;color:#f4efe3}main{padding:20px}</style>${fixture.css}</head><body class="home lunara-header-takeover lunara-header-cover">${fixture.cover_html}<main><section class="lunara-home-masthead"><div class="lunara-home-masthead-logo-frame" style="height:100px">The masthead wordmark</div></section><div style="height:3000px">The program</div></main>${scripts?'<script>'+fs.readFileSync(path.join(root,'assets/js/lunara-header.js'),'utf8')+'</script>':''}</body></html>`);
+            const coverState = () => page.evaluate(() => {
+                const box = selector => { const e=document.querySelector(selector); if(!e) return null; const r=e.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,center:(r.left+r.right)/2,width:r.width,height:r.height}; };
+                const brand=document.querySelector('.lunara-header-brand');
+                return {scroll:document.documentElement.scrollWidth, brand:box('.lunara-header-brand'), brandVisibility:brand?getComputedStyle(brand).visibility:null, brandOpacity:brand?parseFloat(getComputedStyle(brand).opacity):null, revealed:document.querySelector('.lunara-header').classList.contains('is-brand-revealed'), header:box('.lunara-header'), nav:box('.lunara-header-nav'), search:box('.lunara-header-search'), menu:box('.lunara-header-burger'), bodyPad:parseFloat(getComputedStyle(document.body).paddingTop)};
             });
-            assert.ok(cover.scroll<=width && cover.brand===null && cover.search.width>=44 && cover.search.height>=44, `Cover header: no brand link, search keeps its target at ${width}, JS ${scripts}`); ++checks;
+            const cover = await coverState();
+            assert.ok(cover.scroll<=width && cover.brand!==null && cover.brandVisibility==='hidden' && !cover.revealed && cover.search.width>=44 && cover.search.height>=44, `Cover header: the brand waits hidden at the top of the page, search keeps its target at ${width}, JS ${scripts}`); ++checks;
             if (scripts) {
                 const bar = width<=1020 ? 56 : 64;
                 assert.ok(cover.header.height>=bar && cover.header.height<=bar+1 && cover.bodyPad===bar, `Cover header is a ${bar}px bar and the page starts under it at ${width}`); ++checks;
                 if (width<=1020) { assert.ok(cover.menu.width>=44 && cover.menu.height>=44, `Cover menu keeps its target at ${width}`); ++checks; }
                 else { assert.ok(Math.abs(cover.nav.center-width/2)<=1 && cover.nav.right<=cover.search.left+1, `Cover navigation stays centered and clear of search at ${width}`); ++checks; }
+                await page.evaluate(() => window.scrollTo(0, 800));
+                await page.waitForFunction(() => document.querySelector('.lunara-header').classList.contains('is-brand-revealed'), null, {timeout: 2000}).catch(() => {});
+                const down = await coverState();
+                if (width>1020) {
+                    assert.ok(down.revealed && down.brandVisibility==='visible' && down.brandOpacity===1, `Cover brand returns once the masthead wordmark scrolls under the bar at ${width}`); ++checks;
+                    assert.ok(down.brand.height<=bar && down.brand.top>=down.header.top-1 && down.brand.bottom<=down.header.bottom+1 && down.brand.right<=down.nav.left+1 && Math.abs(down.nav.center-width/2)<=1, `The returned brand fits the ${bar}px bar and clears the centered navigation at ${width}`); ++checks;
+                    await page.evaluate(() => window.scrollTo(0, 0));
+                    await page.waitForFunction(() => !document.querySelector('.lunara-header').classList.contains('is-brand-revealed'), null, {timeout: 2000}).catch(() => {});
+                    const back = await coverState();
+                    assert.ok(!back.revealed && back.brandVisibility==='hidden', `Cover brand hides again when the masthead wordmark is back on screen at ${width}`); ++checks;
+                } else {
+                    assert.ok(down.brandVisibility==='hidden', `On phones the cover brand stays hidden while the header scrolls away at ${width}`); ++checks;
+                }
             }
             if(process.env.LUNARA_HEADER_ARTIFACTS) {
                 fs.mkdirSync(process.env.LUNARA_HEADER_ARTIFACTS,{recursive:true});
