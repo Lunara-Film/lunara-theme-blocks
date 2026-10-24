@@ -25,6 +25,17 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+
+## 2026-10-23 — Journal Stories text corrected and deployed (Foundation 1.5.2)
+
+- **Shipped:** [Journal Foundation PR #35](https://github.com/Lunara-Film/lunara-plugin-journal-foundation/pull/35), exact-head merge `acdc7df84bc27f59517bf8b54463fe3941df5076`, tested tree `fc785749193efc6bc539fe6fd8ae0fa7251f57be`. Human-readable feed headlines, summaries, source labels and refresh messages decode entities before markup removal and whitespace normalization. Unicode limits do not split characters without mbstring. Pitch IDs, canonical stored records and publishing approvals are unchanged.
+- **Verified:** 16 PHP behavior suites, 44-file PHP syntax check and 22 JavaScript/CI-policy tests passed. Added 11 behavior checks for entities, source filters, readable search, encoded markup, Unicode bounds, film filtering and unchanged storage. GitHub CI passed PHP 7.4, 8.2 and 8.3; no review threads; exact-head merge and main exact-tree reuse success verified.
+- **Live:** existing Foundation/main manual connection to `/wp-content/plugins/lunara-plugin-journal-foundation`; host completed deployment of `acdc7df` in 44 seconds. Independent WordPress.com readback reports active Foundation 1.5.2. Authenticated Stories search for Prisoners returns two source cards with images and zero residual numeric/quote/ampersand/nbsp entities in displayed headlines/summaries. No cache flush or settings change. Auto-deploy remains off.
+- **Holding:** editorial publication remains separate: Plex article 103719 is still a draft. The Publishing screen shows zero of one published today, reserve zero of seven, and zero scheduled. Earlier automatic approval review rejected publication without final article-specific approval; this implementation does not bypass that decision.
+- **Next:** obtain approval of the finished Plex article, publish and verify its public URL; build an approved reserve and observe one unattended delivery. The daily draft-preparation task and host publishing cron remain configured as previously recorded.
+- **Found, not fixed:** deterministic film filtering can still admit TV-related theatrical events. Source feed cards are discovery material, not verified article facts. Existing Ray Gunn draft 103114 was corrected and saved as “Brad Bird Shouldn’t Have to Keep Starting Over,” with two Netflix primary sources added to its original source row. Removed the false first-animation-since-The-Iron-Giant claim and stale trailer framing. Content/deck, draft status, preserved image and all three source rows read back correctly; no publication approval was set.
+
+
 ## 2026-10-24 — The Lunara Film Debrief: Dalton edits the Home showcase (Theme 3.2.133)
 
 - **Shipped:** Theme 3.2.133 PR: the Home Debrief showcase reads the Lunara Film Debrief editor (kicker, headline, supporting line), the defaults are Dalton's name and line, the editor is renamed from "Lunara Method", and the review-order choice is a filter defaulting to today's behavior. See the 3.2.133 changelog entry. Stacked on 3.2.132; merged and deployed by me when CI is green.
