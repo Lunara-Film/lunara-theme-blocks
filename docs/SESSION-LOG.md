@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Journal credit standard deployed and verified (Theme 3.2.131)
+
+- **Shipped:** [Theme PR #285](https://github.com/Lunara-Film/lunara-theme-blocks/pull/285), merged `2329a6294188c84b40806ab7b3de68b211f94f4e`, tested tree `d55be8222e2b36070397d2979445a8a44f583cd5`. Removed automatic public Image / Source labels across Journal's shared hero, carousel, card, gallery and retention renderers. Exact Exclusive kicker and explicit required-attribution flags retain their exception. The standing standard is in DESIGN.md.
+- **Verified:** new credit policy 36 checks; public semantics 35; relevant archive selection/media/Studio behavior passed. Full CI PHP/syntax checks and all six browser groups passed. One unchanged Studio preview-binding test failed first, plausibly due to its source-attribute-versus-committed-iframe navigation race; one targeted failed-job retry passed. No runtime guard or assertion was weakened. Local PHP passed 69/71, with two missing-extension environment limits covered by CI. Exact-head merge and resulting main checks verified.
+- **Live:** manually deployed the existing Theme/main connection to `/wp-content/themes/lunara-theme-blocks-20260513-2300`; host reported deployment completed in 45 seconds for `2329a62`. Auto-deploy remains off. Authenticated Plex preview now has zero hero-credit blocks and one hero image; older published Gremlins entry also has zero hero-credit blocks and one hero image. Live Journal archive source badges changed from five to zero. No cache flush or stored-content rewrite was performed.
+- **Holding:** no remaining blocker for this requested presentation correction. Article 103719 remains a draft; source count two and stored image-source URL were read back intact. This release does not publish that article or bypass its earlier approval rejection.
+- **Next:** Journal entries use the new default automatically; set the existing Journal Kicker to Exclusive for that post's exception. Continue the separate approved-content/publication workflow when Dalton instructs.
+- **Found, not fixed:** the Studio test's possible navigation race remains outside this Journal correction. A direct browser read of the deployed stylesheet was client-blocked; exact release identity is established by the host's deployed commit and affected live renderer behavior, not a claimed stylesheet read. A tighter after-image screenshot attempt timed out; the earlier captured live image shows the automatic credit removed.
+
+
 ## 2026-10-23 — Journal visual credits become an explicit exception (Theme 3.2.131 candidate)
 
 - **Shipped:** prepared the Theme 3.2.131 candidate under Dalton's instruction to remove the circled Image / Source block across Journal. One shared visibility rule now governs article heroes, carousels, public cards, archive galleries and retention art; old source metadata cannot turn the routine labels back on. Descriptive captions, image/alt output, article links and private source/image provenance remain intact.
