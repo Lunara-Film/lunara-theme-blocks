@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-24 — Always Lunara Film: live across the theme and all six plugins
+
+- **Shipped and live (deployed by me, plugins before the Theme):** Core 0.8.17 (#46), Dispatch 3.4.3 (#22), AI Assistant Classic 0.6.2 (#12), Journal Foundation 1.5.3 (#36), Oscars Ledger 2.8.27 (#63), IMDb Guard 0.4.3 (#12, opened and merged in Dalton's Chrome; this session reaches that repo only under its old owner name), then Theme 3.2.134 (#290). Every visible "Lunara" in code now reads "Lunara Film"; each repo's CI carries a brand lint that fails on a bare name. WordPress.com Deployments reported all seven deployed; the live `style.css` reads 3.2.134; Home, Reviews, Journal, Oscars, Debrief and About return 200 with no PHP errors.
+- **Verified:** before merging, every changed line in all seven diffs was checked mechanically: each is a pure " Film" insertion, except version bumps, CI wiring for the lint, and the reported wording fixes ("Go to Lunara Film", "Lunara Film block", "Links to Lunara Film dossier").
+- **Still bare on the live site, saved by Dalton (code cannot change them):** the Home Journal heading "Fresh movement from the Lunara Journal" (Site Studio → Journal Carousel), the Home Oscar Picks label "Lunara Sweep Watch" (Site Studio → Home Oscar Picks), the Oscars portal kicker "The Lunara Oscar Ledger" (`lunara_oscars_portal_kicker`), the Debrief page title "Lunara Debrief" (h1, `<title>`, og:title), and two sentences in the About page. Also saved: the AI Classic system prompt and the Journal Control Plane purpose/voice text, which steer AI drafts.
+- **Left by design:** the importer's LUNARA DEBRIEF / LUNARA METADATA draft markers (parsed, never shown), stored provenance actor names on Journal records, font-family names, the Studio Search preview's sample query, User-Agent and redirect header values.
+- **Outside the repos, for Dalton:** the IFTTT applet titles ("Run Lunara", "Lunara Morning Desk", "Lunara needs attention"), the ChatGPT GPT name (its OpenAPI titles change on re-import), the Notion page.
+- **Correction to my own audit:** a first post-deploy crawl read cached pages (a fixed `?audit=1` URL), so it repeated pre-deploy text; the rerun with a fresh cache-buster is the one recorded above.
+
 ## 2026-10-24 — Always Lunara Film: the brand sweep (Theme 3.2.134)
 
 - **Shipped:** Theme 3.2.134 PR from `claude/brand-lunara-film`, built on main after 3.2.133 merged (#288). Every visible "Lunara" standing alone now reads "Lunara Film": 274 strings in 53 files (57 on public pages, 168 in admin and editor UI, 4 console messages, 45 in dead `functions.php` fallbacks). The new `tests/brand-name-runtime.php` fails CI with `file:line` on any bare "Lunara" in PHP strings and template text, JS strings, CSS strings or `theme.json`; its allowlist has six entries, each one code rather than copy. DESIGN.md gains an Identity section with the rule. See the 3.2.134 changelog entry. I opened the PR and did not merge or deploy it (this session's instruction); the integrating session merges and deploys.
