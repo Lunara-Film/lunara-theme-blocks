@@ -772,13 +772,16 @@ function lunara_journal_archive_studio_render_gallery( $gallery ) {
 			? '<a class="lunara-journal-archive-gallery-destination" href="' . esc_url( $link_url ) . '">' . $media . '</a>'
 			: $media;
 		$caption = '';
-		if ( ! empty( $item['caption'] ) ) {
+		$show_credit = function_exists( 'lunara_journal_should_show_public_credit' ) && lunara_journal_should_show_public_credit( 0, $item['attachment_id'] );
+		if ( ! empty( $item['caption'] ) && ( $show_credit || ! preg_match( '/^\s*(?:image|credit|source)\s*:/i', $item['caption'] ) ) ) {
 			$caption .= '<p>' . esc_html( $item['caption'] ) . '</p>';
 		}
-		$credit = '<span class="lunara-journal-archive-gallery-credit">' . esc_html( $item['credit'] ) . '</span>';
-		$source = '<a class="lunara-journal-archive-gallery-source" href="' . esc_url( $source_url ) . '" rel="noopener noreferrer">' . esc_html( $item['source'] ) . '</a>';
-		$caption .= '<small>' . $credit . '<span aria-hidden="true"> · </span>' . $source . '</small>';
-		$figures[] = '<figure class="lunara-journal-archive-gallery-item"><div class="lunara-journal-archive-gallery-media" style="--lunara-gallery-focus-x:' . esc_attr( absint( $item['focal_x'] ) ) . '%;--lunara-gallery-focus-y:' . esc_attr( absint( $item['focal_y'] ) ) . '%">' . $media_html . '</div><figcaption>' . $caption . '</figcaption></figure>';
+		if ( $show_credit ) {
+			$credit = '<span class="lunara-journal-archive-gallery-credit">' . esc_html( $item['credit'] ) . '</span>';
+			$source = '<a class="lunara-journal-archive-gallery-source" href="' . esc_url( $source_url ) . '" rel="noopener noreferrer">' . esc_html( $item['source'] ) . '</a>';
+			$caption .= '<small>' . $credit . '<span aria-hidden="true"> · </span>' . $source . '</small>';
+		}
+		$figures[] = '<figure class="lunara-journal-archive-gallery-item"><div class="lunara-journal-archive-gallery-media" style="--lunara-gallery-focus-x:' . esc_attr( absint( $item['focal_x'] ) ) . '%;--lunara-gallery-focus-y:' . esc_attr( absint( $item['focal_y'] ) ) . '%">' . $media_html . '</div>' . ( '' !== $caption ? '<figcaption>' . $caption . '</figcaption>' : '' ) . '</figure>';
 	}
 	if ( empty( $figures ) ) {
 		return '';
