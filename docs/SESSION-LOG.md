@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Dalton's confirmation authorizes the full requested release
+
+- **Shipped:** replaced the repeated deployment-approval gate in the shared release policy and the seven active plus three scoped repository agreements. Dalton's confirmation of an implementation task covers commit, PR, verified merge, manual deployment and live verification; no second version-specific confirmation is required. Explicit hold, prepare-only, draft-only and no-deploy instructions still win. Current runbook/alignment summaries follow the same rule; dated records remain historical.
+- **Verified:** documentation diffs and links reviewed; repository CI is the merge gate where configured. Required checks, branch protections, exact-head merges, existing host destinations and separate reporting of merged versus live states remain required. These documentation-only changes need no runtime version bump or deployment.
+- **Live:** no runtime change from this policy update. Last independently observed Journal Foundation 1.4.1 and Dispatch 3.4.2; Foundation 1.5.0 is already merged in PR #31.
+- **Holding:** no duplicate confirmation gate for the already confirmed Journal app task.
+- **Next:** continue the Journal 1.5.0 release using Dalton's existing confirmation, then verify the live app, scheduler and publication path. Ask only for actual missing access or a substantive scope/target decision.
+- **Found, not fixed:** this rule change does not establish that a host deployment or publication has occurred, and it does not alter auto-deploy settings or reactivate legacy/secondary repositories as WordPress release sources.
+
 ## 2026-10-23 — Home is a cover (Theme 3.2.130)
 
 - **Shipped:** 3.2.129 merged (#278) and deployed by me; the Home and Debrief poster plates are gone (She Said and Rustin resolve through the title-and-year search). Dalton then reviewed Home on his phone: the site header and the program masthead read as two headers. He chose the cover-page masthead (option B) with one rule: it cannot be tall, because the lead story is what readers should meet and click. Theme 3.2.130 PR: on Home the header drops its wordmark and slims to 64/56px, the masthead drops its Search button, the dateline is one centered line, the top paddings tighten, and the lead still is held within 280px (phones) / 300px (desktop) of the top of the page by the browser contract. See the 3.2.130 changelog entry. Merged and deployed by me when CI is green.
