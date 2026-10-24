@@ -69,10 +69,11 @@ and links to the owning Review editor. This does not alter pairing content.
   band rules, the lane-head rule) are gold by their own token,
   `--lunara-home-rule`, never the site-wide `--lunara-border` the Customizer
   sets. Every lane head (Journal, Oscar Picks, Oscar Facts, Latest Reviews)
-  reads like the Running Order's head: a gold spaced-caps kicker naming the
-  lane, the headline in the signature face, the summary in muted reading
-  type, the link in gold italic, over one gold rule; stacked at 820px and
-  below, left-aligned.
+  keeps the Composition rule and the shared section typography and takes the
+  program's voice: a saved kicker in the gold spaced caps of the Stills that
+  Rhyme kicker, the summary in muted reading type, the action beneath in the
+  Running Order's gold italic link. No kicker is added where the heading
+  already names the lane, and no second rule runs under a head.
 - Stills that Rhyme reads from the lead story first, then the review the
   Pair It With desk shows, then the newest reviews, and renders the first
   review that carries all three pairings.

@@ -206,21 +206,6 @@ check_delivery( $legacy_html === lunara_render_homepage_latest_reviews( $legacy_
 lunara_enqueue_homepage_editor_card_assets();
 check_delivery( false === $GLOBALS['localized_block_config']['reviewsCarouselAdopted'] && str_contains( $GLOBALS['localized_block_config']['sections']['lunara/latest-reviews']['editUrl'], 'surface=homepage-structure' ), 'Restoring option absence also re-enables the old block editing owner.' );
 
-// Lane heads (3.2.131): the Journal and Reviews lanes open like the program's
-// own modules, a kicker naming the lane above the saved headline; the kicker
-// steps aside when the headline already is the lane's name.
-$GLOBALS['posts'][1]->post_status = 'publish';
-$lane_slides = array(); foreach ( array( 3, 5, 7 ) as $id ) { $lane_slides[] = array( 'post_id' => $id, 'image_id' => 90 ); }
-configure( 'journal', array( 'mode' => 'manual', 'slides' => $lane_slides, 'heading' => 'Fresh movement from the Lunara Journal' ) );
-$lane = lunara_render_homepage_journal_lane();
-check_delivery( 1 === substr_count( $lane, '<p class="lunara-home-section-kicker">The Journal</p><h2 class="lunara-home-section-title">Fresh movement from the Lunara Journal</h2>' ), 'The Journal lane names itself in a kicker above its saved headline.' );
-configure( 'journal', array( 'mode' => 'manual', 'slides' => $lane_slides, 'heading' => 'The journal' ) );
-$lane = lunara_render_homepage_journal_lane();
-check_delivery( ! str_contains( $lane, 'lunara-home-section-kicker' ) && str_contains( $lane, '<h2 class="lunara-home-section-title">The journal</h2>' ), 'A headline that already is the lane name gets no repeated kicker.' );
-configure( 'reviews', array( 'mode' => 'manual', 'slides' => array( array( 'post_id' => 12 ) ), 'heading' => 'Latest Reviews' ) );
-check_delivery( str_contains( lunara_render_homepage_latest_reviews(), '<p class="lunara-home-section-kicker">Lunara Reviews</p><h2 class="lunara-home-section-title">Latest Reviews</h2>' ), 'The Reviews lane names itself in a kicker above its headline.' );
-$GLOBALS['posts'][1]->post_status = 'draft';
-
 if ( in_array( '--fixture', $argv ?? array(), true ) || in_array( '--legacy-fixture', $argv ?? array(), true ) ) {
 	$GLOBALS['posts'][1]->post_status = 'publish';
 	$GLOBALS['posts'][3]->post_title = 'A long headline about the current film scene that should stay readable on a small screen';

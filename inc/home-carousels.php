@@ -182,16 +182,11 @@ function lunara_render_home_story_carousel( $kind ) {
 	$slides = lunara_home_carousel_slides( $kind );
 	if ( ! $slides ) { return ''; }
 	$heading = '' !== $settings['heading'] ? $settings['heading'] : ( $reviews ? __( 'Latest Reviews', 'lunara-film' ) : __( 'The Journal', 'lunara-film' ) );
-	// Every Home lane opens like the program's own modules (3.2.131): a
-	// kicker naming the lane, then the headline. The kicker steps aside when
-	// the saved headline already is the lane's name, so it never repeats.
-	$kicker  = $reviews ? __( 'Lunara Reviews', 'lunara-film' ) : __( 'The Journal', 'lunara-film' );
-	$kicker  = 0 === strcasecmp( trim( $kicker ), trim( (string) $heading ) ) ? '' : $kicker;
 	$section = $reviews ? 'latest-reviews' : 'dispatch';
 	$classes = $reviews ? 'lunara-home-slot-latest-reviews lunara-home-curated-reviews' : 'lunara-home-slot-dispatch lunara-dispatches-section lunara-home-curated-journal';
 	ob_start(); ?>
 	<section class="lunara-home-section <?php echo esc_attr( $classes ); ?>" data-lunara-site-studio-section="<?php echo esc_attr( $section ); ?>" aria-label="<?php echo esc_attr( $heading ); ?>">
-		<div class="lunara-home-section-head"><div><?php if ( '' !== $kicker ) : ?><p class="lunara-home-section-kicker"><?php echo esc_html( $kicker ); ?></p><?php endif; ?><h2 class="lunara-home-section-title"><?php echo esc_html( $heading ); ?></h2></div><a class="lunara-section-link" href="<?php echo esc_url( home_url( $reviews ? '/reviews/' : '/journal/' ) ); ?>"><?php echo esc_html( $reviews ? __( 'All Reviews', 'lunara-film' ) : __( 'Open the Journal', 'lunara-film' ) ); ?></a></div>
+		<div class="lunara-home-section-head"><div><h2 class="lunara-home-section-title"><?php echo esc_html( $heading ); ?></h2></div><a class="lunara-section-link" href="<?php echo esc_url( home_url( $reviews ? '/reviews/' : '/journal/' ) ); ?>"><?php echo esc_html( $reviews ? __( 'All Reviews', 'lunara-film' ) : __( 'Open the Journal', 'lunara-film' ) ); ?></a></div>
 		<div class="lunara-home-journal-carousel<?php echo $reviews ? ' lunara-home-reviews-carousel' : ''; ?> splide" aria-label="<?php echo esc_attr( $reviews ? __( 'Review stories', 'lunara-film' ) : __( 'Journal stories', 'lunara-film' ) ); ?>" <?php echo $reviews ? 'data-lunara-reviews-carousel' : 'data-lunara-journal-carousel'; ?> data-lunara-autoplay-enabled="<?php echo (int) $settings['autoplay']; ?>" data-lunara-carousel-interval="<?php echo function_exists( 'lunara_slider_interval' ) ? lunara_slider_interval() : (int) $settings['interval'] * 1000; ?>">
 			<div class="splide__track"><ul class="splide__list">
 			<?php foreach ( $slides as $slide ) :
