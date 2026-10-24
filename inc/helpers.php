@@ -119,10 +119,10 @@ function lunara_get_home_section_registry() {
             'aliases'      => array( 'latest', 'reviews' ),
         ),
         'pairing-desk' => array(
-            'label'        => __( 'Stills that Rhyme', 'lunara-film' ),
-            'toggle_label' => __( 'Show Stills that Rhyme', 'lunara-film' ),
+            'label'        => __( 'Pairing Desk (Pair It With)', 'lunara-film' ),
+            'toggle_label' => __( 'Show Pairing Desk', 'lunara-film' ),
             'setting'      => 'lunara_home_show_pairing_desk',
-            'description'  => __( 'The Debrief on Home: the reviewed film and its three pairings, posters by default, stills when all four have them.', 'lunara-film' ),
+            'description'  => __( 'Showcases the signature Pair It With module: the three films paired with the latest reviewed title.', 'lunara-film' ),
             'aliases'      => array( 'pairing', 'pair-it-with', 'pairings' ),
         ),
     );
