@@ -42,7 +42,8 @@ sanitization or a guarantee about previously generated articles.
    merge policy, without another routine merge approval. Confirm the exact
    repository/base/head and passing checks. A merge is not a deployment. Keep
    automatic deployment off.
-3. Record the merged commit and explicit release instruction. Inspect the
+3. Record the merged commit and Dalton's task confirmation; do not require a
+   second release approval. Inspect the
    existing deployment connection/destination instead of creating another one.
 4. Deploy runtime plugin changes before the Theme through the existing manual
    deployment path. Documentation/test-only alignment does not need a version

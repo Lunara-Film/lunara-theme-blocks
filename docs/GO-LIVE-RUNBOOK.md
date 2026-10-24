@@ -1,6 +1,7 @@
 > **Superseded on 2026-10-10.** The working agreement is now the one page in
-> `AGENTS.md`: branch, PR, passing CI, the integrating agent merges, then separately authorized
-> manual deployment and live verification. Reverts also require deployment.
+> `AGENTS.md`: branch, PR, passing CI, agent merge, then agent-triggered
+> manual deployment and live verification under Dalton's task confirmation.
+> Do not request that confirmation twice. Reverts also require deployment.
 > This runbook is kept for history and for the
 > canary script's usage notes; where it disagrees with `AGENTS.md`, `AGENTS.md`
 > wins.
