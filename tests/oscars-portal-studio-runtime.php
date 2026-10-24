@@ -281,7 +281,7 @@ lunara_test_assert( false === $validated['section_visibility']['linked-reviews']
 lunara_test_assert( true === $validated['section_visibility']['board'] && true === $validated['section_visibility']['navigator'], 'Board and navigator lanes must resolve visible by default.' );
 lunara_test_assert( array( 40, 360, 360, 200 ) === array( $validated['presentation']['section_gap'], $validated['presentation']['hero_min_height'], $validated['presentation']['card_min_height'], $validated['presentation']['winners_min_width'] ), 'Default geometry must be 40/360/360/200.' );
 lunara_test_assert( array( 'standard', 'balanced', 'standard' ) === array( $validated['presentation']['density'], $validated['presentation']['lead_prominence'], $validated['presentation']['board_rhythm'] ), 'Default rhythm must be standard/balanced/standard.' );
-lunara_test_assert( 'The Lunara Oscar Ledger' === $validated['identity']['kicker'] && 'Academy Awards history, treated like a living editorial system.' === $validated['identity']['title'], 'Default identity must reproduce the shipped portal literals byte-for-byte.' );
+lunara_test_assert( 'The Lunara Film Oscar Ledger' === $validated['identity']['kicker'] && 'Academy Awards history, treated like a living editorial system.' === $validated['identity']['title'], 'Default identity must reproduce the shipped portal literals byte-for-byte.' );
 
 // The identity defaults are byte-locked against the actual template source:
 // every spec's canonical setting and shipped literal must appear as the exact
@@ -338,7 +338,7 @@ $resolved = lunara_oscars_portal_studio_get_public_config( false );
 lunara_test_assert( false === $resolved['section_visibility']['doors'] && false === $resolved['section_visibility']['navigator'] && true === $resolved['section_visibility']['board'], 'Hiding the doors owner must hide the bound navigator while the board stays content-driven true.' );
 $lunara_test_theme_mods['lunara_oscars_portal_kicker'] = array( 'corrupt-mod' );
 $resolved = lunara_oscars_portal_studio_get_public_config( false );
-lunara_test_assert( 'The Lunara Oscar Ledger' === $resolved['identity']['kicker'], 'A non-scalar copy mod must fall back to the shipped literal without a type error.' );
+lunara_test_assert( 'The Lunara Film Oscar Ledger' === $resolved['identity']['kicker'], 'A non-scalar copy mod must fall back to the shipped literal without a type error.' );
 $lunara_test_theme_mods = array();
 
 // ---------------------------------------------------------------------------
@@ -432,7 +432,7 @@ lunara_test_assert( ! is_wp_error( $long_identity_valid ) && 140 === strlen( $lo
 $empty_identity = $defaults;
 $empty_identity['identity']['kicker'] = '   ';
 $empty_identity_valid = lunara_oscars_portal_studio_validate_config( $empty_identity );
-lunara_test_assert( ! is_wp_error( $empty_identity_valid ) && 'The Lunara Oscar Ledger' === $empty_identity_valid['identity']['kicker'], 'An explicitly empty identity field must fold to its shipped literal.' );
+lunara_test_assert( ! is_wp_error( $empty_identity_valid ) && 'The Lunara Film Oscar Ledger' === $empty_identity_valid['identity']['kicker'], 'An explicitly empty identity field must fold to its shipped literal.' );
 
 // The derived lanes are canonicalized from their owners, not trusted raw.
 $forced_lanes = $defaults;

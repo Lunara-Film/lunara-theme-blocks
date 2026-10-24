@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Lunara About
+ * Template Name: Lunara Film About
  * Template Post Type: page
  *
  * The desk's own dossier — composed from the house instruments so the

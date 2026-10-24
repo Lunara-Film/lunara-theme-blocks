@@ -35,7 +35,7 @@ utility_reset();
 $settings = lunara_debrief_method_settings();
 $roles    = lunara_debrief_method_roles();
 debrief_assert( 'A Lunara Film Signature' === $settings['hero']['kicker'] && '' === $settings['hero']['title'] && true === $settings['hero']['show_stats'], 'Unsaved hero keeps 3.2.89 defaults.' );
-debrief_assert( 0 === strpos( $settings['hero']['thesis'], 'Every review on Lunara ends the same way' ), 'Unsaved thesis keeps 3.2.89 copy.' );
+debrief_assert( 0 === strpos( $settings['hero']['thesis'], 'Every review on Lunara Film ends the same way' ), 'Unsaved thesis keeps the shipped copy.' );
 foreach ( $roles as $slug => $role ) {
 	foreach ( array( 'question', 'copy', 'not' ) as $part ) { debrief_assert( $role[ $part ] === $settings['moves'][ $slug . '_' . $part ], "Move default {$slug}.{$part} matches the canonical role copy." ); }
 }

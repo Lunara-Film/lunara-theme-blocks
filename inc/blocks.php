@@ -14,7 +14,7 @@ function lunara_register_block_category( $categories ) {
         $categories,
         array(
             'slug'  => 'lunara',
-            'title' => __( 'Lunara', 'lunara-film' ),
+            'title' => __( 'Lunara Film', 'lunara-film' ),
             'icon'  => 'format-gallery',
         )
     );
@@ -51,14 +51,14 @@ function lunara_register_dynamic_blocks() {
         ),
     );
 
-    register_block_type( 'lunara/home', array_merge( $common, array( 'title' => __( 'Lunara Home', 'lunara-film' ), 'render_callback' => 'lunara_render_home_block' ) ) );
+    register_block_type( 'lunara/home', array_merge( $common, array( 'title' => __( 'Lunara Film Home', 'lunara-film' ), 'render_callback' => 'lunara_render_home_block' ) ) );
 
     register_block_type(
         'lunara/reviews',
         array_merge(
             $common,
             array(
-                'title'           => __( 'Lunara Reviews Grid', 'lunara-film' ),
+                'title'           => __( 'Lunara Film Reviews Grid', 'lunara-film' ),
                 'attributes'      => array( 'count' => array( 'type' => 'number', 'default' => 6 ) ),
                 'render_callback' => 'lunara_render_reviews_block',
             )
@@ -70,7 +70,7 @@ function lunara_register_dynamic_blocks() {
         array_merge(
             $common,
             array(
-                'title'           => __( 'Lunara Posts Grid', 'lunara-film' ),
+                'title'           => __( 'Lunara Film Posts Grid', 'lunara-film' ),
                 'attributes'      => array(
                     'category' => array( 'type' => 'string', 'default' => '' ),
                     'count'    => array( 'type' => 'number', 'default' => 6 ),
@@ -85,7 +85,7 @@ function lunara_register_dynamic_blocks() {
         array_merge(
             $common,
             array(
-                'title'           => __( 'Lunara Carousel', 'lunara-film' ),
+                'title'           => __( 'Lunara Film Carousel', 'lunara-film' ),
                 'attributes'      => array(
                     'set'   => array( 'type' => 'string', 'default' => 'homepage' ),
                     'limit' => array( 'type' => 'number', 'default' => -1 ),
@@ -100,7 +100,7 @@ function lunara_register_dynamic_blocks() {
         array_merge(
             $common,
             array(
-                'title'           => __( 'Lunara Still', 'lunara-film' ),
+                'title'           => __( 'Lunara Film Still', 'lunara-film' ),
                 'attributes'      => array(
                     'url'     => array( 'type' => 'string', 'default' => '' ),
                     'alt'     => array( 'type' => 'string', 'default' => '' ),
@@ -114,15 +114,15 @@ function lunara_register_dynamic_blocks() {
         )
     );
 
-    register_block_type( 'lunara/debrief', array_merge( $common, array( 'title' => __( 'Lunara Debrief', 'lunara-film' ), 'render_callback' => 'lunara_render_debrief_block' ) ) );
-    register_block_type( 'lunara/pair-it-with', array_merge( $common, array( 'title' => __( 'Lunara Pair It With', 'lunara-film' ), 'render_callback' => 'lunara_render_pair_it_with_block' ) ) );
+    register_block_type( 'lunara/debrief', array_merge( $common, array( 'title' => __( 'Lunara Film Debrief', 'lunara-film' ), 'render_callback' => 'lunara_render_debrief_block' ) ) );
+    register_block_type( 'lunara/pair-it-with', array_merge( $common, array( 'title' => __( 'Lunara Film Pair It With', 'lunara-film' ), 'render_callback' => 'lunara_render_pair_it_with_block' ) ) );
 
     register_block_type(
         'lunara/where-to-watch',
         array_merge(
             $common,
             array(
-                'title'           => __( 'Lunara Where To Watch', 'lunara-film' ),
+                'title'           => __( 'Lunara Film Where To Watch', 'lunara-film' ),
                 'attributes'      => array(
                     'imdb'   => array( 'type' => 'string', 'default' => '' ),
                     'region' => array( 'type' => 'string', 'default' => 'US' ),

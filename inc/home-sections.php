@@ -69,7 +69,7 @@ if ( ! function_exists( 'lunara_render_homepage_latest_reviews' ) ) {
             $heading = __( 'Latest Reviews', 'lunara-film' );
         }
         if ( '' === $kicker ) {
-            $kicker = $has_current_release ? __( 'Current Release Spotlight', 'lunara-film' ) : __( 'Lunara Reviews', 'lunara-film' );
+            $kicker = $has_current_release ? __( 'Current Release Spotlight', 'lunara-film' ) : __( 'Lunara Film Reviews', 'lunara-film' );
         }
         if ( '' === $cta_label ) {
             $cta_label = __( 'All Reviews', 'lunara-film' );

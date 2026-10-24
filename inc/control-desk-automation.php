@@ -219,7 +219,7 @@ if ( ! function_exists( 'lunara_control_desk_render_automation_tab' ) ) {
         $last_run  = isset( $dispatch['last_run'] ) && is_array( $dispatch['last_run'] ) ? $dispatch['last_run'] : array();
         $workflow_descriptions = array(
             'morning_desk'       => __( 'Morning Desk sends one concise operational briefing instead of making you inspect several screens.', 'lunara-film' ),
-            'run_lunara'         => __( 'Run Lunara queues the existing asynchronous Dispatch collector from your phone or watch.', 'lunara-film' ),
+            'run_lunara'         => __( 'Run Lunara Film queues the existing asynchronous Dispatch collector from your phone or watch.', 'lunara-film' ),
             'capture_idea'       => __( 'Capture Idea sends a dictated or typed thought into the private Automation Inbox.', 'lunara-film' ),
             'source_radar'       => __( 'Source Radar saves the exact story URL as a private research candidate, never as an automatic post.', 'lunara-film' ),
             'screening_followup' => __( 'Screening Follow-Up preserves your first reaction, craft note, and possible Debrief pairings.', 'lunara-film' ),
@@ -237,7 +237,7 @@ if ( ! function_exists( 'lunara_control_desk_render_automation_tab' ) ) {
                 <div>
                     <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Journal Automation', 'lunara-film' ); ?></p>
                     <h2><?php esc_html_e( 'IFTTT Pro+ Operator', 'lunara-film' ); ?></h2>
-                    <p class="lunara-control-desk-subtle"><?php esc_html_e( 'A secure transport layer around Lunara: capture privately, run the tested Dispatch queue, surface real problems, and keep every publishing decision in WordPress.', 'lunara-film' ); ?></p>
+                    <p class="lunara-control-desk-subtle"><?php esc_html_e( 'A secure transport layer around Lunara Film: capture privately, run the tested Dispatch queue, surface real problems, and keep every publishing decision in WordPress.', 'lunara-film' ); ?></p>
                 </div>
                 <div class="lunara-control-desk-status-pill">
                     <strong><?php echo esc_html( ! empty( $snapshot['enabled'] ) ? __( 'Enabled', 'lunara-film' ) : __( 'Paused', 'lunara-film' ) ); ?></strong>
@@ -435,7 +435,7 @@ if ( ! function_exists( 'lunara_control_desk_render_automation_tab' ) ) {
 
         <section class="lunara-control-desk-panel lunara-control-desk-automation-guardrail">
             <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Permanent Boundary', 'lunara-film' ); ?></p>
-            <h3><?php esc_html_e( 'IFTTT transports intent; Lunara decides what is allowed.', 'lunara-film' ); ?></h3>
+            <h3><?php esc_html_e( 'IFTTT transports intent; Lunara Film decides what is allowed.', 'lunara-film' ); ?></h3>
             <p><?php esc_html_e( 'This bridge cannot publish, schedule, trash, delete, change a theme or plugin, alter cache/CDN settings, or replace an exact source image. Captures remain private until you deliberately act on them.', 'lunara-film' ); ?></p>
         </section>
         <?php

@@ -12,7 +12,7 @@
 			"palette": [
 				{ "slug": "ground", "name": "Ground — Deep Navy", "color": "#0a1520" },
 				{ "slug": "surface", "name": "Surface — Card Navy", "color": "#0f1d2e" },
-				{ "slug": "gold", "name": "Lunara Gold", "color": "#c9a961" },
+				{ "slug": "gold", "name": "Lunara Film Gold", "color": "#c9a961" },
 				{ "slug": "gold-light", "name": "Gold — Light", "color": "#e0c481" },
 				{ "slug": "gold-deep", "name": "Gold — Deep", "color": "#997a44" },
 				{ "slug": "text", "name": "Text", "color": "#fafbfc" },

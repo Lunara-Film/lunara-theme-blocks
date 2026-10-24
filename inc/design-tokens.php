@@ -23,7 +23,7 @@ if ( ! function_exists( 'lunara_design_token_color_specs' ) ) {
 	 */
 	function lunara_design_token_color_specs() {
 		return array(
-			'gold'         => array( 'var' => '--lunara-gold', 'label' => __( 'Lunara Gold', 'lunara-film' ), 'default' => '#c9a961' ),
+			'gold'         => array( 'var' => '--lunara-gold', 'label' => __( 'Lunara Film Gold', 'lunara-film' ), 'default' => '#c9a961' ),
 			'gold_light'   => array( 'var' => '--lunara-gold-light', 'label' => __( 'Gold — Light', 'lunara-film' ), 'default' => '#e0c481' ),
 			'bg_primary'   => array( 'var' => '--lunara-bg-primary', 'label' => __( 'Ground — Deep Navy', 'lunara-film' ), 'default' => '#0a1520' ),
 			'bg_secondary' => array( 'var' => '--lunara-bg-secondary', 'label' => __( 'Surface — Card Navy', 'lunara-film' ), 'default' => '#0f1d2e' ),

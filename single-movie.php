@@ -62,7 +62,7 @@ while ( have_posts() ) :
                         </p>
                     <?php endif; ?>
                     <?php if ( $review_id ) : ?>
-                        <a class="lunara-entity-review-cta" href="<?php echo esc_url( get_permalink( $review_id ) ); ?>"><?php esc_html_e( 'Read the Lunara Review', 'lunara-film' ); ?> <span aria-hidden="true">&rarr;</span></a>
+                        <a class="lunara-entity-review-cta" href="<?php echo esc_url( get_permalink( $review_id ) ); ?>"><?php esc_html_e( 'Read the Lunara Film Review', 'lunara-film' ); ?> <span aria-hidden="true">&rarr;</span></a>
                     <?php endif; ?>
                 </div>
             </div>

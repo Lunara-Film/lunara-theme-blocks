@@ -1125,7 +1125,7 @@ function lunara_get_home_pulse_editorial_cards( $snapshot = array() ) {
             'title'      => ! empty( $best_picture['film'] ) ? sprintf( '%s is now the front door into the latest ceremony', $best_picture['film'] ) : 'The latest Best Picture winner is now live',
             'copy'       => ! empty( $most_wins['film'] ) && ! empty( $most_wins['wins'] )
                 ? sprintf( '%1$s now sits inside the latest Academy Awards hub alongside %2$s, which led the night with %3$s win%4$s.', $ceremony_label, $most_wins['film'], number_format_i18n( intval( $most_wins['wins'] ) ), intval( $most_wins['wins'] ) === 1 ? '' : 's' )
-                : 'The newest winners, ceremony rollup, and film pages are already stitched into the Lunara Oscar Ledger.',
+                : 'The newest winners, ceremony rollup, and film pages are already stitched into the Lunara Film Oscar Ledger.',
             'link_label' => 'Open Ceremony Hub',
             'url'        => $ceremony_url,
         ),
@@ -1136,7 +1136,7 @@ function lunara_get_home_pulse_editorial_cards( $snapshot = array() ) {
                 : 'Every category in the Ledger leads somewhere real',
             'copy'       => ! empty( $casting_spotlight['film'] )
                 ? sprintf( '%s gives you a live example of how the Ledger moves from a category win into a film page, people pages, and broader ceremony context.', $casting_spotlight['film'] )
-                : 'Browse any category to see the full lineage of winners and nominees, then follow each name into the wider Lunara record.',
+                : 'Browse any category to see the full lineage of winners and nominees, then follow each name into the wider Lunara Film record.',
             'link_label' => ! empty( $casting_spotlight['category_url'] ) ? 'See the Category' : 'Explore the Ledger',
             'url'        => ! empty( $casting_spotlight['category_url'] ) ? $casting_spotlight['category_url'] : $database_url,
         ),
@@ -1147,7 +1147,7 @@ function lunara_get_home_pulse_editorial_cards( $snapshot = array() ) {
                 : 'The craft categories reveal the ceremony from a different angle',
             'copy'       => ! empty( $cinema_spotlight['film'] )
                 ? sprintf( 'Follow %s through the Ledger to see how the craft side of this ceremony connects to the broader competition.', $cinema_spotlight['film'] )
-                : 'Cinematography, editing, sound, and design winners sit alongside every other category inside the same Lunara record.',
+                : 'Cinematography, editing, sound, and design winners sit alongside every other category inside the same Lunara Film record.',
             'link_label' => ! empty( $cinema_spotlight['url'] ) ? 'Open the Winner Page' : 'Browse Categories',
             'url'        => ! empty( $cinema_spotlight['url'] ) ? $cinema_spotlight['url'] : $database_url,
         ),

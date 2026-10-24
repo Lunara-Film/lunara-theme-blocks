@@ -1,8 +1,29 @@
 # Lunara Film: public presentation contract
 
-Lunara is a film publication and a living Oscar ledger. Its identity comes from
-specific criticism, real film imagery, the Lunara wordmark, Tiempos, midnight navy
-and restrained gold. This contract applies to the existing visitor features.
+Lunara Film is a film publication and a living Oscar ledger. Its identity comes
+from specific criticism, real film imagery, the Lunara Film wordmark, Tiempos,
+midnight navy and restrained gold. This contract applies to the existing visitor
+features.
+
+## Identity
+
+- The name is always "Lunara Film" ("LUNARA FILM" in capitals), never "Lunara"
+  alone, in any copy a person can see: public pages, admin screens, Site
+  Studio, the Control Desk, block editor names and descriptions, aria-labels,
+  alt text, titles, meta, JSON-LD, feeds, emails, notices and errors. Dalton,
+  2026-10-23: it ends the confusion about the name and brands us as FILM.
+  Product names follow it as written: Lunara Film Reviews, the Lunara Film
+  Journal, The Lunara Film Oscar Ledger, The Lunara Film Debrief, Lunara Film
+  Site Studio, the Lunara Film Control Desk. Never "Lunara Film Film".
+- Identifiers stay as they are: function, class, block, option and theme-mod
+  names, CSS classes and properties, slugs, URLs, the `lunara-film` text domain
+  and font-family names. Code does not rewrite saved settings or stored
+  content; a stored legacy value is matched at the read boundary and never
+  printed, and anything else stored is changed in Site Studio or the editor.
+- CI enforces the rule: `tests/brand-name-runtime.php` reads every PHP string
+  and template text, every JavaScript string, CSS strings and `theme.json`,
+  and fails on a bare "Lunara". Its allowlist is short, and each entry says
+  why it is code, not copy.
 
 ## Editorial controls
 
@@ -10,7 +31,7 @@ The Home Oscar Forecast uses a centered previous/next and playback control row.
 Do not render one pagination marker per forecast record; all records remain
 reachable through the arrows, touch scrolling and keyboard navigation.
 
-Lunara Site Studio is a first-class daily workspace. Public presentation changes
+Lunara Film Site Studio is a first-class daily workspace. Public presentation changes
 must preserve its existing controls, saved settings, preview, Apply and history.
 Keep relevant content-editor destinations accessible from Studio; do not create
 competing settings stores or silently retire controls during visual refinements.
@@ -107,7 +128,7 @@ and links to the owning Review editor. This does not alter pairing content.
   never dropped and never an empty frame. The set is never cut to one pair.
   Without a review that carries all three, the legacy Pair It With desk
   renders.
-- A film's poster comes from what the site already holds first (a Lunara
+- A film's poster comes from what the site already holds first (a Lunara Film
   review of the film, the movie entity), then the Oscars Ledger, then TMDB. A
   failed lookup is never remembered as "no poster".
 - The Running Order follows: a gold letterspaced kicker, the GT Sectra line
@@ -164,9 +185,10 @@ and links to the owning Review editor. This does not alter pairing content.
   Ledger headings inherit those roles; do not introduce another Tiempos alias
   or force reading copy to display weight. Preserve the Ledger navigator.
 - Home and archive Debrief columns use bounded portrait artwork, lightly ruled
-  argument columns and an attached source-link row. When a published Lunara
-  review resolves for the paired film, include `Read Lunara Review` alongside
-  IMDb in that row; do not substitute a dossier or an unrelated title match.
+  argument columns and an attached source-link row. When a published
+  Lunara Film review resolves for the paired film, include
+  `Read Lunara Film Review` alongside IMDb in that row; do not substitute a
+  dossier or an unrelated title match.
   Preserve all three full
   role names and complete arguments. Forecast image, identity and argument
   should form one clear unit without a second painted card.
@@ -206,7 +228,7 @@ and links to the owning Review editor. This does not alter pairing content.
   badges and pagination. Update each owning declaration and late PHP emitter;
   do not append a global radius override. Saved legacy surface-radius and media
   rounded attributes cannot restore curves. Their obsolete editor controls retire
-  without deleting stored content. The Lunara brand seal, its crescent mark and
+  without deleting stored content. The Lunara Film brand seal, its crescent mark and
   relationship-diagram nodes/arcs retain their meaningful circular geometry.
   The third-party carousel loading ring remains a functional progress indicator.
 - Verify rendered corners alongside existing browser layout and keyboard tests.

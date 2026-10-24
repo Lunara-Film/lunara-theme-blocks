@@ -38,7 +38,7 @@ foreach ( array( 'matched', 'unmatched' ) as $scenario ) {
             debrief_heading_assert( 1 === $xpath->query( './/a[contains(@class,"lunara-pair-card-chip--imdb")]', $footer )->length, $surface . ': IMDb remains beside the review destination.' ); ++$checks;
             if ( $reviews->length ) {
                 $link = $reviews->item( 0 );
-                debrief_heading_assert( 'Read Lunara Review' === $link->textContent && 'https://example.com/reviews/paired-film/' === $link->getAttribute( 'href' ), $surface . ': clear label and correct review URL.' ); ++$checks;
+                debrief_heading_assert( 'Read Lunara Film Review' === $link->textContent && 'https://example.com/reviews/paired-film/' === $link->getAttribute( 'href' ), $surface . ': clear label and correct review URL.' ); ++$checks;
                 debrief_heading_assert( ! $link->hasAttribute( 'target' ) && ! $link->hasAttribute( 'rel' ), $surface . ': internal review uses ordinary same-tab navigation.' ); ++$checks;
             }
         }

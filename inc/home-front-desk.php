@@ -346,7 +346,7 @@ function lunara_render_home_front_door() {
 				<?php endif; ?>
 			</div>
 
-			<nav class="lunara-home-masthead-routes" aria-label="<?php esc_attr_e( 'Lunara section doors', 'lunara-film' ); ?>">
+			<nav class="lunara-home-masthead-routes" aria-label="<?php esc_attr_e( 'Lunara Film section doors', 'lunara-film' ); ?>">
 				<?php foreach ( $routes as $route ) : ?>
 					<a class="lunara-home-masthead-route" href="<?php echo esc_url( $route['url'] ); ?>">
 						<span class="lunara-home-masthead-route-label"><?php echo esc_html( $route['label'] ); ?></span>

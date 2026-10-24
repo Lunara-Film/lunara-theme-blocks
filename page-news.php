@@ -32,7 +32,7 @@ $news_query = new WP_Query(
 );
 
 $news_page      = get_queried_object();
-$archive_kicker = __( 'Lunara Journal', 'lunara-film' );
+$archive_kicker = __( 'Lunara Film Journal', 'lunara-film' );
 $archive_title  = $news_page instanceof WP_Post ? get_the_title( $news_page ) : __( 'Journal', 'lunara-film' );
 
 if ( 'News' === trim( (string) $archive_title ) ) {
@@ -137,7 +137,7 @@ echo lunara_render_news_archive_shell(
                 'kicker' => lunara_theme_mod_text( 'lunara_journal_standby_home_kicker', __( 'Front Door', 'lunara-film' ) ),
                 'title'  => lunara_theme_mod_text( 'lunara_journal_standby_home_title', __( 'Return To The Live Homepage', 'lunara-film' ) ),
                 'copy'   => '',
-                'button' => lunara_theme_mod_text( 'lunara_journal_standby_home_button', __( 'Go To Lunara', 'lunara-film' ) ),
+                'button' => lunara_theme_mod_text( 'lunara_journal_standby_home_button', __( 'Go to Lunara Film', 'lunara-film' ) ),
                 'url'    => lunara_theme_mod_url( 'lunara_journal_standby_home_url', home_url( '/' ) ),
             ),
         ),

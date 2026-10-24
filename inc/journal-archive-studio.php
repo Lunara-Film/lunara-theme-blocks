@@ -35,7 +35,7 @@ function lunara_journal_archive_studio_defaults() {
 		'schema_version'  => 1,
 		'selection_version' => 0,
 		'kicker'         => '',
-		'title'          => __( 'Lunara Journal', 'lunara-film' ),
+		'title'          => __( 'Lunara Film Journal', 'lunara-film' ),
 		'deck'           => '',
 		'supporting_copy' => '',
 		'lead_mode'      => 'shared',
@@ -132,7 +132,7 @@ function lunara_journal_archive_studio_defaults() {
 				'order'            => 3,
 				'label'            => __( 'Review Desk', 'lunara-film' ),
 				'title'            => __( 'Move into the criticism', 'lunara-film' ),
-				'copy'             => __( 'Follow the conversation from quick dispatches into full Lunara reviews and context.', 'lunara-film' ),
+				'copy'             => __( 'Follow the conversation from quick dispatches into full Lunara Film reviews and context.', 'lunara-film' ),
 				'destination'      => 'reviews',
 				'url'              => '',
 				'image_id'         => 0,
@@ -487,7 +487,7 @@ function lunara_journal_archive_studio_get_public_config( $allow_preview = true 
 	// legacy sentinel pair. Once the existing schema marker is present, every
 	// phrase entered in the focused Studio round-trips verbatim.
 	$config['kicker'] = null === $legacy_kicker || false === $legacy_kicker || $legacy_sentinel ? $defaults['kicker'] : (string) $legacy_kicker;
-	$config['title']  = null === $legacy_title || false === $legacy_title || $legacy_sentinel ? __( 'Lunara Journal', 'lunara-film' ) : (string) $legacy_title;
+	$config['title']  = null === $legacy_title || false === $legacy_title || $legacy_sentinel ? __( 'Lunara Film Journal', 'lunara-film' ) : (string) $legacy_title;
 	$config['deck']   = (string) lunara_journal_archive_studio_scalar_or( get_theme_mod( 'lunara_journal_archive_copy', '' ), '' );
 
 	$raw_order = (string) lunara_journal_archive_studio_scalar_or( get_theme_mod( 'lunara_journal_archive_section_order', 'hero,filters,grid,pagination' ), 'hero,filters,grid,pagination' );

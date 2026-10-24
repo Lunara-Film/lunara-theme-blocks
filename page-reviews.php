@@ -62,8 +62,8 @@ $archive_kicker = is_array( $reviews_studio_config ) && isset( $reviews_studio_c
 $archive_title = is_array( $reviews_studio_config ) && isset( $reviews_studio_config['title'] ) && '' !== trim( (string) $reviews_studio_config['title'] )
     ? (string) $reviews_studio_config['title']
     : ( function_exists( 'lunara_theme_mod_text' )
-        ? lunara_theme_mod_text( 'lunara_reviews_archive_title', 'Lunara Reviews' )
-        : 'Lunara Reviews' );
+        ? lunara_theme_mod_text( 'lunara_reviews_archive_title', 'Lunara Film Reviews' )
+        : 'Lunara Film Reviews' );
 $archive_copy = is_array( $reviews_studio_config ) && isset( $reviews_studio_config['deck'] ) && '' !== trim( (string) $reviews_studio_config['deck'] )
     ? (string) $reviews_studio_config['deck']
     : ( function_exists( 'lunara_theme_mod_text' )

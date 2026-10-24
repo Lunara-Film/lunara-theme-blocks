@@ -104,7 +104,7 @@
 		return el(
 			'div',
 			{ className: 'lunara-studio-site-callout', key: 'site-studio' },
-			el( 'strong', {}, __( 'Editing the Lunara homepage?', 'lunara-film' ) ),
+			el( 'strong', {}, __( 'Editing the Lunara Film homepage?', 'lunara-film' ) ),
 			el( 'p', {}, __( 'Use the focused Site Studio for section structure and Lunara Film Debrief copy without loading the full public page in this canvas.', 'lunara-film' ) ),
 			el(
 				'div',
@@ -118,10 +118,10 @@
 
 	function render() {
 		var children = [
-			el( PluginSidebarMoreMenuItem, { target: 'lunara-studio', icon: 'video-alt2', key: 'menu' }, __( 'Lunara Studio', 'lunara-film' ) )
+			el( PluginSidebarMoreMenuItem, { target: 'lunara-studio', icon: 'video-alt2', key: 'menu' }, __( 'Lunara Film Studio', 'lunara-film' ) )
 		];
 		var panelChildren = [
-			el( 'p', { key: 'intro' }, __( 'Insert Lunara’s flagship blocks and homepage sections, then fine-tune every instance in the block settings.', 'lunara-film' ) )
+			el( 'p', { key: 'intro' }, __( 'Insert Lunara Film’s flagship blocks and homepage sections, then fine-tune every instance in the block settings.', 'lunara-film' ) )
 		];
 		var studioCallout = frontPageStudioCallout();
 		if ( studioCallout ) {
@@ -140,12 +140,12 @@
 				panelChildren.push( blockCard( item ) );
 			} );
 		} );
-		panelChildren.push( el( 'p', { key: 'hint', style: { marginTop: '18px', opacity: 0.72 } }, __( 'For complete page starters, browse the Lunara category in the Patterns tab.', 'lunara-film' ) ) );
+		panelChildren.push( el( 'p', { key: 'hint', style: { marginTop: '18px', opacity: 0.72 } }, __( 'For complete page starters, browse the Lunara Film category in the Patterns tab.', 'lunara-film' ) ) );
 
 		children.push(
 			el(
 				PluginSidebar,
-				{ name: 'lunara-studio', title: __( 'Lunara Studio', 'lunara-film' ), icon: 'video-alt2' },
+				{ name: 'lunara-studio', title: __( 'Lunara Film Studio', 'lunara-film' ), icon: 'video-alt2' },
 				el( Panel, {}, panelChildren )
 			)
 		);

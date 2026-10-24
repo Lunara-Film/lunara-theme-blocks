@@ -474,7 +474,7 @@ if ( ! function_exists( 'lunara_register_media_showcase_block' ) ) {
 				'api_version'     => 3,
 				'category'        => 'lunara',
 				'editor_script'   => 'lunara-curated-media',
-				'title'           => __( 'Lunara Media Showcase — Gallery / Slider / Carousel', 'lunara-film' ),
+				'title'           => __( 'Lunara Film Media Showcase — Gallery / Slider / Carousel', 'lunara-film' ),
 				'icon'            => 'format-gallery',
 				'description'     => __( 'A fully customizable image showcase: hand-pick and reorder images from the media library (slot 1 is featured), then present the same set as a responsive gallery, a horizontal slider, or an autoplay carousel. Aspect ratio, columns, gap, captions, links, and section header are all per-instance.', 'lunara-film' ),
 				'attributes'      => lunara_media_showcase_attribute_schema(),

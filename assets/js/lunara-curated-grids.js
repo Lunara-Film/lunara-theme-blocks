@@ -351,12 +351,12 @@
 
 	registerCuratedGrid( {
 		name: 'lunara/reviews-grid',
-		title: __( 'Lunara Reviews Grid — Curated', 'lunara-film' ),
+		title: __( 'Lunara Film Reviews Grid — Curated', 'lunara-film' ),
 		icon: 'star-filled',
 		description: __( 'Hand-pick and reorder exactly which reviews appear (slot 1 is the featured slot), or run on the newest reviews. Layout, columns, score/excerpt display, and section header are all per-instance.', 'lunara-film' ),
 		searchSubtypes: [ 'review' ],
 		slotOneLabel: __( 'Slot 1 is the featured slot in the lead layout. Reorder freely — the grid follows this list.', 'lunara-film' ),
-		cardKickerHelp: __( 'Small label above each card title. Default: "Lunara Review".', 'lunara-film' ),
+		cardKickerHelp: __( 'Small label above each card title. Default: "Lunara Film Review".', 'lunara-film' ),
 		layoutOptions: [
 			{ label: __( 'Uniform grid', 'lunara-film' ), value: 'grid' },
 			{ label: __( 'Featured lead + grid', 'lunara-film' ), value: 'lead' }
@@ -382,7 +382,7 @@
 
 	registerCuratedGrid( {
 		name: 'lunara/journal-grid',
-		title: __( 'Lunara Journal Grid — Curated', 'lunara-film' ),
+		title: __( 'Lunara Film Journal Grid — Curated', 'lunara-film' ),
 		icon: 'editor-ul',
 		description: __( 'Hand-pick and reorder exactly which journal entries appear (slot 1 is the lead card), or run on the newest entries. Lead/uniform layout, columns, type/date/excerpt display, and section header are all per-instance.', 'lunara-film' ),
 		searchSubtypes: [ 'journal', 'post' ],

@@ -67,7 +67,7 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
     function lunara_add_debrief_meta_box() {
         add_meta_box(
             'lunara_debrief_meta',
-            'Lunara Debrief',
+            'Lunara Film Debrief',
             'lunara_debrief_meta_callback',
             'review',
             'normal',
@@ -145,7 +145,7 @@ if ( ! defined( 'LUNARA_CORE_VERSION' ) ) {
         <div class="lunara-meta-field">
             <label for="lunara_imdb_title_id">IMDb Title ID (for this review)</label>
             <input type="text" id="lunara_imdb_title_id" name="lunara_imdb_title_id" value="<?php echo esc_attr( $imdb_review_id ); ?>" placeholder="tt1234567">
-            <p class="description">Connects this review to the Oscars database film page (shows a "Lunara Review" module on /oscars/title/tt…/).</p>
+            <p class="description">Connects this review to the Oscars database film page (shows a "Lunara Film Review" module on /oscars/title/tt…/).</p>
         </div>
 
         <div class="lunara-meta-field">
@@ -649,7 +649,7 @@ if ( ! function_exists( 'lunara_pair_review_link' ) ) {
         if ( '' === $href ) {
             return '';
         }
-        return '<a class="lunara-pair-card-chip lunara-pair-card-chip--review" href="' . esc_url( $href ) . '">' . esc_html__( 'Read Lunara Review', 'lunara-film' ) . '</a>';
+        return '<a class="lunara-pair-card-chip lunara-pair-card-chip--review" href="' . esc_url( $href ) . '">' . esc_html__( 'Read Lunara Film Review', 'lunara-film' ) . '</a>';
     }
 }
 
@@ -1396,7 +1396,7 @@ if ( ! function_exists( 'lunara_render_pair_it_with_admin_preview' ) ) {
                                     <span class="lunara-pair-preview-chip is-muted"><?php esc_html_e( 'No Oscar Ledger data', 'lunara-film' ); ?></span>
                                 <?php endif; ?>
                                 <?php if ( 'review' === $preview['title_href_type'] ) : ?>
-                                    <span class="lunara-pair-preview-chip"><?php esc_html_e( 'Links to Lunara review', 'lunara-film' ); ?></span>
+                                    <span class="lunara-pair-preview-chip"><?php esc_html_e( 'Links to Lunara Film review', 'lunara-film' ); ?></span>
                                 <?php elseif ( 'oscar' === $preview['title_href_type'] ) : ?>
                                     <span class="lunara-pair-preview-chip"><?php esc_html_e( 'Links to Oscar page', 'lunara-film' ); ?></span>
                                 <?php elseif ( 'imdb' === $preview['title_href_type'] ) : ?>
@@ -1970,7 +1970,7 @@ function lunara_debrief_shortcode( $atts ) {
     ob_start();
     ?>
     <section class="lunara-debrief-block">
-        <h2 class="lunara-debrief-heading">Lunara Debrief</h2>
+        <h2 class="lunara-debrief-heading">Lunara Film Debrief</h2>
         <?php $kicker = trim( (string) get_theme_mod( 'lunara_debrief_kicker_text', 'A LUNARA FILM SIGNATURE' ) ); ?>
         <?php if ( $kicker !== '' ) : ?>
             <div class="lunara-debrief-kicker"><?php echo esc_html( $kicker ); ?></div>

@@ -82,8 +82,8 @@ add_filter( 'attachment_fields_to_save', 'lunara_slide_link_save_field', 10, 2 )
  */
 function lunara_register_carousel_admin_page() {
     add_theme_page(
-        'Lunara Carousel',
-        'Lunara Carousel',
+        'Lunara Film Carousel',
+        'Lunara Film Carousel',
         'manage_options',
         'lunara-carousel-manager',
         'lunara_render_carousel_manager_page'
@@ -158,7 +158,7 @@ function lunara_render_carousel_manager_page() {
     }
 
     echo '<div class="wrap">';
-    echo '<h1>Lunara Carousel</h1>';
+    echo '<h1>Lunara Film Carousel</h1>';
     echo '<p><strong>How to update the carousel:</strong> Upload (or select) images in <em>Media → Library</em>, then assign them to a <em>Slide Set</em>. Use this page to drag & drop reorder slides. To add a link per slide, edit the media item and fill in <em>Carousel Link URL</em>.</p>';
 
     echo '<form method="get" action="">';

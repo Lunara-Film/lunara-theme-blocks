@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Lunara Hub
+ * Template Name: Lunara Film Hub
  * Description: Full-width canvas for composing pages with Lunara blocks
  * (cinematic-hero, journal-lane, oscar-picks, oscar-facts) and any other
  * Gutenberg core blocks. Same architecture as the homepage front-page.php

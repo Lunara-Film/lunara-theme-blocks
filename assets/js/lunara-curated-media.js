@@ -203,7 +203,7 @@
 
 	blocks.registerBlockType( 'lunara/media-showcase', {
 		apiVersion: 3,
-		title: __( 'Lunara Media Showcase — Gallery / Slider / Carousel', 'lunara-film' ),
+		title: __( 'Lunara Film Media Showcase — Gallery / Slider / Carousel', 'lunara-film' ),
 		icon: 'format-gallery',
 		category: 'lunara',
 		description: __( 'Hand-pick and reorder images from the media library, then present them as a gallery, slider, or carousel. Every presentation dial is per-instance.', 'lunara-film' ),
@@ -279,7 +279,7 @@
 							checked: !! attributes.autoplay,
 							onChange: set( 'autoplay' )
 						} ),
-						'carousel' === display && el( 'p', {}, __( 'Reading time is shared across the site. Change it in Lunara Site Studio → Global Design → Slider reading time.', 'lunara-film' ) ),
+						'carousel' === display && el( 'p', {}, __( 'Reading time is shared across the site. Change it in Lunara Film Site Studio → Global Design → Slider reading time.', 'lunara-film' ) ),
 						'slider' === display && el( ToggleControl, {
 							label: __( 'Show arrows', 'lunara-film' ),
 							checked: !! attributes.showArrows,

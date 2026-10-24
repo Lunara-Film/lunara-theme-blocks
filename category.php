@@ -20,7 +20,7 @@ if ( $term instanceof WP_Term ) {
     $source_label = $term->name;
 
     if ( lunara_is_editorial_category_term( $term ) ) {
-        $archive_kicker = __( 'Lunara Journal', 'lunara-film' );
+        $archive_kicker = __( 'Lunara Film Journal', 'lunara-film' );
         $run_title      = sprintf(
             /* translators: %s: Category name. */
             __( 'More %s Signal', 'lunara-film' ),

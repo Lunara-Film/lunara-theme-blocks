@@ -251,14 +251,14 @@ if ( ! function_exists( 'lunara_render_curated_reviews_grid' ) ) {
 		$mode          = isset( $attrs['mode'] ) && 'curated' === $attrs['mode'] ? 'curated' : 'latest';
 
 		if ( '' === $card_kicker ) {
-			$card_kicker = __( 'Lunara Review', 'lunara-film' );
+			$card_kicker = __( 'Lunara Film Review', 'lunara-film' );
 		}
 
 		$head = lunara_curated_grid_section_head(
 			$attrs,
 			array(
 				'heading'  => __( 'Reviews', 'lunara-film' ),
-				'kicker'   => __( 'Lunara Reviews', 'lunara-film' ),
+				'kicker'   => __( 'Lunara Film Reviews', 'lunara-film' ),
 				'ctaLabel' => __( 'All Reviews', 'lunara-film' ),
 				'ctaUrl'   => home_url( '/reviews/' ),
 			)
@@ -386,7 +386,7 @@ if ( ! function_exists( 'lunara_render_curated_journal_grid' ) ) {
 		$head = lunara_curated_grid_section_head(
 			$attrs,
 			array(
-				'heading'  => __( 'Fresh movement from the Lunara Journal', 'lunara-film' ),
+				'heading'  => __( 'Fresh movement from the Lunara Film Journal', 'lunara-film' ),
 				'kicker'   => __( 'Journal', 'lunara-film' ),
 				'ctaLabel' => __( 'Open the Journal', 'lunara-film' ),
 				'ctaUrl'   => function_exists( 'lunara_home_dispatch_archive_url' ) ? lunara_home_dispatch_archive_url() : home_url( '/journal/' ),
@@ -397,7 +397,7 @@ if ( ! function_exists( 'lunara_render_curated_journal_grid' ) ) {
 		?>
 		<section class="lunara-home-section lunara-curated-grid-section lunara-dispatches-section lunara-journal-grid-block" data-grid-mode="<?php echo esc_attr( $mode ); ?>" aria-label="<?php esc_attr_e( 'Journal', 'lunara-film' ); ?>">
 			<?php echo $head; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			<div class="lunara-journal-home-grid lunara-curated-grid is-layout-<?php echo esc_attr( $layout ); ?>" style="--lunara-cgrid-cols: <?php echo esc_attr( (string) $columns ); ?>;" aria-label="<?php esc_attr_e( 'Lunara Journal stories', 'lunara-film' ); ?>">
+			<div class="lunara-journal-home-grid lunara-curated-grid is-layout-<?php echo esc_attr( $layout ); ?>" style="--lunara-cgrid-cols: <?php echo esc_attr( (string) $columns ); ?>;" aria-label="<?php esc_attr_e( 'Lunara Film Journal stories', 'lunara-film' ); ?>">
 				<?php foreach ( $posts as $index => $journal_post ) :
 					$pid        = (int) $journal_post->ID;
 					$is_lead    = ( 'lead' === $layout && 0 === $index );
@@ -497,7 +497,7 @@ if ( ! function_exists( 'lunara_register_curated_grid_blocks' ) ) {
 			array_merge(
 				$common,
 				array(
-					'title'           => __( 'Lunara Reviews Grid — Curated', 'lunara-film' ),
+					'title'           => __( 'Lunara Film Reviews Grid — Curated', 'lunara-film' ),
 					'icon'            => 'star-filled',
 					'description'     => __( 'A fully customizable reviews grid: hand-pick and reorder exactly which reviews appear (slot 1 is the featured slot), or run on the newest reviews with optional auto-fill. Layout, columns, score/excerpt display, and section header are all per-instance.', 'lunara-film' ),
 					'attributes'      => lunara_curated_grid_attribute_schema(
@@ -519,7 +519,7 @@ if ( ! function_exists( 'lunara_register_curated_grid_blocks' ) ) {
 			array_merge(
 				$common,
 				array(
-					'title'           => __( 'Lunara Journal Grid — Curated', 'lunara-film' ),
+					'title'           => __( 'Lunara Film Journal Grid — Curated', 'lunara-film' ),
 					'icon'            => 'editor-ul',
 					'description'     => __( 'A fully customizable journal grid: hand-pick and reorder exactly which journal entries appear (slot 1 is the lead), or run on the newest entries with optional auto-fill. Lead/uniform layout, columns, type/date/excerpt display, and section header are all per-instance.', 'lunara-film' ),
 					'attributes'      => lunara_curated_grid_attribute_schema(

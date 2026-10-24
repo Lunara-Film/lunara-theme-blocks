@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function lunara_register_control_desk_page() {
     add_menu_page(
-        __( 'Lunara Control Desk', 'lunara-film' ),
-        __( 'Lunara', 'lunara-film' ),
+        __( 'Lunara Film Control Desk', 'lunara-film' ),
+        __( 'Lunara Film', 'lunara-film' ),
         'edit_posts',
         'lunara-control-desk',
         'lunara_render_control_desk_page',
@@ -21,8 +21,8 @@ function lunara_register_control_desk_page() {
     );
 
     add_theme_page(
-        __( 'Lunara Control Desk', 'lunara-film' ),
-        __( 'Lunara Control Desk', 'lunara-film' ),
+        __( 'Lunara Film Control Desk', 'lunara-film' ),
+        __( 'Lunara Film Control Desk', 'lunara-film' ),
         'edit_posts',
         'lunara-control-desk',
         'lunara_render_control_desk_page'
@@ -759,7 +759,7 @@ function lunara_control_desk_homepage_preset_specs() {
         ),
         'criticism-showcase' => array(
             'label'  => __( 'Criticism Showcase', 'lunara-film' ),
-            'copy'   => __( 'Gives the review lane extra room and weight when the front page should sell Lunara as a criticism destination.', 'lunara-film' ),
+            'copy'   => __( 'Gives the review lane extra room and weight when the front page should sell Lunara Film as a criticism destination.', 'lunara-film' ),
             'values' => array(
                 'lunara_home_front_door_density'     => 'showcase',
                 'lunara_home_route_card_prominence'  => 'strong',
@@ -1225,7 +1225,7 @@ function lunara_control_desk_save_homepage_studio() {
         : '';
 
     $oscar_copy_fields = array(
-        'lunara_home_oscar_picks_kicker'   => __( 'Lunara Forecast', 'lunara-film' ),
+        'lunara_home_oscar_picks_kicker'   => __( 'Lunara Film Forecast', 'lunara-film' ),
         'lunara_home_oscar_picks_heading'  => $default_oscar_heading,
         'lunara_home_oscar_picks_summary'  => __( 'The board before the race hardens. Early forecasts move as films screen, campaigns take shape, and the season reveals itself.', 'lunara-film' ),
         'lunara_home_oscar_picks_cta_text' => __( 'Open the awards-season board', 'lunara-film' ),
@@ -1480,7 +1480,7 @@ function lunara_control_desk_reviews_archive_copy_specs() {
         ),
         'lunara_reviews_archive_title'  => array(
             'label'   => __( 'Archive title', 'lunara-film' ),
-            'default' => __( 'Lunara Reviews', 'lunara-film' ),
+            'default' => __( 'Lunara Film Reviews', 'lunara-film' ),
             'max'     => 140,
             'type'    => 'text',
         ),
@@ -1788,7 +1788,7 @@ function lunara_control_desk_review_single_select_specs() {
                 ),
                 'signature-forward' => array(
                     'label' => __( 'Signature Forward', 'lunara-film' ),
-                    'copy'  => __( 'Stronger text-side emphasis for the Lunara Debrief signature.', 'lunara-film' ),
+                    'copy'  => __( 'Stronger text-side emphasis for the Lunara Film Debrief signature.', 'lunara-film' ),
                 ),
             ),
         ),
@@ -2513,7 +2513,7 @@ function lunara_control_desk_oscars_dossier_select_specs() {
         'lunara_oscars_related_reviews_treatment' => array(
             'label'   => __( 'Related-review treatment', 'lunara-film' ),
             'default' => 'standard-grid',
-            'note'    => __( 'Controls how Lunara review cards behave inside ceremony, category, title, and person Oscar files.', 'lunara-film' ),
+            'note'    => __( 'Controls how Lunara Film review cards behave inside ceremony, category, title, and person Oscar files.', 'lunara-film' ),
             'options' => array(
                 'standard-grid' => array(
                     'label' => __( 'Standard Grid', 'lunara-film' ),
@@ -2620,7 +2620,7 @@ function lunara_control_desk_oscars_dossier_number_specs() {
             'max'     => 8,
             'step'    => 1,
             'unit'    => '',
-            'note'    => __( 'Maximum Lunara review cards shown on Oscars ceremony, category, title, and person routes.', 'lunara-film' ),
+            'note'    => __( 'Maximum Lunara Film review cards shown on Oscars ceremony, category, title, and person routes.', 'lunara-film' ),
         ),
     );
 }
@@ -3096,7 +3096,7 @@ function lunara_control_desk_utility_search_select_specs() {
                 ),
                 'editorial' => array(
                     'label' => __( 'Editorial', 'lunara-film' ),
-                    'copy'  => __( 'Default Lunara utility rhythm: useful, dense, and still premium.', 'lunara-film' ),
+                    'copy'  => __( 'Default Lunara Film utility rhythm: useful, dense, and still premium.', 'lunara-film' ),
                 ),
                 'showcase'  => array(
                     'label' => __( 'Showcase', 'lunara-film' ),
@@ -3801,7 +3801,7 @@ function lunara_control_desk_get_system_status() {
             'note'  => __( 'Owns provider calls and private suggestion snapshots.', 'lunara-film' ),
         ),
         array(
-            'label' => __( 'Lunara Core plugin', 'lunara-film' ),
+            'label' => __( 'Lunara Film Core plugin', 'lunara-film' ),
             'value' => $core_version ? $core_version : __( 'Not detected', 'lunara-film' ),
             'state' => $core_active ? 'ready' : 'weak',
             'note'  => $core_active ? __( 'Active load-bearing plugin; do not deactivate live without staging checks.', 'lunara-film' ) : __( 'Inactive: theme fallbacks should carry Review models, but this needs staging verification.', 'lunara-film' ),
@@ -4388,8 +4388,8 @@ function lunara_control_desk_get_review_pipeline_checks( $post_id ) {
             'group'   => __( 'Copy', 'lunara-film' ),
             'kind'    => $has_excerpt_or_standfirst ? ( '1' === get_post_meta( $post_id, '_lunara_review_hide_standfirst', true ) ? 'weak' : 'ready' ) : 'needs',
             'value'   => lunara_control_desk_has_text( $standfirst ) ? __( 'Standfirst override set', 'lunara-film' ) : lunara_control_desk_get_post_excerpt_label( $post_id ),
-            'note'    => $has_excerpt_or_standfirst ? __( 'Card and hero copy have a controlled source.', 'lunara-film' ) : __( 'Add an excerpt or the Lunara standfirst override.', 'lunara-film' ),
-            'owner'   => __( 'Excerpt box / Lunara Review Controls', 'lunara-film' ),
+            'note'    => $has_excerpt_or_standfirst ? __( 'Card and hero copy have a controlled source.', 'lunara-film' ) : __( 'Add an excerpt or the Lunara Film standfirst override.', 'lunara-film' ),
+            'owner'   => __( 'Excerpt box / Lunara Film Review Controls', 'lunara-film' ),
             'fix_url' => $edit_editorial,
         )
     );
@@ -4412,7 +4412,7 @@ function lunara_control_desk_get_review_pipeline_checks( $post_id ) {
             'kind'    => $pull_quote_kind,
             'value'   => $has_pull_quote ? sprintf( __( '%d chosen words', 'lunara-film' ), $pull_quote_words ) : __( 'Missing', 'lunara-film' ),
             'note'    => $has_pull_quote ? __( 'Archive/home cards use this exact chosen quote before any fallback copy.', 'lunara-film' ) : __( 'Add the exact gold-card hook. Aim for 40-55 words.', 'lunara-film' ),
-            'owner'   => __( 'Lunara Review Controls', 'lunara-film' ),
+            'owner'   => __( 'Lunara Film Review Controls', 'lunara-film' ),
             'fix_url' => $edit_editorial,
         )
     );
@@ -4472,7 +4472,7 @@ function lunara_control_desk_get_review_pipeline_checks( $post_id ) {
             'kind'    => $card_summary['kind'],
             'value'   => $card_summary['value'],
             'note'    => $card_summary['note'],
-            'owner'   => __( 'Lunara Review Controls', 'lunara-film' ),
+            'owner'   => __( 'Lunara Film Review Controls', 'lunara-film' ),
             'fix_url' => $edit_editorial,
         )
     );
@@ -4485,7 +4485,7 @@ function lunara_control_desk_get_review_pipeline_checks( $post_id ) {
             'kind'    => lunara_control_desk_has_text( $hero_banner ) ? 'ready' : ( $featured_id ? 'weak' : 'needs' ),
             'value'   => lunara_control_desk_has_text( $hero_banner ) ? __( 'Hero banner set', 'lunara-film' ) : ( $featured_id ? __( 'Featured fallback', 'lunara-film' ) : __( 'Missing', 'lunara-film' ) ),
             'note'    => lunara_control_desk_has_text( $hero_banner ) ? __( 'Single-review hero has a controlled source.', 'lunara-film' ) : ( $featured_id ? __( 'Single hero will use the featured image fallback.', 'lunara-film' ) : __( 'Add a hero banner or featured image.', 'lunara-film' ) ),
-            'owner'   => __( 'Lunara Review Controls', 'lunara-film' ),
+            'owner'   => __( 'Lunara Film Review Controls', 'lunara-film' ),
             'fix_url' => $edit_editorial,
         )
     );
@@ -4550,7 +4550,7 @@ function lunara_control_desk_get_review_pipeline_checks( $post_id ) {
             'kind'    => ( $home_hero || $home_shelf ) ? 'ready' : 'weak',
             'value'   => $home_hero && $home_shelf ? __( 'Hero + shelf', 'lunara-film' ) : ( $home_hero ? __( 'Hero', 'lunara-film' ) : ( $home_shelf ? __( 'Shelf', 'lunara-film' ) : __( 'Not flagged', 'lunara-film' ) ) ),
             'note'    => ( $home_hero || $home_shelf ) ? __( 'Review is eligible for a homepage lane.', 'lunara-film' ) : __( 'Leave unflagged if this should not be pushed to home.', 'lunara-film' ),
-            'owner'   => __( 'Lunara Review Controls', 'lunara-film' ),
+            'owner'   => __( 'Lunara Film Review Controls', 'lunara-film' ),
             'fix_url' => $edit_editorial,
         )
     );
@@ -4835,7 +4835,7 @@ function lunara_control_desk_journal_source_risk_details( $post_id, $text ) {
     if ( preg_match( '/(?:worldofreel\.com|\bworld\s+of\s+reel\b)/i', $haystack ) ) {
         return array(
             'label' => __( 'World of Reel', 'lunara-film' ),
-            'note'  => __( 'Use as a fast lead only: verify the facts, attribute when dependent, add a distinct Lunara angle, and do not use its imagery.', 'lunara-film' ),
+            'note'  => __( 'Use as a fast lead only: verify the facts, attribute when dependent, add a distinct Lunara Film angle, and do not use its imagery.', 'lunara-film' ),
         );
     }
 
@@ -5169,11 +5169,11 @@ function lunara_control_desk_get_journal_growth_checks( $post_id ) {
 
     $has_original_angle = lunara_control_desk_journal_has_originality_signal( $text );
     $checks[] = array(
-        'label'  => __( 'Lunara Angle', 'lunara-film' ),
+        'label'  => __( 'Lunara Film Angle', 'lunara-film' ),
         'value'  => $has_original_angle ? __( 'Signal found', 'lunara-film' ) : __( 'Needs human read', 'lunara-film' ),
         'state'  => $has_original_angle ? 'ready' : 'needs',
         'note'   => __( 'The entry should add judgment, taste, stakes, or context beyond source summary.', 'lunara-film' ),
-        'signal' => $has_original_angle ? '' : __( 'Clarify original Lunara angle', 'lunara-film' ),
+        'signal' => $has_original_angle ? '' : __( 'Clarify original Lunara Film angle', 'lunara-film' ),
     );
 
     $has_source_signal = lunara_control_desk_journal_has_source_signal( $post_id, $text );
@@ -5540,7 +5540,7 @@ function lunara_control_desk_url( $args = array() ) {
 }
 
 function lunara_control_desk_render_tabs( $active_tab ) {
-    echo '<nav class="nav-tab-wrapper lunara-control-desk-tabs" aria-label="' . esc_attr__( 'Lunara Control Desk tabs', 'lunara-film' ) . '">';
+    echo '<nav class="nav-tab-wrapper lunara-control-desk-tabs" aria-label="' . esc_attr__( 'Lunara Film Control Desk tabs', 'lunara-film' ) . '">';
 
     foreach ( lunara_control_desk_tab_definitions() as $tab => $label ) {
         printf(
@@ -6113,7 +6113,7 @@ function lunara_control_desk_render_operating_plan_tab() {
         array(
             'kicker' => __( '2. Public Product', 'lunara-film' ),
             'title'  => __( 'Home, Journal, Reviews, Oscars', 'lunara-film' ),
-            'body'   => __( 'Treat Lunara as connected surfaces: Journal drives discovery, Reviews build authority, and Oscars gives the site its database spine.', 'lunara-film' ),
+            'body'   => __( 'Treat Lunara Film as connected surfaces: Journal drives discovery, Reviews build authority, and Oscars gives the site its database spine.', 'lunara-film' ),
             'items'  => array(
                 __( 'Home needs curated paths into the strongest current work.', 'lunara-film' ),
                 __( 'Journal must feel original and worth returning to.', 'lunara-film' ),
@@ -6129,7 +6129,7 @@ function lunara_control_desk_render_operating_plan_tab() {
         array(
             'kicker' => __( '3. Journal Growth', 'lunara-film' ),
             'title'  => __( 'Curated, fast, and not derivative', 'lunara-film' ),
-            'body'   => __( 'The Journal pipeline should move quickly, but every kept draft needs a clear Lunara angle, visible attribution, and a useful reader promise.', 'lunara-film' ),
+            'body'   => __( 'The Journal pipeline should move quickly, but every kept draft needs a clear Lunara Film angle, visible attribution, and a useful reader promise.', 'lunara-film' ),
             'items'  => array(
                 __( 'Reject filler and rewritten-source posts.', 'lunara-film' ),
                 __( 'Use credited, provenance-safe imagery and carousel files where the story needs multiple visuals.', 'lunara-film' ),
@@ -6216,13 +6216,13 @@ function lunara_control_desk_render_operating_plan_tab() {
             'label' => __( 'Website workspace', 'lunara-film' ),
             'value' => __( 'Desktop workspace is canonical', 'lunara-film' ),
             'state' => 'ready',
-            'note'  => __( 'Use the Desktop Lunara folder for website logs, handoffs, changelog work, visual QA, and working artifacts.', 'lunara-film' ),
+            'note'  => __( 'Use the Desktop Lunara Film folder for website logs, handoffs, changelog work, visual QA, and working artifacts.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'Old workspace guardrail', 'lunara-film' ),
             'value' => __( 'Documents\\New project is blocked', 'lunara-film' ),
             'state' => 'ready',
-            'note'  => __( 'Do not save new Lunara website evidence, screenshots, handoffs, changelogs, or working artifacts there.', 'lunara-film' ),
+            'note'  => __( 'Do not save new Lunara Film website evidence, screenshots, handoffs, changelogs, or working artifacts there.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'Latest handoff', 'lunara-film' ),
@@ -6246,7 +6246,7 @@ function lunara_control_desk_render_operating_plan_tab() {
         <div class="lunara-control-desk-panel-header">
             <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Operating Plan', 'lunara-film' ); ?></p>
             <h2><?php esc_html_e( 'Use every tool without scattering the work', 'lunara-film' ); ?></h2>
-            <p class="lunara-control-desk-intro"><?php esc_html_e( 'This is the private plan of attack for building Lunara: protect continuity, keep the site fast and readable, make Journal a real growth product, and preserve the Oscars Ledger as the signature database experience.', 'lunara-film' ); ?></p>
+            <p class="lunara-control-desk-intro"><?php esc_html_e( 'This is the private plan of attack for building Lunara Film: protect continuity, keep the site fast and readable, make Journal a real growth product, and preserve the Oscars Ledger as the signature database experience.', 'lunara-film' ); ?></p>
         </div>
 
         <div class="lunara-control-desk-plan-lanes">
@@ -6488,7 +6488,7 @@ function lunara_control_desk_render_system_status_tab() {
     <section class="lunara-control-desk-panel">
         <div class="lunara-control-desk-panel-header">
             <p class="lunara-control-desk-kicker"><?php esc_html_e( 'System Status', 'lunara-film' ); ?></p>
-            <h2><?php esc_html_e( 'The private operating surface for Lunara work', 'lunara-film' ); ?></h2>
+            <h2><?php esc_html_e( 'The private operating surface for Lunara Film work', 'lunara-film' ); ?></h2>
             <p class="lunara-control-desk-intro"><?php esc_html_e( 'This is read-only in the first rollout: it tells you where things live, what is active, and which surface owns each job.', 'lunara-film' ); ?></p>
         </div>
         <?php lunara_control_desk_render_status_cards( lunara_control_desk_get_system_status() ); ?>
@@ -7036,7 +7036,7 @@ function lunara_control_desk_review_work_session_url( $post_id, $active_filter )
 function lunara_control_desk_build_review_brief_text( $post, $checks, $readiness ) {
     $open_checks = lunara_control_desk_get_open_review_checks( $checks );
     $lines       = array(
-        sprintf( __( 'Lunara Review Packaging Brief: %s', 'lunara-film' ), lunara_control_desk_get_review_title( $post ) ),
+        sprintf( __( 'Lunara Film Review Packaging Brief: %s', 'lunara-film' ), lunara_control_desk_get_review_title( $post ) ),
         sprintf( __( 'Post ID: %d', 'lunara-film' ), absint( $post->ID ) ),
         sprintf( __( 'Status: %s', 'lunara-film' ), get_post_status( $post ) ),
         sprintf( __( 'Modified: %s', 'lunara-film' ), get_the_modified_date( get_option( 'date_format' ), $post ) ),
@@ -8383,7 +8383,7 @@ function lunara_control_desk_render_homepage_oscar_picks_curation() {
         __( 'Road to the %s Academy Awards', 'lunara-film' ),
         $ceremony_ordinal
     );
-    $kicker = (string) get_theme_mod( 'lunara_home_oscar_picks_kicker', __( 'Lunara Forecast', 'lunara-film' ) );
+    $kicker = (string) get_theme_mod( 'lunara_home_oscar_picks_kicker', __( 'Lunara Film Forecast', 'lunara-film' ) );
     $heading = (string) get_theme_mod( 'lunara_home_oscar_picks_heading', $default_heading );
     $summary = (string) get_theme_mod( 'lunara_home_oscar_picks_summary', __( 'The board before the race hardens. Early forecasts move as films screen, campaigns take shape, and the season reveals itself.', 'lunara-film' ) );
     $cta_text = (string) get_theme_mod( 'lunara_home_oscar_picks_cta_text', __( 'Open the awards-season board', 'lunara-film' ) );
@@ -10271,7 +10271,7 @@ function lunara_control_desk_image_quality_state( $attachment_id, $target, $exte
         return array(
             'state'      => 'ready',
             'label'      => __( 'Ready', 'lunara-film' ),
-            'note'       => __( 'The source file meets the Lunara target for this surface.', 'lunara-film' ),
+            'note'       => __( 'The source file meets the Lunara Film target for this surface.', 'lunara-film' ),
             'reason'     => 'at-target',
             'dimensions' => $dimensions,
         );
@@ -11037,7 +11037,7 @@ function lunara_control_desk_image_quality_summary_cards( $rows, $scope = 'recen
             'label' => __( 'At target', 'lunara-film' ),
             'value' => (string) $ready,
             'state' => 'ready',
-            'note'  => __( 'Meets the current Lunara source-size rule.', 'lunara-film' ),
+            'note'  => __( 'Meets the current Lunara Film source-size rule.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'Needs attention', 'lunara-film' ),
@@ -11385,7 +11385,7 @@ function lunara_control_desk_render_image_quality_filters( $rows, $filters ) {
 
 function lunara_control_desk_render_image_quality_targets() {
     ?>
-    <div class="lunara-control-desk-image-targets" aria-label="<?php echo esc_attr__( 'Lunara image targets', 'lunara-film' ); ?>">
+    <div class="lunara-control-desk-image-targets" aria-label="<?php echo esc_attr__( 'Lunara Film image targets', 'lunara-film' ); ?>">
         <?php foreach ( lunara_control_desk_image_quality_targets() as $target ) : ?>
             <article>
                 <p class="lunara-control-desk-kicker"><?php echo esc_html( $target['ratio'] ); ?></p>
@@ -11799,7 +11799,7 @@ function lunara_control_desk_render_image_quality_console() {
         <div class="lunara-control-desk-panel-header">
             <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Image Quality Console', 'lunara-film' ); ?></p>
             <h3><?php esc_html_e( 'Find the soft source before it reaches the public surface', 'lunara-film' ); ?></h3>
-            <p class="lunara-control-desk-subtle"><?php esc_html_e( 'The renderer already requests the large Lunara sizes; this console checks whether the selected source file is good enough to survive that treatment.', 'lunara-film' ); ?></p>
+            <p class="lunara-control-desk-subtle"><?php esc_html_e( 'The renderer already requests the large Lunara Film sizes; this console checks whether the selected source file is good enough to survive that treatment.', 'lunara-film' ); ?></p>
         </div>
         <?php lunara_control_desk_render_status_cards( lunara_control_desk_image_quality_summary_cards( $filtered, $scope ) ); ?>
         <?php lunara_control_desk_render_image_quality_filters( $all_rows, $filters ); ?>
@@ -11899,7 +11899,7 @@ function lunara_control_desk_theme_studio_groups() {
             'label'    => __( 'Footer', 'lunara-film' ),
             'section'  => 'lunara_footer_options',
             'preview'  => home_url( '/' ),
-            'owner'    => __( 'Custom Lunara footer renderer', 'lunara-film' ),
+            'owner'    => __( 'Custom Lunara Film footer renderer', 'lunara-film' ),
             'note'     => __( 'Footer logo, tagline, column headings, ordered links, and copyright.', 'lunara-film' ),
             'renders'  => array( __( 'Every public footer', 'lunara-film' ), __( 'Editorial links', 'lunara-film' ), __( 'Ledger links', 'lunara-film' ), __( 'Utility links', 'lunara-film' ) ),
             'settings' => array( 'lunara_footer_tagline', 'lunara_footer_show_logo', 'lunara_footer_col1_heading', 'lunara_footer_col2_heading', 'lunara_footer_col3_heading', 'lunara_footer_copyright', 'lunara_footer_navigation' ),
@@ -11945,7 +11945,7 @@ function lunara_control_desk_theme_studio_setting_copy( $setting ) {
     $copy = array(
         'lunara_show_logo'                       => array(
             'label' => __( 'Logo visibility', 'lunara-film' ),
-            'hint'  => __( 'Turns the Lunara mark on or off in the header.', 'lunara-film' ),
+            'hint'  => __( 'Turns the Lunara Film mark on or off in the header.', 'lunara-film' ),
         ),
         'lunara_logo_max_height'                 => array(
             'label' => __( 'Logo height', 'lunara-film' ),
@@ -12434,7 +12434,7 @@ function lunara_control_desk_theme_studio_mobile_checks() {
             'section' => 'lunara_footer_options',
             'checks'  => array(
                 __( 'Footer columns stack in a readable order.', 'lunara-film' ),
-                __( 'Editorial, Ledger, and utility links retain Lunara styling.', 'lunara-film' ),
+                __( 'Editorial, Ledger, and utility links retain Lunara Film styling.', 'lunara-film' ),
                 __( 'Tagline, copyright, and social controls do not collide.', 'lunara-film' ),
             ),
         ),
@@ -12727,12 +12727,12 @@ function lunara_control_desk_theme_studio_glossary_terms() {
         ),
         array(
             'term'    => __( 'Featured image', 'lunara-film' ),
-            'meaning' => __( 'The WordPress primary image for a post; Lunara may use it as a fallback.', 'lunara-film' ),
+            'meaning' => __( 'The WordPress primary image for a post; Lunara Film may use it as a fallback.', 'lunara-film' ),
             'where'   => __( 'Review cards, Journal cards, single heroes, homepage lanes.', 'lunara-film' ),
         ),
         array(
             'term'    => __( 'Card image override', 'lunara-film' ),
-            'meaning' => __( 'A Lunara review-specific image that can replace the featured image in card surfaces.', 'lunara-film' ),
+            'meaning' => __( 'A Lunara Film review-specific image that can replace the featured image in card surfaces.', 'lunara-film' ),
             'where'   => __( 'Review archive cards, homepage review cards, related review cards.', 'lunara-film' ),
         ),
         array(
@@ -14063,7 +14063,7 @@ function lunara_control_desk_get_journal_growth_items( $rows ) {
 
 function lunara_control_desk_build_journal_growth_brief( $post, $checks, $readiness ) {
     $lines = array(
-        sprintf( __( 'Lunara Journal Growth Brief: %s', 'lunara-film' ), get_the_title( $post ) ? get_the_title( $post ) : __( '(Untitled)', 'lunara-film' ) ),
+        sprintf( __( 'Lunara Film Journal Growth Brief: %s', 'lunara-film' ), get_the_title( $post ) ? get_the_title( $post ) : __( '(Untitled)', 'lunara-film' ) ),
         sprintf( __( 'Post ID: %d', 'lunara-film' ), absint( $post->ID ) ),
         sprintf( __( 'Status: %s', 'lunara-film' ), get_post_status( $post ) ),
         sprintf( __( 'Modified: %s', 'lunara-film' ), get_the_modified_date( get_option( 'date_format' ), $post ) ),
@@ -14572,7 +14572,7 @@ function lunara_control_desk_render_journal_growth_tab( $rows ) {
             'label' => __( 'Originality Blockers', 'lunara-film' ),
             'value' => sprintf( __( '%d need attention', 'lunara-film' ), $blocker_count ),
             'state' => $blocker_count ? 'needs' : 'ready',
-            'note'  => __( 'Missing standfirsts or unclear Lunara angles should be fixed before publish.', 'lunara-film' ),
+            'note'  => __( 'Missing standfirsts or unclear Lunara Film angles should be fixed before publish.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'Homepage Candidates', 'lunara-film' ),
@@ -14590,7 +14590,7 @@ function lunara_control_desk_render_journal_growth_tab( $rows ) {
             'label' => __( 'Source Risk', 'lunara-film' ),
             'value' => sprintf( __( '%d need source pass', 'lunara-film' ), $source_risk_count ),
             'state' => $source_risk_count ? 'needs' : 'ready',
-            'note'  => __( 'World of Reel can stay as a fast signal, but those drafts need independent Lunara framing and clean image sourcing.', 'lunara-film' ),
+            'note'  => __( 'World of Reel can stay as a fast signal, but those drafts need independent Lunara Film framing and clean image sourcing.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'Visual Provenance', 'lunara-film' ),
@@ -14868,13 +14868,13 @@ function lunara_control_desk_render_block_registry_diagnostic() {
         <table class="widefat striped">
             <thead>
                 <tr>
-                    <th><?php esc_html_e( 'Registered Lunara-family block', 'lunara-film' ); ?></th>
+                    <th><?php esc_html_e( 'Registered Lunara Film block', 'lunara-film' ); ?></th>
                     <th><?php esc_html_e( 'In inserter?', 'lunara-film' ); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ( empty( $blocks ) ) : ?>
-                    <tr><td colspan="2"><?php esc_html_e( 'No Lunara-family blocks registered.', 'lunara-film' ); ?></td></tr>
+                    <tr><td colspan="2"><?php esc_html_e( 'No Lunara Film blocks registered.', 'lunara-film' ); ?></td></tr>
                 <?php endif; ?>
                 <?php foreach ( $blocks as $name => $in_inserter ) : ?>
                     <tr>
@@ -14889,7 +14889,7 @@ function lunara_control_desk_render_block_registry_diagnostic() {
             echo esc_html(
                 sprintf(
                     /* translators: %d: number of registered lunara patterns */
-                    __( 'Registered Lunara block patterns: %d', 'lunara-film' ),
+                    __( 'Registered Lunara Film block patterns: %d', 'lunara-film' ),
                     count( $patterns )
                 )
             );
@@ -14898,9 +14898,9 @@ function lunara_control_desk_render_block_registry_diagnostic() {
             }
             ?>
         </p>
-        <h3 style="margin-top:18px;"><?php esc_html_e( 'Content containing Lunara block markup', 'lunara-film' ); ?></h3>
+        <h3 style="margin-top:18px;"><?php esc_html_e( 'Content containing Lunara Film block markup', 'lunara-film' ); ?></h3>
         <?php if ( empty( $content_rows ) ) : ?>
-            <p class="lunara-control-desk-subtle"><?php esc_html_e( 'No stored content contains Lunara block markup.', 'lunara-film' ); ?></p>
+            <p class="lunara-control-desk-subtle"><?php esc_html_e( 'No stored content contains Lunara Film block markup.', 'lunara-film' ); ?></p>
         <?php else : ?>
             <ul class="lunara-control-desk-link-list">
                 <?php foreach ( $content_rows as $row ) : ?>
@@ -15247,7 +15247,7 @@ function lunara_control_desk_render_notice() {
 
 function lunara_render_control_desk_page() {
     if ( ! current_user_can( 'edit_posts' ) ) {
-        wp_die( esc_html__( 'You do not have permission to access the Lunara Control Desk.', 'lunara-film' ) );
+        wp_die( esc_html__( 'You do not have permission to access the Lunara Film Control Desk.', 'lunara-film' ) );
     }
 
     $rows            = lunara_control_desk_get_rows();
@@ -15261,7 +15261,7 @@ function lunara_render_control_desk_page() {
     <div class="wrap lunara-control-desk">
         <div class="lunara-control-desk-hero">
             <div>
-                <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Lunara', 'lunara-film' ); ?></p>
+                <p class="lunara-control-desk-kicker"><?php esc_html_e( 'Lunara Film', 'lunara-film' ); ?></p>
                 <h1><?php esc_html_e( 'Control Desk', 'lunara-film' ); ?></h1>
                 <p class="lunara-control-desk-intro"><?php esc_html_e( 'Drafts, packaging gaps, private AI suggestions, homepage readiness, and Oscar Ledger opportunities in one place.', 'lunara-film' ); ?></p>
             </div>

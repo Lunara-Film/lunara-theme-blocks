@@ -223,7 +223,7 @@
 			var cancel, timer = setTimeout( function () {
 				cancel = window.LunaraPairingReviewEditor.mount( ref.current, { imdb: props.imdb || '', review_id: editor && editor.getCurrentPostId ? Number( editor.getCurrentPostId() ) || 0 : 0 }, false );
 			}, 250 );
-			ref.current.textContent = __( 'Checking Lunara reviews…', 'lunara-film' );
+			ref.current.textContent = __( 'Checking Lunara Film reviews…', 'lunara-film' );
 			return function () { clearTimeout( timer ); if ( cancel ) { cancel(); } };
 		}, [ props.imdb ] );
 		return el( 'p', { ref: ref, className: 'description' } );
@@ -384,7 +384,7 @@
 
 	blocks.registerBlockType( 'lunara/pairing', {
 		apiVersion: 3,
-		title: __( 'Lunara Pair It With — Curated', 'lunara-film' ),
+		title: __( 'Lunara Film Pair It With — Curated', 'lunara-film' ),
 		icon: 'screenoptions',
 		category: 'lunara',
 		description: __( 'Hand-build the signature Pair It With per instance: pick each film, its role label, note, and poster; reorder freely; or mirror an existing review.', 'lunara-film' ),

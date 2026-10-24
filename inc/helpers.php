@@ -94,7 +94,7 @@ function lunara_get_home_section_registry() {
             'label'        => __( 'Oscar Ledger Intro', 'lunara-film' ),
             'toggle_label' => __( 'Show Oscar Ledger Intro', 'lunara-film' ),
             'setting'      => 'lunara_home_show_database',
-            'description'  => __( 'The structural introduction to the Lunara Oscar Ledger.', 'lunara-film' ),
+            'description'  => __( 'The structural introduction to the Lunara Film Oscar Ledger.', 'lunara-film' ),
             'aliases'      => array( 'database-spotlight' ),
         ),
         'ledger' => array(
@@ -616,7 +616,7 @@ function lunara_get_oscars_portal_section_registry() {
             'label'        => __( 'Linked Reviews', 'lunara-film' ),
             'toggle_label' => __( 'Show Linked Reviews', 'lunara-film' ),
             'setting'      => 'lunara_oscars_show_linked_reviews',
-            'description'  => __( 'Show the review cards that connect Lunara criticism back into the Oscars title pages.', 'lunara-film' ),
+            'description'  => __( 'Show the review cards that connect Lunara Film criticism back into the Oscars title pages.', 'lunara-film' ),
             'aliases'      => array( 'reviews' ),
         ),
     );

@@ -298,7 +298,7 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_signature' ) ) {
         }
 
         $html  = '<section class="lunara-debrief-block lunara-debrief-block--signature">';
-        $html .= '<h2 class="lunara-debrief-heading">' . esc_html__( 'Lunara Debrief', 'lunara-film' ) . '</h2>';
+        $html .= '<h2 class="lunara-debrief-heading">' . esc_html__( 'Lunara Film Debrief', 'lunara-film' ) . '</h2>';
         if ( '' !== $kicker ) {
             $html .= '<div class="lunara-debrief-kicker">' . esc_html( $kicker ) . '</div>';
         }

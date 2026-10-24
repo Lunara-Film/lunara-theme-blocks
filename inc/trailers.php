@@ -162,7 +162,7 @@ if ( ! function_exists( 'lunara_trailer_add_meta_box' ) ) {
 		foreach ( lunara_trailer_supported_post_types() as $post_type ) {
 			add_meta_box(
 				'lunara_trailer_meta',
-				__( 'Lunara Trailer', 'lunara-film' ),
+				__( 'Lunara Film Trailer', 'lunara-film' ),
 				'lunara_trailer_meta_box_render',
 				$post_type,
 				'side',

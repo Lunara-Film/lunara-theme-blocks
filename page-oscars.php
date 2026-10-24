@@ -69,7 +69,7 @@ $oscars_portal_label_font_class = function_exists( 'lunara_oscars_portal_uses_ti
     ? ' is-label-font-tiempos'
     : '';
 
-$hero_kicker       = $oscars_portal_text( 'kicker', 'lunara_oscars_portal_kicker', 'The Lunara Oscar Ledger' );
+$hero_kicker       = $oscars_portal_text( 'kicker', 'lunara_oscars_portal_kicker', 'The Lunara Film Oscar Ledger' );
 $hero_title        = $oscars_portal_text( 'title', 'lunara_oscars_portal_title', 'Academy Awards history, treated like a living editorial system.' );
 $hero_copy         = '';
 $explore_kicker    = $oscars_portal_text( 'explore_kicker', 'lunara_oscars_portal_explore_kicker', 'Explore the Portal' );

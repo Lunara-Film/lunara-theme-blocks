@@ -282,7 +282,7 @@ function lunara_featured_image_guard_block_reason( $attachment_id ) {
             if ( preg_match( $pattern, $source_string ) ) {
                 return sprintf(
                     /* translators: %s: blocked source label. */
-                    __( 'Blocked featured image source: %s images are not approved for Lunara featured images.', 'lunara-film' ),
+                    __( 'Blocked featured image source: %s images are not approved for Lunara Film featured images.', 'lunara-film' ),
                     $source_label
                 );
             }
@@ -376,7 +376,7 @@ function lunara_featured_image_guard_admin_notice() {
         ?>
         <div class="notice notice-error">
             <p>
-                <strong><?php esc_html_e( 'Lunara blocked publishing.', 'lunara-film' ); ?></strong>
+                <strong><?php esc_html_e( 'Lunara Film blocked publishing.', 'lunara-film' ); ?></strong>
                 <?php
                 printf(
                     /* translators: 1: attachment ID, 2: block reason. */
@@ -405,7 +405,7 @@ function lunara_featured_image_guard_admin_notice() {
         ?>
         <div class="notice notice-error">
             <p>
-                <strong><?php esc_html_e( 'Blocked for Lunara featured images.', 'lunara-film' ); ?></strong>
+                <strong><?php esc_html_e( 'Blocked for Lunara Film featured images.', 'lunara-film' ); ?></strong>
                 <?php
                 printf(
                     /* translators: 1: attachment ID, 2: block reason. */
@@ -444,7 +444,7 @@ function lunara_featured_image_guard_admin_notice() {
             <?php
             printf(
                 /* translators: 1: attachment ID, 2: block reason. */
-                esc_html__( 'Attachment #%1$d cannot be published on Lunara. Replace it before publishing. %2$s', 'lunara-film' ),
+                esc_html__( 'Attachment #%1$d cannot be published on Lunara Film. Replace it before publishing. %2$s', 'lunara-film' ),
                 absint( $thumbnail_id ),
                 esc_html( $reason )
             );
@@ -508,7 +508,7 @@ function lunara_featured_image_guard_admin_footer() {
             <?php
             printf(
                 /* translators: 1: attachment ID, 2: block reason. */
-                esc_html__( 'Attachment #%1$d can stay in the Media Library, but it cannot be used as a Lunara featured image. %2$s', 'lunara-film' ),
+                esc_html__( 'Attachment #%1$d can stay in the Media Library, but it cannot be used as a Lunara Film featured image. %2$s', 'lunara-film' ),
                 absint( $upload_attachment_id ),
                 esc_html( $upload_reason )
             );
@@ -528,7 +528,7 @@ function lunara_featured_image_guard_admin_footer() {
         }
 
         function blockReason(model) {
-            return model && model.get ? (model.get('lunaraBlockedFeaturedImageReason') || 'This image is blocked for Lunara featured images.') : 'This image is blocked for Lunara featured images.';
+            return model && model.get ? (model.get('lunaraBlockedFeaturedImageReason') || 'This image is blocked for Lunara Film featured images.') : 'This image is blocked for Lunara Film featured images.';
         }
 
         function decorate(view) {
@@ -556,7 +556,7 @@ function lunara_featured_image_guard_admin_footer() {
                     return;
                 }
 
-                $('<div class="lunara-media-blocked-panel-note"><strong>Blocked featured image.</strong> This media item cannot be used as a featured image on Lunara posts, Journal entries, or Reviews.</div>').prependTo($panel);
+                $('<div class="lunara-media-blocked-panel-note"><strong>Blocked featured image.</strong> This media item cannot be used as a featured image on Lunara Film posts, Journal entries, or Reviews.</div>').prependTo($panel);
             });
         }
 

@@ -156,7 +156,7 @@ if ( ! function_exists( 'lunara_debrief_method_settings_spec' ) ) {
 			'hero'     => array(
 				'kicker'     => $text( 'lunara_debrief_hero_kicker', __( 'A Lunara Film Signature', 'lunara-film' ), 120, __( 'Kicker', 'lunara-film' ) ),
 				'title'      => $text( 'lunara_debrief_hero_title', '', 160, __( 'Heading', 'lunara-film' ), 'text', __( 'Leave empty to use the page title.', 'lunara-film' ) ),
-				'thesis'     => $text( 'lunara_debrief_hero_thesis', __( 'Every review on Lunara ends the same way — with three more films. Not a list of lookalikes. An argument in three moves: one that deepens the film, one that challenges it, and one that explains where it came from.', 'lunara-film' ), 600, __( 'Thesis', 'lunara-film' ), 'textarea' ),
+				'thesis'     => $text( 'lunara_debrief_hero_thesis', __( 'Every review on Lunara Film ends the same way — with three more films. Not a list of lookalikes. An argument in three moves: one that deepens the film, one that challenges it, and one that explains where it came from.', 'lunara-film' ), 600, __( 'Thesis', 'lunara-film' ), 'textarea' ),
 				'show_stats' => $toggle( 'lunara_debrief_show_stats', __( 'Show the live totals', 'lunara-film' ) ),
 			),
 			'moves'    => $moves,
@@ -168,7 +168,7 @@ if ( ! function_exists( 'lunara_debrief_method_settings_spec' ) ) {
 					'lunara_debrief_why_body',
 					__( 'A single recommendation just agrees with you. Three chosen on purpose form a triangle around the film: the Theme Echo shows what it shares with cinema history, the Counter Program tests its argument, and the Career Context shows how it was made. Read all three and you understand the film you just read about better.', 'lunara-film' )
 						. "\n\n"
-						. __( 'Every pairing is chosen by hand, carries a one-line reason, and links into the Lunara Oscar Ledger, so each Debrief also leads into the site\'s Academy Awards history.', 'lunara-film' ),
+						. __( 'Every pairing is chosen by hand, carries a one-line reason, and links into the Lunara Film Oscar Ledger, so each Debrief also leads into the site\'s Academy Awards history.', 'lunara-film' ),
 					2000,
 					__( 'Body', 'lunara-film' ),
 					'textarea',

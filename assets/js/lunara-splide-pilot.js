@@ -220,7 +220,7 @@
 		} catch (error) {
 			restore();
 			if (window.console && window.console.warn) {
-				window.console.warn('Lunara Splide pilot failed to initialize.', error);
+				window.console.warn('Lunara Film Splide pilot failed to initialize.', error);
 			}
 		}
 	}

@@ -74,7 +74,7 @@ if ( ! function_exists( 'lunara_blocks_hub_register_patterns' ) ) {
 		if ( function_exists( 'register_block_pattern_category' ) ) {
 			register_block_pattern_category(
 				'lunara',
-				array( 'label' => __( 'Lunara', 'lunara-film' ) )
+				array( 'label' => __( 'Lunara Film', 'lunara-film' ) )
 			);
 		}
 

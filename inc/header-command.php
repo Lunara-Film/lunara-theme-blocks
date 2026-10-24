@@ -72,7 +72,7 @@ if ( ! function_exists( 'lunara_header_nav_links' ) ) {
 
 if ( ! function_exists( 'lunara_header_register_menu_location' ) ) {
 	function lunara_header_register_menu_location() {
-		register_nav_menus( array( 'lunara-header' => __( 'Lunara Header', 'lunara-film' ) ) );
+		register_nav_menus( array( 'lunara-header' => __( 'Lunara Film Header', 'lunara-film' ) ) );
 	}
 	add_action( 'after_setup_theme', 'lunara_header_register_menu_location', 20 );
 }
@@ -600,14 +600,14 @@ if ( ! function_exists( 'lunara_header_takeover_render_switch_panel' ) ) {
 		<section class="lunara-control-desk-panel">
 			<div class="lunara-control-desk-panel-header">
 				<p class="lunara-control-desk-kicker"><?php esc_html_e( 'Header Command', 'lunara-film' ); ?></p>
-				<h2><?php esc_html_e( 'The Lunara header and off-canvas navigation', 'lunara-film' ); ?></h2>
-				<p class="lunara-control-desk-intro"><?php esc_html_e( 'The staged parent-theme exit. When on, the Blocksy header is replaced by the Lunara header bar and the deep-blur off-canvas navigation. Flip it, inspect the live site, and the Template flip becomes the approved follow-up.', 'lunara-film' ); ?></p>
+				<h2><?php esc_html_e( 'The Lunara Film header and off-canvas navigation', 'lunara-film' ); ?></h2>
+				<p class="lunara-control-desk-intro"><?php esc_html_e( 'The staged parent-theme exit. When on, the Blocksy header is replaced by the Lunara Film header bar and the deep-blur off-canvas navigation. Flip it, inspect the live site, and the Template flip becomes the approved follow-up.', 'lunara-film' ); ?></p>
 			</div>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="lunara_header_takeover_toggle" />
 				<?php wp_nonce_field( 'lunara_header_takeover_toggle' ); ?>
 				<button type="submit" class="button <?php echo $on ? '' : 'button-primary'; ?>">
-					<?php $on ? esc_html_e( 'Takeover is ON — switch back to the Blocksy header', 'lunara-film' ) : esc_html_e( 'Enable the Lunara header takeover', 'lunara-film' ); ?>
+					<?php $on ? esc_html_e( 'Takeover is ON — switch back to the Blocksy header', 'lunara-film' ) : esc_html_e( 'Enable the Lunara Film header takeover', 'lunara-film' ); ?>
 				</button>
 			</form>
 		</section>
