@@ -113,8 +113,15 @@ and links to the owning Review editor. This does not alter pairing content.
   Pairing rows use a centered 860px frame. Route CSS owns that geometry; late
   Studio output may change supported presentation choices without restoring a
   side rail. Additional CSS must not be required to hold this layout together.
-- Journal leads with headlines; dates, visual credits and useful taxonomy remain
-  readable supporting information. Entries without artwork are intentional text
+- Journal leads with headlines; dates and useful taxonomy remain readable
+  supporting information. Automatic image/source overlays and visual-source
+  badges are absent by default across Journal articles, cards and galleries,
+  including older entries. The existing Journal Kicker set exactly to
+  "Exclusive" enables public visual credit for that post. Explicit required
+  attribution metadata also remains effective. Never infer exclusivity from an
+  outlet name, source headline or a passing word in article copy. Keep image
+  and source provenance privately for verification; preserve descriptive
+  captions, image alt text and editorial links in the article. Entries without artwork are intentional text
   compositions, not failed image placeholders.
   The newest main archive edition has one centered lead followed by a balanced
   two-column story index on desktop. Alternate sorts, taxonomy results and later

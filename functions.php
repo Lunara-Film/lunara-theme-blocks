@@ -15862,7 +15862,9 @@ if ( ! function_exists( 'lunara_render_journal_card_provenance' ) ) {
 			? lunara_get_journal_visual_context( $post_id )
 			: array();
 
-		if ( empty( $visual['has_provenance'] ) && empty( $visual['has_carousel'] ) ) {
+		$show_source = ! empty( $visual['has_provenance'] ) && function_exists( 'lunara_journal_should_show_public_credit' )
+			&& lunara_journal_should_show_public_credit( $post_id, isset( $visual['attachment_id'] ) ? $visual['attachment_id'] : 0 );
+		if ( ! $show_source && empty( $visual['has_carousel'] ) ) {
 			return;
 		}
 
@@ -15872,7 +15874,7 @@ if ( ! function_exists( 'lunara_render_journal_card_provenance' ) ) {
 		}
 		?>
 		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" aria-label="<?php esc_attr_e( 'Journal visual provenance', 'lunara-film' ); ?>">
-			<?php if ( ! empty( $visual['has_provenance'] ) ) : ?>
+			<?php if ( $show_source ) : ?>
 				<span class="lunara-journal-card-provenance-pill is-source">
 					<?php
 					printf(
