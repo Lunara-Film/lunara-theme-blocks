@@ -47,6 +47,30 @@ function lunara_get_journal_field_value( $post_id, $canonical_key, $legacy_keys 
 	return $default;
 }
 
+/**
+ * Public image/source labels are opt-in, separate from private provenance.
+ * An exact Exclusive kicker marks a Journal file; a typed required-credit
+ * flag preserves an explicit attribution obligation on a post or attachment.
+ * No ambient loop post or source/body keyword can opt a file in.
+ */
+function lunara_journal_should_show_public_credit( $post_id = 0, $attachment_id = 0 ) {
+	$post_id       = absint( $post_id );
+	$attachment_id = absint( $attachment_id );
+	if ( $post_id && 'journal' !== get_post_type( $post_id ) ) {
+		return false;
+	}
+	foreach ( array_filter( array( $post_id, $attachment_id ) ) as $object_id ) {
+		if ( in_array( get_post_meta( $object_id, '_lunara_journal_public_credit_required', true ), array( true, 1, '1' ), true ) ) {
+			return true;
+		}
+	}
+	if ( ! $post_id ) {
+		return false;
+	}
+	$kicker = lunara_get_journal_field_value( $post_id, 'journal_kicker', array( '_lunara_journal_kicker' ) );
+	return is_scalar( $kicker ) && 'exclusive' === strtolower( trim( (string) $kicker ) );
+}
+
 function lunara_get_journal_source_items( $post_id ) {
 	$items = lunara_get_journal_field_value( $post_id, 'journal_source_items', array(), array() );
 	$out   = array();
