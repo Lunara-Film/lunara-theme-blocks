@@ -117,6 +117,9 @@ if ( ! function_exists( 'lunara_render_journal_hero_credit' ) ) {
 	 * @return void
 	 */
 	function lunara_render_journal_hero_credit( $post_id ) {
+		if ( ! function_exists( 'lunara_journal_should_show_public_credit' ) || ! lunara_journal_should_show_public_credit( $post_id, get_post_thumbnail_id( $post_id ) ) ) {
+			return;
+		}
 		$data = lunara_get_journal_hero_credit_data( $post_id );
 		if ( empty( $data['credit'] ) && empty( $data['source_name'] ) ) {
 			return;
@@ -213,11 +216,12 @@ if ( ! function_exists( 'lunara_get_journal_carousel_credit_html' ) ) {
 	 * Return a compact image credit line for a Journal carousel item.
 	 *
 	 * @param int $attachment_id Attachment ID.
+	 * @param int $post_id       Explicit Journal post ID, when part of a file.
 	 * @return string
 	 */
-	function lunara_get_journal_carousel_credit_html( $attachment_id ) {
+	function lunara_get_journal_carousel_credit_html( $attachment_id, $post_id = 0 ) {
 		$attachment_id = absint( $attachment_id );
-		if ( $attachment_id <= 0 ) {
+		if ( $attachment_id <= 0 || ! function_exists( 'lunara_journal_should_show_public_credit' ) || ! lunara_journal_should_show_public_credit( $post_id, $attachment_id ) ) {
 			return '';
 		}
 
@@ -313,7 +317,12 @@ if ( ! function_exists( 'lunara_render_journal_image_carousel' ) ) {
 						$caption = trim( (string) get_the_title( $attachment_id ) );
 					}
 
-					$credit_html = lunara_get_journal_carousel_credit_html( $attachment_id );
+					$show_credit = function_exists( 'lunara_journal_should_show_public_credit' ) && lunara_journal_should_show_public_credit( $post_id, $attachment_id );
+					// Legacy imported captions sometimes consist of the retired labels.
+					if ( ! $show_credit && preg_match( '/^\s*(?:image|credit|source)\s*:/i', $caption ) ) {
+						$caption = '';
+					}
+					$credit_html = lunara_get_journal_carousel_credit_html( $attachment_id, $post_id );
 					if ( '' !== $caption && '' !== $credit_html ) {
 						$caption_text = strtolower( wp_strip_all_tags( $caption ) );
 						if ( false !== strpos( $caption_text, 'image:' ) || false !== strpos( $caption_text, 'credit:' ) || false !== strpos( $caption_text, 'source:' ) ) {

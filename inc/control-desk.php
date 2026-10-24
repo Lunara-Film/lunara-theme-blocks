@@ -5150,7 +5150,7 @@ function lunara_control_desk_get_journal_growth_checks( $post_id ) {
         'label'  => __( 'Visual Provenance', 'lunara-film' ),
         'value'  => $thumbnail_id ? ( ! empty( $credit_quality ) ? implode( ', ', $credit_quality ) : __( 'Credit/source missing', 'lunara-film' ) ) : __( 'No visual file', 'lunara-film' ),
         'state'  => $visual_provenance_state,
-        'note'   => $thumbnail_id && ( $has_credit || $has_source_name ) ? sprintf( __( 'Public credit should read cleanly on the Journal single. Current signal: %s', 'lunara-film' ), $image_credit ) : __( 'Clean Power means the image story must look intentional and credible, with visible provenance when outside artwork is used.', 'lunara-film' ),
+        'note'   => $thumbnail_id && ( $has_credit || $has_source_name ) ? sprintf( __( 'Stored visual provenance: %s. Public credit appears for Exclusive entries or explicit required attribution.', 'lunara-film' ), $image_credit ) : __( 'Keep visual provenance for editorial verification. Routine Journal artwork does not display an automatic public credit.', 'lunara-film' ),
         'signal' => 'ready' === $visual_provenance_state ? '' : __( 'Add credible visual provenance', 'lunara-film' ),
     );
 

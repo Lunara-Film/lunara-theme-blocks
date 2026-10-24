@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Journal visual credits become an explicit exception (Theme 3.2.131 candidate)
+
+- **Shipped:** prepared the Theme 3.2.131 candidate under Dalton's instruction to remove the circled Image / Source block across Journal. One shared visibility rule now governs article heroes, carousels, public cards, archive galleries and retention art; old source metadata cannot turn the routine labels back on. Descriptive captions, image/alt output, article links and private source/image provenance remain intact.
+- **Standard:** the existing Journal Kicker set exactly to Exclusive enables the post-specific exception; explicit required-attribution metadata remains effective. No outlet/source/body substring infers exclusivity. DESIGN.md records the default for existing and future Journal output, and private Control Desk help no longer demands routine public visual credits.
+- **Live:** Theme 3.2.130 at preparation time. Journal Foundation 1.5.1 remains live. The Plex/Fandango item 103719 is still a draft and was inspected through its authenticated preview; this task does not authorize bypassing its earlier article-publication rejection.
+- **Holding:** Codex owns the Theme credit-standard implementation/release. Relevant runtime checks, required CI, exact-head merge, existing manual deployment and live article/archive verification must complete before calling the correction live.
+- **Next:** release the verified candidate to the existing Theme destination with auto-deploy off, then append live results. No database cleanup or cache flush is part of the change.
+- **Found, not fixed:** the prior Journal article approval and unverified unattended delivery remain separate work. This change removes automatic presentation, not the private evidence records used to verify stories and images.
+
+
 ## 2026-10-23 — Journal app live, sourcing corrected, first article awaiting approval
 
 - **Shipped:** Journal Foundation 1.5.0 deployed from `31eb007`, then 1.5.1 from [PR #33](https://github.com/Lunara-Film/lunara-plugin-journal-foundation/pull/33), merge `aa7669fdc2509d40bd72431a24b60b53d09135c8`. Live verification found Dispatch 3.4.2 lazy-loads its feed service; 1.5.1 initializes that public service before discovery checks, without invoking the paid drafting worker. Tested tree `b435fadcb370b160ca9571e086902041d84251ad`.

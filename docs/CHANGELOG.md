@@ -11,6 +11,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-23 — Theme 3.2.131: Journal visual credits are explicit exceptions
+
+Dalton removed the automatic Image / Source treatment as the Journal-wide default. Routine articles no longer turn stored image provenance into public overlays or badges. The same rule governs heroes, article carousels, story cards, archive galleries and retention images. Existing entries inherit it without a database rewrite.
+
+The existing Journal Kicker set exactly to **Exclusive** enables the exception for that entry. Explicit required-attribution metadata on an entry or attachment remains supported. Private provenance, descriptive captions, images, alt text and article links are retained; source/outlet text never guesses that an item is exclusive.
+
+
 
 ## 2026-10-23 — Theme 3.2.130: Home is a cover — one wordmark, a slim header, a tight masthead
 
