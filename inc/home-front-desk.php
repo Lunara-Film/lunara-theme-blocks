@@ -218,6 +218,9 @@ function lunara_render_home_front_door() {
 	$companions  = lunara_get_home_front_door_companions( $lead['url'], 2 );
 	$counts      = function_exists( 'wp_count_posts' ) ? wp_count_posts( 'review' ) : null;
 	$review_total = is_object( $counts ) && isset( $counts->publish ) ? absint( $counts->publish ) : 0;
+	// The cover (3.2.130): the header above carries no wordmark and keeps the
+	// search, so this masthead is the brand and prints no second Search.
+	$cover = ! function_exists( 'lunara_home_cover_is_enabled' ) || lunara_home_cover_is_enabled();
 
 	if ( $logo_id ) {
 		// Timing-immune sizing: the settled dimensions ride on the element, so
@@ -287,11 +290,13 @@ function lunara_render_home_front_door() {
 
 	ob_start();
 	?>
-	<section class="lunara-home-masthead lunara-home-front-desk lunara-home-program is-density-<?php echo esc_attr( $density ); ?> is-route-<?php echo esc_attr( $prominence ); ?>" aria-labelledby="lunara-home-masthead-title">
+	<section class="lunara-home-masthead lunara-home-front-desk lunara-home-program<?php echo $cover ? ' is-cover' : ''; ?> is-density-<?php echo esc_attr( $density ); ?> is-route-<?php echo esc_attr( $prominence ); ?>" aria-labelledby="lunara-home-masthead-title">
 		<div class="lunara-home-masthead-panel">
 			<div class="lunara-home-program-dateline">
 				<p class="lunara-home-program-dateline-items"><?php echo implode( '', array_map( static function ( $item ) { return '<span>' . esc_html( $item ) . '</span>'; }, $dateline ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+				<?php if ( ! $cover ) : ?>
 				<button type="button" class="lunara-home-program-search" data-lunara-search-open><?php esc_html_e( 'Search', 'lunara-film' ); ?></button>
+				<?php endif; ?>
 			</div>
 
 			<div class="lunara-home-masthead-identity">

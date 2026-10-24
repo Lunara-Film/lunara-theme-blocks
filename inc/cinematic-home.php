@@ -43,6 +43,35 @@ function lunara_home_cinematic_front_door_is_enabled() {
 }
 
 /**
+ * Whether Home is a cover (3.2.130).
+ *
+ * A cover carries one wordmark: the program masthead's. The header above it
+ * is a slim bar with search and the menu, and the masthead keeps a tight
+ * height budget (dateline on one line, no second Search, the mark, the dek)
+ * so the lead story is the first thing a reader meets. Home is a cover
+ * whenever the program masthead is the opener; the lunara_home_cover_enabled
+ * filter can turn it off, which brings the header wordmark and the masthead
+ * Search button back.
+ *
+ * @return bool
+ */
+function lunara_home_cover_is_enabled() {
+	$enabled = ! lunara_home_cinematic_front_door_is_enabled();
+
+	return (bool) apply_filters( 'lunara_home_cover_enabled', $enabled );
+}
+
+/**
+ * Whether the page being rendered is the Home cover. The header and the
+ * masthead both ask this, so the two always agree on who carries the mark.
+ *
+ * @return bool
+ */
+function lunara_home_is_cover_request() {
+	return is_front_page() && lunara_home_cover_is_enabled();
+}
+
+/**
  * Whether a third-party slider shortcode is allowed to render the front door.
  */
 function lunara_home_plugin_hero_is_allowed() {
@@ -141,6 +170,10 @@ function lunara_render_plugin_backed_home_hero() {
  * @return array
  */
 function lunara_cinematic_home_body_classes( $classes ) {
+	if ( lunara_home_is_cover_request() ) {
+		$classes[] = 'lunara-home-cover';
+	}
+
 	if ( is_front_page() && lunara_home_cinematic_front_door_is_enabled() ) {
 		$classes[] = 'lunara-home-cinematic-front-door-enabled';
 

@@ -37,7 +37,7 @@ and links to the owning Review editor. This does not alter pairing content.
   gives each pairing its own row: poster beside the complete argument, stacking
   at 640px and below. Neither layout uses a painted container inside another.
 - The Home masthead reads as a printed program: a dateline (place, month,
-  review count) with Search, the mark and dek, then "Now Showing": the lead
+  review count), the mark and dek, then "Now Showing": the lead
   story's landscape still, film and take, beside two companion reviews with
   their stills, then the three section doors. Image, label and headline form
   one unit, not a painted card. The former live signal bar and the Journal and
@@ -45,8 +45,17 @@ and links to the owning Review editor. This does not alter pairing content.
   The wordmark in the masthead is a modest centered mark (at most about 104px
   tall on desktop, 72px on phones, never wider than 560px), not a second
   header; the Brand console logo sizes can shrink it, never enlarge it, and
-  the dek always sits below it. The site header shows the wordmark at its own
-  proportions, contained, never cropped.
+  the dek always sits below it. On inner pages the site header shows the
+  wordmark at its own proportions, contained, never cropped.
+- Home is a cover: one wordmark on the page, the masthead's. The site header
+  on Home drops its brand and slims to a 64px bar (56px on phones) with
+  search and the menu, and the masthead prints no second Search. The
+  masthead spends as little height as it can before the lead story: the
+  dateline on one centered line with middle dots, the mark at its cap, the
+  dek, then Now Showing. The lead still starts within 300px of the top of
+  the page on desktop and 280px on phones; the Studio paddings can tighten
+  that, never loosen it. The hero carousel opener is not a cover (the header
+  keeps its wordmark), and `lunara_home_cover_enabled` can turn the cover off.
 - Every Home section after the masthead opens on the one-pixel gold hairline
   with the same breathing room, and its title is set in the signature face at
   regular weight. One rule per seam: no second border from a section's own

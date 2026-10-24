@@ -46,6 +46,7 @@ function sanitize_key( $key ) {
 }
 function lunara_test_true() { return true; }
 function lunara_test_false() { return false; }
+function is_front_page() { return $GLOBALS['lunara_test']['front'] ?? true; }
 
 require dirname( __DIR__ ) . '/inc/cinematic-home.php';
 
@@ -73,6 +74,23 @@ $GLOBALS['lunara_test']['filters'] = array();
 $GLOBALS['lunara_test']['mods']['lunara_home_opener_style'] = 'cinematic';
 add_filter( 'lunara_home_cinematic_front_door_enabled', 'lunara_test_false' );
 lunara_test_assert( false === lunara_home_cinematic_front_door_is_enabled(), 'a filter can force the carousel off' );
+
+// The cover (3.2.130): Home is a cover whenever the program masthead leads.
+// The header and the masthead both read lunara_home_is_cover_request(), so
+// one answer decides who carries the wordmark.
+$GLOBALS['lunara_test']['filters'] = array();
+$GLOBALS['lunara_test']['mods']    = array();
+lunara_test_assert( true === lunara_home_cover_is_enabled() && true === lunara_home_is_cover_request(), 'with the program masthead leading, Home is a cover' );
+lunara_test_assert( in_array( 'lunara-home-cover', lunara_cinematic_home_body_classes( array() ), true ), 'the cover marks the body' );
+$GLOBALS['lunara_test']['mods']['lunara_home_opener_style'] = 'cinematic';
+lunara_test_assert( false === lunara_home_cover_is_enabled() && ! in_array( 'lunara-home-cover', lunara_cinematic_home_body_classes( array() ), true ), 'the carousel opener is not a cover: the header keeps its wordmark' );
+$GLOBALS['lunara_test']['mods'] = array();
+add_filter( 'lunara_home_cover_enabled', 'lunara_test_false' );
+lunara_test_assert( false === lunara_home_cover_is_enabled() && false === lunara_home_is_cover_request(), 'a filter can turn the cover off under the program masthead' );
+$GLOBALS['lunara_test']['filters'] = array();
+$GLOBALS['lunara_test']['front']   = false;
+lunara_test_assert( true === lunara_home_cover_is_enabled() && false === lunara_home_is_cover_request(), 'an inner page is never a cover request' );
+$GLOBALS['lunara_test']['front'] = true;
 
 /*
  * front-page.php against stubbed WordPress. The section renderers are stubs
