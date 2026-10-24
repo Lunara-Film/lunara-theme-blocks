@@ -69,6 +69,8 @@ function apply_filters( $hook, $value, ...$args ) {
 	return $value;
 }
 function __( $text, $domain = null ) { return $text; }
+// The Lunara Film Debrief editor saves its words as theme mods (3.2.132).
+function get_theme_mod( $key, $default = false ) { return $GLOBALS['lunara_test']['mods'][ $key ] ?? $default; }
 function esc_html( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
 function esc_attr( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
 function esc_url( $url ) { return htmlspecialchars( (string) $url, ENT_QUOTES, 'UTF-8' ); }
@@ -157,9 +159,11 @@ if ( in_array( '--fixture', $argv ?? array(), true ) ) {
 	exit( 0 );
 }
 
-lunara_test_assert( 1 === substr_count( $html, '<section ' ) && 1 === preg_match( '#<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme is-media-posters" data-lunara-site-studio-section="pairing-desk" data-lunara-stills-media="posters" aria-label="Stills that Rhyme">#', $html ), 'one section in the pairing-desk slot, in posters media, keeping its id and Site Studio hook' );
+lunara_test_assert( 1 === substr_count( $html, '<section ' ) && 1 === preg_match( '#<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme is-media-posters" data-lunara-site-studio-section="pairing-desk" data-lunara-stills-media="posters" aria-label="The Lunara Film Debrief">#', $html ), 'one section in the pairing-desk slot, in posters media, keeping its id and Site Studio hook' );
 lunara_test_assert( false === strpos( $html, 'legacy-pair-it-with-desk' ), 'the legacy desk does not render alongside the module' );
-lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-stills-kicker">Stills that Rhyme</p>' ) && false !== strpos( $html, '<h2 class="lunara-home-stills-title">Every review ends with three more films.</h2>' ), 'kicker and the thesis line: three more films' );
+lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-stills-kicker">The Lunara Film Debrief</p>' ) && false !== strpos( $html, '<h2 class="lunara-home-stills-title">Every review ends with three more films.</h2>' ), 'with the editor blank, the Debrief defaults: its name and the thesis line' );
+lunara_test_assert( 1 === substr_count( $html, '<p class="lunara-home-stills-copy">Theme Echo, Counter Program, and Career Context close every Lunara Film review — the next three movies after the credits, each selected individually by me.</p>' ), 'with the editor blank, the Debrief default line, between the headline and the source' );
+lunara_test_assert( strpos( $html, 'lunara-home-stills-title' ) < strpos( $html, 'lunara-home-stills-copy' ) && strpos( $html, 'lunara-home-stills-copy' ) < strpos( $html, 'lunara-home-stills-source' ), 'kicker, headline, line, then the source' );
 lunara_test_assert( 1 === preg_match( '#<p class="lunara-home-stills-source">Fresh from the debrief of <a href="https://example.test/reviews/harbor-light/">Harbor Light – The Tide Comes In Twice</a></p>#', $html ), 'the source line names the review the trio comes from' );
 
 // The reviewed film leads with its poster; then exactly three pairings in Method order, each under its full role name with the question.
@@ -315,5 +319,34 @@ add_filter( 'lunara_home_stills_that_rhyme_set', static function ( $set ) {
 } );
 $html = lunara_render_home_stills_that_rhyme();
 lunara_test_assert( 3 === substr_count( $html, 'is-pairing' ) && 2 === substr_count( $html, 'has-no-art' ) && false !== strpos( $html, 'Supplied.' ) && false === strpos( $html, 'legacy-pair-it-with-desk' ), 'a supplied set renders, plates where posters are missing' );
+
+// ---- The Lunara Film Debrief editor drives the words (3.2.132) ----
+// What Dalton types in Site Studio (the same fields that head the Reviews
+// page Pairing Desk) replaces the defaults; a blank field falls back.
+lunara_test_reset();
+lunara_test_trio();
+$GLOBALS['lunara_test']['mods'] = array( 'lunara_home_pairing_desk_kicker' => '  A saved kicker ', 'lunara_home_pairing_desk_title' => 'A saved headline.', 'lunara_home_pairing_desk_copy' => 'A saved line about the Debrief.' );
+$html = lunara_render_home_stills_that_rhyme();
+lunara_test_assert( false !== strpos( $html, 'aria-label="A saved kicker"' ) && false !== strpos( $html, '<p class="lunara-home-stills-kicker">A saved kicker</p>' ) && false !== strpos( $html, '<h2 class="lunara-home-stills-title">A saved headline.</h2>' ) && false !== strpos( $html, '<p class="lunara-home-stills-copy">A saved line about the Debrief.</p>' ), 'the saved kicker, headline and line replace the defaults' );
+$GLOBALS['lunara_test']['mods'] = array( 'lunara_home_pairing_desk_kicker' => '   ', 'lunara_home_pairing_desk_copy' => '' );
+$html = lunara_render_home_stills_that_rhyme();
+lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-stills-kicker">The Lunara Film Debrief</p>' ) && false !== strpos( $html, 'each selected individually by me.</p>' ), 'a blank field falls back to the Debrief default' );
+
+// ---- Which review leads (3.2.132) ----
+// Both the lead story (21) and the editor's Featured Review (22) carry a
+// full trio. Home keeps the lead story first by default; 'editor' puts the
+// editor's pick first, so Home matches the Reviews page Pairing Desk.
+lunara_test_reset();
+lunara_test_trio( 21 );
+lunara_test_trio( 22 );
+$GLOBALS['lunara_test']['recent'] = array( 22 );
+lunara_test_assert( 'lead' === lunara_home_stills_that_rhyme_review_source() && 21 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ), 'by default the lead story is tried first' );
+lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/harbor-light/">' ), 'by default Home features the lead story' );
+add_filter( 'lunara_home_stills_that_rhyme_review_source', static function () { return 'editor'; } );
+lunara_test_assert( 'editor' === lunara_home_stills_that_rhyme_review_source() && 22 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ) && in_array( 21, lunara_home_stills_that_rhyme_candidate_review_ids(), true ), 'editor first: the Featured Review leads and the lead story follows' );
+lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/night-ferry/">' ), 'editor first: Home features the editor\'s Featured Review' );
+$GLOBALS['lunara_test']['filters'] = array();
+add_filter( 'lunara_home_stills_that_rhyme_review_source', static function () { return 'anything else'; } );
+lunara_test_assert( 'lead' === lunara_home_stills_that_rhyme_review_source(), 'an unknown source value keeps the lead story first' );
 
 fwrite( STDOUT, "Home stills that rhyme: the reviewed film and its three, posters by default — contract passed.\n" );

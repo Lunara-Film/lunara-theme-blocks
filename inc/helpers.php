@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Built-in homepage Lunara Method copy shared by admin and public renderers.
+ * Built-in homepage Lunara Film Debrief copy shared by admin and public renderers.
  *
  * @return array<string,string>
  */
@@ -37,9 +37,9 @@ function lunara_split_review_headline( $title ) {
 
 function lunara_home_pairing_desk_copy_defaults() {
     return array(
-        'kicker' => __( 'The Lunara Method', 'lunara-film' ),
+        'kicker' => __( 'The Lunara Film Debrief', 'lunara-film' ),
         'title'  => __( 'Every review ends with three more films.', 'lunara-film' ),
-        'copy'   => __( 'Theme Echo, Counter Program, and Career Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.', 'lunara-film' ),
+        'copy'   => __( 'Theme Echo, Counter Program, and Career Context close every Lunara Film review — the next three movies after the credits, each selected individually by me.', 'lunara-film' ),
     );
 }
 

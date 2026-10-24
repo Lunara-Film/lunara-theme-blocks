@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-24 — Theme 3.2.133: The Lunara Film Debrief — Dalton edits the Home showcase
+
+Dalton asked whether he can edit the Home Debrief showcase. He could not: its kicker ("Stills that Rhyme") and headline were written into the theme, and it featured the lead story first, while his editor in Site Studio (then "Lunara Method") drove only the Pairing Desk on the Reviews page. So Home featured The Social Reckoning and the Reviews page Backrooms, from one editor.
+
+- **Home reads the editor** (inc/home-stills-that-rhyme.php): `lunara_home_stills_that_rhyme_copy()` reads the kicker, headline and supporting copy the editor saves (`lunara_home_pairing_desk_kicker`, `_title`, `_copy`); a blank field falls back to `lunara_home_pairing_desk_copy_defaults()`. The supporting line renders between the headline and the source line (`.lunara-home-stills-copy`). The section's accessible name follows the kicker. The Studio preview applies unsaved edits as theme mods and renders the real Home, so the preview shows the showcase as Dalton types.
+- **Dalton's name and line** (inc/helpers.php, functions.php fallbacks): the defaults are now "The Lunara Film Debrief", "Every review ends with three more films." and "Theme Echo, Counter Program, and Career Context close every Lunara Film review — the next three movies after the credits, each selected individually by me." (his words, 2026-10-23; one comma added after "credits"). The same defaults head the Reviews page Pairing Desk.
+- **The editor is renamed** "Lunara Film Debrief" everywhere it is named (Site Studio registry and navigation, Control Desk, block editor links, messages), per Dalton's rule that the name is always Lunara Film, never Lunara alone.
+- **Which review leads**: `lunara_home_stills_that_rhyme_review_source()` — `lead` (default, Home's behavior until now: the lead story, then the editor's Featured Review, then the newest) or `editor` (the editor's Featured Review first, so Home and the Reviews page match). Dalton has not chosen yet; an unknown value keeps `lead`. The editor's help text now says what Home does with its pick.
+- Tests: `home-stills-that-rhyme-runtime.php` (the Debrief defaults with the editor blank, the saved words, blank fields falling back, the line between headline and source, both review orders and the unknown-value fallback).
+
 ## 2026-10-24 — Theme 3.2.132: the brand returns on scroll, the rules turn gold, the lane heads take the program's voice
 
 - **Cover brand on scroll** (inc/header-command.php, assets/js/lunara-header.js): on the Home cover the header brand renders again, marked `is-cover-brand`, hidden while the masthead's wordmark is on screen. An IntersectionObserver on `.lunara-home-masthead-logo-frame` sets `is-brand-revealed` once the wordmark has scrolled under the bar, and clears it on the way back; the returned logo is 44px tall. Desktop only (on phones the header scrolls away). No-JS and browsers without IntersectionObserver keep it hidden. Its logo is fetched at low priority so it never competes with the lead still. Reduced motion: no fade.

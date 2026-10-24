@@ -423,11 +423,12 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) )
 	 * @return int[] Distinct published review IDs, lead first.
 	 */
 	function lunara_home_stills_that_rhyme_candidate_review_ids() {
-		$ids = array( lunara_home_stills_that_rhyme_lead_review_id() );
-
-		if ( function_exists( 'lunara_get_pairing_desk_review_id' ) ) {
-			$ids[] = (int) lunara_get_pairing_desk_review_id();
-		}
+		$lead   = lunara_home_stills_that_rhyme_lead_review_id();
+		$picked = function_exists( 'lunara_get_pairing_desk_review_id' ) ? (int) lunara_get_pairing_desk_review_id() : 0;
+		// 3.2.132: the lead story leads by default; 'editor' puts the Lunara
+		// Film Debrief editor's Featured Review first, so Home and the Reviews
+		// page Pairing Desk feature the same review.
+		$ids = 'lead' === lunara_home_stills_that_rhyme_review_source() ? array( $lead, $picked ) : array( $picked, $lead );
 
 		if ( class_exists( 'WP_Query' ) ) {
 			$recent = new WP_Query(
@@ -460,6 +461,54 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) )
 		}
 
 		return $ids;
+	}
+}
+
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_review_source' ) ) {
+	/**
+	 * Which review the Home Debrief showcase tries first (3.2.132): 'lead'
+	 * (the masthead's lead story, as Home has always done) or 'editor' (the
+	 * Lunara Film Debrief editor's Featured Review, the one the Reviews page
+	 * Pairing Desk shows). Either way a review shows only with all three
+	 * pairings; the rest of the line is the other source, then the newest
+	 * reviews. 'lead' stays the default until Dalton chooses; filterable.
+	 *
+	 * @return string 'editor' or 'lead'.
+	 */
+	function lunara_home_stills_that_rhyme_review_source() {
+		$source = 'lead';
+		if ( function_exists( 'apply_filters' ) ) {
+			$source = sanitize_key( (string) apply_filters( 'lunara_home_stills_that_rhyme_review_source', $source ) );
+		}
+		return 'editor' === $source ? 'editor' : 'lead';
+	}
+}
+
+if ( ! function_exists( 'lunara_home_stills_that_rhyme_copy' ) ) {
+	/**
+	 * The words over the Home Debrief showcase (3.2.132), read from the
+	 * Lunara Film Debrief editor in Site Studio: the same kicker, title and
+	 * supporting copy that head the Pairing Desk on the Reviews page, so one
+	 * edit changes both places. A blank field falls back to the Method's own
+	 * defaults (lunara_home_pairing_desk_copy_defaults()).
+	 *
+	 * @return array{kicker:string,title:string,copy:string}
+	 */
+	function lunara_home_stills_that_rhyme_copy() {
+		$defaults = array(
+			'kicker' => 'The Lunara Film Debrief',
+			'title'  => 'Every review ends with three more films.',
+			'copy'   => '',
+		);
+		if ( function_exists( 'lunara_home_pairing_desk_copy_defaults' ) ) {
+			$defaults = array_merge( $defaults, array_intersect_key( (array) lunara_home_pairing_desk_copy_defaults(), $defaults ) );
+		}
+		$copy = array();
+		foreach ( array_keys( $defaults ) as $field ) {
+			$saved          = function_exists( 'get_theme_mod' ) ? trim( (string) get_theme_mod( 'lunara_home_pairing_desk_' . $field, '' ) ) : '';
+			$copy[ $field ] = '' !== $saved ? $saved : trim( (string) $defaults[ $field ] );
+		}
+		return $copy;
 	}
 }
 
@@ -622,13 +671,20 @@ if ( ! function_exists( 'lunara_render_home_stills_that_rhyme' ) ) {
 			$title .= ' – ' . $take;
 		}
 
+		$words = lunara_home_stills_that_rhyme_copy();
+
 		ob_start();
 		?>
-		<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme is-media-<?php echo esc_attr( $media ); ?>" data-lunara-site-studio-section="pairing-desk" data-lunara-stills-media="<?php echo esc_attr( $media ); ?>" aria-label="<?php esc_attr_e( 'Stills that Rhyme', 'lunara-film' ); ?>">
+		<section id="pairing-desk" class="lunara-home-section lunara-home-slot-pairing-desk lunara-home-stills-that-rhyme is-media-<?php echo esc_attr( $media ); ?>" data-lunara-site-studio-section="pairing-desk" data-lunara-stills-media="<?php echo esc_attr( $media ); ?>" aria-label="<?php echo esc_attr( '' !== $words['kicker'] ? $words['kicker'] : $words['title'] ); ?>">
 			<div class="lunara-home-stills-inner">
 				<header class="lunara-home-stills-head">
-					<p class="lunara-home-stills-kicker"><?php esc_html_e( 'Stills that Rhyme', 'lunara-film' ); ?></p>
-					<h2 class="lunara-home-stills-title"><?php esc_html_e( 'Every review ends with three more films.', 'lunara-film' ); ?></h2>
+					<?php if ( '' !== $words['kicker'] ) : ?>
+					<p class="lunara-home-stills-kicker"><?php echo esc_html( $words['kicker'] ); ?></p>
+					<?php endif; ?>
+					<h2 class="lunara-home-stills-title"><?php echo esc_html( $words['title'] ); ?></h2>
+					<?php if ( '' !== $words['copy'] ) : ?>
+					<p class="lunara-home-stills-copy"><?php echo esc_html( $words['copy'] ); ?></p>
+					<?php endif; ?>
 					<p class="lunara-home-stills-source"><?php esc_html_e( 'Fresh from the debrief of', 'lunara-film' ); ?> <a href="<?php echo esc_url( $review['url'] ); ?>"><?php echo esc_html( $title ); ?></a></p>
 				</header>
 

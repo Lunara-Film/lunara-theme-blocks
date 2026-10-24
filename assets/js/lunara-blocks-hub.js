@@ -105,12 +105,12 @@
 			'div',
 			{ className: 'lunara-studio-site-callout', key: 'site-studio' },
 			el( 'strong', {}, __( 'Editing the Lunara homepage?', 'lunara-film' ) ),
-			el( 'p', {}, __( 'Use the focused Site Studio for section structure and Lunara Method copy without loading the full public page in this canvas.', 'lunara-film' ) ),
+			el( 'p', {}, __( 'Use the focused Site Studio for section structure and Lunara Film Debrief copy without loading the full public page in this canvas.', 'lunara-film' ) ),
 			el(
 				'div',
 				{ className: 'lunara-studio-site-callout__actions' },
 				siteStudio.siteStudioUrl ? el( Button, { variant: 'primary', href: siteStudio.siteStudioUrl }, __( 'Open Site Studio', 'lunara-film' ) ) : null,
-				siteStudio.methodUrl ? el( Button, { variant: 'secondary', href: siteStudio.methodUrl }, __( 'Edit Lunara Method', 'lunara-film' ) ) : null,
+				siteStudio.methodUrl ? el( Button, { variant: 'secondary', href: siteStudio.methodUrl }, __( 'Edit Lunara Film Debrief', 'lunara-film' ) ) : null,
 				siteStudio.homepageUrl ? el( Button, { variant: 'tertiary', href: siteStudio.homepageUrl, target: '_blank', rel: 'noopener noreferrer' }, __( 'View Homepage', 'lunara-film' ) ) : null
 			)
 		);

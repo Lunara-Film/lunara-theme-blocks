@@ -15370,9 +15370,9 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 		$copy_defaults = function_exists( 'lunara_home_pairing_desk_copy_defaults' )
 			? lunara_home_pairing_desk_copy_defaults()
 			: array(
-				'kicker' => 'The Lunara Method',
+				'kicker' => 'The Lunara Film Debrief',
 				'title'  => 'Every review ends with three more films.',
-				'copy'   => 'Theme Echo, Counter Program, and Career Context close every Lunara review — the next three moves after the credits, argued by a critic, not served by an algorithm. No other film desk builds this rail.',
+				'copy'   => 'Theme Echo, Counter Program, and Career Context close every Lunara Film review — the next three movies after the credits, each selected individually by me.',
 			);
 		$kicker = function_exists( 'lunara_theme_mod_text' )
 			? lunara_theme_mod_text( 'lunara_home_pairing_desk_kicker', $copy_defaults['kicker'] )
@@ -15401,7 +15401,7 @@ if ( ! function_exists( 'lunara_render_home_pairing_desk' ) ) {
 				<div class="lunara-pairing-desk-head">
 					<div>
 
-						<h2 class="lunara-home-section-title"><?php echo esc_html( '' !== $kicker ? $kicker : __( 'The Lunara Method', 'lunara-film' ) ); ?></h2>
+						<h2 class="lunara-home-section-title"><?php echo esc_html( '' !== $kicker ? $kicker : __( 'The Lunara Film Debrief', 'lunara-film' ) ); ?></h2>
 						<p class="lunara-pairing-desk-thesis"><?php echo esc_html( $title ); ?></p>
 					</div>
 					<div class="lunara-pairing-desk-intro">

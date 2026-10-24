@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-24 — The Lunara Film Debrief: Dalton edits the Home showcase (Theme 3.2.133)
+
+- **Shipped:** Theme 3.2.133 PR: the Home Debrief showcase reads the Lunara Film Debrief editor (kicker, headline, supporting line), the defaults are Dalton's name and line, the editor is renamed from "Lunara Method", and the review-order choice is a filter defaulting to today's behavior. See the 3.2.133 changelog entry. Stacked on 3.2.132; merged and deployed by me when CI is green.
+- **Decided (Dalton, 2026-10-23):** the module is "The Lunara Debrief", and the name is always Lunara Film, never Lunara alone ("it solves the confusion and brands us as FILM"). Applied here as "The Lunara Film Debrief"; he can make the Debrief the one exception. His line: "Theme Echo, Counter Program, and Career Context close every Lunara Film review — the next three movies after the credits each selected individually by me."
+- **Holding:** which review Home features. His editor has Backrooms saved as its Featured Review (the Reviews page shows it; the editor's Automatic rule would choose The Social Reckoning, the newest review with a pairing). Home keeps the lead story first until he chooses; `editor` is one filter value away.
+- **Verified:** `home-stills-that-rhyme-runtime.php`, `home-stills-that-rhyme-browser-runtime.js` 96; whole PHP suite 0 failures.
+- **Next:** the brand sweep (Theme 3.2.134 and the plugins): every visible "Lunara" alone becomes "Lunara Film", with a CI check so it cannot return; saved settings and content listed for Dalton.
+
 ## 2026-10-24 — Brand on scroll, gold rules, lane heads (Theme 3.2.132); plugin CI on Node 24
 
 - **Shipped:** Theme 3.2.132 PR: on the Home cover the header brand returns on desktop once the masthead wordmark scrolls under the bar; Home's rules read their own gold token (the Customizer's site-wide `--lunara-border` is white, which is why the hairlines rendered white); the Journal, Oscar Picks, Oscar Facts and Latest Reviews heads take the program's voice inside DESIGN.md's centered Composition rule; the Studio names the Running Order and Ledger slots for what they render (the Debrief slot keeps Dalton's label, "Pairing Desk (Pair It With)"). See the 3.2.132 changelog entry. Merged and deployed by me when CI is green. Also the Node 24 action majors in the plugin CI (checkout v5, setup-node v5, upload-artifact v6), test-only, merged with no version bump or deploy per AGENTS.md: Core #45, Dispatch #21, AI Assistant Classic #11, Journal Foundation #34, Oscars Ledger #62, all green with no Node 20 annotations. IMDb Guard #11 was opened in Dalton's Chrome (this session reaches that repo only under its old owner name) and merges there when green.

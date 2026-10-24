@@ -718,13 +718,13 @@ if ( ! function_exists( 'lunara_site_studio_lunara_method_read_state' ) ) {
 }
 if ( ! function_exists( 'lunara_site_studio_lunara_method_validate_state' ) ) {
 	function lunara_site_studio_lunara_method_validate_state( $candidate ) {
-		if ( ! is_array( $candidate ) || array_keys( lunara_site_studio_lunara_method_state_schema() ) !== array_keys( $candidate ) ) { return new WP_Error( 'site_studio_method_invalid', __( 'The Lunara Method state is incomplete.', 'lunara-film' ) ); }
+		if ( ! is_array( $candidate ) || array_keys( lunara_site_studio_lunara_method_state_schema() ) !== array_keys( $candidate ) ) { return new WP_Error( 'site_studio_method_invalid', __( 'The Lunara Film Debrief state is incomplete.', 'lunara-film' ) ); }
 		$fields = array();
 		foreach ( array( 'kicker', 'title', 'copy' ) as $key ) { if ( ! is_string( $candidate[ $key ] ) ) { $fields[ $key ] = 'Use text for this field.'; } }
 		foreach ( array( 'review_id', 'backdrop_id' ) as $key ) { if ( ! is_int( $candidate[ $key ] ) || $candidate[ $key ] < 0 ) { $fields[ $key ] = 'Choose a valid ID.'; } }
 		if ( ! in_array( $candidate['review_mode'], array( 'automatic', 'manual' ), true ) ) { $fields['review_mode'] = 'Choose Automatic or Manual.'; }
 		if ( ! lunara_site_studio_method_backdrop_valid( $candidate['backdrop'] ) ) { $fields['backdrop'] = 'Check the backdrop framing values.'; }
-		if ( $fields ) { return new WP_Error( 'site_studio_method_invalid', 'Review the invalid Lunara Method fields.', array( 'fields' => $fields ) ); }
+		if ( $fields ) { return new WP_Error( 'site_studio_method_invalid', 'Review the invalid Lunara Film Debrief fields.', array( 'fields' => $fields ) ); }
 		$state = array(
 			'kicker' => isset( $candidate['kicker'] ) ? trim( sanitize_text_field( $candidate['kicker'] ) ) : '',
 			'title' => isset( $candidate['title'] ) ? trim( sanitize_text_field( $candidate['title'] ) ) : '',
@@ -752,7 +752,7 @@ if ( ! function_exists( 'lunara_site_studio_lunara_method_save_state' ) ) {
 		$validated = lunara_site_studio_lunara_method_validate_state( $candidate ); if ( is_wp_error( $validated ) ) { return $validated; }
 		$before = lunara_site_studio_raw_mod_snapshot( lunara_site_studio_lunara_method_keys() );
 		$keys = lunara_site_studio_lunara_method_keys();
-		if ( ! lunara_site_studio_apply_mod_snapshot( lunara_site_studio_lunara_method_desired_mods( $validated ), $keys ) ) { if ( ! lunara_site_studio_apply_mod_snapshot( $before, $keys ) ) { return new WP_Error( 'site_studio_method_rollback_failed', __( 'The Lunara Method could not be restored safely.', 'lunara-film' ) ); } return new WP_Error( 'site_studio_method_write_failed', __( 'The Lunara Method could not be saved.', 'lunara-film' ) ); }
+		if ( ! lunara_site_studio_apply_mod_snapshot( lunara_site_studio_lunara_method_desired_mods( $validated ), $keys ) ) { if ( ! lunara_site_studio_apply_mod_snapshot( $before, $keys ) ) { return new WP_Error( 'site_studio_method_rollback_failed', __( 'The Lunara Film Debrief could not be restored safely.', 'lunara-film' ) ); } return new WP_Error( 'site_studio_method_write_failed', __( 'The Lunara Film Debrief could not be saved.', 'lunara-film' ) ); }
 		$revision_id = lunara_site_studio_private_revision( 'lunara-method', array( 'mods' => $before ), 'save' );
 		if ( is_wp_error( $revision_id ) ) { if ( ! lunara_site_studio_apply_mod_snapshot( $before, $keys ) ) { return new WP_Error( 'site_studio_method_rollback_failed' ); } return $revision_id; }
 		return array( 'state' => lunara_site_studio_lunara_method_read_state(), 'changed_sections' => array( 'language', 'featured-review', 'backdrop' ), 'revision_id' => $revision_id, 'timestamp' => current_time( 'mysql' ) );
@@ -760,12 +760,12 @@ if ( ! function_exists( 'lunara_site_studio_lunara_method_save_state' ) ) {
 }
 if ( ! function_exists( 'lunara_site_studio_lunara_method_restore_revision' ) ) {
 	function lunara_site_studio_lunara_method_restore_revision( $revision_id ) {
-		$target = lunara_site_studio_private_revision_target( 'lunara-method', $revision_id ); if ( is_wp_error( $target ) || ! lunara_site_studio_valid_method_revision_config( $target ) ) { return is_wp_error( $target ) ? $target : new WP_Error( 'site_studio_revision_invalid', __( 'The selected Lunara Method revision is invalid.', 'lunara-film' ) ); }
+		$target = lunara_site_studio_private_revision_target( 'lunara-method', $revision_id ); if ( is_wp_error( $target ) || ! lunara_site_studio_valid_method_revision_config( $target ) ) { return is_wp_error( $target ) ? $target : new WP_Error( 'site_studio_revision_invalid', __( 'The selected Lunara Film Debrief revision is invalid.', 'lunara-film' ) ); }
 		foreach ( lunara_site_studio_lunara_method_keys() as $key ) { if ( ! array_key_exists( $key, $target['mods'] ) ) { $target['mods'][ $key ] = array( 'present' => false, 'value' => null ); } }
 		$current = lunara_site_studio_raw_mod_snapshot( lunara_site_studio_lunara_method_keys() );
 		$safety_id = lunara_site_studio_private_revision( 'lunara-method', array( 'mods' => $current ), 'restore-safety' ); if ( is_wp_error( $safety_id ) ) { return $safety_id; }
 		$keys = lunara_site_studio_lunara_method_keys();
-		if ( ! lunara_site_studio_apply_mod_snapshot( $target['mods'], $keys ) ) { if ( ! lunara_site_studio_apply_mod_snapshot( $current, $keys ) ) { return new WP_Error( 'site_studio_method_rollback_failed', __( 'The Lunara Method could not be restored safely.', 'lunara-film' ) ); } return new WP_Error( 'site_studio_method_restore_failed', __( 'The selected Lunara Method revision could not be restored.', 'lunara-film' ) ); }
+		if ( ! lunara_site_studio_apply_mod_snapshot( $target['mods'], $keys ) ) { if ( ! lunara_site_studio_apply_mod_snapshot( $current, $keys ) ) { return new WP_Error( 'site_studio_method_rollback_failed', __( 'The Lunara Film Debrief could not be restored safely.', 'lunara-film' ) ); } return new WP_Error( 'site_studio_method_restore_failed', __( 'The selected Lunara Film Debrief revision could not be restored.', 'lunara-film' ) ); }
 		return array( 'state' => lunara_site_studio_lunara_method_read_state(), 'safety_revision_id' => $safety_id, 'timestamp' => current_time( 'mysql' ) );
 	}
 }

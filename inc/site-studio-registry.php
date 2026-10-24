@@ -94,7 +94,7 @@ if ( ! function_exists( 'lunara_site_studio_default_surfaces' ) ) {
 			'lunara-method' => array(
 				'id'                  => 'lunara-method',
 				'group'               => __( 'Homepage', 'lunara-film' ),
-				'label'               => __( 'Lunara Method', 'lunara-film' ),
+				'label'               => __( 'Lunara Film Debrief', 'lunara-film' ),
 				'description'         => __( 'Edit the words, featured Review, and backdrop for the signature three-film showcase.', 'lunara-film' ),
 				'aliases'             => array( 'pairing desk', 'pair it with', 'method', 'three films' ),
 				'owner'               => 'theme:lunara-method',
