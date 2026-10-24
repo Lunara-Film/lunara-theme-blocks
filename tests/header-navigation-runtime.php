@@ -22,7 +22,10 @@ function get_post_meta($id, $key = '', $single = false) { return ''; }
 function lunara_resize_wpcom_image_url($url, $w, $h) { return $url . '?resize=' . $w . ',' . $h; }
 function get_bloginfo($key) { return 'Lunara Film'; }
 function is_admin() { return false; }
-function is_front_page() { return false; }
+function is_front_page() { return $GLOBALS['front_page'] ?? false; }
+// The cover switch lives in inc/cinematic-home.php (contract: home-opener-runtime.php);
+// here it is the seam the header reads: Home with the program masthead is a cover.
+function lunara_home_is_cover_request() { return is_front_page() && ($GLOBALS['cover'] ?? true); }
 function wp_get_theme() { return new class { public function parent() { return false; } }; }
 function post_type_exists($type) { return false; }
 function has_nav_menu($location) { return $GLOBALS['use_saved_menu'] ?? true; }
@@ -93,8 +96,28 @@ if (false !== strpos($brand, '236')) { fwrite(STDERR, "FAIL: the old 420x236 cro
 if (!preg_match('/\.lunara-header-logo\s*\{[^}]*object-fit:\s*contain/', $css) || preg_match('/\.lunara-header-logo\s*\{[^}]*object-fit:\s*cover/', $css)) { fwrite(STDERR, "FAIL: the header logo box contains the wordmark, it does not cover with it\n"); exit(1); }
 ++$checks;
 
+// The Home cover (3.2.130): on Home with the program masthead the header
+// drops its brand link (the masthead carries the only wordmark) and marks
+// itself is-cover; the body gets lunara-header-cover; search and the menu
+// stay. Everywhere else, and on Home with the cover filtered off, the brand
+// link renders as before.
+verify_header(str_contains($markup, '<a class="lunara-header-brand" href="https://lunara.test/"') && !str_contains($markup, 'is-cover'), 'An inner page header carries the brand link and is not a cover');
+verify_header(lunara_header_body_class(array()) === array('lunara-header-takeover'), 'An inner page body is not marked as a cover');
+$GLOBALS['front_page'] = true;
+ob_start(); lunara_render_header_command(); $cover_markup = ob_get_clean();
+verify_header(!str_contains($cover_markup, 'lunara-header-brand') && str_contains($cover_markup, '<header class="lunara-header is-cover" data-lunara-header>'), 'The Home cover header prints no brand link and names itself is-cover');
+verify_header(substr_count($cover_markup, 'data-lunara-search-open') === 1 && str_contains($cover_markup, 'data-lunara-nav-open'), 'The cover header keeps search and the menu');
+verify_header(lunara_header_body_class(array()) === array('lunara-header-takeover', 'lunara-header-cover'), 'The Home cover body carries lunara-header-cover');
+$GLOBALS['cover'] = false;
+ob_start(); lunara_render_header_command(); $uncovered = ob_get_clean();
+verify_header(str_contains($uncovered, 'lunara-header-brand') && !str_contains($uncovered, 'is-cover') && lunara_header_body_class(array()) === array('lunara-header-takeover'), 'With the cover filtered off, Home gets the brand link back');
+$GLOBALS['cover'] = true;
+$GLOBALS['front_page'] = false;
+verify_header(preg_match('/body\.lunara-header-cover\.lunara-header-takeover\s*\{\s*padding-top:\s*64px/', $css) === 1 && preg_match('/\.lunara-header\.is-cover \.lunara-header-inner\s*\{\s*height:\s*64px/', $css) === 1, 'The cover bar is 64px on desktop and the page starts under it');
+verify_header(preg_match('/body\.lunara-header-cover\.lunara-header-takeover\s*\{\s*padding-top:\s*56px/', $css) === 1 && preg_match('/\.lunara-header\.is-cover \.lunara-header-inner\s*\{\s*height:\s*56px/', $css) === 1, 'The cover bar is 56px on phones and the page starts under it');
+
 if (in_array('--fixture', $argv, true)) {
-    echo json_encode(array('html'=>$markup,'css'=>$css,'checks'=>$checks));
+    echo json_encode(array('html'=>$markup,'cover_html'=>$cover_markup,'css'=>$css,'checks'=>$checks));
 } else {
     echo "Header navigation runtime passed: $checks checks.\n";
 }

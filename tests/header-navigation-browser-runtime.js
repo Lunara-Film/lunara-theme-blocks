@@ -74,6 +74,21 @@ const fixture = JSON.parse(execFileSync('php', [path.join(__dirname, 'header-nav
                 });
                 assert.ok(fullMenu.scroll<=width&&Math.abs((fullMenu.nav.left+fullMenu.nav.right)/2-width/2)<=1&&fullMenu.brand.right<=fullMenu.nav.left+1&&fullMenu.nav.right<=fullMenu.search.left+1, `Logo and five-section menu stay centered without collisions at ${width}`);++checks;
             }
+            // The Home cover (3.2.130): the same bar with no brand link, 64px on
+            // desktop and 56px on phones, search and menu still 44px targets,
+            // navigation still centered on desktop.
+            await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#09151e;color:#f4efe3}main{padding:20px}</style>${fixture.css}</head><body class="home lunara-header-takeover lunara-header-cover">${fixture.cover_html}<main><h1>The cover</h1></main>${scripts?'<script>'+fs.readFileSync(path.join(root,'assets/js/lunara-header.js'),'utf8')+'</script>':''}</body></html>`);
+            const cover = await page.evaluate(() => {
+                const box = selector => { const e=document.querySelector(selector); if(!e) return null; const r=e.getBoundingClientRect(); return {left:r.left,right:r.right,center:(r.left+r.right)/2,width:r.width,height:r.height}; };
+                return {scroll:document.documentElement.scrollWidth, brand:box('.lunara-header-brand'), header:box('.lunara-header'), nav:box('.lunara-header-nav'), search:box('.lunara-header-search'), menu:box('.lunara-header-burger'), bodyPad:parseFloat(getComputedStyle(document.body).paddingTop)};
+            });
+            assert.ok(cover.scroll<=width && cover.brand===null && cover.search.width>=44 && cover.search.height>=44, `Cover header: no brand link, search keeps its target at ${width}, JS ${scripts}`); ++checks;
+            if (scripts) {
+                const bar = width<=1020 ? 56 : 64;
+                assert.ok(cover.header.height>=bar && cover.header.height<=bar+1 && cover.bodyPad===bar, `Cover header is a ${bar}px bar and the page starts under it at ${width}`); ++checks;
+                if (width<=1020) { assert.ok(cover.menu.width>=44 && cover.menu.height>=44, `Cover menu keeps its target at ${width}`); ++checks; }
+                else { assert.ok(Math.abs(cover.nav.center-width/2)<=1 && cover.nav.right<=cover.search.left+1, `Cover navigation stays centered and clear of search at ${width}`); ++checks; }
+            }
             if(process.env.LUNARA_HEADER_ARTIFACTS) {
                 fs.mkdirSync(process.env.LUNARA_HEADER_ARTIFACTS,{recursive:true});
                 await page.screenshot({path:path.join(process.env.LUNARA_HEADER_ARTIFACTS,`header-${width}-${scripts?'js':'no-js'}.png`),fullPage:true});

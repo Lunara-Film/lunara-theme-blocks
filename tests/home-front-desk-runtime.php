@@ -89,6 +89,8 @@ function lunara_get_home_identity_logo_id() { return 0; }
 function lunara_home_select_setting( $key, $default, $allowed ) { return $default; }
 function lunara_home_brand_number_setting( $key, $default, $min, $max ) { return $default; }
 function lunara_get_latest_review_post() { return new WP_Post( 11, lunara_test_review( 11 )['title'] ); }
+// The cover switch (inc/cinematic-home.php, its own contract in home-opener-runtime.php).
+function lunara_home_cover_is_enabled() { return $GLOBALS['lunara_test']['cover'] ?? true; }
 function lunara_get_review_hero_image_url( $id ) { return lunara_test_review( (int) $id )['still']; }
 function lunara_rightsize_backdrop_url( $url ) { return str_replace( '/original/', '/w1280/', (string) $url ); }
 function lunara_get_cinematic_hero_slides( $count ) {
@@ -128,12 +130,21 @@ if ( in_array( '--fixture', $argv ?? array(), true ) ) {
 }
 
 // Structure.
-lunara_test_assert( 1 === substr_count( $html, 'class="lunara-home-masthead lunara-home-front-desk lunara-home-program' ), 'one program masthead section' );
+lunara_test_assert( 1 === substr_count( $html, 'class="lunara-home-masthead lunara-home-front-desk lunara-home-program is-cover' ), 'one program masthead section, and on Home it is the cover' );
 lunara_test_assert( false === strpos( $html, 'lunara-home-signal-bar' ) && false === strpos( $html, 'lunara-home-front-desk-signal' ) && false === strpos( $html, 'lunara-home-front-desk-search' ), 'the signal bar and signal cards are retired' );
 lunara_test_assert( strpos( $html, 'lunara-home-program-dateline' ) < strpos( $html, 'lunara-home-masthead-identity' ) && strpos( $html, 'lunara-home-masthead-identity' ) < strpos( $html, 'lunara-home-front-desk-grid' ) && strpos( $html, 'lunara-home-front-desk-grid' ) < strpos( $html, 'lunara-home-masthead-routes' ), 'dateline, identity, Now Showing, doors: in that order' );
 lunara_test_assert( false !== strpos( $html, '<span>Dallas</span>' ) && false !== strpos( $html, '<span>October 2026</span>' ) && false !== strpos( $html, '<span>248 reviews</span>' ), 'the dateline carries place, month and the review count' );
-lunara_test_assert( false !== strpos( $html, 'data-lunara-search-open' ), 'search still opens Search Command' );
+// The cover (3.2.130): the header keeps the search and drops its wordmark,
+// so the masthead prints no second Search; it is the one mark on the page.
+lunara_test_assert( false === strpos( $html, 'data-lunara-search-open' ) && false === strpos( $html, 'lunara-home-program-search' ), 'the cover masthead prints no second Search control' );
 lunara_test_assert( 3 === substr_count( $html, 'class="lunara-home-masthead-route"' ), 'three section doors remain' );
+
+// Cover off (the lunara_home_cover_enabled filter): the header carries the
+// wordmark again, and the masthead gets its Search button back.
+$GLOBALS['lunara_test']['cover'] = false;
+$uncovered = lunara_render_home_front_door();
+$GLOBALS['lunara_test']['cover'] = true;
+lunara_test_assert( false === strpos( $uncovered, ' is-cover' ) && 1 === substr_count( $uncovered, 'class="lunara-home-program-search" data-lunara-search-open' ), 'with the cover off the masthead keeps its own Search button' );
 
 // Lead story.
 lunara_test_assert( 1 === preg_match( '#<article class="lunara-home-front-desk-lead has-image">\s*<a class="lunara-home-front-desk-lead-link" href="https://example.test/reviews/the-social-reckoning/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-lead-media skip-lazy no-lazy" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high"#s', $html ), 'the lead opens with its still as the eager, high-priority LCP image' );

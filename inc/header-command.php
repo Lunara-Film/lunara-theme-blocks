@@ -77,10 +77,24 @@ if ( ! function_exists( 'lunara_header_register_menu_location' ) ) {
 	add_action( 'after_setup_theme', 'lunara_header_register_menu_location', 20 );
 }
 
+if ( ! function_exists( 'lunara_header_is_cover' ) ) {
+	/**
+	 * On the Home cover (3.2.130) the program masthead carries the only
+	 * wordmark, so the header drops its brand and slims to search + menu.
+	 */
+	function lunara_header_is_cover() {
+		return function_exists( 'lunara_home_is_cover_request' ) && lunara_home_is_cover_request();
+	}
+}
+
 if ( ! function_exists( 'lunara_header_body_class' ) ) {
 	function lunara_header_body_class( $classes ) {
 		if ( lunara_header_takeover_enabled() ) {
 			$classes[] = 'lunara-header-takeover';
+
+			if ( lunara_header_is_cover() ) {
+				$classes[] = 'lunara-header-cover';
+			}
 		}
 		return $classes;
 	}
@@ -239,12 +253,15 @@ if ( ! function_exists( 'lunara_render_header_command' ) ) {
 		if ( ! lunara_header_takeover_enabled() || is_admin() ) {
 			return;
 		}
+		$cover = lunara_header_is_cover();
 		?>
-		<header class="lunara-header" data-lunara-header>
+		<header class="lunara-header<?php echo $cover ? ' is-cover' : ''; ?>" data-lunara-header>
 			<div class="lunara-header-inner">
+				<?php if ( ! $cover ) : ?>
 				<a class="lunara-header-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 					<?php echo lunara_header_brand_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</a>
+				<?php endif; ?>
 				<nav class="lunara-header-nav" aria-label="<?php esc_attr_e( 'Primary', 'lunara-film' ); ?>">
 					<?php echo lunara_header_nav_markup( 'header-nav' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</nav>
@@ -424,6 +441,11 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-header-burger span { top: 50%; transform: translateY(-4px); }
 		.lunara-header-burger span::before { left: 0; right: 0; transform: translateY(7px); }
 		.lunara-header-burger span::after { display: none; }
+		/* The Home cover (3.2.130): the masthead carries the only wordmark, so
+		   the header above it is a slim bar, search and the menu, and the page
+		   starts that much higher. */
+		body.lunara-header-cover.lunara-header-takeover { padding-top: 64px; }
+		.lunara-header.is-cover .lunara-header-inner { height: 64px; }
 		@media (max-width: 1020px) {
 			.lunara-header-nav { display: none; }
 			body.lunara-header-takeover { padding-top: 68px; }
@@ -433,6 +455,8 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 			.lunara-header-search { grid-column: 1; grid-row: 1; }
 			.lunara-header-burger { grid-column: 3; grid-row: 1; }
 			.lunara-header-logo { width: auto; max-width: 134px; height: 48px; }
+			body.lunara-header-cover.lunara-header-takeover { padding-top: 56px; }
+			.lunara-header.is-cover .lunara-header-inner { height: 56px; }
 
 			/* --- Mobile fix (2026-10): plain header + no colour bleed ------
 			   1. HEADER. On phones the header was position:fixed with an

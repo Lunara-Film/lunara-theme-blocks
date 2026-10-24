@@ -12,6 +12,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 ---
 
 
+## 2026-10-23 — Theme 3.2.130: Home is a cover — one wordmark, a slim header, a tight masthead
+
+Dalton's phone review of 3.2.129: the site header (search, wordmark, menu) and the program masthead (dateline, Search, wordmark, dek) read as two headers stacked before the first film. Decision: the cover-page masthead (his option B), with the explicit rule that it cannot be tall — the lead story is what readers should meet and click.
+
+- `lunara_home_cover_is_enabled()` / `lunara_home_is_cover_request()` (inc/cinematic-home.php): Home is a cover whenever the program masthead is the opener; the `lunara_home_cover_enabled` filter can turn it off. Body class `lunara-home-cover`.
+- Header (inc/header-command.php): on the cover the header prints no brand link, names itself `is-cover`, and the body gets `lunara-header-cover`; the bar is 64px on desktop and 56px on phones (was 88/68), and the page starts under it. Search and the menu are unchanged. Inner pages are unchanged.
+- Masthead (inc/home-front-desk.php, assets/css/lunara-home-modules.css): `is-cover` on the section; no Search button (the header's is the one Search control on the page); the dateline is one centered line with middle dots (12px on phones, 13px up); the wrapper's top padding and the panel's top padding tighten; the dek is one line on desktop. The wordmark keeps its Direction D cap. With the cover off, the masthead Search button returns.
+- Budget, measured in the browser test with the real cover header above the masthead: the lead still starts at about 224px from the top of the page on a 390px phone (264px at 320px), 254px at 1100px and 287px at 1440px. The contract holds it under 280px on phones and 300px on desktop.
+- Tests: `home-opener-runtime.php` (cover on under the program masthead, off under the carousel, filter final say, never on an inner page); `home-front-desk-runtime.php` (no second Search on the cover, Search back when the cover is off); `header-navigation-runtime.php` (no brand link on the cover, brand on inner pages and with the cover off, body classes, the 64/56px rules; the fixture now also hands out the cover header); `home-front-desk-browser-runtime.js` (header + masthead together: no wordmark in the header, one Search control, the 64/56px bar, one dateline line, the budget); `header-navigation-browser-runtime.js` (the cover bar at six widths, scripts on and off).
+
 ## 2026-10-23 — Theme 3.2.129: the trace reads "not found"; a title-and-year search is the last resort
 
 The 3.2.128 trace on the live Home, for She Said (tt14807308): site none; Ledger asked; gateway class loaded, credentials tmdb=yes, answer `lunara_movie_provider_not_found`; theme TMDB key constant defined and its own find also empty. So TMDB's find-by-IMDb-id returns no movie for an id IMDb itself resolves. Rather than depend on one lookup method:

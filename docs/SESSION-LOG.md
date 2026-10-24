@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Home is a cover (Theme 3.2.130)
+
+- **Shipped:** 3.2.129 merged (#278) and deployed by me; the Home and Debrief poster plates are gone (She Said and Rustin resolve through the title-and-year search). Dalton then reviewed Home on his phone: the site header and the program masthead read as two headers. He chose the cover-page masthead (option B) with one rule: it cannot be tall, because the lead story is what readers should meet and click. Theme 3.2.130 PR: on Home the header drops its wordmark and slims to 64/56px, the masthead drops its Search button, the dateline is one centered line, the top paddings tighten, and the lead still is held within 280px (phones) / 300px (desktop) of the top of the page by the browser contract. See the 3.2.130 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** `home-opener-runtime.php`, `home-front-desk-runtime.php`, `header-navigation-runtime.php` (77 checks), `home-front-desk-browser-runtime.js` (65 checks; measured lead top 224px at 390, 264px at 320, 254px at 1100, 287px at 1440), `header-navigation-browser-runtime.js` (138 checks); whole PHP suite 0 failures.
+- **Live:** Theme 3.2.129; 3.2.130 follows on CI.
+- **Decided:** Home carries one wordmark, the masthead's. The header on Home is a utility bar. Inner pages keep the header wordmark.
+- **Found, not fixed:** on desktop the header is fixed, so once a reader scrolls past the masthead there is no wordmark on screen until they scroll back; a scroll-reveal of the header brand (shown only after the masthead leaves the viewport) is the follow-up if Dalton wants it. The hairline color nit and the Method/Journal/Picks kicker heads stay open.
+
 ## 2026-10-23 — "Not found", so search by title (Theme 3.2.129)
 
 - **Shipped:** 3.2.128 merged (#277) and deployed by me; the trace read in Dalton's Chrome: for She Said the gateway has TMDb credentials and answers `not_found`, and the theme's own find is empty too. Theme 3.2.129 PR: a title-and-year TMDB search as the last resort, the year threaded from the Debrief orbit and the Home module, and the trace extended with the find answer. See the 3.2.129 changelog entry. Merged and deployed by me when CI is green; then I read the trace again.
