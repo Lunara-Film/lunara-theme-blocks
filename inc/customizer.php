@@ -95,43 +95,43 @@ function lunara_customize_register( $wp_customize ) {
 
     // ── PANELS ──────────────────────────────────────────────────────────────
     $wp_customize->add_panel( 'lunara_shell_panel', array(
-        'title'    => __( 'Lunara Site Shell', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Site Shell', 'lunara-film' ),
         'priority' => 30,
         'description' => __( 'Header, navigation, global colors, typography, and spacing.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_homepage_panel', array(
-        'title'    => __( 'Lunara Homepage', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Homepage', 'lunara-film' ),
         'priority' => 31,
         'description' => __( 'Hero, section layout, curation, and content counts.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_reviews_panel', array(
-        'title'    => __( 'Lunara Reviews', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Reviews', 'lunara-film' ),
         'priority' => 32,
         'description' => __( 'Review single layout, labels, debrief, and related section.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_editorial_panel', array(
-        'title'    => __( 'Lunara Editorial', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Editorial', 'lunara-film' ),
         'priority' => 33,
         'description' => __( 'Standard posts, archives, and the debrief signature.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_utility_panel', array(
-        'title'    => __( 'Lunara Utility Pages', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Utility Pages', 'lunara-film' ),
         'priority' => 34,
         'description' => __( '404, search, and generic archive pages.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_oscars_panel', array(
-        'title'    => __( 'Lunara Oscars', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Oscars', 'lunara-film' ),
         'priority' => 35,
         'description' => __( 'Oscars portal headings and button labels.', 'lunara-film' ),
     ) );
 
     $wp_customize->add_panel( 'lunara_footer_panel', array(
-        'title'    => __( 'Lunara Footer', 'lunara-film' ),
+        'title'    => __( 'Lunara Film Footer', 'lunara-film' ),
         'priority' => 36,
         'description' => __( 'Footer tagline, columns, and copyright.', 'lunara-film' ),
     ) );
@@ -827,14 +827,14 @@ function lunara_customize_register( $wp_customize ) {
         ),
         array(
             'setting'  => 'lunara_home_database_heading',
-            'default'  => 'The Lunara Oscar Ledger',
+            'default'  => 'The Lunara Film Oscar Ledger',
             'label'    => __( 'Oscar Spotlight Heading', 'lunara-film' ),
             'type'     => 'text',
             'sanitize' => 'sanitize_text_field',
         ),
         array(
             'setting'  => 'lunara_home_database_copy',
-            'default'  => 'This is not just a review blog. The Lunara Oscar Ledger is a research-driven archive of Academy Awards history, structured so readers can move from iconic films to categories, people, companies, and ceremony context without getting lost in a dead wall of data.',
+            'default'  => 'This is not just a review blog. The Lunara Film Oscar Ledger is a research-driven archive of Academy Awards history, structured so readers can move from iconic films to categories, people, companies, and ceremony context without getting lost in a dead wall of data.',
             'label'    => __( 'Oscar Spotlight Copy', 'lunara-film' ),
             'type'     => 'textarea',
             'sanitize' => 'sanitize_textarea_field',
@@ -1290,7 +1290,7 @@ function lunara_customize_register( $wp_customize ) {
         ),
         array(
             'setting'     => 'lunara_home_dispatch_heading',
-            'default'     => 'News, Reactions, and the Lunara Journal',
+            'default'     => 'News, Reactions, and the Lunara Film Journal',
             'label'       => __( 'Journal Heading', 'lunara-film' ),
             'type'        => 'text',
             'sanitize'    => 'sanitize_text_field',
@@ -1512,7 +1512,7 @@ function lunara_customize_register( $wp_customize ) {
             'label'       => __( 'Heading', 'lunara-film' ),
             'section'     => 'lunara_newsletter_options',
             'type'        => 'text',
-            'description' => __( 'Default: “Get Lunara in your inbox”.', 'lunara-film' ),
+            'description' => __( 'Default: “Get Lunara Film in your inbox”.', 'lunara-film' ),
         )
     );
 
@@ -1574,7 +1574,7 @@ function lunara_customize_register( $wp_customize ) {
         ),
         array(
             'setting'  => 'lunara_reviews_archive_title',
-            'default'  => 'Lunara Reviews',
+            'default'  => 'Lunara Film Reviews',
             'label'    => __( 'Reviews Archive Title', 'lunara-film' ),
             'type'     => 'text',
             'sanitize' => 'sanitize_text_field',
@@ -1828,7 +1828,7 @@ function lunara_customize_register( $wp_customize ) {
     $oscars_portal_controls = array(
         array(
             'setting'     => 'lunara_oscars_portal_kicker',
-            'default'     => 'The Lunara Oscar Ledger',
+            'default'     => 'The Lunara Film Oscar Ledger',
             'label'       => __( 'Portal Kicker', 'lunara-film' ),
             'type'        => 'text',
             'sanitize'    => 'sanitize_text_field',
@@ -1844,7 +1844,7 @@ function lunara_customize_register( $wp_customize ) {
         ),
         array(
             'setting'     => 'lunara_oscars_portal_copy',
-            'default'     => 'Move from a winning film to the people behind it, from one category to the ceremony around it, and from the ledger straight into Lunara criticism without ever hitting a dead wall of data.',
+            'default'     => 'Move from a winning film to the people behind it, from one category to the ceremony around it, and from the ledger straight into Lunara Film criticism without ever hitting a dead wall of data.',
             'label'       => __( 'Portal Intro Copy', 'lunara-film' ),
             'type'        => 'textarea',
             'sanitize'    => 'sanitize_textarea_field',
@@ -2138,7 +2138,7 @@ function lunara_customize_register( $wp_customize ) {
     $review_layout_controls = array(
         array(
             'setting'     => 'lunara_review_default_label',
-            'default'     => 'Lunara Review',
+            'default'     => 'Lunara Film Review',
             'label'       => __( 'Default Review Label', 'lunara-film' ),
             'type'        => 'text',
             'sanitize'    => 'sanitize_text_field',
@@ -2244,7 +2244,7 @@ function lunara_customize_register( $wp_customize ) {
         ),
         array(
             'setting'  => 'lunara_review_related_title',
-            'default'  => 'More Lunara Criticism',
+            'default'  => 'More Lunara Film Criticism',
             'label'    => __( 'Related Section Title', 'lunara-film' ),
         ),
     );
@@ -2412,7 +2412,7 @@ function lunara_customize_register( $wp_customize ) {
         'lunara_post_signal_news'     => array( 'label' => __( 'News Signal Note', 'lunara-film' ), 'default' => 'Industry movement, festival motion, and awards pressure — reported and contextualized for readers tracking cinema as a living system.' ),
         'lunara_post_signal_reaction' => array( 'label' => __( 'Reaction Signal Note', 'lunara-film' ), 'default' => 'A sharper immediate response filed while the impression is still live.' ),
         'lunara_post_signal_essay'    => array( 'label' => __( 'Essay Signal Note', 'lunara-film' ), 'default' => 'A longer editorial line built for readers who want cinema taken seriously as argument, not recap.' ),
-        'lunara_post_signal_dispatch' => array( 'label' => __( 'Dispatch Signal Note', 'lunara-film' ), 'default' => 'A Lunara filing built to move quickly and stay useful.' ),
+        'lunara_post_signal_dispatch' => array( 'label' => __( 'Dispatch Signal Note', 'lunara-film' ), 'default' => 'A Lunara Film filing built to move quickly and stay useful.' ),
     );
 
     foreach ( $signal_note_controls as $setting => $control ) {
@@ -2622,7 +2622,7 @@ function lunara_customize_register( $wp_customize ) {
         ),
         4 => array(
             'kicker' => 'About',
-            'title'  => 'See how Lunara structures the archive.',
+            'title'  => 'See how Lunara Film structures the archive.',
             'copy'   => 'Read the editorial and data philosophy behind the Oscar ledger.',
             'url'    => '/oscars/about/',
         ),

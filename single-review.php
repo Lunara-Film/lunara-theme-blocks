@@ -45,7 +45,7 @@ if ( have_posts() ) :
         $archive_url_meta = trim( (string) get_post_meta( $post_id, '_lunara_review_archive_url_override', true ) );
         $hide_where_card  = '1' === get_post_meta( $post_id, '_lunara_review_hide_where_card', true );
         $hide_detail_card = '1' === get_post_meta( $post_id, '_lunara_review_hide_details_card', true );
-        $default_label    = trim( (string) get_theme_mod( 'lunara_review_default_label', 'Lunara Review' ) );
+        $default_label    = trim( (string) get_theme_mod( 'lunara_review_default_label', 'Lunara Film Review' ) );
         $show_standfirst_default = (bool) get_theme_mod( 'lunara_review_show_standfirst_default', true );
         $show_where_default      = (bool) get_theme_mod( 'lunara_review_show_where_card_default', true );
         $show_details_default    = (bool) get_theme_mod( 'lunara_review_show_details_card_default', true );
@@ -431,7 +431,7 @@ if ( have_posts() ) :
                     <section class="lunara-home-section lunara-review-related lunara-review-related--retention<?php echo $is_full_spoiler ? ' lunara-spoiler-protected-content lunara-spoiler-protected-content--module' : ''; ?>"<?php echo $is_full_spoiler ? ' data-lunara-spoiler-protected data-lunara-spoiler-post="' . esc_attr( $post_id ) . '"' : ''; ?>>
                         <div class="lunara-home-section-head">
                             <div>
-                                <h2 class="lunara-section-title"><?php echo esc_html( get_theme_mod( 'lunara_review_related_title', __( 'More Lunara Criticism', 'lunara-film' ) ) ); ?></h2>
+                                <h2 class="lunara-section-title"><?php echo esc_html( get_theme_mod( 'lunara_review_related_title', __( 'More Lunara Film Criticism', 'lunara-film' ) ) ); ?></h2>
                                 <p class="lunara-home-section-kicker"><?php echo esc_html( $related_kicker ); ?></p>
                             </div>
                             <a class="lunara-section-link" href="<?php echo esc_url( $archive_url ); ?>">

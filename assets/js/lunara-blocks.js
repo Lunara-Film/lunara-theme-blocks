@@ -64,7 +64,7 @@
     }
 
     blocks.registerBlockType( 'lunara/home', {
-        title: __( 'Lunara Home', 'lunara-film' ),
+        title: __( 'Lunara Film Home', 'lunara-film' ),
         icon: 'admin-home',
         category: 'lunara',
         supports: { html: false, align: [ 'wide', 'full' ] },
@@ -77,7 +77,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/reviews', {
-        title: __( 'Lunara Reviews Grid', 'lunara-film' ),
+        title: __( 'Lunara Film Reviews Grid', 'lunara-film' ),
         icon: 'format-gallery',
         category: 'lunara',
         attributes: {
@@ -102,7 +102,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/posts', {
-        title: __( 'Lunara Posts Grid', 'lunara-film' ),
+        title: __( 'Lunara Film Posts Grid', 'lunara-film' ),
         icon: 'grid-view',
         category: 'lunara',
         attributes: {
@@ -135,7 +135,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/carousel', {
-        title: __( 'Lunara Carousel', 'lunara-film' ),
+        title: __( 'Lunara Film Carousel', 'lunara-film' ),
         icon: 'images-alt2',
         category: 'lunara',
         attributes: {
@@ -173,7 +173,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/still', {
-        title: __( 'Lunara Still', 'lunara-film' ),
+        title: __( 'Lunara Film Still', 'lunara-film' ),
         icon: 'format-image',
         category: 'lunara',
         attributes: {
@@ -244,7 +244,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/debrief', {
-        title: __( 'Lunara Debrief', 'lunara-film' ),
+        title: __( 'Lunara Film Debrief', 'lunara-film' ),
         icon: 'editor-ul',
         category: 'lunara',
         supports: { html: false, align: [ 'wide', 'full' ] },
@@ -257,7 +257,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/pair-it-with', {
-        title: __( 'Lunara Pair It With', 'lunara-film' ),
+        title: __( 'Lunara Film Pair It With', 'lunara-film' ),
         icon: 'editor-insertmore',
         category: 'lunara',
         supports: { html: false, align: [ 'wide', 'full' ] },
@@ -270,7 +270,7 @@
     } );
 
     blocks.registerBlockType( 'lunara/where-to-watch', {
-        title: __( 'Lunara Where To Watch', 'lunara-film' ),
+        title: __( 'Lunara Film Where To Watch', 'lunara-film' ),
         icon: 'visibility',
         category: 'lunara',
         attributes: {

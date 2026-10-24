@@ -320,7 +320,7 @@ $lunara_test_design_tokens = array();
 // --- Defaults reproduce the current public literals byte-for-byte.
 $defaults = lunara_reviews_archive_studio_defaults();
 $pristine_defaults = $defaults;
-lunara_test_assert( 'Criticism Desk' === $defaults['kicker'] && 'Lunara Reviews' === $defaults['title'], 'Default identity must reproduce the shipped Criticism Desk / Lunara Reviews literals.' );
+lunara_test_assert( 'Criticism Desk' === $defaults['kicker'] && 'Lunara Film Reviews' === $defaults['title'], 'Default identity must reproduce the shipped Criticism Desk / Lunara Film Reviews literals.' );
 lunara_test_assert( 'Spoiler-free criticism, full-spoiler companion files, festival finds, and the films that deserve a longer argument after the credits roll.' === $defaults['deck'], 'Default deck must reproduce the shipped archive copy byte-for-byte.' );
 lunara_test_assert( 9 === $defaults['item_count'], 'Reviews archive must retain nine cards by default.' );
 lunara_test_assert( array( 'hero', 'grid', 'pagination', 'pairing-desk' ) === $defaults['section_order'], 'Default section order must preserve the proven public sequence.' );

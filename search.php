@@ -435,7 +435,7 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
                 </div>
                 <div class="lunara-editorial-archive-empty-note">
                     <h2 class="lunara-section-title"><?php esc_html_e( 'Search for a title, person, or argument worth reopening.', 'lunara-film' ); ?></h2>
-                    <p class="lunara-home-section-kicker"><?php echo esc_html( $has_query ? __( 'Try Again', 'lunara-film' ) : __( 'Explore Lunara', 'lunara-film' ) ); ?></p>
+                    <p class="lunara-home-section-kicker"><?php echo esc_html( $has_query ? __( 'Try Again', 'lunara-film' ) : __( 'Explore Lunara Film', 'lunara-film' ) ); ?></p>
                     <form role="search" method="get" class="lunara-search-form lunara-search-form-shell" action="<?php echo esc_url( function_exists( 'lunara_search_command_url' ) ? lunara_search_command_url() : home_url( '/' ) ); ?>">
                         <label class="screen-reader-text" for="lunara-search-input"><?php esc_html_e( 'Search for:', 'lunara-film' ); ?></label>
                         <input id="lunara-search-input" type="search" class="lunara-search-input" placeholder="<?php esc_attr_e( 'Search Lunara Film', 'lunara-film' ); ?>" value="<?php echo esc_attr( $query_text ); ?>" name="<?php echo esc_attr( function_exists( 'lunara_search_command_url' ) ? 'q' : 's' ); ?>" />
@@ -446,7 +446,7 @@ if ( empty( $result_posts ) && empty( $oscar_matches ) && ! empty( $recovery_hit
             <div class="lunara-search-empty-routes-shell">
                 <div class="lunara-home-section-head lunara-search-results-head">
                     <div>
-                        <h2 class="lunara-section-title"><?php esc_html_e( 'Elsewhere in Lunara', 'lunara-film' ); ?></h2>
+                        <h2 class="lunara-section-title"><?php esc_html_e( 'Elsewhere in Lunara Film', 'lunara-film' ); ?></h2>
 
                     </div>
                 </div>

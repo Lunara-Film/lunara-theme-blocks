@@ -253,9 +253,9 @@ if ( ! function_exists( 'lunara_oscar_pick_meta_box_callback' ) ) {
 			</select>
 		</p>
 		<p>
-			<label for="lunara_pick_oscar_entity_url"><strong><?php esc_html_e( 'Lunara Ledger URL (optional)', 'lunara-film' ); ?></strong></label><br>
+			<label for="lunara_pick_oscar_entity_url"><strong><?php esc_html_e( 'Lunara Film Ledger URL (optional)', 'lunara-film' ); ?></strong></label><br>
 			<input type="url" id="lunara_pick_oscar_entity_url" name="lunara_pick_oscar_entity_url" value="<?php echo esc_attr( $ledger_url ); ?>" class="widefat" placeholder="/oscars/title/tt12345/" />
-			<span class="description"><?php esc_html_e( 'Link to the film/person page in the Lunara Oscar Ledger. The card image deep-links here.', 'lunara-film' ); ?></span>
+			<span class="description"><?php esc_html_e( 'Link to the film/person page in the Lunara Film Oscar Ledger. The card image deep-links here.', 'lunara-film' ); ?></span>
 		</p>
 		<p>
 			<label for="lunara_pick_imdb_id"><strong><?php esc_html_e( 'Film IMDb ID (optional)', 'lunara-film' ); ?></strong></label><br>

@@ -14,10 +14,10 @@ function lunara_site_studio_home_oscars_spec( $kind ) {
 	$ordinal = function_exists( 'lunara_oscar_ceremony_ordinal_from_year' ) ? lunara_oscar_ceremony_ordinal_from_year( $year ) : (string) ( $year - 1928 );
 	$spec = array(
 		'copy' => array(
-			'kicker' => array( 'mod' => $prefix . 'kicker', 'type' => 'text', 'default' => $picks ? 'Lunara Forecast' : 'Did you know?', 'max_length' => 160 ),
+			'kicker' => array( 'mod' => $prefix . 'kicker', 'type' => 'text', 'default' => $picks ? 'Lunara Film Forecast' : 'Did you know?', 'max_length' => 160 ),
 			'heading' => array( 'mod' => $prefix . 'heading', 'type' => 'text', 'default' => $picks ? 'Road to the ' . $ordinal . ' Academy Awards' : 'Records, firsts, and Oscar arguments that still live on', 'max_length' => 300 ),
 			'summary' => array( 'mod' => $prefix . 'summary', 'type' => 'text', 'default' => $picks ? 'The board before the race hardens. Early forecasts move as films screen, campaigns take shape, and the season reveals itself.' : '', 'max_length' => 1200 ),
-			'cta_text' => array( 'mod' => $prefix . 'cta_text', 'type' => 'text', 'default' => $picks ? 'Open the awards-season board' : 'Explore the full Lunara Oscar Ledger', 'max_length' => 160 ),
+			'cta_text' => array( 'mod' => $prefix . 'cta_text', 'type' => 'text', 'default' => $picks ? 'Open the awards-season board' : 'Explore the full Lunara Film Oscar Ledger', 'max_length' => 160 ),
 		),
 		'selection' => array(
 			'mode' => array( 'mod' => $prefix . 'selection_mode', 'type' => 'select', 'default' => 'legacy', 'allowed' => array( 'legacy', 'automatic', 'manual' ) ),

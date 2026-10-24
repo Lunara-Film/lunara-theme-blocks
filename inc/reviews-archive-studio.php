@@ -36,7 +36,7 @@ function lunara_reviews_archive_studio_defaults() {
 		'schema_version'  => 1,
 		'selection_version' => 0,
 		'kicker'          => __( 'Criticism Desk', 'lunara-film' ),
-		'title'           => __( 'Lunara Reviews', 'lunara-film' ),
+		'title'           => __( 'Lunara Film Reviews', 'lunara-film' ),
 		'deck'            => __( 'Spoiler-free criticism, full-spoiler companion files, festival finds, and the films that deserve a longer argument after the credits roll.', 'lunara-film' ),
 		'supporting_copy' => '',
 		'lead_mode'       => 'automatic',

@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-24 — Always Lunara Film: the brand sweep (Theme 3.2.134)
+
+- **Shipped:** Theme 3.2.134 PR from `claude/brand-lunara-film`, built on main after 3.2.133 merged (#288). Every visible "Lunara" standing alone now reads "Lunara Film": 274 strings in 53 files (57 on public pages, 168 in admin and editor UI, 4 console messages, 45 in dead `functions.php` fallbacks). The new `tests/brand-name-runtime.php` fails CI with `file:line` on any bare "Lunara" in PHP strings and template text, JS strings, CSS strings or `theme.json`; its allowlist has six entries, each one code rather than copy. DESIGN.md gains an Identity section with the rule. See the 3.2.134 changelog entry. I opened the PR and did not merge or deploy it (this session's instruction); the integrating session merges and deploys.
+- **Verified:** whole PHP suite 72/72 with the guard. The guard fails on a temporary bare `__( 'Lunara Trailer' )` at `inc/trailers.php:165` and passes once it is removed. Run over 3.2.133's tree, it reports exactly the 274 strings this release changes. CI policy and shard tests 16/16. All 62 browser and Node test files passed locally (`journal-gallery-controls-browser-runtime.js` skipped; it times out in this container on main too).
+- **Live:** Theme 3.2.133 (the live Journal page reads `data-lunara-theme-version="3.2.133"`). 3.2.134 follows on merge and deploy.
+- **Holding:** stored values that code does not rewrite, read on the live site today: the Home Journal carousel heading "Fresh movement from the Lunara Journal", the Home Oscar Picks kicker "Lunara Sweep Watch", the Debrief page title "Lunara Debrief" (its h1, `<title>` and `og:title`) and two lines of the About page. They need Dalton's edit, or his OK for an agent to make it, in Site Studio and the page editor.
+- **Next:** merge and deploy, then re-read Home, Reviews, Journal, Oscars, Debrief and a single Review for any "Lunara" a saved value still holds. Then the plugin sweep: the Oscars Ledger prints "The Lunara Oscar Ledger", "related Lunara writing" and "On Lunara" on its own pages.
+- **Found, not fixed:** the IFTTT workflow "Run Lunara" is named by Journal Foundation (`run_lunara`) and by Dalton's applet. The theme's description now says "Run Lunara Film", so the plugin label and the applet should follow, unless Dalton keeps that name as the one exception. The Site Studio Search preview still searches for "Lunara", a protocol value PHP and JS check against each other; a follow-up can change it if he wants that preview's search box to read "Lunara Film".
+
 
 ## 2026-10-23 — Journal Stories text corrected and deployed (Foundation 1.5.2)
 

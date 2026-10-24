@@ -26,7 +26,7 @@ function lunara_render_oscars_portal_markup() {
     $deep_cuts          = function_exists( 'lunara_get_home_deep_cuts' ) ? lunara_get_home_deep_cuts() : array();
     $linked_reviews     = function_exists( 'lunara_oscars_linked_reviews_query' ) ? lunara_oscars_linked_reviews_query( 4 ) : new WP_Query();
 
-    $hero_kicker       = lunara_theme_mod_text( 'lunara_oscars_portal_kicker', 'The Lunara Oscar Ledger' );
+    $hero_kicker       = lunara_theme_mod_text( 'lunara_oscars_portal_kicker', 'The Lunara Film Oscar Ledger' );
     $hero_title        = lunara_theme_mod_text( 'lunara_oscars_portal_title', 'Academy Awards history, treated like a living editorial system.' );
     $hero_copy         = '';
     $explore_heading   = lunara_theme_mod_text( 'lunara_oscars_portal_explore_heading', 'Start anywhere in the ledger.' );

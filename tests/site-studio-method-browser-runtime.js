@@ -38,8 +38,8 @@ function barrier(){let entered,release;const entry=new Promise(r=>{entered=r;}),
   await page.goto('https://example.test/wp-admin/admin.php?page=lunara-site-studio&surface=lunara-method');await settled();await installMedia();
   await page.waitForFunction(()=>document.querySelector('[data-method-selected]').textContent.includes('Published Review 7'));
   check(await page.locator('[data-method-selected]').textContent().then(t=>t.includes('Sep 10, 2026')),'Selected item displays its published title and date.');
-  await page.getByRole('link',{name:'Read Lunara Review (opens in a new tab)',exact:true}).waitFor();
-  check((await page.locator('[data-method-selected]').textContent()).includes('Counter Program: No published Lunara review'),'Site Studio reports full pairing roles and availability.');
+  await page.getByRole('link',{name:'Read Lunara Film Review (opens in a new tab)',exact:true}).waitFor();
+  check((await page.locator('[data-method-selected]').textContent()).includes('Counter Program: No published Lunara Film review'),'Site Studio reports full pairing roles and availability.');
   check((await page.getByRole('link',{name:'Edit this review and its pairings',exact:true}).getAttribute('href')).includes('post=7&action=edit'),'Site Studio links to the displayed source review editor.');
   if(process.env.LUNARA_PAIRING_EDITOR_CAPTURE){await page.locator('[data-method-selected]').screenshot({path:process.env.LUNARA_PAIRING_EDITOR_CAPTURE});}
   check(await page.locator('.lunara-editor-image-stage').evaluate(n=>n.style.aspectRatio)==='1440 / 600','Image guide samples the actual desktop destination frame.');

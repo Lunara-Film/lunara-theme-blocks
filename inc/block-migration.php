@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function lunara_register_block_migration_page() {
     add_management_page(
-        __( 'Lunara Block Migration', 'lunara-film' ),
-        __( 'Lunara Block Migration', 'lunara-film' ),
+        __( 'Lunara Film Block Migration', 'lunara-film' ),
+        __( 'Lunara Film Block Migration', 'lunara-film' ),
         'edit_pages',
         'lunara-block-migration',
         'lunara_render_block_migration_page'
@@ -38,8 +38,8 @@ function lunara_render_block_migration_page() {
     $candidates = lunara_find_shortcode_migration_candidates();
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e( 'Lunara Block Migration', 'lunara-film' ); ?></h1>
-        <p><?php esc_html_e( 'Convert legacy Lunara shortcodes stored in content into real Gutenberg dynamic blocks. Old shortcode rendering remains available as a fallback.', 'lunara-film' ); ?></p>
+        <h1><?php esc_html_e( 'Lunara Film Block Migration', 'lunara-film' ); ?></h1>
+        <p><?php esc_html_e( 'Convert legacy Lunara Film shortcodes stored in content into real Gutenberg dynamic blocks. Old shortcode rendering remains available as a fallback.', 'lunara-film' ); ?></p>
 
         <?php if ( is_array( $result ) ) : ?>
             <div class="notice notice-success">
@@ -57,7 +57,7 @@ function lunara_render_block_migration_page() {
 
         <h2><?php esc_html_e( 'Detected Content', 'lunara-film' ); ?></h2>
         <?php if ( empty( $candidates ) ) : ?>
-            <p><?php esc_html_e( 'No supported Lunara shortcodes were found in pages, posts, reviews, or journal entries.', 'lunara-film' ); ?></p>
+            <p><?php esc_html_e( 'No supported Lunara Film shortcodes were found in pages, posts, reviews, or journal entries.', 'lunara-film' ); ?></p>
         <?php else : ?>
             <table class="widefat striped">
                 <thead>
@@ -89,7 +89,7 @@ function lunara_render_block_migration_page() {
             <form method="post" style="margin-top: 18px;">
                 <?php wp_nonce_field( 'lunara_block_migration' ); ?>
                 <input type="hidden" name="lunara_block_migration_action" value="convert">
-                <?php submit_button( __( 'Convert Supported Lunara Shortcodes to Blocks', 'lunara-film' ), 'primary' ); ?>
+                <?php submit_button( __( 'Convert Supported Lunara Film Shortcodes to Blocks', 'lunara-film' ), 'primary' ); ?>
             </form>
         <?php endif; ?>
     </div>

@@ -97,7 +97,7 @@ function lunara_oscars_portal_studio_visibility_owners() {
  */
 function lunara_oscars_portal_studio_identity_specs() {
 	return array(
-		'kicker'             => array( 'setting' => 'lunara_oscars_portal_kicker', 'default' => 'The Lunara Oscar Ledger', 'label' => __( 'Hero kicker', 'lunara-film' ), 'max' => 140 ),
+		'kicker'             => array( 'setting' => 'lunara_oscars_portal_kicker', 'default' => 'The Lunara Film Oscar Ledger', 'label' => __( 'Hero kicker', 'lunara-film' ), 'max' => 140 ),
 		'title'              => array( 'setting' => 'lunara_oscars_portal_title', 'default' => 'Academy Awards history, treated like a living editorial system.', 'label' => __( 'Hero headline', 'lunara-film' ), 'max' => 220 ),
 		'explore_kicker'     => array( 'setting' => 'lunara_oscars_portal_explore_kicker', 'default' => 'Explore the Portal', 'label' => __( 'Quick Start kicker', 'lunara-film' ), 'max' => 140 ),
 		'explore_heading'    => array( 'setting' => 'lunara_oscars_portal_explore_heading', 'default' => 'Start anywhere in the ledger.', 'label' => __( 'Quick Start heading', 'lunara-film' ), 'max' => 220 ),

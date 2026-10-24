@@ -131,7 +131,7 @@ if ( ! function_exists( 'lunara_add_post_editorial_meta_box' ) ) {
     function lunara_add_review_editorial_meta_box() {
         add_meta_box(
             'lunara_review_editorial_controls',
-            'Lunara Review Controls',
+            'Lunara Film Review Controls',
             'lunara_review_editorial_meta_callback',
             'review',
             'side',
@@ -165,7 +165,7 @@ if ( ! function_exists( 'lunara_add_post_editorial_meta_box' ) ) {
         <p>
             <label for="lunara_review_lane_label_override"><strong>Lane Label Override</strong></label><br>
             <input type="text" name="lunara_review_lane_label_override" id="lunara_review_lane_label_override" value="<?php echo esc_attr( $lane_label ); ?>" style="width:100%;">
-            <small>Replaces the automatic `Lunara Review` label above the title.</small>
+            <small>Replaces the automatic `Lunara Film Review` label above the title.</small>
         </p>
         <p>
             <label for="lunara_review_standfirst"><strong>Standfirst Override</strong></label><br>
@@ -209,7 +209,7 @@ if ( ! function_exists( 'lunara_add_post_editorial_meta_box' ) ) {
         <p>
             <label for="lunara_review_archive_url_override"><strong>Reviews Archive URL Override</strong></label><br>
             <input type="url" name="lunara_review_archive_url_override" id="lunara_review_archive_url_override" value="<?php echo esc_attr( $archive_url ); ?>" style="width:100%;">
-            <small>Where "Open Reviews" under More Lunara Criticism points, instead of the main reviews archive.</small>
+            <small>Where "Open Reviews" under More Lunara Film Criticism points, instead of the main reviews archive.</small>
         </p>
         <p>
             <label>
@@ -350,7 +350,7 @@ if ( ! function_exists( 'lunara_add_post_editorial_meta_box' ) ) {
         foreach ( array( 'post', 'journal' ) as $pt ) {
             add_meta_box(
                 'lunara_post_editorial_controls',
-                'Lunara Editorial Controls',
+                'Lunara Film Editorial Controls',
                 'lunara_post_editorial_meta_callback',
                 $pt,
                 'side',

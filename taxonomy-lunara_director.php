@@ -14,7 +14,7 @@ if ( $term instanceof WP_Term ) {
     if ( '' === $archive_copy ) {
         $archive_copy = sprintf(
             /* translators: %s: Director name. */
-            __( 'Every Lunara review currently filed under %s lives here, so the archive reads like a focused filmography rather than a scattershot tag page.', 'lunara-film' ),
+            __( 'Every Lunara Film review currently filed under %s lives here, so the archive reads like a focused filmography rather than a scattershot tag page.', 'lunara-film' ),
             $term->name
         );
     }

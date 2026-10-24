@@ -390,7 +390,7 @@ if ( 'review' === $post_type ) {
                     <section class="lunara-review-single-hero">
                         <div class="lunara-review-single-hero-inner">
                             <h1 class="lunara-review-single-title"><?php the_title(); ?></h1>
-                            <p class="lunara-archive-hero-kicker"><?php esc_html_e( 'Lunara Review', 'lunara-film' ); ?></p>
+                            <p class="lunara-archive-hero-kicker"><?php esc_html_e( 'Lunara Film Review', 'lunara-film' ); ?></p>
 
                             <?php if ( '' !== trim( $excerpt ) ) : ?>
                                 <p class="lunara-review-single-excerpt"><?php echo esc_html( $excerpt ); ?></p>
@@ -482,7 +482,7 @@ if ( 'review' === $post_type ) {
                             <div class="lunara-home-section-head lunara-review-single-debrief-head">
                                 <div>
                                     <h2 class="lunara-section-title"><?php esc_html_e( 'The Closing Ledger', 'lunara-film' ); ?></h2>
-                                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Lunara Debrief', 'lunara-film' ); ?></p>
+                                    <p class="lunara-home-section-kicker"><?php esc_html_e( 'Lunara Film Debrief', 'lunara-film' ); ?></p>
                                 </div>
                                 <?php if ( '' !== $ledger_pill ) : ?>
                                     <div class="lunara-review-single-debrief-ledger"><?php echo wp_kses_post( $ledger_pill ); ?></div>
@@ -512,7 +512,7 @@ if ( 'review' === $post_type ) {
                         <section class="lunara-home-section lunara-review-related">
                             <div class="lunara-home-section-head">
                                 <div>
-                                    <h2 class="lunara-section-title"><?php esc_html_e( 'More Lunara Criticism', 'lunara-film' ); ?></h2>
+                                    <h2 class="lunara-section-title"><?php esc_html_e( 'More Lunara Film Criticism', 'lunara-film' ); ?></h2>
                                     <p class="lunara-home-section-kicker"><?php esc_html_e( 'Continue Watching', 'lunara-film' ); ?></p>
                                 </div>
                                 <a class="lunara-section-link" href="<?php echo esc_url( $archive_url ); ?>">
@@ -611,7 +611,7 @@ if ( have_posts() ) :
             'podcast'   => __( 'An audio-led dispatch translated into a cleaner editorial trail on the page.', 'lunara-film' ),
             'ink'       => __( 'A writerly dispatch lane where the filing itself carries the signature.', 'lunara-film' ),
             'interview' => __( 'A conversation-driven filing shaped to foreground the voice and what matters in it.', 'lunara-film' ),
-            'dispatch'  => get_theme_mod( 'lunara_post_signal_dispatch', __( 'A Lunara filing built to move quickly while still keeping the argument intact.', 'lunara-film' ) ),
+            'dispatch'  => get_theme_mod( 'lunara_post_signal_dispatch', __( 'A Lunara Film filing built to move quickly while still keeping the argument intact.', 'lunara-film' ) ),
         );
         $signal_note    = '' !== $signal_note_override
             ? $signal_note_override

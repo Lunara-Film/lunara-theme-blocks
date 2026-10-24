@@ -341,7 +341,7 @@ if ( ! function_exists( 'lunara_register_pairing_showcase_block' ) ) {
 				'api_version'     => 3,
 				'category'        => 'lunara',
 				'editor_script'   => 'lunara-pairing-showcase',
-				'title'           => __( 'Lunara Pair It With — Curated', 'lunara-film' ),
+				'title'           => __( 'Lunara Film Pair It With — Curated', 'lunara-film' ),
 				'icon'            => 'screenoptions',
 				'description'     => __( 'The signature Pair It With, fully editable per instance: hand-pick each film, its role label, note, and poster, reorder the cards (slot 1 is featured), or mirror an existing review\'s automatic pairings. Posters, IMDb links, and Oscar-ledger pills resolve automatically.', 'lunara-film' ),
 				'attributes'      => lunara_pairing_showcase_attribute_schema(),

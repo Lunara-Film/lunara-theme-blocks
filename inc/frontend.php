@@ -1834,7 +1834,7 @@ if ( ! function_exists( 'lunara_get_search_recovery_routes' ) ) {
                     array(
                         'kicker' => $kicker,
                         'title'  => $title,
-                        'meta'   => __( 'Closest Lunara route', 'lunara-film' ),
+                        'meta'   => __( 'Closest Lunara Film route', 'lunara-film' ),
                         'url'    => get_permalink( $post_id ),
                         'score'  => $score,
                     )
@@ -3876,11 +3876,11 @@ if ( ! function_exists( 'lunara_render_newsletter_signup' ) ) {
 
         $heading = trim( (string) get_theme_mod( 'lunara_newsletter_heading', '' ) );
         if ( '' === $heading ) {
-            $heading = __( 'Get Lunara in your inbox', 'lunara-film' );
+            $heading = __( 'Get Lunara Film in your inbox', 'lunara-film' );
         }
         $blurb = trim( (string) get_theme_mod( 'lunara_newsletter_blurb', '' ) );
         if ( '' === $blurb ) {
-            $blurb = __( 'New reviews and Journal dispatches, straight from the Lunara desk. No spam — unsubscribe anytime.', 'lunara-film' );
+            $blurb = __( 'New reviews and Journal dispatches, straight from the Lunara Film desk. No spam — unsubscribe anytime.', 'lunara-film' );
         }
 
         // Mailchimp bot-trap field name is b_<u>_<id>, derived from the form

@@ -291,7 +291,7 @@ delete_option( LUNARA_JOURNAL_ARCHIVE_STUDIO_OPTION );
 set_theme_mod( 'lunara_journal_archive_kicker', 'The Lunara Journal' );
 set_theme_mod( 'lunara_journal_archive_title', 'Journal' );
 $pre_studio_identity = lunara_journal_archive_studio_get_public_config( false );
-lunara_test_assert( '' === $pre_studio_identity['kicker'] && 'Lunara Journal' === $pre_studio_identity['title'], 'An exact pre-Studio legacy sentinel pair must use the current uncluttered default identity without a write.' );
+lunara_test_assert( '' === $pre_studio_identity['kicker'] && 'Lunara Film Journal' === $pre_studio_identity['title'], 'An exact pre-Studio legacy sentinel pair must use the current uncluttered default identity without a write.' );
 update_option( LUNARA_JOURNAL_ARCHIVE_STUDIO_OPTION, array( 'schema_version' => 1 ) );
 $post_studio_identity = lunara_journal_archive_studio_get_public_config( false );
 lunara_test_assert( 'The Lunara Journal' === $post_studio_identity['kicker'] && 'Journal' === $post_studio_identity['title'], 'Once the existing Studio schema marker is present, those same explicit phrases must round-trip verbatim.' );
@@ -606,7 +606,7 @@ $cleared_gallery_candidate = lunara_journal_archive_studio_config_from_request( 
 lunara_test_assert( array() === $cleared_gallery_candidate['gallery']['items'] && ! is_wp_error( lunara_journal_archive_studio_validate_config( $cleared_gallery_candidate ) ), 'Clear gallery must validate as an empty zero-output state.' );
 
 $public_before = lunara_journal_archive_studio_get_public_config( false );
-lunara_test_assert( 'Lunara Journal' === $public_before['title'], 'Built-in fallback must represent current public identity.' );
+lunara_test_assert( 'Lunara Film Journal' === $public_before['title'], 'Built-in fallback must represent current public identity.' );
 $state_before_invalid = serialize( array( $lunara_test_theme_mods, $lunara_test_options, $lunara_test_posts ) );
 $invalid_promotion = lunara_journal_archive_studio_promote_config( $invalid_lead, 'save' );
 lunara_test_assert( is_wp_error( $invalid_promotion ), 'Invalid promotion must return its validation error.' );
@@ -816,7 +816,7 @@ $restore_id = $revisions[0]['id'];
 $post_records_before_restore = serialize( $lunara_test_posts );
 $restored = lunara_journal_archive_studio_restore_revision( $restore_id );
 lunara_test_assert( ! is_wp_error( $restored ), 'A valid prior-public revision must restore.' );
-lunara_test_assert( 'Lunara Journal' === lunara_journal_archive_studio_get_public_config( false )['title'], 'Restore must reinstate the prior public configuration.' );
+lunara_test_assert( 'Lunara Film Journal' === lunara_journal_archive_studio_get_public_config( false )['title'], 'Restore must reinstate the prior public configuration.' );
 lunara_test_assert( $post_records_before_restore === serialize( $lunara_test_posts ), 'Restore must not change Journal publication metadata.' );
 $restore_revisions = lunara_journal_archive_studio_get_revisions();
 lunara_test_assert( 'restore' === $restore_revisions[0]['action'] && 'passed' === $restore_revisions[0]['validator_result'] && true === $restore_revisions[0]['prior_public'], 'Restore must create a complete newest audit row.' );

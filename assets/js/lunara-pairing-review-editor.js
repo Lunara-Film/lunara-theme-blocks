@@ -2,19 +2,19 @@
 (function () {
  'use strict';
  var api = window.wp.apiFetch, query = window.wp.url.addQueryArgs;
- var labels = {unidentified:'Choose a film with an IMDb ID to check for a Lunara review.',reviewed:'Lunara review available',unreviewed:'No published Lunara review for this film.'};
+ var labels = {unidentified:'Choose a film with an IMDb ID to check for a Lunara Film review.',reviewed:'Lunara Film review available',unreviewed:'No published Lunara Film review for this film.'};
  function node(tag,text,parent) { var element=document.createElement(tag);element.textContent=text;parent.appendChild(element);return element; }
  function safeUrl(value) { try { var url=new URL(value);return url.origin===window.location.origin && !url.username && !url.password ? url.href : ''; } catch(error) { return ''; } }
  function render(parent,item) {
   if (!item || !Object.prototype.hasOwnProperty.call(labels,item.status) || typeof item.url!=='string') { throw new Error('Invalid review status'); }
   node('span',labels[item.status],parent);
-  if (item.status==='reviewed') { var href=safeUrl(item.url);if(!href){throw new Error('Invalid review link');}node('span',' — ',parent);var link=node('a','Read Lunara Review',parent);link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Read Lunara Review (opens in a new tab)'); }
+  if (item.status==='reviewed') { var href=safeUrl(item.url);if(!href){throw new Error('Invalid review link');}node('span',' — ',parent);var link=node('a','Read Lunara Film Review',parent);link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Read Lunara Film Review (opens in a new tab)'); }
  }
  function mount(parent,params,report) {
   var alive=true;
   parent.replaceChildren();parent.setAttribute('role','status');parent.setAttribute('aria-live','polite');
   function load() {
-   parent.replaceChildren();node('span','Checking Lunara reviews…',parent);
+   parent.replaceChildren();node('span','Checking Lunara Film reviews…',parent);
    api({path:query('/lunara-pairing-editor/v1/'+(report?'report':'lookup'),params)}).then(function (payload) {
     if(!alive){return;}parent.replaceChildren();
     if(report){
@@ -35,7 +35,7 @@
   var parent=node('p','',input.closest('.acf-input') || input.parentElement),cancel=null,timer=null;
   parent.className='description lunara-pairing-review-status';
   function update() {
-   if(cancel){cancel();}clearTimeout(timer);parent.replaceChildren();node('span','Checking Lunara reviews…',parent);
+   if(cancel){cancel();}clearTimeout(timer);parent.replaceChildren();node('span','Checking Lunara Film reviews…',parent);
    timer=setTimeout(function () {
     var id=document.getElementById('post_ID'),params={review_id:id?Number(id.value)||0:0};
     params[movie?'movie_id':'imdb']=movie?Number(input.value)||0:input.value;

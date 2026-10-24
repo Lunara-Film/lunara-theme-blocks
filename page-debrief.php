@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Lunara Debrief Method
+ * Template Name: Lunara Film Debrief Method
  * Template Post Type: page
  *
  * The explainer for the signature that closes every review: three films in

@@ -6,7 +6,7 @@ function jp_assert( $ok, $message ) { global $checks; ++$checks; if ( ! $ok ) { 
 function jp_dom( $html ) { $doc = new DOMDocument(); @$doc->loadHTML( '<?xml encoding="UTF-8">' . $html ); return new DOMXPath( $doc ); }
 $html = jp_render();
 $dom = jp_dom( $html );
-jp_assert( 1 === $dom->query( '//h1' )->length && 'Lunara Journal' === $dom->query( '//h1' )->item(0)->textContent, 'The actual archive retains one named page heading.' );
+jp_assert( 1 === $dom->query( '//h1' )->length && 'Lunara Film Journal' === $dom->query( '//h1' )->item(0)->textContent, 'The actual archive retains one named page heading.' );
 jp_assert( 8 === $dom->query( '//h2[@class="lunara-review-grid-title"]' )->length, 'Every archive story uses the next heading level; no hidden toolbar heading is needed.' );
 jp_assert( 3 === $dom->query( '//h3[@class="lunara-journal-archive-retention-title"]' )->length, 'All three continuation routes remain under the section heading.' );
 jp_assert( 0 === $dom->query( '//h2[@class="lunara-footer-col-heading"]' )->length, 'The standard footer omits directory headings.' );
