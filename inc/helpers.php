@@ -56,10 +56,10 @@ function lunara_get_home_section_registry() {
             'aliases'      => array(),
         ),
         'featured' => array(
-            'label'        => __( 'Featured Reviews', 'lunara-film' ),
-            'toggle_label' => __( 'Show Featured Reviews', 'lunara-film' ),
+            'label'        => __( 'The Running Order', 'lunara-film' ),
+            'toggle_label' => __( 'Show The Running Order', 'lunara-film' ),
             'setting'      => 'lunara_home_show_featured',
-            'description'  => __( 'The curated poster-led criticism shelf.', 'lunara-film' ),
+            'description'  => __( 'Every review, newest first: the poster wall under the masthead.', 'lunara-film' ),
             'aliases'      => array( 'featured-reviews', 'featured-review' ),
         ),
         'dispatch' => array(
@@ -98,10 +98,10 @@ function lunara_get_home_section_registry() {
             'aliases'      => array( 'database-spotlight' ),
         ),
         'ledger' => array(
-            'label'        => __( 'From the Ledger', 'lunara-film' ),
-            'toggle_label' => __( 'Show From the Ledger', 'lunara-film' ),
+            'label'        => __( 'The Oscar Ledger (Intermission)', 'lunara-film' ),
+            'toggle_label' => __( 'Show the Oscar Ledger band', 'lunara-film' ),
             'setting'      => 'lunara_home_show_ledger',
-            'description'  => __( 'Oscar-ledger story cards and research-driven history links.', 'lunara-film' ),
+            'description'  => __( 'The full-bleed Oscar Ledger band: the ceremony count and five Best Picture posters.', 'lunara-film' ),
             'aliases'      => array(),
         ),
         'deep-cuts' => array(
@@ -119,10 +119,10 @@ function lunara_get_home_section_registry() {
             'aliases'      => array( 'latest', 'reviews' ),
         ),
         'pairing-desk' => array(
-            'label'        => __( 'Pairing Desk (Pair It With)', 'lunara-film' ),
-            'toggle_label' => __( 'Show Pairing Desk', 'lunara-film' ),
+            'label'        => __( 'Stills that Rhyme', 'lunara-film' ),
+            'toggle_label' => __( 'Show Stills that Rhyme', 'lunara-film' ),
             'setting'      => 'lunara_home_show_pairing_desk',
-            'description'  => __( 'Showcases the signature Pair It With module: the three films paired with the latest reviewed title.', 'lunara-film' ),
+            'description'  => __( 'The Debrief on Home: the reviewed film and its three pairings, posters by default, stills when all four have them.', 'lunara-film' ),
             'aliases'      => array( 'pairing', 'pair-it-with', 'pairings' ),
         ),
     );

@@ -59,6 +59,25 @@
 		}
 	}
 
+	/*
+	 * The Home cover (3.2.131): the masthead carries the wordmark, so the
+	 * header's own brand stays hidden until that wordmark has scrolled up
+	 * under the bar, then returns. Scrolling back down past it hides it again.
+	 * Without IntersectionObserver the brand simply stays hidden.
+	 */
+	function coverReveal() {
+		var header = document.querySelector('.lunara-header.is-cover');
+		var mark = document.querySelector('.lunara-home-masthead-logo-frame') || document.querySelector('.lunara-home-masthead');
+		if (!header || !mark || !('IntersectionObserver' in window)) { return; }
+		var top = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+		var observer = new IntersectionObserver(function (entries) {
+			var entry = entries[entries.length - 1];
+			var line = entry.rootBounds ? entry.rootBounds.top : top;
+			header.classList.toggle('is-brand-revealed', !entry.isIntersecting && entry.boundingClientRect.bottom <= line + 1);
+		}, { rootMargin: '-' + top + 'px 0px 0px 0px', threshold: 0 });
+		observer.observe(mark);
+	}
+
 	function ready(fn) {
 		if (document.readyState !== 'loading') { fn(); } else { document.addEventListener('DOMContentLoaded', fn); }
 	}
@@ -70,6 +89,8 @@
 		Array.prototype.forEach.call(document.querySelectorAll('.ct-drawer-canvas, #offcanvas.ct-panel'), function (el) {
 			if (el.parentNode) { el.parentNode.removeChild(el); }
 		});
+
+		coverReveal();
 
 		root   = document.getElementById('lunara-offcanvas');
 		opener = document.querySelector('[data-lunara-nav-open]');

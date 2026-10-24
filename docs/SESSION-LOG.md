@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-24 — Brand on scroll, gold rules, lane heads (Theme 3.2.131); plugin CI on Node 24
+
+- **Shipped:** Theme 3.2.131 PR: on the Home cover the header brand returns on desktop once the masthead wordmark scrolls under the bar; Home's rules read their own gold token (the Customizer's site-wide `--lunara-border` is white, which is why the hairlines rendered white); the Journal, Oscar Picks, Oscar Facts and Latest Reviews heads take the Running Order's head; the Studio names the Direction D slots for what they render. See the 3.2.131 changelog entry. Merged and deployed by me when CI is green. Also the Node 24 action majors in the plugin CI (checkout v5, setup-node v5, upload-artifact v6), test-only, merged with no version bump or deploy per AGENTS.md: Core #45, Dispatch #21, AI Assistant Classic #11, Journal Foundation #34, Oscars Ledger #62, all green with no Node 20 annotations. IMDb Guard #11 was opened in Dalton's Chrome (this session reaches that repo only under its old owner name) and merges there when green.
+- **Verified:** whole PHP suite 0 failures; CI policy tests 16/16; `header-navigation-browser-runtime.js` 150, `home-lane-heads-browser-runtime.js` 185 (new), `home-front-desk-browser-runtime.js` 65 (with the live white token; fails on 3.2.130's CSS), `home-carousels-browser-runtime.js` 144, `home-section-order` 12, `home-stills-that-rhyme` 96, `home-running-order` 60, `home-ledger-band` 40, `live-search-keyboard` 174.
+- **Live:** Theme 3.2.130; 3.2.131 follows on CI.
+- **Found, not fixed:** "Method" in the earlier open list was the old Pairing Desk editor's name ("Lunara Method"); Stills that Rhyme replaced that head on Home, so there is no Method head left there. The lunara-page-lifecycle script mounts only on the first page load (no soft navigation), so the cover state cannot carry onto inner pages.
+
 ## 2026-10-23 — Journal app live, sourcing corrected, first article awaiting approval
 
 - **Shipped:** Journal Foundation 1.5.0 deployed from `31eb007`, then 1.5.1 from [PR #33](https://github.com/Lunara-Film/lunara-plugin-journal-foundation/pull/33), merge `aa7669fdc2509d40bd72431a24b60b53d09135c8`. Live verification found Dispatch 3.4.2 lazy-loads its feed service; 1.5.1 initializes that public service before discovery checks, without invoking the paid drafting worker. Tested tree `b435fadcb370b160ca9571e086902041d84251ad`.
