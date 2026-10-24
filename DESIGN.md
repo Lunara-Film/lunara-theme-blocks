@@ -74,20 +74,30 @@ and links to the owning Review editor. This does not alter pairing content.
   Rhyme kicker, the summary in muted reading type, the action beneath in the
   Running Order's gold italic link. No kicker is added where the heading
   already names the lane, and no second rule runs under a head.
-- Stills that Rhyme reads from the lead story first, then the review the
-  Pair It With desk shows, then the newest reviews, and renders the first
-  review that carries all three pairings.
+- The Home Debrief showcase (the pairing-desk slot, built as Stills that
+  Rhyme) is The Lunara Film Debrief on Home, and Dalton edits it: its kicker,
+  headline and supporting line come from the Lunara Film Debrief editor in
+  Site Studio, the same fields that head the Pairing Desk on the Reviews
+  page, so one edit changes both places. Blank fields fall back to the
+  Debrief defaults: "The Lunara Film Debrief", "Every review ends with three
+  more films.", and Dalton's line, "Theme Echo, Counter Program, and Career
+  Context close every Lunara Film review — the next three movies after the
+  credits, each selected individually by me." It reads from the lead story
+  first, then the editor's Featured Review, then the newest reviews, and
+  renders the first review that carries all three pairings
+  (`lunara_home_stills_that_rhyme_review_source` = `editor` puts the
+  editor's Featured Review first).
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.
-- Home runs in the program's order: the masthead, Stills that Rhyme, The
+- Home runs in the program's order: the masthead, the Debrief showcase, The
   Running Order, the Oscar Ledger intermission, then the Journal lane and the
   Oscar lanes. The saved Section Order (a Studio preset, or a custom order)
   decides that order in PHP; no stylesheet reorders the sections. Phones read
   the same order as desktop.
-- Stills that Rhyme fills the pairing-desk slot with the Debrief as the
-  Debrief is: the reviewed film and its three. A kicker, the line "Every
-  review ends with three more films.", the source review, then the reviewed
+- The showcase fills the pairing-desk slot with the Debrief as the
+  Debrief is: the reviewed film and its three. The editor's kicker, headline
+  and line, the source review, then the reviewed
   film's face centered over the three pairings' faces in one row, each under
   its full role name — Theme Echo, Counter Program, Career Context — with
   "Film, Year." and the Method question. Posters (2:3) are the default face,
