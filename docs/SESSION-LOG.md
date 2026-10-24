@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Journal app implemented and merged; deployment pending (Foundation 1.5.0)
+
+- **Shipped:** `lunara-plugin-journal-foundation` 1.5.0 implemented and merged in [PR #31](https://github.com/Lunara-Film/lunara-plugin-journal-foundation/pull/31), commit `d74408154042e175d4624c62926393e9986810de`, verified tree `f7b42560dabd82f033fa330e55612471b5747104`. Stories now source and display film pitches with images, source links, an optional angle, Write it / Pass decisions and the shared Dispatch queue. Publishing shows a daily target of one, a seven-article reserve target, timed delivery and held articles; approval expires or becomes invalid when the saved article changes.
+- **Verified:** all 16 local PHP behavior suites, 16 JavaScript behavior tests, and repository PHP/JavaScript syntax passed. PR CI passed on PHP 7.4, 8.2 and 8.3. Independent backend review findings were corrected. These checks do not establish live or rendered behavior.
+- **Live:** independently read through WordPress.com: Foundation 1.4.1 and Dispatch 3.4.2. Foundation 1.5.0 has not been deployed; no publication settings, scopes or live articles changed.
+- **Holding:** the merged 1.5.0 candidate awaits its explicit deployment instruction under `AGENTS.md`. Automatic deployment remains off.
+- **Next:** verify the existing manual Foundation repository destination and deploy the identified 1.5.0 candidate when instructed; then verify host cron, live feeds/provider access, publication configuration/scopes, rendered desktop/mobile behavior, and one approved real article from saved draft through its public URL.
+- **Found, not fixed:** Cloud Browser could not reach the local fixture (`ERR_CONNECTION_REFUSED`), so visual and live end-to-end verification remain outstanding. A reliable server scheduler is not yet verified. Source-coverage matching is bounded to 250 active Journal records, and deterministic feature-film filtering can miss or misclassify stories.
+
 ## 2026-10-23 — Own Journal app: sourcing through daily publication (Foundation 1.5.0 in progress)
 
 - **Shipped:** pending. Dalton approved building the private LUNARA app using the Grok example's story-sourcing simplicity; the existing Journal Desk and Dispatch remain the runtime.
