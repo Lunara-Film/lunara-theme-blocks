@@ -4,6 +4,13 @@ Ideas that are not defects. Each needs three lines and Dalton's yes before any
 agent builds it; features batch into at most one release a quarter. Newest
 first.
 
+## Private Journal app and daily publishing — Dalton, 2026-10-23
+
+- Visitor gains: a consistently active Journal, with at least one post intended for every day; Dalton gains a shared, phone-friendly path from sourced film stories to edited, verified publication.
+- Build cost: extend the existing private Journal Desk and Foundation with a film-story feed, shared pitch decisions, publication coverage, and explicitly approved reserve/timed delivery; reuse Dispatch and the existing guarded publishing route.
+- Keep cost: maintain bounded feed filtering and delivery behavior tests, approved reserve freshness, and an independently verified server scheduler; no second content database or browser-held publishing credentials.
+- Status: implementation explicitly authorized by Dalton's “OK, let’s get after it begin create it go go go.” Foundation 1.5.0 is in progress on `codex/journal-story-wire`. Publication settings and deployment remain separate release checks.
+
 ## Supabase Oscars Ledger shortcode — Dalton, 2026-10-15
 
 - Visitor gains: a searchable list of all 12,138 Oscars records (ceremonies 1–98), with ceremony, winners-only and IMDb ID filters, on any page that carries `[lunara_oscars_supabase]`.

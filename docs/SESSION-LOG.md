@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-23 — Own Journal app: sourcing through daily publication (Foundation 1.5.0 in progress)
+
+- **Shipped:** pending. Dalton approved building the private LUNARA app using the Grok example's story-sourcing simplicity; the existing Journal Desk and Dispatch remain the runtime.
+- **Live:** unchanged by this work. No deployment or production configuration change has been made.
+- **Holding:** Codex is implementing Journal Foundation 1.5.0 on `codex/journal-story-wire`: shared film-story discovery, article decisions, publication coverage, and approved reserve/timed delivery. Do not duplicate this work.
+- **Next:** finish behavior and interface checks, open the Foundation PR, wait for its required CI, and merge the verified candidate. Deployment and live save-to-public-page verification follow the separate release instruction.
+- **Found, not fixed:** the host's reliable server scheduler and the installed publication configuration/scopes remain unverified. The browser-local queue and draft-only push in the Grok reference are not the new application's storage or publishing path.
+
 ## 2026-10-23 — "Not found", so search by title (Theme 3.2.129)
 
 - **Shipped:** 3.2.128 merged (#277) and deployed by me; the trace read in Dalton's Chrome: for She Said the gateway has TMDb credentials and answers `not_found`, and the theme's own find is empty too. Theme 3.2.129 PR: a title-and-year TMDB search as the last resort, the year threaded from the Debrief orbit and the Home module, and the trace extended with the find answer. See the 3.2.129 changelog entry. Merged and deployed by me when CI is green; then I read the trace again.
