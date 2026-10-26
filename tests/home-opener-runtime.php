@@ -142,6 +142,9 @@ require dirname( __DIR__ ) . '/inc/home-running-order.php';
 require dirname( __DIR__ ) . '/inc/home-stills-that-rhyme.php';
 require dirname( __DIR__ ) . '/inc/home-ledger-band.php';
 require dirname( __DIR__ ) . '/inc/home-panels.php';
+// The block-mode ordering helper, from the real module; its block renderer
+// stays the stub above (function_exists guards keep the stubs).
+require dirname( __DIR__ ) . '/inc/home-blocks.php';
 
 function lunara_test_render_front_page(): string {
 	ob_start();
@@ -210,16 +213,20 @@ lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']
 lunara_test_assert( false === strpos( $html, 'hero block' ) && false !== strpos( $html, 'stills block' ) && false !== strpos( $html, 'running order block' ) && 1 === substr_count( $html, 'lunara-home-program' ), 'the masthead renders once and the section blocks follow it' );
 lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'the registry loop does not run beneath the block composition' );
 // The live Home is in block mode (3.2.137): the blocks get the panels too.
-// The band is a panel, the Running Order before it stays on the ground, and
-// the editor's paragraph between the band and the Journal breaks the run, so
-// the Journal keeps its own hairline.
+// 3.2.138: they print in the saved Section Order (here: featured 2,
+// pairing-desk 3, ledger 4, dispatch 5), not the order the stored blocks
+// hold (pairing-desk, featured, ledger, dispatch), so the panels follow what
+// a reader sees. The editor's paragraph is not a section: it goes first, as
+// the header's order rules place it, and takes no part.
 preg_match_all( '/<section class="lunara-home-section lunara-home-slot-([a-z-]+)([^"]*)"/', $html, $lunara_test_rows, PREG_SET_ORDER );
 $lunara_test_marks = array();
 foreach ( $lunara_test_rows as $lunara_test_row ) {
 	$lunara_test_marks[ $lunara_test_row[1] ] = trim( $lunara_test_row[2] );
 }
-lunara_test_assert( array( 'pairing-desk' => 'is-home-panel', 'featured' => 'is-after-home-panel', 'ledger' => 'lunara-home-ledger-band is-home-panel', 'dispatch' => '' ) === $lunara_test_marks, 'in block mode front-page.php marks the section blocks: panel, ground, band, and a block after the editor paragraph left on its hairline' );
-lunara_test_assert( false !== strpos( $html, '<p>An editor note between blocks.</p>' ), 'in block mode a core block between sections still renders' );
+lunara_test_assert( array( 'featured', 'pairing-desk', 'ledger', 'dispatch' ) === array_keys( $lunara_test_marks ), 'in block mode the sections print in the saved Section Order, not the stored block order' );
+lunara_test_assert( array( 'featured' => 'is-home-panel', 'pairing-desk' => 'is-after-home-panel', 'ledger' => 'lunara-home-ledger-band is-home-panel', 'dispatch' => 'is-after-home-panel' ) === $lunara_test_marks, 'in block mode front-page.php marks the section blocks in that order: panel, ground, band, ground' );
+lunara_test_assert( strpos( $html, '<p>An editor note between blocks.</p>' ) < strpos( $html, 'lunara-home-slot-featured' ), 'in block mode a block that is not a section prints before the sections' );
+lunara_test_assert( false !== strpos( $html, '<p>An editor note between blocks.</p>' ), 'in block mode a core block still renders' );
 add_filter( 'lunara_home_panels_enabled', 'lunara_test_false' );
 $html = lunara_test_render_front_page();
 lunara_test_assert( false === strpos( $html, 'home-panel' ) && false !== strpos( $html, 'stills block' ), 'in block mode the filter turns the panels off and the blocks still render' );

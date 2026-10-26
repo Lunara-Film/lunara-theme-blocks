@@ -96,9 +96,9 @@ foreach ( array( $slots, array_slice( $slots, 0, 5 ), array( 'featured', 'ledger
 }
 lunara_test_assert( $orders > 5000, 'the rules ran over every order' );
 
-// The live order: the Debrief showcase, the Running Order, the band, the
-// Journal, Oscar Picks.
-lunara_test_assert( array( true, false, true, false, true ) === lunara_home_panel_plan( array( 'pairing-desk', 'featured', 'ledger', 'dispatch', 'oscar-picks' ) ), 'the live order alternates panel, ground, band, ground, panel' );
+// The live order (3.2.138): the Debrief showcase, the Journal, the band,
+// the Running Order, Oscar Picks.
+lunara_test_assert( array( true, false, true, false, true ) === lunara_home_panel_plan( array( 'pairing-desk', 'dispatch', 'ledger', 'featured', 'oscar-picks' ) ), 'the live order alternates panel, ground, band, ground, panel' );
 lunara_test_assert( array( false, true, false, true, false ) === lunara_home_panel_plan( array( 'pairing-desk', 'ledger', 'featured', 'dispatch', 'oscar-picks' ) ), 'with the band second, the first section stays on the ground' );
 lunara_test_assert( array( true ) === lunara_home_panel_plan( array( 'dispatch' ) ) && array() === lunara_home_panel_plan( array() ), 'one section is a panel; no sections, no plan' );
 
@@ -133,7 +133,7 @@ function lunara_test_panel_classes( array $out ): array {
 	);
 }
 
-$live = array( lunara_test_section( 'pairing-desk' ), lunara_test_section( 'featured' ), lunara_test_section( 'ledger', ' lunara-home-ledger-band' ), lunara_test_section( 'dispatch' ), lunara_test_section( 'oscar-picks' ) );
+$live = array( lunara_test_section( 'pairing-desk' ), lunara_test_section( 'dispatch' ), lunara_test_section( 'ledger', ' lunara-home-ledger-band' ), lunara_test_section( 'featured' ), lunara_test_section( 'oscar-picks' ) );
 $out  = lunara_home_mark_panels( $live );
 lunara_test_assert( array( 'is-home-panel', 'is-after-home-panel', 'is-home-panel', 'is-after-home-panel', 'is-home-panel is-home-panel-last' ) === lunara_test_panel_classes( $out ), 'the live order is marked panel, after, band, after, last panel' );
 lunara_test_assert( 5 === count( $out ), 'five sections in, five out' );

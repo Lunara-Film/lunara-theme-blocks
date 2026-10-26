@@ -111,9 +111,9 @@ and links to the owning Review editor. This does not alter pairing content.
   ground colour inside a panel: no plate disappears into the surface under
   it. `lunara_home_panels_enabled` turns the panels off. Both compositions
   are marked the same way: the section blocks saved in the Home page, which
-  the live Home uses, and the Customizer registry. A block that is not a
-  Home section (an editor's paragraph) renders on the ground and takes no
-  part in the alternation; the section after it opens on its own hairline.
+  the live Home uses, and the Customizer registry. Panels follow the order a
+  reader sees, the saved Section Order; a block that is not a Home section
+  (an editor's paragraph) prints before the sections and takes no part.
 - The Home Debrief showcase (the pairing-desk slot, built as Stills that
   Rhyme) is The Lunara Film Debrief on Home, and Dalton edits it: its kicker,
   headline and supporting line come from the Lunara Film Debrief editor in
@@ -122,19 +122,22 @@ and links to the owning Review editor. This does not alter pairing content.
   Debrief defaults: "The Lunara Film Debrief", "Every review ends with three
   more films.", and Dalton's line, "Theme Echo, Counter Program, and Career
   Context close every Lunara Film review — the next three movies after the
-  credits, each selected individually by me." It reads from the lead story
-  first, then the editor's Featured Review, then the newest reviews, and
-  renders the first review that carries all three pairings
-  (`lunara_home_stills_that_rhyme_review_source` = `editor` puts the
-  editor's Featured Review first).
+  credits, each selected individually by me." It reads from the editor's
+  Featured Review first (Dalton, 2026-10-26), then the lead story, then the
+  newest reviews, and renders the first review that carries all three
+  pairings, so the pick in the Debrief editor is what Home features
+  (`lunara_home_stills_that_rhyme_review_source` = `lead` puts the lead
+  story first).
   The program masthead is Home's opener. The hero carousel is a stored
   alternative (`lunara_home_opener_style` = `cinematic`), not the default, and
   whichever opener renders, the lead story appears once: no second hero below.
-- Home runs in the program's order: the masthead, the Debrief showcase, The
-  Running Order, the Oscar Ledger intermission, then the Journal lane and the
-  Oscar lanes. The saved Section Order (a Studio preset, or a custom order)
-  decides that order in PHP; no stylesheet reorders the sections. Phones read
-  the same order as desktop.
+- Home runs in the program's order: the masthead, the Debrief showcase, the
+  Journal lane, the Oscar Ledger intermission, The Running Order, then the
+  Oscar lanes (Dalton, 2026-10-26: the Journal second). The saved Section
+  Order (a Studio preset, or a custom order) decides that order in PHP; no
+  stylesheet reorders the sections. In block mode the section blocks print
+  in that order too, whatever order the Home page stores them in. Phones
+  read the same order as desktop.
 - The showcase fills the pairing-desk slot with the Debrief as the
   Debrief is: the reviewed film and its three. The editor's kicker, headline
   and line, the source review, then the reviewed
@@ -150,14 +153,16 @@ and links to the owning Review editor. This does not alter pairing content.
 - A film's poster comes from what the site already holds first (a Lunara Film
   review of the film, the movie entity), then the Oscars Ledger, then TMDB. A
   failed lookup is never remembered as "no poster".
-- The Running Order follows: a gold letterspaced kicker, the GT Sectra line
+- The Running Order: a gold letterspaced kicker, the GT Sectra line
   "Every review, newest first." and an "All N reviews" link over a wall of 2:3
   poster frames, newest first, skipping the three reviews Now Showing carries.
-  Each poster is one link: film in GT Sectra Display, take in Tiempos Text
-  italic, score beneath. A review without a poster is a typographic card on
-  the surface color, never an empty frame. Six across from 1200px, four from
-  760px, three on phones; the wall shares the masthead's frame and edges. No
-  ordinal numerals.
+  Each poster is one link: film in GT Sectra Display at 18px (17px on
+  phones), take in Tiempos Text italic at 16px, score beneath. A review
+  without a poster is a typographic card on the surface color, never an
+  empty frame. Six across from 1200px, four from 760px, two on phones, so
+  the text has room (Dalton, 2026-10-26: "the text needs to be much more
+  legible"); the wall shares the masthead's frame and edges. No ordinal
+  numerals.
 - The Oscar Ledger band is a full-bleed intermission on the surface navy with
   one gold rule above and one below: the kicker, a GT Sectra headline carrying
   the live ceremony count as digits, a Tiempos record line of Ledger totals,
@@ -271,6 +276,10 @@ and links to the owning Review editor. This does not alter pairing content.
 - Ordinary reading/card copy is normally 16–18px; functional metadata and controls
   are at least 13px. These are house quality rules, not claims about WCAG pixel
   requirements. Body text uses normal tracking and ordinary case.
+- Review text on Home is reading copy: a take or a Method question reads at
+  16px or more in the near-white take colour (`--lunara-home-take`, about 13:1
+  on the ground), never in muted grey, and a film's name in a caption at 17px
+  or more.
 - Long prose stays approximately 60–75 characters wide. Phone gutters are
   normally at least 20px, with room for safe areas and text scaling.
 - No ornamental radial lighting, grain, repeating stripes, chromatic glow,
