@@ -25,6 +25,12 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — The alternating panels are live (Theme 3.2.137)
+
+- **Live:** Theme 3.2.137 (merge `5542782`, #295), deployed by me through WordPress.com Deployments; the live `style.css` read 3.2.137 at 20:53:13 UTC. Four seconds later the live Home's HTML carried the planned classes: the Debrief showcase `is-home-panel`, the Running Order `is-after-home-panel`, the Ledger band `is-home-panel`, the Journal `is-after-home-panel`, Oscar Picks `is-home-panel is-home-panel-last`. Live pixels in Chromium at 1440 and 390px: every panel reads #0f1d2e at both viewport edges, the ground sections read #0a1520 (#07111d on phones), and the last panel meets the footer with one rule row. Home, Reviews, Journal, Oscars, Debrief and About return 200 with no PHP errors.
+- **Lesson:** a successful deploy and a new version number did not mean the change was live (3.2.136). A Home release is live when the live Home's HTML and pixels show it.
+- **Next:** Dalton's call on the Home Debrief source review: the lead story (now) or the editor's Featured Review.
+
 ## 2026-10-26 — The panels reach the live Home (Theme 3.2.137)
 
 - **Found:** after the 3.2.136 deploy (WordPress.com reported success at 19:39:48 UTC; the live `style.css` read 3.2.136 and the new files were on the server), the live Home still printed no panel classes. I first called it a PHP cache delay and told Dalton so; that was wrong. The live Home renders from the section blocks saved in the Home page, and 3.2.136 marked only the registry composition. My regression: I had concluded block mode was off from a wrapper class these blocks never print.
