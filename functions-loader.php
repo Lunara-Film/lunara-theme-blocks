@@ -82,6 +82,7 @@ require_once $lunara_inc . 'home-front-desk.php'; // The Home masthead as a prin
 require_once $lunara_inc . 'home-running-order.php';
 require_once $lunara_inc . 'home-stills-that-rhyme.php';
 require_once $lunara_inc . 'home-ledger-band.php';
+require_once $lunara_inc . 'home-panels.php'; // 3.2.136: which sections sit on the Ledger navy.
 require_once $lunara_inc . 'cinematic-home.php';
 
 // Layer 8 — Admin tools (admin-only; no front-end dependencies).

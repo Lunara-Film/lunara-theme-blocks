@@ -133,6 +133,7 @@ get_header();
 	);
 
 	// Render each enabled section in order; an off toggle hides it.
+	$lunara_rendered_sections = array();
 	foreach ( $lunara_render_slugs as $lunara_slug ) {
 		$lunara_enabled = function_exists( 'lunara_home_section_is_enabled' ) ? lunara_home_section_is_enabled( $lunara_slug ) : true;
 		if ( ! $lunara_enabled ) {
@@ -141,12 +142,22 @@ get_header();
 
 		$lunara_callback = $lunara_section_renderers[ $lunara_slug ];
 		if ( function_exists( $lunara_callback ) ) {
-			if ( 'hero' === $lunara_slug ) {
-				echo call_user_func( $lunara_callback, array( 'first_image_is_lcp' => false ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			} else {
-				echo call_user_func( $lunara_callback ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
+			$lunara_rendered_sections[] = array(
+				'slug' => $lunara_slug,
+				'html' => (string) ( 'hero' === $lunara_slug
+					? call_user_func( $lunara_callback, array( 'first_image_is_lcp' => false ) )
+					: call_user_func( $lunara_callback ) ),
+			);
 		}
+	}
+
+	// Alternating panels (3.2.136, inc/home-panels.php): the sections that
+	// render alternate between the ground and the Ledger band's navy.
+	$lunara_section_markup = function_exists( 'lunara_home_mark_panels' )
+		? lunara_home_mark_panels( $lunara_rendered_sections )
+		: array_column( $lunara_rendered_sections, 'html' );
+	foreach ( $lunara_section_markup as $lunara_markup ) {
+		echo $lunara_markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	wp_reset_postdata();

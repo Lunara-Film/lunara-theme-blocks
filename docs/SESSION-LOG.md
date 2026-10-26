@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — The saved copy reads Lunara Film; Home alternates with the Ledger navy (Theme 3.2.136)
+
+- **Done (saved values, Dalton's "go"):** the five stored values listed on 2026-10-24 now read Lunara Film on the live site: two About sentences (two " Film" insertions, nothing else changed), the Debrief page title "The Lunara Film Debrief" (h1, `<title>`, og:title; the slug is unchanged), the Home Journal heading "Fresh movement from the Lunara Film Journal", the Home Oscar Picks label "Lunara Film Sweep Watch", and the Oscars portal kicker "The Lunara Film Oscar Ledger". A crawl with fresh cache-busters of Home, Reviews, Journal, Oscars, Debrief, About, two Reviews, Search and a Journal story found no bare "Lunara".
+- **Shipped:** Theme 3.2.136 PR: alternating panels on Home in the Ledger band's navy (Dalton chose option C of three). See the 3.2.136 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** whole PHP suite 74/74 with the new `home-panels-runtime.php`; `home-panels-browser-runtime.js` 672 checks, and five deliberate breakages each fail it; the full browser suite on CI before merge.
+- **Live:** Theme 3.2.135 until 3.2.136 deploys.
+- **Next:** Dalton's call on the Home Debrief source review: the lead story (now) or the editor's Featured Review (`lunara_home_stills_that_rhyme_review_source` = `editor`).
+- **Found, not fixed:** the "Oscars forward" Home preset gives phones a different section order (Journal, Latest Reviews and the Debrief showcase move up), against DESIGN.md's "Phones read the same order as desktop". Under that preset the panels, which follow the rendered order, would not alternate cleanly on phones; the live Home uses the Editorial default, where both orders match. Still saved with a bare "Lunara": the AI Assistant Classic system prompt and the Journal Control Plane purpose/voice text (they steer AI drafts; offered to Dalton, not changed).
+
 ## 2026-10-26 — Site Studio was stuck on "Loading editor…" since 3.2.134 (Theme 3.2.135)
 
 - **Found:** opening Site Studio in Dalton's Chrome to make the five saved-copy edits he approved ("go"), every surface stayed on "Loading editor…". The Site Studio scripts were not enqueued: 3.2.134 renamed the top-level menu "Lunara" to "Lunara Film", which changed the submenu's screen ID, and the enqueue gate hard-coded the old ID. The tests' `add_submenu_page()` double returned the old ID, so CI could not see it. My regression, from the brand sweep I ran.
