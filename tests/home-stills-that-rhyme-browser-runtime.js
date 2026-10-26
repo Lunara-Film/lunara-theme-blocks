@@ -48,6 +48,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     takeStyle: style('.lunara-home-stills-take', 'fontStyle'), takeFont: style('.lunara-home-stills-take', 'fontFamily'), takeSize: parseFloat(style('.lunara-home-stills-take', 'fontSize')),
                     questionSizes: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-question-text')].map(e => parseFloat(getComputedStyle(e).fontSize)),
                     pairingFilmSizes: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-film')].map(e => parseFloat(getComputedStyle(e).fontSize)),
+                    pairingFrameTops: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-frame')].map(e => e.getBoundingClientRect().top),
                     brokenWords: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-film')].flatMap(e => {
                         const node = e.firstChild; if (!node || node.nodeType !== 3) return [];
                         const text = node.textContent, out = []; let i = 0;
@@ -78,6 +79,9 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.sectionTopBorder === 0 && Math.abs(d.hairline.h - 1) < .6 && d.hairline.bg === 'rgba(201, 169, 97, 0.28)', `${label}: the section opens with the program's single hairline rule (no border of its own)`, d);
             assert(d.pairingFilmSizes.length === 3 && d.pairingFilmSizes.every(v => v >= 16), `${label}: each pairing's film and year read at 16px or more`, d.pairingFilmSizes);
             if (media === 'posters' && width >= 360) assert(d.brokenWords.length === 0, `${label}: no pairing title breaks mid-word`, d.brokenWords);
+            // 3.2.140: the three faces line up even when one role name fits on one
+            // line and the others wrap ("Theme Echo" against "Counter Program").
+            if (media === 'posters' || width >= 760) assert(Math.max(...d.pairingFrameTops) - Math.min(...d.pairingFrameTops) <= 1, `${label}: the three faces start on one line`, d.pairingFrameTops);
             const [p1, p2, p3] = d.pairings;
             if (media === 'posters' || width >= 760) assert(p2.left >= p1.right - 1 && p3.left >= p2.right - 1 && Math.abs(p1.top - p3.top) <= 1 && Math.abs(p1.width - p3.width) <= 1 && p1.left >= 16 - .5 && p3.right <= width - 16 + .5, `${label}: the three stand in one row of equal frames (posters at every width)`, d);
             else assert(p2.top >= p1.bottom - 1 && p3.top >= p2.bottom - 1 && Math.abs(p1.width - p3.width) <= 1 && p1.left >= 16 && p1.right <= width - 16, `${label}: the stills stack with a 16px gutter on phones`, d);
