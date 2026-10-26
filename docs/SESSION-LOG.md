@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — Site Studio was stuck on "Loading editor…" since 3.2.134 (Theme 3.2.135)
+
+- **Found:** opening Site Studio in Dalton's Chrome to make the five saved-copy edits he approved ("go"), every surface stayed on "Loading editor…". The Site Studio scripts were not enqueued: 3.2.134 renamed the top-level menu "Lunara" to "Lunara Film", which changed the submenu's screen ID, and the enqueue gate hard-coded the old ID. The tests' `add_submenu_page()` double returned the old ID, so CI could not see it. My regression, from the brand sweep I ran.
+- **Shipped:** Theme 3.2.135 PR: the gate follows the screen ID WordPress registers. See the 3.2.135 changelog entry. Merged and deployed by me when CI is green; then the five saved-copy edits.
+- **Verified:** `site-studio-runtime.php` (new assertion fails on 3.2.134), whole PHP suite 0 failures, all Site Studio browser contracts.
+- **Live:** Theme 3.2.134 (Site Studio editor broken) until 3.2.135 deploys.
+
 ## 2026-10-24 — Always Lunara Film: live across the theme and all six plugins
 
 - **Shipped and live (deployed by me, plugins before the Theme):** Core 0.8.17 (#46), Dispatch 3.4.3 (#22), AI Assistant Classic 0.6.2 (#12), Journal Foundation 1.5.3 (#36), Oscars Ledger 2.8.27 (#63), IMDb Guard 0.4.3 (#12, opened and merged in Dalton's Chrome; this session reaches that repo only under its old owner name), then Theme 3.2.134 (#290). Every visible "Lunara" in code now reads "Lunara Film"; each repo's CI carries a brand lint that fails on a bare name. WordPress.com Deployments reported all seven deployed; the live `style.css` reads 3.2.134; Home, Reviews, Journal, Oscars, Debrief and About return 200 with no PHP errors.
