@@ -24,8 +24,10 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath });
     try {
-        for (const media of ['posters', 'stills']) for (const width of [320, 390, 768, 1366]) {
-            const section = fixtures[media];
+        for (const media of ['posters', 'stills']) for (const width of [320, 360, 390, 768, 1366]) {
+            // A long one-word title from the live showcase (3.2.139): it must stay
+            // whole on phones from 360px up.
+            const section = fixtures[media].replace('lunara-home-stills-film">Night Ferry, 1998.', 'lunara-home-stills-film">Skinamarink, 2022.');
             const page = await browser.newPage({ viewport: { width, height: 1000 }, javaScriptEnabled: false });
             await page.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${css}</style></head><body class="home"><main class="lunara-front-page">${section.replace(/src="https:[^"]+"/g, `src="${still}"`)}</main></body></html>`, { waitUntil: 'load' });
             const d = await page.evaluate(() => {
@@ -45,6 +47,16 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     filmFont: style('.lunara-home-stills-film', 'fontFamily'), filmSize: parseFloat(style('.lunara-home-stills-film', 'fontSize')), filmStyle: style('.lunara-home-stills-film', 'fontStyle'),
                     takeStyle: style('.lunara-home-stills-take', 'fontStyle'), takeFont: style('.lunara-home-stills-take', 'fontFamily'), takeSize: parseFloat(style('.lunara-home-stills-take', 'fontSize')),
                     questionSizes: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-question-text')].map(e => parseFloat(getComputedStyle(e).fontSize)),
+                    pairingFilmSizes: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-film')].map(e => parseFloat(getComputedStyle(e).fontSize)),
+                    brokenWords: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-film')].flatMap(e => {
+                        const node = e.firstChild; if (!node || node.nodeType !== 3) return [];
+                        const text = node.textContent, out = []; let i = 0;
+                        for (const w of text.split(/(\s+)/)) {
+                            if (w.trim()) { const tops = new Set(); const range = document.createRange(); for (let k = 0; k < w.length; k++) { range.setStart(node, i + k); range.setEnd(node, i + k + 1); const rc = range.getClientRects()[0]; if (rc) tops.add(Math.round(rc.top)); } if (tops.size > 1) out.push(w); }
+                            i += w.length;
+                        }
+                        return out;
+                    }),
                     takeColors: [...document.querySelectorAll('.lunara-home-stills-take, .lunara-home-stills-item.is-pairing .lunara-home-stills-question-text')].map(e => getComputedStyle(e).color),
                     sectionTopBorder: parseFloat(getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme')).borderTopWidth), hairline: (() => { const b = getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme'), '::before'); return { h: parseFloat(b.height), bg: b.backgroundColor }; })(),
                 };
@@ -64,6 +76,8 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.filmFont.startsWith('"Tiempos Text"') && d.filmSize >= 17 && d.filmStyle === 'normal' && d.takeStyle === 'italic' && d.takeFont.startsWith('"Tiempos Text"') && d.takeSize >= 16, `${label}: captions are Tiempos at 17px with the take in italic at 16px or more`, d);
             assert(d.questionSizes.length === 3 && d.questionSizes.every(v => v >= 16) && d.takeColors.length >= 4 && d.takeColors.every(c => { const n = (c.match(/[\d.]+/g) || []).map(Number); return n[0] >= 240 && n[1] >= 240 && n[2] >= 240 && (n.length < 4 || n[3] >= .8); }), `${label}: the take and the Method questions read at 16px in the near-white take colour`, d);
             assert(d.sectionTopBorder === 0 && Math.abs(d.hairline.h - 1) < .6 && d.hairline.bg === 'rgba(201, 169, 97, 0.28)', `${label}: the section opens with the program's single hairline rule (no border of its own)`, d);
+            assert(d.pairingFilmSizes.length === 3 && d.pairingFilmSizes.every(v => v >= 16), `${label}: each pairing's film and year read at 16px or more`, d.pairingFilmSizes);
+            if (media === 'posters' && width >= 360) assert(d.brokenWords.length === 0, `${label}: no pairing title breaks mid-word`, d.brokenWords);
             const [p1, p2, p3] = d.pairings;
             if (media === 'posters' || width >= 760) assert(p2.left >= p1.right - 1 && p3.left >= p2.right - 1 && Math.abs(p1.top - p3.top) <= 1 && Math.abs(p1.width - p3.width) <= 1 && p1.left >= 16 - .5 && p3.right <= width - 16 + .5, `${label}: the three stand in one row of equal frames (posters at every width)`, d);
             else assert(p2.top >= p1.bottom - 1 && p3.top >= p2.bottom - 1 && Math.abs(p1.width - p3.width) <= 1 && p1.left >= 16 && p1.right <= width - 16, `${label}: the stills stack with a 16px gutter on phones`, d);
