@@ -5,9 +5,37 @@ require_once __DIR__ . '/site-studio-navigation.php';
 
 if ( ! function_exists( 'lunara_register_site_studio_page' ) ) {
 	function lunara_register_site_studio_page() {
-		add_submenu_page( 'lunara-control-desk', __( 'Lunara Film Site Studio', 'lunara-film' ), __( 'Site Studio', 'lunara-film' ), 'edit_theme_options', 'lunara-site-studio', 'lunara_render_site_studio_page', 1 );
+		// Keep the screen ID WordPress assigns: it is built from the parent
+		// menu's title, so it changes whenever that title does (3.2.135).
+		$GLOBALS['lunara_site_studio_hook'] = add_submenu_page( 'lunara-control-desk', __( 'Lunara Film Site Studio', 'lunara-film' ), __( 'Site Studio', 'lunara-film' ), 'edit_theme_options', 'lunara-site-studio', 'lunara_render_site_studio_page', 1 );
 	}
 	add_action( 'admin_menu', 'lunara_register_site_studio_page', 20 );
+}
+
+if ( ! function_exists( 'lunara_site_studio_is_screen' ) ) {
+	/**
+	 * Whether an admin_enqueue_scripts hook is the Site Studio screen.
+	 *
+	 * WordPress names a submenu screen "{parent menu title}_page_{slug}", so
+	 * the Lunara menu's rename to "Lunara Film" (3.2.134) turned
+	 * "lunara_page_lunara-site-studio" into "lunara-film_page_lunara-site-studio"
+	 * and a hard-coded check stopped loading the editor. Match the ID
+	 * registered on admin_menu, and any parent title with this page's slug.
+	 *
+	 * @param string $hook The current admin page hook suffix.
+	 * @return bool
+	 */
+	function lunara_site_studio_is_screen( $hook ) {
+		if ( ! is_string( $hook ) || '' === $hook ) {
+			return false;
+		}
+		$registered = isset( $GLOBALS['lunara_site_studio_hook'] ) && is_string( $GLOBALS['lunara_site_studio_hook'] ) ? $GLOBALS['lunara_site_studio_hook'] : '';
+		if ( '' !== $registered && $registered === $hook ) {
+			return true;
+		}
+		$suffix = '_page_lunara-site-studio';
+		return strlen( $hook ) > strlen( $suffix ) && substr( $hook, -strlen( $suffix ) ) === $suffix;
+	}
 }
 
 if ( ! function_exists( 'lunara_site_studio_authorized_surfaces' ) ) {
@@ -157,7 +185,7 @@ if ( ! function_exists( 'lunara_site_studio_origin_key' ) ) {
 
 if ( ! function_exists( 'lunara_enqueue_site_studio_assets' ) ) {
 	function lunara_enqueue_site_studio_assets( $hook ) {
-		if ( 'lunara_page_lunara-site-studio' !== $hook || ! function_exists( 'lunara_resolve_theme_asset' ) ) { return; }
+		if ( ! lunara_site_studio_is_screen( $hook ) || ! function_exists( 'lunara_resolve_theme_asset' ) ) { return; }
 		$surfaces = lunara_site_studio_authorized_surfaces(); $surface_id = lunara_site_studio_workspace_surface( $surfaces );
 		if ( '' === $surface_id || ! isset( $surfaces[ $surface_id ] ) ) { return; }
 		wp_enqueue_style( 'dashicons' );

@@ -11,6 +11,14 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-26 — Theme 3.2.135: Site Studio loads again after the Lunara Film menu rename
+
+3.2.134 renamed the top-level admin menu from "Lunara" to "Lunara Film". WordPress builds a submenu's screen ID from its parent menu's title, so Site Studio's screen became `lunara-film_page_lunara-site-studio`, while `lunara_enqueue_site_studio_assets()` still compared the hook with the hard-coded `lunara_page_lunara-site-studio`. The editor scripts stopped loading and every Site Studio surface stayed on "Loading editor…" from the 3.2.134 deploy (2026-10-24 03:03 UTC) until this release. Found on 2026-10-26 when opening Site Studio for Dalton's saved-copy edits.
+
+- `lunara_register_site_studio_page()` keeps the screen ID `add_submenu_page()` returns (`$GLOBALS['lunara_site_studio_hook']`); `lunara_site_studio_is_screen()` matches it, and any parent title ending in `_page_lunara-site-studio`, so a later rename cannot break it again. The asset gate uses it.
+- The only other Lunara admin screen check outside WordPress's fixed parents (`oscar_fact_page_…`) takes its prefix from a post type slug, which the brand sweep did not change; the six plugins have no such checks.
+- Tests: `site-studio-runtime.php`'s `add_submenu_page()` double now returns the real post-rename ID; new assertions cover the renamed ID, a future rename, the old ID, and other screens that must not load the editor. The new assertion fails on 3.2.134's gate.
+
 ## 2026-10-24 — Theme 3.2.134: always Lunara Film
 
 Dalton, 2026-10-23: "I also wanna make sure that it's never just LUNARA. It's always LUNARA FILM. ... I've gotten way too much feedback about confusion in regards to the name so this is two-fold: it solves that and it stylistically brands us as FILM again."
