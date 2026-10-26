@@ -80,11 +80,27 @@ and links to the owning Review editor. This does not alter pairing content.
   the page on desktop and 280px on phones; the Studio paddings can tighten
   that, never loosen it. The hero carousel opener is not a cover (the header
   keeps its wordmark), and `lunara_home_cover_enabled` can turn the cover off.
-- Every Home section after the masthead opens on the one-pixel gold hairline
-  with the same breathing room, and its title is set in the signature face at
+- Every Home section after the masthead opens on one gold rule with the same
+  breathing room: its own one-pixel hairline, or the rule of the panel it
+  sits on or follows (below). Its title is set in the signature face at
   regular weight. One rule per seam: no second border from a section's own
   styles and none under the masthead. The Oscar Ledger band keeps its own
-  full-bleed rules. The saved Section Order decides on phones as it does on
+  full-bleed rules.
+- Home alternates its ground with panels (Dalton, 2026-10-26: the Ledger
+  band's colour, in alternating panels). Counting only the sections that
+  render, in the saved order, the first section after the opener sits on a
+  panel, and panels then alternate with the ground. The Oscar Ledger band is
+  always a panel. Two panels never touch, so the section before the band
+  stays on the ground. A panel is the band's surface navy
+  (`--lunara-bg-secondary`, #0f1d2e) out to both viewport edges, with the
+  program's gold rule along its top and bottom edges and equal padding
+  inside; the module inside keeps its own frame and gutters. A ground section
+  after a panel opens on that panel's rule, with no hairline of its own. The
+  last panel runs down to the footer's rule and drops its own, so the footer
+  seam keeps one rule too. A plate painted the surface colour takes the
+  ground colour inside a panel: no plate disappears into the surface under
+  it. `lunara_home_panels_enabled` turns the panels off. The block
+  composition (Home section blocks, not in use) keeps the ground. The saved Section Order decides on phones as it does on
   desktop; the inline order rules the header prints follow the same map.
   The program's rules (the section hairline, the Running Order and Ledger
   band rules, the lane-head rule) are gold by their own token,
@@ -240,7 +256,8 @@ and links to the owning Review editor. This does not alter pairing content.
   at read time without changing saved articles or other visual settings. Public
   CSS policy checks discover new stylesheets automatically in Theme and Ledger.
   See `docs/PUBLIC-GEOMETRY.md` for the complete ownership and coverage map.
-- Ground: `#0a1520`; reading text: near-white; accent: `#c9a961` or `#e0c481`.
+- Ground: `#0a1520`; Home's panels and the Ledger band: `#0f1d2e`; reading
+  text: near-white; accent: `#c9a961` or `#e0c481`.
   Saved valid color choices must keep their intended semantics and contrast.
 - Tiempos Headline carries editorial headings; Tiempos Text carries reading.
   GT Sectra Display (the Display optical size) carries the film name in a

@@ -116,11 +116,11 @@ function lunara_get_home_section_order_map() {
 }
 function lunara_home_section_is_enabled( $slug ) { return $GLOBALS['lunara_test']['enabled'][ $slug ] ?? true; }
 function lunara_render_cinematic_hero_carousel( $args = array() ) { return '<section class="lunara-home-slot-hero" data-lunara-home-hero-source="legacy">hero</section>'; }
-function lunara_render_homepage_latest_reviews() { return '<section class="lunara-home-slot-latest-reviews">latest</section>'; }
-function lunara_render_homepage_journal_lane() { return '<section class="lunara-home-slot-dispatch">journal</section>'; }
-function lunara_render_oscar_picks_carousel() { return '<section class="lunara-home-slot-oscar-picks">picks</section>'; }
-function lunara_render_oscar_facts_carousel() { return '<section class="lunara-home-slot-oscar-facts">facts</section>'; }
-function lunara_render_home_pairing_desk() { return '<section class="lunara-home-slot-pairing-desk">pair-it-with</section>'; }
+function lunara_render_homepage_latest_reviews() { return '<section class="lunara-home-section lunara-home-slot-latest-reviews">latest</section>'; }
+function lunara_render_homepage_journal_lane() { return '<section class="lunara-home-section lunara-home-slot-dispatch">journal</section>'; }
+function lunara_render_oscar_picks_carousel() { return '<section class="lunara-home-section lunara-home-slot-oscar-picks">picks</section>'; }
+function lunara_render_oscar_facts_carousel() { return '<section class="lunara-home-section lunara-home-slot-oscar-facts">facts</section>'; }
+function lunara_render_home_pairing_desk() { return '<section class="lunara-home-section lunara-home-slot-pairing-desk">pair-it-with</section>'; }
 // No published reviews here: The Running Order (its own contract is
 // tests/home-running-order-runtime.php) has nothing to show and adds nothing.
 class WP_Query { public $posts = array(); public function __construct( array $args = array() ) {} }
@@ -129,6 +129,7 @@ class WP_Query { public $posts = array(); public function __construct( array $ar
 require dirname( __DIR__ ) . '/inc/home-running-order.php';
 require dirname( __DIR__ ) . '/inc/home-stills-that-rhyme.php';
 require dirname( __DIR__ ) . '/inc/home-ledger-band.php';
+require dirname( __DIR__ ) . '/inc/home-panels.php';
 
 function lunara_test_render_front_page(): string {
 	ob_start();
@@ -170,6 +171,23 @@ $GLOBALS['lunara_test']['enabled']['pairing-desk'] = false;
 $html = lunara_test_render_front_page();
 lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'an off toggle hides the pairing-desk slot' );
 
+// Alternating panels (3.2.136): front-page.php hands the sections that
+// render to inc/home-panels.php, in order. Five render here (the Running
+// Order and the band have no data): panel, ground, panel, ground, and a last
+// panel that meets the footer. The filter turns the panels off.
+$GLOBALS['lunara_test']['enabled'] = array();
+$html = lunara_test_render_front_page();
+preg_match_all( '/<section class="lunara-home-section lunara-home-slot-([a-z-]+)([^"]*)"/', $html, $lunara_test_rows, PREG_SET_ORDER );
+$lunara_test_marks = array();
+foreach ( $lunara_test_rows as $lunara_test_row ) {
+	$lunara_test_marks[ $lunara_test_row[1] ] = trim( $lunara_test_row[2] );
+}
+lunara_test_assert( array( 'pairing-desk' => 'is-home-panel', 'dispatch' => 'is-after-home-panel', 'latest-reviews' => 'is-home-panel', 'oscar-picks' => 'is-after-home-panel', 'oscar-facts' => 'is-home-panel is-home-panel-last' ) === $lunara_test_marks, 'front-page.php marks the sections that render, in order: panel, ground, panel, ground, last panel' );
+add_filter( 'lunara_home_panels_enabled', 'lunara_test_false' );
+$html = lunara_test_render_front_page();
+lunara_test_assert( false === strpos( $html, 'home-panel' ) && array( 'pairing-desk', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts' ) === lunara_test_slot_order( $html ), 'with lunara_home_panels_enabled off, the same sections render unmarked' );
+$GLOBALS['lunara_test']['filters'] = array();
+
 // Block mode (the live Home since 3.1.50): the blocks are the page, and the
 // hero block stays out under any front door, not only under the carousel.
 $GLOBALS['lunara_test']['block_mode'] = true;
@@ -179,6 +197,7 @@ $html = lunara_test_render_front_page();
 lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the program masthead keeps the hero block out of the composition' );
 lunara_test_assert( false === strpos( $html, 'hero block' ) && false !== strpos( $html, 'stills block' ) && false !== strpos( $html, 'running order block' ) && 1 === substr_count( $html, 'lunara-home-program' ), 'the masthead renders once and the section blocks follow it' );
 lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'the registry loop does not run beneath the block composition' );
+lunara_test_assert( false === strpos( $html, 'home-panel' ), 'the block composition renders as before: the panels follow the registry composition only' );
 $GLOBALS['lunara_test']['front_door'] = '<section data-lunara-home-hero-source="site-studio">carousel</section>';
 lunara_test_render_front_page();
 lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the carousel wrapper keeps the hero block out too' );
