@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — Home is live as Dalton approved it (Theme 3.2.140)
+
+- **Live:** Theme 3.2.140 (merge `be31988`, #299), deployed by me; `style.css` read 3.2.140 at 22:44:57 UTC. On the live Home the three Debrief faces start on one line at 360, 390, 768 and 1440px, no pairing title breaks from 360px up, and the order stays: the Debrief showcase (Backrooms, with Skinamarink, Cube and The Backrooms), the Journal, the Ledger band, The Running Order, Oscar Picks, with the panels alternating. Home, Reviews, Journal and Oscars return 200.
+- **Holding:** none.
+- **Found, not fixed:** at 320px a long one-word pairing title (Skinamarink,) still breaks mid-word in a 91px column, by design (the last resort). The "Oscars forward" preset still gives phones a different order (2026-10-26 entry).
+- **Next:** Dalton's review of the new Home.
+
 ## 2026-10-26 — 3.2.139 is live; the three Debrief faces line up (Theme 3.2.140)
 
 - **Live:** Theme 3.2.139 (merge `75a25b5`, #298), deployed by me; `style.css` read 3.2.139 at 22:37:36 UTC. On the live Home "Skinamarink," stays whole at 360, 375, 390 and 430px (pairing columns 104 to 127px, 16px gutters, no overflow); at 320px it still breaks, as designed; desktop unchanged.
