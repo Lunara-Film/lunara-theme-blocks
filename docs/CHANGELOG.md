@@ -11,6 +11,14 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-26 — Theme 3.2.137: the alternating panels reach the live Home
+
+3.2.136 deployed cleanly, but the live Home showed no panels. The live Home renders from the section blocks saved in the Home page (the block composition, `inc/home-blocks.php`), and 3.2.136 marked only the Customizer registry's sections. **Correction to the 3.2.136 entry:** its "Scope" line said the block composition was not in use; it is the live Home's composition. My check had looked for a block wrapper class that these blocks never print. The page's own content (`/wp-json/wp/v2/pages/4055`) renders the six section blocks.
+
+- `lunara_home_block_composition_sections()` (new, `inc/home-blocks.php`) renders the Home page's top-level blocks one at a time, in page order, each with `render_block()` exactly as `do_blocks()` renders it, and names each Lunara section block by its registry slug (anything else carries ''). The excluded hero block stays out, as before.
+- `front-page.php` uses it in block mode: the joined blocks still feed the semantic H1 check, and the blocks print through `lunara_home_mark_panels()`, so both compositions get the same plan. A block that is not a Home section (an editor's paragraph) renders on the ground and takes no part; the section after it keeps its hairline. `lunara_render_home_block_composition()` stays for its other callers.
+- Tests: `home-block-composition-runtime.php` checks the per-block renderer (the excluded hero, slugs only for Lunara section blocks, each block rendered on its own in page order, an empty page). `home-opener-runtime.php` now drives block mode through the real marking with blocks, whitespace and an editor paragraph: panel, ground, band, and the Journal after the paragraph on its own hairline; the filter turns it off. That contract fails on 3.2.136's block path.
+
 ## 2026-10-26 — Theme 3.2.136: Home alternates its ground with the Ledger band's navy
 
 Dalton marked the Oscar Ledger band on Home ("I really prefer the colorization that this section ... renders out as") and chose alternating panels from the three options: "I like this background that's the background I like Oh alternating panels" (2026-10-26).

@@ -216,6 +216,47 @@ if ( ! function_exists( 'lunara_render_home_block_composition' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lunara_home_block_composition_sections' ) ) {
+	/**
+	 * The front page's blocks rendered one at a time, in page order, so
+	 * front-page.php can mark Home's alternating panels on them (3.2.137).
+	 * Each top-level block renders exactly as do_blocks() renders it; a
+	 * Lunara section block carries its registry slug, and any other block
+	 * (core blocks, the whitespace between blocks) carries ''.
+	 *
+	 * @param string[] $excluded_block_names Block names to leave out.
+	 * @return array[] array( 'slug' => string, 'html' => string ) per block.
+	 */
+	function lunara_home_block_composition_sections( $excluded_block_names = array() ) {
+		$page_id = lunara_home_front_page_id();
+		if ( $page_id <= 0 ) {
+			return array();
+		}
+
+		$content = lunara_home_front_page_content( $page_id );
+		if ( '' === trim( $content ) ) {
+			return array();
+		}
+
+		$excluded_block_names = array_filter( array_map( 'sanitize_text_field', (array) $excluded_block_names ) );
+		$slug_by_block        = array_flip( lunara_home_section_block_map() );
+		$sections             = array();
+		foreach ( parse_blocks( $content ) as $block ) {
+			$block_name = isset( $block['blockName'] ) ? (string) $block['blockName'] : '';
+			if ( '' !== $block_name && in_array( $block_name, $excluded_block_names, true ) ) {
+				continue;
+			}
+
+			$sections[] = array(
+				'slug' => isset( $slug_by_block[ $block_name ] ) ? (string) $slug_by_block[ $block_name ] : '',
+				'html' => (string) render_block( $block ),
+			);
+		}
+
+		return $sections;
+	}
+}
+
 if ( ! function_exists( 'lunara_compose_home_section_blocks' ) ) {
 	/**
 	 * Purely compose Home page content from the given ordered slug list.

@@ -109,6 +109,10 @@ function do_blocks( $content ) {
 	return $content;
 }
 
+function render_block( $block ) {
+	return '<render>' . $block['serialized'] . '</render>';
+}
+
 require dirname( __DIR__ ) . '/inc/home-blocks.php';
 
 $composed = lunara_compose_home_section_blocks( $lunara_home_test_content, array( 'latest-reviews', 'hero' ) );
@@ -181,5 +185,20 @@ $lunara_home_test_content      = $expected;
 $lunara_home_test_update_error = true;
 $failed = lunara_home_migrate_block_composition();
 lunara_home_test_assert( is_wp_error( $failed ) && ! isset( $lunara_home_test_options['lunara_home_composition_revision'] ), 'A failed recomposition is reported and stays due.' );
+
+/*
+ * Block mode renders the page's blocks one at a time (3.2.137), so
+ * front-page.php can mark Home's alternating panels on them: every top-level
+ * block, in page order, rendered by render_block() as do_blocks() renders it,
+ * a Lunara section block with its registry slug and any other block with ''.
+ */
+$lunara_home_test_content = $expected;
+$sections = lunara_home_block_composition_sections( array( 'lunara/cinematic-hero' ) );
+lunara_home_test_assert( array( '', '', 'latest-reviews', '' ) === array_column( $sections, 'slug' ), 'Block sections leave the excluded hero out and name only Lunara section blocks by slug.' );
+lunara_home_test_assert( '<render><!-- wp:core/heading -->Before<!-- /wp:core/heading --></render>' === $sections[0]['html'] && '<render><!-- wp:lunara/latest-reviews {"source":"curated","count":8} /--></render>' === $sections[2]['html'], 'Each block section is that block rendered on its own, in page order.' );
+$all = lunara_home_block_composition_sections();
+lunara_home_test_assert( 5 === count( $all ) && 'hero' === $all[1]['slug'] && 'Keep me after lanes.' === trim( strip_tags( str_replace( array( '<!-- wp:core/paragraph -->', '<!-- /wp:core/paragraph -->' ), '', $all[4]['html'] ) ) ), 'Without exclusions every block renders, the hero block named hero.' );
+$lunara_home_test_content = "  \n";
+lunara_home_test_assert( array() === lunara_home_block_composition_sections(), 'An empty Home page has no block sections.' );
 
 echo "home-block composition runtime: all assertions passed.\n";

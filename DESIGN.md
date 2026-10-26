@@ -85,7 +85,17 @@ and links to the owning Review editor. This does not alter pairing content.
   sits on or follows (below). Its title is set in the signature face at
   regular weight. One rule per seam: no second border from a section's own
   styles and none under the masthead. The Oscar Ledger band keeps its own
-  full-bleed rules.
+  full-bleed rules. The saved Section Order decides on phones as it does on
+  desktop; the inline order rules the header prints follow the same map.
+  The program's rules (the section hairline, the Running Order and Ledger
+  band rules, the lane-head rule) are gold by their own token,
+  `--lunara-home-rule`, never the site-wide `--lunara-border` the Customizer
+  sets. Every lane head (Journal, Oscar Picks, Oscar Facts, Latest Reviews)
+  keeps the Composition rule and the shared section typography and takes the
+  program's voice: a saved kicker in the gold spaced caps of the Stills that
+  Rhyme kicker, the summary in muted reading type, the action beneath in the
+  Running Order's gold italic link. No kicker is added where the heading
+  already names the lane, and no second rule runs under a head.
 - Home alternates its ground with panels (Dalton, 2026-10-26: the Ledger
   band's colour, in alternating panels). Counting only the sections that
   render, in the saved order, the first section after the opener sits on a
@@ -99,18 +109,11 @@ and links to the owning Review editor. This does not alter pairing content.
   last panel runs down to the footer's rule and drops its own, so the footer
   seam keeps one rule too. A plate painted the surface colour takes the
   ground colour inside a panel: no plate disappears into the surface under
-  it. `lunara_home_panels_enabled` turns the panels off. The block
-  composition (Home section blocks, not in use) keeps the ground. The saved Section Order decides on phones as it does on
-  desktop; the inline order rules the header prints follow the same map.
-  The program's rules (the section hairline, the Running Order and Ledger
-  band rules, the lane-head rule) are gold by their own token,
-  `--lunara-home-rule`, never the site-wide `--lunara-border` the Customizer
-  sets. Every lane head (Journal, Oscar Picks, Oscar Facts, Latest Reviews)
-  keeps the Composition rule and the shared section typography and takes the
-  program's voice: a saved kicker in the gold spaced caps of the Stills that
-  Rhyme kicker, the summary in muted reading type, the action beneath in the
-  Running Order's gold italic link. No kicker is added where the heading
-  already names the lane, and no second rule runs under a head.
+  it. `lunara_home_panels_enabled` turns the panels off. Both compositions
+  are marked the same way: the section blocks saved in the Home page, which
+  the live Home uses, and the Customizer registry. A block that is not a
+  Home section (an editor's paragraph) renders on the ground and takes no
+  part in the alternation; the section after it opens on its own hairline.
 - The Home Debrief showcase (the pairing-desk slot, built as Stills that
   Rhyme) is The Lunara Film Debrief on Home, and Dalton edits it: its kicker,
   headline and supporting line come from the Lunara Film Debrief editor in
