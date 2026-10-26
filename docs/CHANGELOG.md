@@ -11,6 +11,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-26 — Theme 3.2.139: a long pairing title stays whole on phones
+
+The live check of 3.2.138 found "Skinamarink, 2022." breaking as "Skinamarin / k, 2022." in the Debrief showcase on phones. The three pairing posters were 77 to 101px wide from 320 to 390px, and the word needs about 108px at 17px (about 102px at 16px), so it broke at 16px before 3.2.138 too. Hyphenation is no fix: Chromium on Linux does not hyphenate it, so a test could not hold it.
+
+- Up to 480px, in poster mode, the pairing row spans the screen less its 16px gutters (`calc(100vw - 32px)`, centered), the gap tightens from 12px to 8px, and the pairing film and year read at 16px. The columns become 104px at 360px, 109px at 375px and 114px at 390px, so the title stays whole from 360px up. At 320px (91px) it still breaks, as the last resort.
+- Test: the Debrief browser contract renders one pairing as "Skinamarink, 2022." and asserts that no pairing title breaks mid-word at 360px and up, and that pairing captions read at 16px or more; it gains a 360px width. It fails without the new rule.
+
 ## 2026-10-26 — Theme 3.2.138: your pick leads the Debrief showcase, the review text reads, the Journal moves up
 
 Dalton, 2026-10-26, on my three proposals: "Agreed on all fronts please go forward."

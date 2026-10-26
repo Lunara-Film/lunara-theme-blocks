@@ -50,3 +50,8 @@ body.home .lunara-home-stills-item:hover .lunara-home-stills-film,body.home .lun
 body.home .lunara-home-stills-item:focus-visible{outline:2px solid var(--lunara-stills-gold-light);outline-offset:4px;}
 @media(max-width:820px){body.home .lunara-home-stills-that-rhyme{padding:24px 16px;}body.home .lunara-home-stills-inner{gap:18px;}body.home .lunara-home-stills-title{font-size:1.9rem!important;}}
 @media(max-width:759px){body.home .lunara-home-stills-grid{gap:20px;}body.home .lunara-home-stills-three{grid-template-columns:minmax(0,1fr);gap:20px;}body.home .is-media-posters .lunara-home-stills-three{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}body.home .is-media-posters .lunara-home-stills-item.is-review{width:min(100%,200px);}}
+/* 3.2.139: on phones the three pairing posters were about 100px wide, so a
+   one-word title ("Skinamarink,") broke mid-word. Up to 480px the row spans
+   the screen less its 16px gutters, the gap tightens to 8px, and the pairing
+   film and year read at 16px: a long title stays whole from 360px up. */
+@media(max-width:480px){body.home .is-media-posters .lunara-home-stills-three{justify-self:center;width:calc(100vw - 32px);max-width:none;gap:8px;}body.home .is-media-posters .lunara-home-stills-item.is-pairing .lunara-home-stills-caption{font-size:1rem;}}

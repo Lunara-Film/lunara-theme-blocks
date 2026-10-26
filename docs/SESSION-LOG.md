@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — 3.2.138 is live; a long pairing title stays whole on phones (Theme 3.2.139)
+
+- **Live:** Theme 3.2.138 (merge `a9b724e`, #297), deployed by me; the live `style.css` read 3.2.138 at 22:28:04 UTC. The live Home's HTML and pixels at 1440 and 390px: the order is the Debrief showcase, the Journal, the Ledger band, The Running Order, Oscar Picks, with panels on the showcase, the band and Oscar Picks; the showcase features "Backrooms – Mapping Is the Prison" with Skinamarink, Cube and The Backrooms; the Running Order shows six across on desktop and two on phones, film 18/17px, take 16px in the take colour, stars 15px; Debrief captions 17px and questions 16px; Now Showing second and third takes 17px. The stored Home blocks were rewritten in the new order at 22:28:22 UTC (composition revision 3, `/wp-json/wp/v2/pages/4055`). Home, Reviews, Journal, Oscars, Debrief, About and the Backrooms review return 200 with no PHP errors.
+- **Found:** on phones "Skinamarink," broke mid-word in the showcase (77 to 101px pairing columns).
+- **Shipped:** Theme 3.2.139 PR: up to 480px the pairing row spans the screen less its gutters with an 8px gap, and pairing captions read at 16px. See the 3.2.139 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** the Debrief browser contract with "Skinamarink, 2022." (fails without the rule); the rule applied to the live Home's markup keeps the word whole at 360, 375, 390 and 430px with 16px gutters and no overflow.
+
 ## 2026-10-26 — Your pick leads, the review text reads, the Journal moves up (Theme 3.2.138)
 
 - **Asked:** Dalton agreed to my three proposals: feature his Featured Review in the Home Debrief showcase, make the review text much more legible, and move the Journal up to second.
