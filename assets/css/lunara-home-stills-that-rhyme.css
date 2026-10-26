@@ -32,6 +32,11 @@ body.home .lunara-home-stills-source a{color:var(--lunara-stills-gold-light);tex
 body.home .lunara-home-stills-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:clamp(18px,2.6vw,32px);min-width:0;}
 body.home .lunara-home-stills-item.is-review{width:min(100%,860px);}
 body.home .lunara-home-stills-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,24px);width:100%;min-width:0;}
+/* 3.2.140: the three pairings share one set of rows (role, face, caption)
+   through subgrid, so their faces start on one line even when one role name
+   fits on a line and the others wrap; a one-line role name sits on the face. */
+body.home .lunara-home-stills-three>.lunara-home-stills-item.is-pairing{grid-row:span 3;grid-template-rows:subgrid;}
+body.home .lunara-home-stills-three>.lunara-home-stills-item.is-pairing>.lunara-home-stills-role{align-self:end;}
 body.home .lunara-home-stills-item.is-pairing .lunara-home-stills-role{display:block;margin-bottom:2px;}
 body.home .lunara-home-stills-frame.is-text{display:grid;place-items:center;padding:12px;text-align:center;}
 body.home .lunara-home-stills-text-title{color:var(--lunara-stills-gold-light);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,serif));font-size:clamp(1.1rem,1.6vw,1.5rem);font-weight:400;line-height:1.15;text-wrap:balance;}

@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — 3.2.139 is live; the three Debrief faces line up (Theme 3.2.140)
+
+- **Live:** Theme 3.2.139 (merge `75a25b5`, #298), deployed by me; `style.css` read 3.2.139 at 22:37:36 UTC. On the live Home "Skinamarink," stays whole at 360, 375, 390 and 430px (pairing columns 104 to 127px, 16px gutters, no overflow); at 320px it still breaks, as designed; desktop unchanged.
+- **Found:** at 390px the Theme Echo poster sat higher than the other two, because its role name fits on one line and theirs wrap.
+- **Shipped:** Theme 3.2.140 PR: the pairings share rows through subgrid. See the 3.2.140 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** the Debrief browser contract (151 checks) with the new face-alignment assertion, which fails on 3.2.139; the rule applied to the live Home's markup lines the three faces up at 360, 390, 600, 768 and 1440px.
+
 ## 2026-10-26 — 3.2.138 is live; a long pairing title stays whole on phones (Theme 3.2.139)
 
 - **Live:** Theme 3.2.138 (merge `a9b724e`, #297), deployed by me; the live `style.css` read 3.2.138 at 22:28:04 UTC. The live Home's HTML and pixels at 1440 and 390px: the order is the Debrief showcase, the Journal, the Ledger band, The Running Order, Oscar Picks, with panels on the showcase, the band and Oscar Picks; the showcase features "Backrooms – Mapping Is the Prison" with Skinamarink, Cube and The Backrooms; the Running Order shows six across on desktop and two on phones, film 18/17px, take 16px in the take colour, stars 15px; Debrief captions 17px and questions 16px; Now Showing second and third takes 17px. The stored Home blocks were rewritten in the new order at 22:28:22 UTC (composition revision 3, `/wp-json/wp/v2/pages/4055`). Home, Reviews, Journal, Oscars, Debrief, About and the Backrooms review return 200 with no PHP errors.

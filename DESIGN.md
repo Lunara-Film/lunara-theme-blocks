@@ -146,7 +146,9 @@ and links to the owning Review editor. This does not alter pairing content.
   "Film, Year." and the Method question. Posters (2:3) are the default face,
   three across at every width; on phones up to 480px the row spans the screen
   less its 16px gutters with an 8px gap and the pairing captions read at
-  16px, so a long one-word title stays whole from 360px up. Stills (16:9) are the option, taken only when
+  16px, so a long one-word title stays whole from 360px up. The three share
+  one set of rows (role, face, caption), so their faces start on one line
+  whatever their role names wrap to. Stills (16:9) are the option, taken only when
   the reviewed film and all three pairings have one; the row then stacks on
   phones. A film with no art is a typographic plate on the surface colour,
   never dropped and never an empty frame. The set is never cut to one pair.

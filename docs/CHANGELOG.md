@@ -11,6 +11,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-26 — Theme 3.2.140: the three Debrief faces line up
+
+The live check of 3.2.139 at 390px: with the wider phone columns, "THEME ECHO" fits on one line while "COUNTER PROGRAM" and "CAREER CONTEXT" wrap to two, so the Theme Echo poster started higher than the other two. The browser contract compared the pairing items' tops, not their faces', so it did not see it.
+
+- The three pairings share one set of rows (role, face, caption) through CSS subgrid (`grid-row: span 3; grid-template-rows: subgrid`), so the faces and captions start on one line at every width and in both faces; a one-line role name sits at the foot of its row, on its poster.
+- Test: the Debrief browser contract asserts that the three faces start within 1px of each other wherever they stand in one row. It fails on 3.2.139 at 390px.
+
 ## 2026-10-26 — Theme 3.2.139: a long pairing title stays whole on phones
 
 The live check of 3.2.138 found "Skinamarink, 2022." breaking as "Skinamarin / k, 2022." in the Debrief showcase on phones. The three pairing posters were 77 to 101px wide from 320 to 390px, and the word needs about 108px at 17px (about 102px at 16px), so it broke at 16px before 3.2.138 too. Hyphenation is no fix: Chromium on Linux does not hyphenate it, so a test could not hold it.
