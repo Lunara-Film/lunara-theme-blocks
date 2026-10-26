@@ -762,12 +762,12 @@ body.home .lunara-home-front-desk-lead-media,body.home .lunara-home-front-desk-c
 body.home .lunara-home-front-desk-label{margin:8px 0 0;}
 body.home .lunara-home-front-desk-title{margin:0;min-width:0;overflow-wrap:anywhere;color:var(--lunara-text,#f4efe3)!important;font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(2.1rem,3.6vw,3.6rem);font-weight:400;line-height:1.02;letter-spacing:0;text-wrap:balance;}
 body.home .lunara-home-front-desk-film,body.home .lunara-home-front-desk-take{display:block;}
-body.home .lunara-home-front-desk-take{margin-top:.3em;color:rgba(192,192,200,.96);font-family:var(--lunara-font-body,Georgia,serif);font-size:clamp(1.05rem,.42em,1.5rem);font-style:italic;font-weight:400;line-height:1.3;}
+body.home .lunara-home-front-desk-take{margin-top:.3em;color:var(--lunara-home-take,rgba(250,251,252,.84));font-family:var(--lunara-font-body,Georgia,serif);font-size:clamp(1.05rem,.42em,1.5rem);font-style:italic;font-weight:400;line-height:1.3;}
 body.home .lunara-home-front-desk-copy{max-width:62ch;margin:0;color:rgba(244,239,227,.84);font-size:1.02rem;line-height:1.62;}
 body.home .lunara-home-front-desk-cta{display:inline-flex;width:max-content;max-width:100%;align-items:center;gap:8px;color:var(--lunara-gold-light,#e0c481);font-size:.96rem;font-weight:600;font-style:italic;line-height:1.2;}
 body.home .lunara-home-front-desk-stack{display:grid;grid-template-rows:auto auto;gap:clamp(18px,2vw,28px);min-width:0;align-content:start;}
 body.home .lunara-home-front-desk-companion-title{display:block;min-width:0;overflow-wrap:anywhere;color:var(--lunara-text,#f4efe3);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(1.3rem,1.6vw,1.6rem);font-weight:400;line-height:1.1;letter-spacing:0;text-wrap:balance;}
-body.home .lunara-home-front-desk-companion-title .lunara-home-front-desk-take{font-size:.95rem;}
+body.home .lunara-home-front-desk-companion-title .lunara-home-front-desk-take{font-size:1.0625rem;line-height:1.35;}
 body.home .lunara-home-front-desk-lead:hover .lunara-home-front-desk-title,body.home .lunara-home-front-desk-lead:focus-within .lunara-home-front-desk-title,body.home .lunara-home-front-desk-companion:hover .lunara-home-front-desk-companion-title,body.home .lunara-home-front-desk-companion:focus-visible .lunara-home-front-desk-companion-title{color:var(--lunara-gold-light,#e0c481);}
 body.home .lunara-home-masthead-route{display:grid;gap:8px;min-width:0;border:1px solid rgba(201,169,97,.2);border-radius:0;background:rgba(6,14,24,.72);color:var(--lunara-text,#f4efe3)!important;text-decoration:none!important;}
 body.home .lunara-home-masthead-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:min(100%,1120px);margin:0 auto;}
@@ -895,7 +895,9 @@ body.home .lunara-home-program.is-cover .lunara-home-masthead-dek{max-width:36ch
    the Home seams read it, so they rendered white. The program's rules (the
    section hairline above, the Running Order and Ledger band rules, the lane
    heads below) read --lunara-home-rule instead, gold by definition. */
-body.home{--lunara-home-rule:rgba(201,169,97,.28);}
+body.home{--lunara-home-rule:rgba(201,169,97,.28);--lunara-home-take:rgba(250,251,252,.84);}
+/* The program's take colour (3.2.138): every review take and Debrief
+   question on Home reads near-white (about 13:1 on the ground), not grey. */
 
 /* Lane heads in the program's voice (3.2.131). The Journal, Oscar Picks,
    Oscar Facts and Latest Reviews heads keep the Composition rule (heading,

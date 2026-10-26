@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — Your pick leads, the review text reads, the Journal moves up (Theme 3.2.138)
+
+- **Asked:** Dalton agreed to my three proposals: feature his Featured Review in the Home Debrief showcase, make the review text much more legible, and move the Journal up to second.
+- **Shipped:** Theme 3.2.138 PR. See the 3.2.138 changelog entry. Merged and deployed by me when CI is green; then one wp-admin visit lets the composition revision 3 rewrite the stored Home blocks in the new order.
+- **Verified:** whole PHP suite with the new `home-program-order-runtime.php`; the Home browser contracts (Running Order, Debrief showcase, front desk, panels, lane heads, section order); each new floor and the order contract fail on the 3.2.137 values; the full suite on CI before merge.
+- **Live:** Theme 3.2.137 until 3.2.138 deploys. Live means the live Home shows Backrooms in the showcase, the Journal second, the new text sizes and the panels in the new order, in its HTML and on screen.
+
 ## 2026-10-26 — The alternating panels are live (Theme 3.2.137)
 
 - **Live:** Theme 3.2.137 (merge `5542782`, #295), deployed by me through WordPress.com Deployments; the live `style.css` read 3.2.137 at 20:53:13 UTC. Four seconds later the live Home's HTML carried the planned classes: the Debrief showcase `is-home-panel`, the Running Order `is-after-home-panel`, the Ledger band `is-home-panel`, the Journal `is-after-home-panel`, Oscar Picks `is-home-panel is-home-panel-last`. Live pixels in Chromium at 1440 and 390px: every panel reads #0f1d2e at both viewport edges, the ground sections read #0a1520 (#07111d on phones), and the last panel meets the footer with one rule row. Home, Reviews, Journal, Oscars, Debrief and About return 200 with no PHP errors.

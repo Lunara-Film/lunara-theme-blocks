@@ -10,9 +10,9 @@ const { chromium } = require('playwright-core');
 const root = path.resolve(__dirname, '..');
 const executablePath = process.env.LUNARA_BROWSER_EXECUTABLE || ['C:/Program Files/Google/Chrome/Application/chrome.exe', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'].find(fs.existsSync);
 const css = ['style.css', 'assets/css/lunara-shell.css', 'assets/css/lunara-home-modules.css', 'assets/css/lunara-public-guardrails.css'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
-// The Direction D running order, as the editorial-default preset sorts it, each
-// slot with a visible body so it has height.
-const slots = ['pairing-desk', 'featured', 'ledger', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts'];
+// The program order, as the editorial-default preset sorts it since 3.2.138
+// (the Journal second), each slot with a visible body so it has height.
+const slots = ['pairing-desk', 'dispatch', 'ledger', 'featured', 'latest-reviews', 'oscar-picks', 'oscar-facts'];
 const sections = ['<section class="lunara-home-masthead lunara-home-front-desk lunara-home-program" data-slot="masthead"><p>Masthead</p></section>']
     .concat(slots.map(s => `<section class="lunara-home-section lunara-home-slot-${s}" data-slot="${s}"><h2>${s}</h2><p>Body of ${s}.</p></section>`)).join('');
 let checks = 0;
@@ -28,7 +28,7 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.every(s => s.height > 0), `${label}: every section has height`, d);
             assert(d.every(s => s.order === '0'), `${label}: no slot carries a CSS order override`, d);
             const visual = [...d].sort((a, b) => a.top - b.top).map(s => s.slot);
-            assert(JSON.stringify(visual) === JSON.stringify(['masthead'].concat(['pairing-desk', 'featured', 'ledger', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts'])), `${label}: readers see the sections in DOM order: masthead, Stills that Rhyme, The Running Order, the Ledger, then the lanes`, { visual });
+            assert(JSON.stringify(visual) === JSON.stringify(['masthead'].concat(slots)), `${label}: readers see the sections in DOM order: masthead, the Debrief showcase, the Journal, the Ledger, The Running Order, then the lanes`, { visual });
             await page.close();
         }
         process.stdout.write(`Home section order browser: ${checks} checks passed.\n`);

@@ -581,23 +581,25 @@ function lunara_control_desk_homepage_order_preset_specs() {
     return array(
         'editorial-default' => array(
             'label'   => __( 'Editorial default', 'lunara-film' ),
-            'copy'    => __( 'The program: Now Showing, Stills that Rhyme, The Running Order, the Oscar Ledger intermission, then the Journal and the Oscar lanes. Phones read the same order.', 'lunara-film' ),
-            'desktop_order' => array( 'hero', 'pairing-desk', 'featured', 'ledger', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts', 'oscar-spotlight', 'database', 'deep-cuts' ),
-            'mobile_order'  => array( 'hero', 'pairing-desk', 'featured', 'ledger', 'dispatch', 'latest-reviews', 'oscar-picks', 'oscar-facts', 'oscar-spotlight', 'database', 'deep-cuts' ),
+            // 3.2.138 (Dalton, 2026-10-26): the Journal moves up to second,
+            // under the Debrief showcase; The Running Order follows the Ledger.
+            'copy'    => __( 'The program: Now Showing, Stills that Rhyme, the Journal, the Oscar Ledger intermission, then The Running Order and the Oscar lanes. Phones read the same order.', 'lunara-film' ),
+            'desktop_order' => array( 'hero', 'pairing-desk', 'dispatch', 'ledger', 'featured', 'latest-reviews', 'oscar-picks', 'oscar-facts', 'oscar-spotlight', 'database', 'deep-cuts' ),
+            'mobile_order'  => array( 'hero', 'pairing-desk', 'dispatch', 'ledger', 'featured', 'latest-reviews', 'oscar-picks', 'oscar-facts', 'oscar-spotlight', 'database', 'deep-cuts' ),
             'desktop' => array(
                 __( 'Program masthead and Now Showing', 'lunara-film' ),
                 __( 'Stills that Rhyme', 'lunara-film' ),
-                __( 'The Running Order', 'lunara-film' ),
-                __( 'The Oscar Ledger', 'lunara-film' ),
                 __( 'Journal lane', 'lunara-film' ),
+                __( 'The Oscar Ledger', 'lunara-film' ),
+                __( 'The Running Order', 'lunara-film' ),
                 __( 'Oscar Picks', 'lunara-film' ),
             ),
             'mobile'  => array(
                 __( 'Program masthead and Now Showing', 'lunara-film' ),
                 __( 'Stills that Rhyme', 'lunara-film' ),
-                __( 'The Running Order', 'lunara-film' ),
-                __( 'The Oscar Ledger', 'lunara-film' ),
                 __( 'Journal lane', 'lunara-film' ),
+                __( 'The Oscar Ledger', 'lunara-film' ),
+                __( 'The Running Order', 'lunara-film' ),
                 __( 'Oscar Picks', 'lunara-film' ),
             ),
         ),

@@ -332,21 +332,30 @@ $GLOBALS['lunara_test']['mods'] = array( 'lunara_home_pairing_desk_kicker' => ' 
 $html = lunara_render_home_stills_that_rhyme();
 lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-stills-kicker">The Lunara Film Debrief</p>' ) && false !== strpos( $html, 'each selected individually by me.</p>' ), 'a blank field falls back to the Debrief default' );
 
-// ---- Which review leads (3.2.132) ----
+// ---- Which review leads (3.2.138) ----
 // Both the lead story (21) and the editor's Featured Review (22) carry a
-// full trio. Home keeps the lead story first by default; 'editor' puts the
-// editor's pick first, so Home matches the Reviews page Pairing Desk.
+// full trio. Dalton chose his pick (2026-10-26): by default the editor's
+// Featured Review leads, so Home matches the Reviews page Pairing Desk;
+// 'lead' puts the masthead's lead story first.
 lunara_test_reset();
 lunara_test_trio( 21 );
 lunara_test_trio( 22 );
 $GLOBALS['lunara_test']['recent'] = array( 22 );
-lunara_test_assert( 'lead' === lunara_home_stills_that_rhyme_review_source() && 21 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ), 'by default the lead story is tried first' );
-lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/harbor-light/">' ), 'by default Home features the lead story' );
-add_filter( 'lunara_home_stills_that_rhyme_review_source', static function () { return 'editor'; } );
-lunara_test_assert( 'editor' === lunara_home_stills_that_rhyme_review_source() && 22 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ) && in_array( 21, lunara_home_stills_that_rhyme_candidate_review_ids(), true ), 'editor first: the Featured Review leads and the lead story follows' );
-lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/night-ferry/">' ), 'editor first: Home features the editor\'s Featured Review' );
+lunara_test_assert( 'editor' === lunara_home_stills_that_rhyme_review_source() && 22 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ) && in_array( 21, lunara_home_stills_that_rhyme_candidate_review_ids(), true ), 'by default the Featured Review is tried first and the lead story follows' );
+lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/night-ferry/">' ), 'by default Home features the editor\'s Featured Review' );
+add_filter( 'lunara_home_stills_that_rhyme_review_source', static function () { return 'lead'; } );
+lunara_test_assert( 'lead' === lunara_home_stills_that_rhyme_review_source() && 21 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ), 'lead first: the lead story is tried first' );
+lunara_test_assert( false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/harbor-light/">' ), 'lead first: Home features the lead story' );
 $GLOBALS['lunara_test']['filters'] = array();
 add_filter( 'lunara_home_stills_that_rhyme_review_source', static function () { return 'anything else'; } );
-lunara_test_assert( 'lead' === lunara_home_stills_that_rhyme_review_source(), 'an unknown source value keeps the lead story first' );
+lunara_test_assert( 'editor' === lunara_home_stills_that_rhyme_review_source(), 'an unknown source value keeps the Featured Review first' );
+// A Featured Review without all three pairings never costs the section:
+// the lead story with its trio takes it.
+lunara_test_reset();
+$GLOBALS['lunara_test']['filters'] = array();
+lunara_test_trio( 21 );
+$GLOBALS['lunara_test']['posts'][22]['meta']['theme_echo_movie'] = 501; // the pick has one pairing, not three
+$GLOBALS['lunara_test']['recent'] = array( 22, 21 );
+lunara_test_assert( 22 === ( lunara_home_stills_that_rhyme_candidate_review_ids()[0] ?? 0 ) && false !== strpos( lunara_render_home_stills_that_rhyme(), 'Fresh from the debrief of <a href="https://example.test/reviews/harbor-light/">' ), 'a Featured Review without its full trio hands the showcase to the lead story' );
 
 fwrite( STDOUT, "Home stills that rhyme: the reviewed film and its three, posters by default — contract passed.\n" );

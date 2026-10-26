@@ -93,11 +93,13 @@ if ( ! function_exists( 'lunara_register_direction_d_homepage_blocks' ) ) {
 if ( ! function_exists( 'lunara_home_composition_revision' ) ) {
 	/**
 	 * The composition the Home page blocks must carry. Bump when the block map
-	 * gains a section that an existing block-mode Home page needs written in.
+	 * gains a section that an existing block-mode Home page needs written in,
+	 * or when the program order changes, so the stored blocks follow it.
 	 *   2 — 3.2.122: lunara/running-order and lunara/ledger-band (Direction D).
+	 *   3 — 3.2.138: the Journal moves up to second (Dalton, 2026-10-26).
 	 */
 	function lunara_home_composition_revision() {
-		return 2;
+		return 3;
 	}
 }
 
@@ -254,6 +256,37 @@ if ( ! function_exists( 'lunara_home_block_composition_sections' ) ) {
 		}
 
 		return $sections;
+	}
+}
+
+if ( ! function_exists( 'lunara_home_sort_block_sections' ) ) {
+	/**
+	 * Put the rendered blocks in the saved Section Order (3.2.138), the order
+	 * the header's inline order rules already show them in, so the page's
+	 * reading order, the visible order and Home's alternating panels agree
+	 * even before the stored blocks are recomposed. A section block takes its
+	 * slug's place in the map (an unmapped slug sorts after them, at 99); any
+	 * other block (slug '') goes first, where the order rules place it.
+	 * Equal places keep their page order.
+	 *
+	 * @param array[] $sections  array( 'slug' => string, 'html' => string ) per block.
+	 * @param array   $order_map Slug => position, from lunara_get_home_section_order_map().
+	 * @return array[] The same blocks, in the saved order.
+	 */
+	function lunara_home_sort_block_sections( array $sections, array $order_map ) {
+		$keyed = array();
+		foreach ( array_values( $sections ) as $index => $section ) {
+			$slug    = isset( $section['slug'] ) ? (string) $section['slug'] : '';
+			$place   = '' === $slug ? 0 : ( isset( $order_map[ $slug ] ) ? (int) $order_map[ $slug ] : 99 );
+			$keyed[] = array( $place, $index, $section );
+		}
+		usort(
+			$keyed,
+			static function ( $a, $b ) {
+				return array( $a[0], $a[1] ) <=> array( $b[0], $b[1] );
+			}
+		);
+		return array_column( $keyed, 2 );
 	}
 }
 

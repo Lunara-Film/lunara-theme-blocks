@@ -48,7 +48,7 @@ const sections = {
 const masthead = offline(php('home-front-desk-runtime.php', ['--fixture']));
 const footer = '<footer class="lunara-site-footer" role="contentinfo"><div class="lunara-footer-inner"><nav class="lunara-footer-nav-grid" aria-label="Footer"><ul class="lunara-footer-curated-list"><li><a href="/reviews/">Reviews</a></li><li><a href="/journal/">Journal</a></li><li><a href="/oscars/">Oscars</a></li></ul></nav><p class="lunara-footer-copyright">© 2026 Lunara Film</p></div></footer>';
 const orders = {
-    live: ['pairing-desk', 'featured', 'ledger', 'dispatch', 'oscar-picks'],
+    live: ['pairing-desk', 'dispatch', 'ledger', 'featured', 'oscar-picks'],
     'band second': ['dispatch', 'ledger', 'oscar-facts', 'featured', 'latest-reviews'],
     'no band': ['oscar-facts', 'featured', 'pairing-desk'],
 };

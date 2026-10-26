@@ -4,15 +4,18 @@
    kicker, a signature-face title and the count link head it; then 2:3
    posters in square frames, film in GT Sectra, take in reading italic, the
    score beneath. A review without a poster is a typographic card on the
-   surface color. Six across on desktop, four on tablets, three on phones,
-   no ornamental numerals anywhere. */
+   surface color. Six across on desktop, four on tablets, two on phones,
+   no ornamental numerals anywhere. 3.2.138 (Dalton: "the text needs to be
+   much more legible"): the film reads at 18px (17px on phones), the take
+   at 16px in the program's take colour, the stars at 15px, and phones show
+   two posters across so that text has room. */
 body.home .lunara-home-running-order{box-sizing:border-box;width:100%;padding:0 min(5vw,76px);border:0;border-radius:0;background:transparent;box-shadow:none;}
 body.home .lunara-home-running-order-inner{display:grid;gap:clamp(18px,2vw,26px);width:min(100%,1320px);min-width:0;margin-inline:auto;}
 body.home .lunara-home-running-order-head{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"kicker all" "title all";align-items:end;column-gap:24px;row-gap:6px;min-width:0;padding:0 0 12px;border-bottom:1px solid var(--lunara-home-rule,rgba(201,169,97,.28));}
 body.home .lunara-home-running-order-kicker{grid-area:kicker;margin:0;color:var(--lunara-gold,#c9a961);font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif);font-size:0.8125rem;font-weight:400;letter-spacing:.24em;line-height:1.3;text-transform:uppercase;}
 body.home .lunara-home-running-order-title{grid-area:title;margin:0;min-width:0;overflow-wrap:anywhere;color:var(--lunara-text,#fafbfc);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(1.55rem,2.4vw,2.3rem);font-weight:400;line-height:1.08;letter-spacing:0;text-wrap:balance;}
 body.home .lunara-home-running-order-all{grid-area:all;display:inline-flex;align-items:center;align-self:end;min-height:44px;color:var(--lunara-gold-light,#e0c481);font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;font-style:italic;line-height:1.3;text-decoration:underline;text-underline-offset:4px;white-space:nowrap;}
-body.home .lunara-home-running-order-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,26px) clamp(10px,1.4vw,16px);margin:0;padding:0;list-style:none;}
+body.home .lunara-home-running-order-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,26px) clamp(10px,1.4vw,16px);margin:0;padding:0;list-style:none;}
 body.home .lunara-home-running-order-item{min-width:0;margin:0;padding:0;}
 body.home .lunara-home-running-order-card{display:grid;gap:8px;align-content:start;min-width:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--lunara-text,#fafbfc)!important;text-decoration:none!important;}
 body.home .lunara-home-running-order-frame{display:block;box-sizing:border-box;width:100%;aspect-ratio:2/3;overflow:hidden;border-radius:0;background:var(--lunara-bg-secondary,#0f1d2e);}
@@ -20,16 +23,16 @@ body.home .lunara-home-running-order-poster{display:block;width:100%;height:100%
 body.home .lunara-home-running-order-frame.is-text{display:grid;place-content:center;padding:12px;border:1px solid var(--lunara-home-rule,rgba(201,169,97,.28));text-align:center;}
 body.home .lunara-home-running-order-headline{display:block;min-width:0;overflow-wrap:anywhere;}
 body.home .lunara-home-running-order-film,body.home .lunara-home-running-order-take{display:block;}
-body.home .lunara-home-running-order-film{color:var(--lunara-text,#fafbfc);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:clamp(1rem,1.1vw,1.15rem);font-weight:400;line-height:1.15;letter-spacing:0;text-wrap:balance;}
-body.home .lunara-home-running-order-take{margin-top:.2em;color:var(--lunara-text-muted,#a8a8b8);font-family:var(--lunara-font-body,Georgia,serif);font-size:0.875rem;font-style:italic;font-weight:400;line-height:1.3;}
+body.home .lunara-home-running-order-film{color:var(--lunara-text,#fafbfc);font-family:var(--lunara-font-signature,var(--lunara-font-display,Georgia,"Times New Roman",serif));font-size:1.0625rem;font-weight:400;line-height:1.2;letter-spacing:0;text-wrap:balance;}
+body.home .lunara-home-running-order-take{margin-top:.25em;color:var(--lunara-home-take,rgba(250,251,252,.84));font-family:var(--lunara-font-body,Georgia,serif);font-size:1rem;font-style:italic;font-weight:400;line-height:1.35;}
 body.home .lunara-home-running-order-frame.is-text .lunara-home-running-order-film{color:var(--lunara-gold,#c9a961);font-size:clamp(1.1rem,1.5vw,1.5rem);line-height:1.1;}
 body.home .lunara-home-running-order-frame.is-text .lunara-home-running-order-take{margin-top:.5em;}
 body.home .lunara-home-running-order-score{display:block;line-height:1;}
-body.home .lunara-home-running-order-score .lunara-stars{color:var(--lunara-gold,#c9a961);font-size:0.8125rem;letter-spacing:1px;}
+body.home .lunara-home-running-order-score .lunara-stars{color:var(--lunara-gold,#c9a961);font-size:0.9375rem;letter-spacing:1px;}
 body.home .lunara-home-running-order-card:hover .lunara-home-running-order-film,body.home .lunara-home-running-order-card:focus-visible .lunara-home-running-order-film{color:var(--lunara-gold-light,#e0c481);}
 body.home .lunara-home-running-order-card:focus-visible{outline:2px solid var(--lunara-gold-light,#e0c481);outline-offset:3px;}
-@media(min-width:760px){body.home .lunara-home-running-order-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media(min-width:760px){body.home .lunara-home-running-order-grid{grid-template-columns:repeat(4,minmax(0,1fr));}body.home .lunara-home-running-order-film{font-size:1.125rem;}}
 @media(min-width:1200px){body.home .lunara-home-running-order-grid{grid-template-columns:repeat(6,minmax(0,1fr));}}
 @media(max-width:820px){body.home .lunara-home-running-order{padding:0 16px;}body.home .lunara-home-running-order-head{grid-template-columns:minmax(0,1fr);grid-template-areas:"kicker" "title" "all";row-gap:4px;}body.home .lunara-home-running-order-all{justify-self:start;}body.home .lunara-home-running-order-title{font-size:1.6rem;}}
-@media(max-width:480px){body.home .lunara-home-running-order-grid{gap:16px 10px;}body.home .lunara-home-running-order-film{font-size:0.95rem;}body.home .lunara-home-running-order-take{font-size:0.8125rem;}body.home .lunara-home-running-order-frame.is-text{padding:8px;}body.home .lunara-home-running-order-frame.is-text .lunara-home-running-order-film{font-size:1rem;}}
+@media(max-width:480px){body.home .lunara-home-running-order-grid{gap:20px 14px;}body.home .lunara-home-running-order-frame.is-text{padding:10px;}body.home .lunara-home-running-order-frame.is-text .lunara-home-running-order-film{font-size:1rem;}}
 @media(prefers-reduced-motion:reduce){body.home .lunara-home-running-order-card,body.home .lunara-home-running-order-film{transition:none!important;}}

@@ -425,9 +425,9 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) )
 	function lunara_home_stills_that_rhyme_candidate_review_ids() {
 		$lead   = lunara_home_stills_that_rhyme_lead_review_id();
 		$picked = function_exists( 'lunara_get_pairing_desk_review_id' ) ? (int) lunara_get_pairing_desk_review_id() : 0;
-		// 3.2.132: the lead story leads by default; 'editor' puts the Lunara
-		// Film Debrief editor's Featured Review first, so Home and the Reviews
-		// page Pairing Desk feature the same review.
+		// 3.2.138: the Lunara Film Debrief editor's Featured Review leads, so
+		// Home and the Reviews page Pairing Desk feature the same review;
+		// 'lead' puts the masthead's lead story first instead.
 		$ids = 'lead' === lunara_home_stills_that_rhyme_review_source() ? array( $lead, $picked ) : array( $picked, $lead );
 
 		if ( class_exists( 'WP_Query' ) ) {
@@ -466,21 +466,22 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_candidate_review_ids' ) )
 
 if ( ! function_exists( 'lunara_home_stills_that_rhyme_review_source' ) ) {
 	/**
-	 * Which review the Home Debrief showcase tries first (3.2.132): 'lead'
-	 * (the masthead's lead story, as Home has always done) or 'editor' (the
+	 * Which review the Home Debrief showcase tries first: 'editor' (the
 	 * Lunara Film Debrief editor's Featured Review, the one the Reviews page
-	 * Pairing Desk shows). Either way a review shows only with all three
+	 * Pairing Desk shows) or 'lead' (the masthead's lead story). Dalton chose
+	 * 'editor' on 2026-10-26 (3.2.138), so his pick in the Debrief editor is
+	 * what Home features. Either way a review shows only with all three
 	 * pairings; the rest of the line is the other source, then the newest
-	 * reviews. 'lead' stays the default until Dalton chooses; filterable.
+	 * reviews. Filterable; an unknown value keeps the editor's pick first.
 	 *
 	 * @return string 'editor' or 'lead'.
 	 */
 	function lunara_home_stills_that_rhyme_review_source() {
-		$source = 'lead';
+		$source = 'editor';
 		if ( function_exists( 'apply_filters' ) ) {
 			$source = sanitize_key( (string) apply_filters( 'lunara_home_stills_that_rhyme_review_source', $source ) );
 		}
-		return 'editor' === $source ? 'editor' : 'lead';
+		return 'lead' === $source ? 'lead' : 'editor';
 	}
 }
 

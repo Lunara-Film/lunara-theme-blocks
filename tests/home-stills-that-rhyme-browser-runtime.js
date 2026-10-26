@@ -5,7 +5,9 @@
 // posters in one row at every width. Stills (the option): a 16:9 still over
 // three 16:9 stills, one row from 760px and stacked below. GT Sectra on the
 // title line, Tiempos captions with an italic take, centered frame, the
-// program's hairline, no overflow, square corners.
+// program's hairline, no overflow, square corners. 3.2.138: the film and year
+// read at 17px or more, the take and the Method question at 16px or more in
+// a near-white take colour.
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
 const { chromium } = require('playwright-core');
 const assertSquareSurfaces = require('./tools/assert-square-surfaces.cjs');
@@ -41,7 +43,9 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     kickerSize: parseFloat(style('.lunara-home-stills-kicker', 'fontSize')), roleSize: parseFloat(style('.lunara-home-stills-role', 'fontSize')), roleText: document.querySelector('.lunara-home-stills-role').textContent.trim(),
                     questionStyle: style('.lunara-home-stills-question-text', 'fontStyle'), questionFont: style('.lunara-home-stills-question-text', 'fontFamily'),
                     filmFont: style('.lunara-home-stills-film', 'fontFamily'), filmSize: parseFloat(style('.lunara-home-stills-film', 'fontSize')), filmStyle: style('.lunara-home-stills-film', 'fontStyle'),
-                    takeStyle: style('.lunara-home-stills-take', 'fontStyle'), takeFont: style('.lunara-home-stills-take', 'fontFamily'),
+                    takeStyle: style('.lunara-home-stills-take', 'fontStyle'), takeFont: style('.lunara-home-stills-take', 'fontFamily'), takeSize: parseFloat(style('.lunara-home-stills-take', 'fontSize')),
+                    questionSizes: [...document.querySelectorAll('.lunara-home-stills-item.is-pairing .lunara-home-stills-question-text')].map(e => parseFloat(getComputedStyle(e).fontSize)),
+                    takeColors: [...document.querySelectorAll('.lunara-home-stills-take, .lunara-home-stills-item.is-pairing .lunara-home-stills-question-text')].map(e => getComputedStyle(e).color),
                     sectionTopBorder: parseFloat(getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme')).borderTopWidth), hairline: (() => { const b = getComputedStyle(document.querySelector('.lunara-home-stills-that-rhyme'), '::before'); return { h: parseFloat(b.height), bg: b.backgroundColor }; })(),
                 };
             });
@@ -57,7 +61,8 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.titleFont.startsWith('"GT Sectra Display"') && d.titleSize >= 30, `${label}: the title line is GT Sectra`, d);
             assert(d.kickerSize >= 13 && d.roleSize >= 13 && d.roleText === 'Theme Echo', `${label}: kicker and the full role name are at least 13px`, d);
             assert(d.questionStyle === 'italic' && d.questionFont.startsWith('"Tiempos Text"'), `${label}: the Method question is reading italic`, d);
-            assert(d.filmFont.startsWith('"Tiempos Text"') && d.filmSize >= 16 && d.filmStyle === 'normal' && d.takeStyle === 'italic' && d.takeFont.startsWith('"Tiempos Text"'), `${label}: captions are Tiempos with the take in italic`, d);
+            assert(d.filmFont.startsWith('"Tiempos Text"') && d.filmSize >= 17 && d.filmStyle === 'normal' && d.takeStyle === 'italic' && d.takeFont.startsWith('"Tiempos Text"') && d.takeSize >= 16, `${label}: captions are Tiempos at 17px with the take in italic at 16px or more`, d);
+            assert(d.questionSizes.length === 3 && d.questionSizes.every(v => v >= 16) && d.takeColors.length >= 4 && d.takeColors.every(c => { const n = (c.match(/[\d.]+/g) || []).map(Number); return n[0] >= 240 && n[1] >= 240 && n[2] >= 240 && (n.length < 4 || n[3] >= .8); }), `${label}: the take and the Method questions read at 16px in the near-white take colour`, d);
             assert(d.sectionTopBorder === 0 && Math.abs(d.hairline.h - 1) < .6 && d.hairline.bg === 'rgba(201, 169, 97, 0.28)', `${label}: the section opens with the program's single hairline rule (no border of its own)`, d);
             const [p1, p2, p3] = d.pairings;
             if (media === 'posters' || width >= 760) assert(p2.left >= p1.right - 1 && p3.left >= p2.right - 1 && Math.abs(p1.top - p3.top) <= 1 && Math.abs(p1.width - p3.width) <= 1 && p1.left >= 16 - .5 && p3.right <= width - 16 + .5, `${label}: the three stand in one row of equal frames (posters at every width)`, d);

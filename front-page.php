@@ -44,7 +44,13 @@ get_header();
 	// panels can be marked on them below; joined, they are the composition.
 	$lunara_block_sections = array();
 	if ( $lunara_uses_block_composition && function_exists( 'lunara_home_block_composition_sections' ) ) {
-		$lunara_block_sections    = lunara_home_block_composition_sections( $lunara_block_excluded );
+		$lunara_block_sections = lunara_home_block_composition_sections( $lunara_block_excluded );
+		// 3.2.138: the blocks print in the saved Section Order, the order the
+		// header's inline order rules show, so the reading order, the visible
+		// order and the panels agree whatever order the stored blocks hold.
+		if ( function_exists( 'lunara_home_sort_block_sections' ) && function_exists( 'lunara_get_home_section_order_map' ) ) {
+			$lunara_block_sections = lunara_home_sort_block_sections( $lunara_block_sections, lunara_get_home_section_order_map() );
+		}
 		$lunara_block_composition = implode( '', array_column( $lunara_block_sections, 'html' ) );
 	} else {
 		$lunara_block_composition = $lunara_uses_block_composition && function_exists( 'lunara_render_home_block_composition' )

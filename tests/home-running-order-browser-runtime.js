@@ -2,7 +2,10 @@
 // The Running Order in the real public cascade (style, shell, home modules,
 // its own stylesheet, guardrails), JavaScript off, beneath the program
 // masthead: columns per width, no overflow, 2:3 frames, edges aligned with
-// Now Showing, faces, minimum sizes and square corners.
+// Now Showing, faces, minimum sizes, legibility and square corners. 3.2.138
+// (Dalton: "the text needs to be much more legible"): two posters across on
+// phones, the film at 17px or more, the take at 16px and at least 10:1
+// against the page, the stars at 15px.
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
 const { chromium } = require('playwright-core');
 const assertSquareSurfaces = require('./tools/assert-square-surfaces.cjs');
@@ -14,7 +17,7 @@ const wall = fixture('home-running-order-runtime.php');
 const css = ['style.css', 'assets/css/lunara-shell.css', 'assets/css/lunara-home-modules.css', 'assets/css/lunara-home-running-order.css', 'assets/css/lunara-public-guardrails.css'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
 const svg = (w, h) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="${w}" height="${h}" fill="#1c2633"/></svg>`);
 const html = masthead.replace(/src="https:[^"]+"/g, `src="${svg(1920, 1080)}"`) + wall.replace(/ srcset="[^"]+"/g, '').replace(/src="https:[^"]+"/g, `src="${svg(342, 513)}"`);
-const columnsFor = width => (width >= 1200 ? 6 : width >= 760 ? 4 : 3);
+const columnsFor = width => (width >= 1200 ? 6 : width >= 760 ? 4 : 2);
 let checks = 0;
 const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSON.stringify(detail, null, 1)); throw new Error(message); } };
 (async () => {
@@ -46,6 +49,18 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
                     takeFont: cs('.lunara-home-running-order-take', 'fontFamily'), takeStyle: cs('.lunara-home-running-order-take', 'fontStyle'), takeSize: parseFloat(cs('.lunara-home-running-order-take', 'fontSize')),
                     kickerTransform: cs('.lunara-home-running-order-kicker', 'textTransform'), kickerSpacing: parseFloat(cs('.lunara-home-running-order-kicker', 'letterSpacing')), kickerColor: cs('.lunara-home-running-order-kicker', 'color'),
                     starSize: parseFloat(cs('.lunara-home-running-order-score .lunara-stars', 'fontSize')),
+                    filmSizes: [...document.querySelectorAll('.lunara-home-running-order-card:not(:has(.is-text)) .lunara-home-running-order-film')].map(e => parseFloat(getComputedStyle(e).fontSize)),
+                    takeContrast: (() => {
+                        const rgb = c => (c.match(/[\d.]+/g) || []).map(Number);
+                        const take = document.querySelector('.lunara-home-running-order-card:not(:has(.is-text)) .lunara-home-running-order-take');
+                        let n = take.parentElement, ground = [10, 21, 32];
+                        while (n) { const c = rgb(getComputedStyle(n).backgroundColor); if (c.length >= 3 && (c.length < 4 || c[3] > .5)) { ground = c.slice(0, 3); break; } n = n.parentElement; }
+                        const t = rgb(getComputedStyle(take).color), a = t.length > 3 ? t[3] : 1;
+                        const fg = t.slice(0, 3).map((v, i) => v * a + ground[i] * (1 - a));
+                        const lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; };
+                        const L1 = lum(fg), L2 = lum(ground);
+                        return (Math.max(L1, L2) + .05) / (Math.min(L1, L2) + .05);
+                    })(),
                     frameBackground: cs('.lunara-home-running-order-frame.is-text', 'backgroundColor'),
                     posterFit: cs('.lunara-home-running-order-poster', 'objectFit'), posterLoading: document.querySelector('.lunara-home-running-order-poster').getAttribute('loading'),
                 };
@@ -60,7 +75,8 @@ const assert = (ok, message, detail) => { checks++; if (!ok) { console.error(JSO
             assert(d.textFrameCentered !== null && d.textFrameCentered <= 2 && d.frameBackground === 'rgb(15, 29, 46)', `${label}: a text card centers its title on the surface color`, d);
             assert(d.titleFont.startsWith('"GT Sectra Display"') && d.filmFont.startsWith('"GT Sectra Display"') && d.takeFont.startsWith('"Tiempos Text"') && d.takeStyle === 'italic', `${label}: GT Sectra for the title and film, Tiempos italic for the take`, d);
             assert(d.kickerTransform === 'uppercase' && d.kickerSpacing > 0 && d.kickerColor === 'rgb(201, 169, 97)', `${label}: the kicker is letterspaced gold capitals`, d);
-            assert(d.takeSize >= 13 && d.starSize >= 13 && d.all.height >= 44, `${label}: take and score are at least 13px and the count link keeps a 44px target`, d);
+            assert(d.takeSize >= 16 && d.starSize >= 15 && d.filmSizes.length && d.filmSizes.every(v => v >= 17) && d.all.height >= 44, `${label}: the film reads at 17px or more, the take at 16px, the stars at 15px, and the count link keeps a 44px target`, d);
+            assert(d.takeContrast >= 10, `${label}: the take reads at 10:1 or better against the page`, d.takeContrast);
             assert(d.posterFit === 'cover' && d.posterLoading === 'lazy', `${label}: posters cover their frame and load lazily`, d);
             if (width <= 820) assert(d.all.left <= d.head.left + 1 && d.all.top >= d.head.top, `${label}: the count link stacks under the title on phones`, d);
             else assert(d.all.right >= d.head.right - 1 && d.all.left > d.head.left + d.head.width / 2, `${label}: the count link sits right of the title`, d);

@@ -201,4 +201,22 @@ lunara_home_test_assert( 5 === count( $all ) && 'hero' === $all[1]['slug'] && 'K
 $lunara_home_test_content = "  \n";
 lunara_home_test_assert( array() === lunara_home_block_composition_sections(), 'An empty Home page has no block sections.' );
 
+/*
+ * The saved Section Order decides the printed order in block mode (3.2.138):
+ * section blocks by their place in the map, an unmapped slug after them,
+ * any other block first, and equal places in page order.
+ */
+$order_map = array( 'hero' => 1, 'pairing-desk' => 2, 'dispatch' => 3, 'ledger' => 4, 'featured' => 5 );
+$stored    = array(
+	array( 'slug' => 'pairing-desk', 'html' => 'P' ),
+	array( 'slug' => 'featured', 'html' => 'F' ),
+	array( 'slug' => '', 'html' => 'note' ),
+	array( 'slug' => 'ledger', 'html' => 'L' ),
+	array( 'slug' => 'oscar-facts', 'html' => 'X' ),
+	array( 'slug' => 'dispatch', 'html' => 'J' ),
+	array( 'slug' => '', 'html' => 'space' ),
+);
+lunara_home_test_assert( array( 'note', 'space', 'P', 'J', 'L', 'F', 'X' ) === array_column( lunara_home_sort_block_sections( $stored, $order_map ), 'html' ), 'Blocks print in the saved order: other blocks first, then the map, then unmapped slugs.' );
+lunara_home_test_assert( array( 'P', 'F' ) === array_column( lunara_home_sort_block_sections( array( array( 'slug' => 'pairing-desk', 'html' => 'P' ), array( 'slug' => 'featured', 'html' => 'F' ) ), array() ), 'html' ), 'Without a map, the stored order holds.' );
+
 echo "home-block composition runtime: all assertions passed.\n";
