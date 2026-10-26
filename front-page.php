@@ -39,9 +39,18 @@ get_header();
 	// Any rendered front door is the Home hero (the carousel wrapper or, since
 	// 3.2.120, the program masthead), so the hero block never renders beneath
 	// it. Keyed off the carousel marker alone, the masthead got a second hero.
-	$lunara_block_composition      = $lunara_uses_block_composition && function_exists( 'lunara_render_home_block_composition' )
-		? (string) lunara_render_home_block_composition( '' !== $lunara_front_door ? array( 'lunara/cinematic-hero' ) : array() )
-		: '';
+	$lunara_block_excluded = '' !== $lunara_front_door ? array( 'lunara/cinematic-hero' ) : array();
+	// The blocks render once, one at a time (3.2.137), so the alternating
+	// panels can be marked on them below; joined, they are the composition.
+	$lunara_block_sections = array();
+	if ( $lunara_uses_block_composition && function_exists( 'lunara_home_block_composition_sections' ) ) {
+		$lunara_block_sections    = lunara_home_block_composition_sections( $lunara_block_excluded );
+		$lunara_block_composition = implode( '', array_column( $lunara_block_sections, 'html' ) );
+	} else {
+		$lunara_block_composition = $lunara_uses_block_composition && function_exists( 'lunara_render_home_block_composition' )
+			? (string) lunara_render_home_block_composition( $lunara_block_excluded )
+			: '';
+	}
 
 	// Keep Home from shipping without a semantic H1, independent of whichever
 	// editable front-door renderer or block composition is active. Existing
@@ -86,7 +95,12 @@ get_header();
 	 * as before (which is also the rollback: remove the blocks, this resumes).
 	 */
 	if ( $lunara_uses_block_composition ) {
-		echo $lunara_block_composition; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// The live Home is in block mode, so the alternating panels (3.2.137,
+		// inc/home-panels.php) are marked on the blocks exactly as they are on
+		// the registry's sections below.
+		echo ( $lunara_block_sections && function_exists( 'lunara_home_mark_panels' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			? implode( '', lunara_home_mark_panels( $lunara_block_sections ) )
+			: $lunara_block_composition;
 		wp_reset_postdata();
 		?>
 </div>

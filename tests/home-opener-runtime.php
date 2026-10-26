@@ -104,11 +104,23 @@ function __( $text, $domain = null ) { return $text; }
 function esc_html( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
 function wp_reset_postdata() {}
 function lunara_home_uses_block_composition() { return ! empty( $GLOBALS['lunara_test']['block_mode'] ); }
-function lunara_render_home_block_composition( $excluded = array() ) {
+// Block mode renders the Home page's blocks one at a time (3.2.137): a slug
+// per Lunara section block, '' for anything else (here, the whitespace and a
+// core paragraph between blocks).
+function lunara_home_block_composition_sections( $excluded = array() ) {
 	$GLOBALS['lunara_test']['excluded'] = array_values( (array) $excluded );
-	$blocks = array( 'lunara/cinematic-hero' => '<section class="lunara-home-hero lunara-home-slot-hero">hero block</section>', 'lunara/pairing-desk' => '<section class="lunara-home-slot-pairing-desk">stills block</section>', 'lunara/running-order' => '<section class="lunara-home-slot-featured">running order block</section>' );
+	$blocks = array(
+		'lunara/cinematic-hero' => array( 'slug' => 'hero', 'html' => '<section class="lunara-home-hero lunara-home-slot-hero">hero block</section>' ),
+		'space-1'               => array( 'slug' => '', 'html' => "\n\n" ),
+		'lunara/pairing-desk'   => array( 'slug' => 'pairing-desk', 'html' => '<section class="lunara-home-section lunara-home-slot-pairing-desk">stills block</section>' ),
+		'space-2'               => array( 'slug' => '', 'html' => "\n\n" ),
+		'lunara/running-order'  => array( 'slug' => 'featured', 'html' => '<section class="lunara-home-section lunara-home-slot-featured">running order block</section>' ),
+		'lunara/ledger-band'    => array( 'slug' => 'ledger', 'html' => '<section class="lunara-home-section lunara-home-slot-ledger lunara-home-ledger-band">band block</section>' ),
+		'core/paragraph'        => array( 'slug' => '', 'html' => '<p>An editor note between blocks.</p>' ),
+		'lunara/journal-lane'   => array( 'slug' => 'dispatch', 'html' => '<section class="lunara-home-section lunara-home-slot-dispatch">journal block</section>' ),
+	);
 	foreach ( $GLOBALS['lunara_test']['excluded'] as $name ) { unset( $blocks[ $name ] ); }
-	return implode( '', $blocks );
+	return array_values( $blocks );
 }
 function lunara_render_home_front_door() { return (string) $GLOBALS['lunara_test']['front_door']; }
 function lunara_get_home_section_order_map() {
@@ -197,7 +209,21 @@ $html = lunara_test_render_front_page();
 lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the program masthead keeps the hero block out of the composition' );
 lunara_test_assert( false === strpos( $html, 'hero block' ) && false !== strpos( $html, 'stills block' ) && false !== strpos( $html, 'running order block' ) && 1 === substr_count( $html, 'lunara-home-program' ), 'the masthead renders once and the section blocks follow it' );
 lunara_test_assert( false === strpos( $html, 'pair-it-with' ), 'the registry loop does not run beneath the block composition' );
-lunara_test_assert( false === strpos( $html, 'home-panel' ), 'the block composition renders as before: the panels follow the registry composition only' );
+// The live Home is in block mode (3.2.137): the blocks get the panels too.
+// The band is a panel, the Running Order before it stays on the ground, and
+// the editor's paragraph between the band and the Journal breaks the run, so
+// the Journal keeps its own hairline.
+preg_match_all( '/<section class="lunara-home-section lunara-home-slot-([a-z-]+)([^"]*)"/', $html, $lunara_test_rows, PREG_SET_ORDER );
+$lunara_test_marks = array();
+foreach ( $lunara_test_rows as $lunara_test_row ) {
+	$lunara_test_marks[ $lunara_test_row[1] ] = trim( $lunara_test_row[2] );
+}
+lunara_test_assert( array( 'pairing-desk' => 'is-home-panel', 'featured' => 'is-after-home-panel', 'ledger' => 'lunara-home-ledger-band is-home-panel', 'dispatch' => '' ) === $lunara_test_marks, 'in block mode front-page.php marks the section blocks: panel, ground, band, and a block after the editor paragraph left on its hairline' );
+lunara_test_assert( false !== strpos( $html, '<p>An editor note between blocks.</p>' ), 'in block mode a core block between sections still renders' );
+add_filter( 'lunara_home_panels_enabled', 'lunara_test_false' );
+$html = lunara_test_render_front_page();
+lunara_test_assert( false === strpos( $html, 'home-panel' ) && false !== strpos( $html, 'stills block' ), 'in block mode the filter turns the panels off and the blocks still render' );
+$GLOBALS['lunara_test']['filters'] = array();
 $GLOBALS['lunara_test']['front_door'] = '<section data-lunara-home-hero-source="site-studio">carousel</section>';
 lunara_test_render_front_page();
 lunara_test_assert( array( 'lunara/cinematic-hero' ) === $GLOBALS['lunara_test']['excluded'], 'in block mode the carousel wrapper keeps the hero block out too' );

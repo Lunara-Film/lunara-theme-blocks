@@ -7,7 +7,9 @@
  * ground (#0a1520) and full-bleed panels in the band's surface navy
  * (#0f1d2e). front-page.php renders each section, then this file decides
  * which sections sit on a panel and adds the classes that
- * assets/css/lunara-home-modules.css reads:
+ * assets/css/lunara-home-modules.css reads. Both compositions are marked:
+ * the section blocks saved in the Home page, which the live Home uses
+ * (3.2.137), and the Customizer registry:
  *
  * - `is-home-panel`: the section sits on a panel;
  * - `is-home-panel-last`: that panel is the last section, so it meets the

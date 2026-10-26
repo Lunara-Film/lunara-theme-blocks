@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-26 — The panels reach the live Home (Theme 3.2.137)
+
+- **Found:** after the 3.2.136 deploy (WordPress.com reported success at 19:39:48 UTC; the live `style.css` read 3.2.136 and the new files were on the server), the live Home still printed no panel classes. I first called it a PHP cache delay and told Dalton so; that was wrong. The live Home renders from the section blocks saved in the Home page, and 3.2.136 marked only the registry composition. My regression: I had concluded block mode was off from a wrapper class these blocks never print.
+- **Shipped:** Theme 3.2.137 PR: the block composition renders its blocks one at a time and prints them through the same panel marking. See the 3.2.137 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** `home-opener-runtime.php` drives block mode through the real marking and fails on 3.2.136's block path; `home-block-composition-runtime.php` covers the per-block renderer; whole PHP suite 73/73, the panel (672), front desk (65) and lane-head (130) browser contracts locally; the full suite on CI before merge.
+- **Live:** Theme 3.2.136 (no panels on the block-mode Home) until 3.2.137 deploys. "Live" for this release means the live Home's HTML carries the panel classes and a screenshot shows the panels, not only the deployed version.
+
 ## 2026-10-26 — Journal credit and publishing audit; Plex paragraph repair
 
 - **Shipped:** no runtime release was needed. The Journal credit standard from Theme #285 remains deployed in active Theme 3.2.136. Repaired only saved draft 103719's paragraph markup: five HTML paragraphs, unchanged words and links, status still draft. Readback confirms the wording is identical after whitespace/tag normalization.
@@ -41,6 +48,8 @@ there; `AGENTS.md` is the single canonical copy.)
 - **Shipped:** Theme 3.2.136 PR: alternating panels on Home in the Ledger band's navy (Dalton chose option C of three). See the 3.2.136 changelog entry. Merged and deployed by me when CI is green.
 - **Verified:** whole PHP suite 74/74 with the new `home-panels-runtime.php`; `home-panels-browser-runtime.js` 672 checks, and five deliberate breakages each fail it; the full browser suite on CI before merge.
 - **Live:** Theme 3.2.135 until 3.2.136 deploys.
+- **Correction (2026-10-26, later):** the PHP suite count above is 73 files, not 74 (all passed).
+- **Correction (2026-10-26, later):** 3.2.136 deployed, but its panels never reached the live Home, which renders from the Home page's section blocks; 3.2.136 marked only the registry composition. See the entry above (Theme 3.2.137).
 - **Next:** Dalton's call on the Home Debrief source review: the lead story (now) or the editor's Featured Review (`lunara_home_stills_that_rhyme_review_source` = `editor`).
 - **Found, not fixed:** the "Oscars forward" Home preset gives phones a different section order (Journal, Latest Reviews and the Debrief showcase move up), against DESIGN.md's "Phones read the same order as desktop". Under that preset the panels, which follow the rendered order, would not alternate cleanly on phones; the live Home uses the Editorial default, where both orders match. Still saved with a bare "Lunara": the AI Assistant Classic system prompt and the Journal Control Plane purpose/voice text (they steer AI drafts; offered to Dalton, not changed).
 
