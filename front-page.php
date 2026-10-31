@@ -24,14 +24,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// 3.2.141: admin render timing (inc/render-timing.php). Each span is a no-op
+// unless an admin asked for ?lunara-timing.
+$lunara_time = function_exists( 'lunara_render_timing_span' ) ? 'lunara_render_timing_span' : static function ( $label, $edge ) {};
+
+$lunara_time( 'header', 'begin' );
 get_header();
+$lunara_time( 'header', 'end' );
 ?>
 
 <div id="primary" class="site-main lunara-front-page">
 	<?php
 	$lunara_front_door = '';
 	if ( function_exists( 'lunara_render_home_front_door' ) ) {
+		$lunara_time( 'front-door', 'begin' );
 		$lunara_front_door = (string) lunara_render_home_front_door();
+		$lunara_time( 'front-door', 'end' );
 	}
 	$lunara_front_door_has_canonical_hero = '' !== $lunara_front_door && false !== strpos( $lunara_front_door, 'data-lunara-home-hero-source=' );
 
@@ -44,7 +52,9 @@ get_header();
 	// panels can be marked on them below; joined, they are the composition.
 	$lunara_block_sections = array();
 	if ( $lunara_uses_block_composition && function_exists( 'lunara_home_block_composition_sections' ) ) {
+		$lunara_time( 'sections', 'begin' );
 		$lunara_block_sections = lunara_home_block_composition_sections( $lunara_block_excluded );
+		$lunara_time( 'sections', 'end' );
 		// 3.2.138: the blocks print in the saved Section Order, the order the
 		// header's inline order rules show, so the reading order, the visible
 		// order and the panels agree whatever order the stored blocks hold.
@@ -112,7 +122,9 @@ get_header();
 </div>
 
 <?php
+		$lunara_time( 'footer', 'begin' );
 		get_footer();
+		$lunara_time( 'footer', 'end' );
 		return;
 	}
 
@@ -162,12 +174,14 @@ get_header();
 
 		$lunara_callback = $lunara_section_renderers[ $lunara_slug ];
 		if ( function_exists( $lunara_callback ) ) {
+			$lunara_time( 'section:' . $lunara_slug, 'begin' );
 			$lunara_rendered_sections[] = array(
 				'slug' => $lunara_slug,
 				'html' => (string) ( 'hero' === $lunara_slug
 					? call_user_func( $lunara_callback, array( 'first_image_is_lcp' => false ) )
 					: call_user_func( $lunara_callback ) ),
 			);
+			$lunara_time( 'section:' . $lunara_slug, 'end' );
 		}
 	}
 
@@ -185,4 +199,6 @@ get_header();
 </div>
 
 <?php
+$lunara_time( 'footer', 'begin' );
 get_footer();
+$lunara_time( 'footer', 'end' );

@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-31 — Theme 3.2.141: a render timer for admins, for the speed pass
+
+Measured on the live site on 2026-10-31 before this release, three cold requests each (fresh cache-busters, so the edge and Batcache miss): Home 2.4–2.9 s to first byte; Reviews, Journal, Oscars, Debrief, About, a review, a Journal story and a ceremony category 1.0–1.7 s; `/robots.txt` 1.0 s and `/wp-json/` 1.1–1.3 s. Cached pages answer in 0.1–0.2 s, but the cache keeps a page for about 5 minutes, so at this site's traffic many visits are cold. So every uncached request pays about 1 s before any page work, and Home pays about 1.5 s more. The host's own `server-timing` header agreed (2507 ms at the origin for one cold Home). 31 plugins are active.
+
+To fix that, the speed pass has to see where the time goes on the live site, with the live plugins and data. This release adds the instrument and nothing else:
+
+- `inc/render-timing.php` (new), loaded first by `functions-loader.php`. A request with `?lunara-timing` records when each phase starts (theme load, after_setup_theme, init, wp_loaded, template_redirect, wp_head, wp_footer) with the query count; each callback on fourteen page hooks with the plugin, theme or core folder that owns it, its time with and without the measured callbacks inside it, and its queries; each top-level block render; and named spans. `front-page.php` names its spans: header, front door, sections (block mode), each registry section, footer. At shutdown, a user who can manage options gets one HTML comment, `<!-- lunara-timing {base64 JSON} -->`. A visitor gets nothing; REST, feeds, Ajax and admin screens never get it; a request without the parameter only defines the functions. A callback that takes an argument by reference is left unwrapped, so a timed request behaves as an untimed one.
+- Read it in a logged-in tab: `JSON.parse(atob((await (await fetch('/?lunara-timing=1')).text()).match(/<!-- lunara-timing ([A-Za-z0-9+\/=]+) -->/)[1]))`.
+- Test: `tests/render-timing-runtime.php` (52 checks) runs the module against a hook stub that iterates as core's `WP_Hook` does, with real plugin, theme and core files in a temporary tree. It fails if the module hooks anything without the parameter, wraps a by-reference callback, counts nested time twice, lists inner blocks, or prints for a visitor.
+
 ## 2026-10-26 — Theme 3.2.140: the three Debrief faces line up
 
 The live check of 3.2.139 at 390px: with the wider phone columns, "THEME ECHO" fits on one line while "COUNTER PROGRAM" and "CAREER CONTEXT" wrap to two, so the Theme Echo poster started higher than the other two. The browser contract compared the pairing items' tops, not their faces', so it did not see it.

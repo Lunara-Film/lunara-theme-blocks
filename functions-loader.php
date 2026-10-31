@@ -16,6 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $lunara_inc = get_stylesheet_directory() . '/inc/';
 
+// First, so its first mark is the moment the theme starts to load (3.2.141).
+// It records nothing unless an admin asks for ?lunara-timing.
+require_once $lunara_inc . 'render-timing.php';
+
 // Layer 0 — Foundation (no dependencies).
 require_once $lunara_inc . 'setup.php';
 require_once $lunara_inc . 'helpers.php';
@@ -176,3 +180,5 @@ if ( is_admin() ) {
 if ( ! defined( 'LUNARA_SPLIT_LOADER_ACTIVE' ) ) {
     define( 'LUNARA_SPLIT_LOADER_ACTIVE', true );
 }
+
+lunara_render_timing_mark( 'theme_loaded' );

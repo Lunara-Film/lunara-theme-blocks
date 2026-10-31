@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — The speed pass starts: a render timer for admins (Theme 3.2.141)
+
+- **Asked:** Dalton, 08:47 CT: "We have to keep going with this. We have to keep going." The next item from "What Done Looks Like" is the whole-site speed pass.
+- **Found:** cold first byte on the live site (three fresh cache-busters each): Home 2.4–2.9 s; nine other page types 1.0–1.7 s; `/robots.txt` 1.0 s. Cached: 0.1–0.2 s, kept about 5 minutes. 31 active plugins. The active Dispatch is the old copy (3.4.2, folder `lunara-plugin-dispatch-main`); the newer 3.4.3 (`lunara-plugin-dispatch`, the Lunara Film name) is installed but inactive. Lunara Dossier Audit is installed and active.
+- **Shipped:** Theme 3.2.141 PR: `inc/render-timing.php`, an admin-only timer behind `?lunara-timing`. See the 3.2.141 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** whole PHP suite 75/75 with the new `render-timing-runtime.php` (52 checks; five deliberate breakages each fail it); `public-route-stabilization-runtime.js` passes; the full suite on CI before merge.
+- **Live:** Theme 3.2.140 until 3.2.141 deploys.
+- **Next:** read the timer on Home, a review, Reviews, Journal, Oscars and a 404 in Dalton's logged-in Chrome; fix the theme's share; bring Dalton the plugin list with the measured cost of each.
+
 ## 2026-10-26 — Home is live as Dalton approved it (Theme 3.2.140)
 
 - **Live:** Theme 3.2.140 (merge `be31988`, #299), deployed by me; `style.css` read 3.2.140 at 22:44:57 UTC. On the live Home the three Debrief faces start on one line at 360, 390, 768 and 1440px, no pairing title breaks from 360px up, and the order stays: the Debrief showcase (Backrooms, with Skinamarink, Cube and The Backrooms), the Journal, the Ledger band, The Running Order, Oscar Picks, with the panels alternating. Home, Reviews, Journal and Oscars return 200.
