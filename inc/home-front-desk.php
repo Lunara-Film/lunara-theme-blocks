@@ -152,7 +152,7 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 	}
 
 	$attachment_id = function_exists( 'attachment_url_to_postid' )
-		? absint( attachment_url_to_postid( (string) preg_replace( '/\?.*$/', '', $image_url ) ) )
+		? absint( function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( (string) preg_replace( '/\?.*$/', '', $image_url ) ) : attachment_url_to_postid( (string) preg_replace( '/\?.*$/', '', $image_url ) ) )
 		: 0;
 
 	if ( $attachment_id ) {

@@ -1778,7 +1778,8 @@ if ( ! function_exists( 'lunara_get_review_card_image_data' ) ) {
         }
 
         if ( '' !== $card_url ) {
-            $attachment_id = attachment_url_to_postid( $card_url );
+            // 3.2.143: no scan for a URL that cannot be an attachment (inc/attachment-lookups.php).
+            $attachment_id = function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( $card_url ) : attachment_url_to_postid( $card_url );
 
             if ( $attachment_id > 0 ) {
                 $url  = (string) wp_get_attachment_image_url( $attachment_id, $size );
@@ -3363,7 +3364,7 @@ if ( ! function_exists( 'lunara_render_editorial_archive_shell' ) ) {
             $total_count = $visible_count;
         }
 
-        $sort_base_url = remove_query_arg( array( 'sort', 'paged' ), get_pagenum_link( 1 ) );
+        $sort_base_url = lunara_archive_sort_base_url();
         $sort_label    = lunara_get_editorial_archive_sort_label( $current_sort );
 
         $overview_lines = array_values( array_filter( (array) $args['overview_lines'], static function ( $line ) {
@@ -3660,8 +3661,8 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
             && ( function_exists( 'lunara_reviews_archive_section_is_enabled' )
                 ? lunara_reviews_archive_section_is_enabled( 'pairing-desk' )
                 : true );
-        $sort_base_url  = remove_query_arg( array( 'sort', 'paged' ), get_pagenum_link( 1 ) );
-        $filter_base_url = remove_query_arg( array( 'sort', 'review_year', 'paged' ), get_pagenum_link( 1 ) );
+        $sort_base_url  = lunara_archive_sort_base_url();
+        $filter_base_url = lunara_archive_sort_base_url( array( 'review_year' ) );
 
         // Retention routes: the three configured cards drive the existing
         // remainder-fill aside. The defaults reproduce today's exact labels

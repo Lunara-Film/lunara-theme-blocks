@@ -63,4 +63,8 @@ if ( ! function_exists( 'lunara_skip_block_render_for_asset_scan' ) ) {
 		return lunara_block_render_is_asset_scan() ? '' : $pre_render;
 	}
 }
-add_filter( 'pre_render_block', 'lunara_skip_block_render_for_asset_scan', 5, 2 );
+// 3.2.143: last, so no later filter can discard the answer. Core's own
+// _wp_add_block_level_preset_styles() runs on pre_render_block at 10 and
+// returns null whatever it is given, so at 5 (3.2.142) the empty string never
+// reached render_block() and the scans kept rendering every Home section.
+add_filter( 'pre_render_block', 'lunara_skip_block_render_for_asset_scan', PHP_INT_MAX - 1, 2 );

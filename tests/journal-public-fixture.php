@@ -66,6 +66,7 @@ function lunara_journal_archive_studio_get_public_config() { return $GLOBALS['jp
 function is_paged() { return ! empty( $GLOBALS['jp_paged'] ); }
 function lunara_journal_archive_card_image_markup( $id, $attrs ) { return ! empty( $GLOBALS['jp_failed_media'] ) ? '' : '<img src="/tests/fixtures/home-carousel-landscape.svg" width="1280" height="800" alt="' . esc_attr( $attrs['alt'] ) . '">'; }
 require dirname( __DIR__ ) . '/inc/journal-archive-media.php';
+require dirname( __DIR__ ) . '/inc/archive-urls.php';
 function lunara_get_journal_visual_context( $id ) { return array( 'has_provenance' => in_array( $id, array( 1, 2, 3, 4, 6 ), true ), 'source_label' => 6 === $id ? 'Deadline' : 'Dark Horizons', 'has_carousel' => false ); }
 function jp_extract( $file, $name ) {
     $tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/' . $file ) );

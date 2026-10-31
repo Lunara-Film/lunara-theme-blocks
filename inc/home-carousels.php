@@ -62,7 +62,7 @@ function lunara_home_carousel_source_artwork( $post_id, $size = 'full', $placeme
 	}
 
 	if ( '' !== $result['url'] && ! $result['attachment_id'] && function_exists( 'attachment_url_to_postid' ) ) {
-		$result['attachment_id'] = absint( attachment_url_to_postid( $result['url'] ) );
+		$result['attachment_id'] = absint( function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( $result['url'] ) : attachment_url_to_postid( $result['url'] ) );
 	}
 	if ( 'poster' === $placement && $result['attachment_id'] ) {
 		$full_source = wp_get_attachment_image_url( $result['attachment_id'], 'full' );

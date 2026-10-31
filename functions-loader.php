@@ -23,6 +23,8 @@ require_once $lunara_inc . 'render-timing.php';
 // Layer 0 — Foundation (no dependencies).
 require_once $lunara_inc . 'setup.php';
 require_once $lunara_inc . 'helpers.php';
+require_once $lunara_inc . 'archive-urls.php'; // 3.2.143: archive sort and filter base URLs.
+require_once $lunara_inc . 'attachment-lookups.php'; // 3.2.143: attachment IDs without the slow scan.
 require_once $lunara_inc . 'navigation-runtime.php'; // Audited public assets and page lifecycle.
 require_once $lunara_inc . 'analytics-off.php'; // 3.2.97: dormant Google Analytics outputs stay off.
 require_once $lunara_inc . 'fonts.php';         // 3.2.101: the theme is the only front-end source of @font-face.

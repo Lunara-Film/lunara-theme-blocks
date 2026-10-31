@@ -11,6 +11,20 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-31 — Theme 3.2.143: the scan guard takes effect; attachment lookups skip the slow scan; archive sort links keep every filter
+
+The 3.2.142 timer on the live Home (signed in, three runs) found two things.
+
+**The scan guard never took effect.** Every Home section still rendered three times: `Gutenkit\Config\Modules::block_assets` took 765 ms and `Gutenkit\Libs\AssetGenerator::enqueue_scripts` 380 ms. Core's own `_wp_add_block_level_preset_styles()` runs on `pre_render_block` at priority 10 and returns `null` on every path, whatever it is given, so the guard's empty string at priority 5 never reached `render_block()`. The guard now runs at `PHP_INT_MAX - 1`, after every normal filter. The 3.2.142 test passed because its hook stub had no core filter; `block-scan-guard-runtime.php` now carries a stand-in for core's filter and fails with the guard at 5. **Correction to the 3.2.142 entry:** that release removed no render passes; this one does.
+
+**Attachment lookups cost 1.43 s per Home render.** `attachment_url_to_postid()` ran 62 times per Home render (three passes of about 20), about 23 ms each, and found an attachment 5 times. Most calls asked about TMDB images. By caller: the Running Order posters (`lunara_get_review_card_image_data`) 817 ms for 36 calls; the hero carousel artwork 418 ms for 18; the hero image check 119 ms for 5; the front-desk stills 68 ms for 3.
+
+- `inc/attachment-lookups.php` (new): `lunara_attachment_id_for_url()` gives core's answer without its scan where the answer is known. A URL outside this site's uploads is 0 at once: every attachment here is a WordPress upload or sideload (Lunara Core, Dispatch, Journal Foundation and the Oscars Ledger all use `media_sideload_image()` or `media_handle_sideload()`), whose file path is relative to the uploads folder, so core's scan finds nothing for such a URL. A URL in the uploads gets core's answer, kept in the object cache under a key that carries the posts' last-changed time, so an upload, an edit or a deletion makes the next lookup ask core again. The six public call sites use it (review card images, hero carousel artwork, hero delivery, front-desk stills, the Debrief showcase stills, and the backdrop helper in `inc/frontend.php`); each falls back to core's function when the module is absent.
+
+**The Reviews and Journal sort links kept only the first query parameter.** `get_pagenum_link()` escapes its URL by default (`&` becomes `&#038;`), and `add_query_arg()` splits a URL at its first `#`, so on a page with two query parameters every sort link moved the second one into a fragment. `inc/archive-urls.php` (new): `lunara_archive_sort_base_url()` builds the base unescaped from `get_pagenum_link( 1, false )`; each link escapes it when it prints, as before. It serves both Reviews sort lists, the Reviews year filter and the Journal sort list.
+
+- Tests: `attachment-lookups-runtime.php` (new, 17 checks; three deliberate breakages each fail it), `archive-sort-base-url-runtime.php` (new, 7 checks, with core's fragment rule; it reproduces the live defect with the escaped URL), and `block-scan-guard-runtime.php` with core's filter.
+
 ## 2026-10-31 — Theme 3.2.142: Home stops rendering itself three times
 
 The 3.2.141 timer on the live Home (signed in, three runs, 2909 ms median): `wp_head` took 1055 ms. GutenKit renders the whole post content twice in the head on a classic theme, only to find its own blocks' CSS and modules, and throws the HTML away: `Gutenkit\Config\Modules::block_assets` on `enqueue_block_assets` (inside core's `wp_common_block_scripts_and_styles`, 637 ms, 50 queries) and `Gutenkit\Libs\AssetGenerator::enqueue_scripts` on `wp_enqueue_scripts` (258 ms, 30 queries). The block timings show every Home section rendered three times per request, and the hero block that Home leaves out of its own render rendered in the first scan (210 ms).
