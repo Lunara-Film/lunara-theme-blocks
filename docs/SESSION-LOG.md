@@ -25,6 +25,18 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — 24 active plugins; Dispatch runs the deployed copy (Dispatch 3.4.4)
+
+- **Asked:** Dalton, 18:06 CT, on the four plugin changes: "absolutely on the plug-ins ... let's get after those."
+- **Done (deactivated, not deleted; each can be reactivated from the Plugins screen):** GutenKit Blocks Pro 2.3.13, GutenKit Blocks 2.5.4, ACF Extended 0.9.2.8, AI Provider for Anthropic 1.0.5, for Google 1.2.1 and for OpenAI 1.2.0, AI 1.5.0. Dispatch switched: `lunara-plugin-dispatch-main` (3.4.2) off, then `lunara-plugin-dispatch` (the deployed folder) on. Active plugins: 31 to 24. Checked first: no Lunara Film code and none of the 3 active code snippets calls these plugins; WordPress 7.1.4 has the Abilities API in core.
+- **Found:** activating the deployed Dispatch scheduled nothing ("Next scheduled run: Not scheduled"): activation runs after plugins_loaded, so the every-4-hours interval was not registered and WordPress rejected the event.
+- **Shipped and live:** Dispatch 3.4.4 (#23, merge `8457a31`), deployed by me to `lunara-plugin-dispatch`: activation registers the intervals first, and `ensure_schedule()` restores a missing run on every load. The settings screen now reads: next run October 31 7:16 pm, every 4 hours, automation enabled, pitch mode, Anthropic Claude. So 3.4.3's Lunara Film name is live in Dispatch at last (see the correction on the 2026-10-24 entry).
+- **Verified after each step:** 7 public pages return 200, complete, with no PHP error text; the Home lost only GutenKit's inline style tag and its body is identical (1,059 tags); wp-admin loads the 5 field groups, Film Dossiers, Reviews and the Journal Control Plane; a review still shows all three Debrief pairings; the site's MCP answers; the REST index keeps `mcp`, `wp-abilities/v1` and the Lunara Film namespaces (only the AI plugin's `ai/v1` is gone).
+- **Measured (origin time, median of 5 cold requests):** `/robots.txt` 988 to 678 ms; a review 1096 to 894; Journal 1071 to 808; Reviews about 1100 to 764; Home 1176 to 1060. Signed-in Home (timer, 3 runs): 1648 to 1383 ms; PHP files per request 3,133 to 2,601; peak memory 95 to 72 MB; `init` 261 to 139 ms (ACF's own share 85–120 to 39 ms, so ACF Extended ran inside it).
+- **Correction to my earlier message today:** ACF Pro does not register the Movies post type; its ACF copy is disabled and another plugin registers `movie`. ACF Pro stays for the 3 active field groups (2 more are disabled).
+- **Found, not fixed (cleanup, Dalton's clicks; no speed gain, because WordPress never loads inactive code):** 15 inactive plugins (the 8 above plus the old Dispatch copy, Cimo, Code Snippets free, Jetpack VideoPress, Oscars Ledger Supabase, miniOrange MCP, WordPress Importer, WP All Export); two old theme copies (`lunara-film-premium-20260503-living-pulse` 3.0.7, `lunara-theme-blocks` 3.2.85; keep Blocksy and Twenty Twenty-Two); database rows of removed plugins (Elementor 16, WPCode 11, TablePress 6, Pods 14, Ninja Tables, WP Social Reviews, Stackable, Jetpack sitemap leftovers); 820 Journal drafts.
+- **Next:** the CSS usage map of `style.css`, then a trim plan for Dalton.
+
 ## 2026-10-31 — The speed pass, server side, is live (Theme 3.2.144)
 
 - **Live:** Theme 3.2.144 (merge `00822ee`, #304), deployed by me; `style.css` read 3.2.144 at 14:56:19 UTC. The Debrief page's body (1,046 tags) is identical to before; Home, Reviews, Journal, Oscars, About and a review return 200 with no PHP errors. The Debrief snapshot starts with the first rebuild after this deploy; from the next cache drop on, visitors get it.
