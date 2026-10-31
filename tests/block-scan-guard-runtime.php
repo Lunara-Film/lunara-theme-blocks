@@ -14,7 +14,9 @@
  *   block that is not a Home section (Pairing Showcase enqueues its
  *   stylesheet while it renders), and a Home block with inner blocks;
  * - the body render runs each Home section's renderer once and prints it;
- * - admin screens, Ajax and an earlier filter's answer are left alone.
+ * - admin screens, Ajax and an earlier filter's answer are left alone;
+ * - core's own pre_render_block filter, which returns null whatever it is
+ *   given, cannot undo the guard (it did in 3.2.142).
  *
  * Run: php tests/block-scan-guard-runtime.php
  */
@@ -64,6 +66,16 @@ function wp_doing_ajax() { return $GLOBALS['lunara_test_ajax']; }
 
 require dirname( __DIR__ ) . '/inc/home-blocks.php';
 require dirname( __DIR__ ) . '/inc/block-scan-guard.php';
+
+/*
+ * Core's own pre_render_block filter (wp-includes/block-supports/settings.php)
+ * returns null on every path, whatever it is given, so it discards any answer
+ * from an earlier filter. 3.2.142's guard ran at 5 and was lost to it.
+ */
+function _wp_add_block_level_preset_styles( $pre_render, $block ) {
+	return null;
+}
+add_filter( 'pre_render_block', '_wp_add_block_level_preset_styles', 10, 2 );
 
 /*
  * Blocks render as core renders them: pre_render_block may answer instead of
@@ -137,7 +149,7 @@ lunara_test_assert( 3 === ( $GLOBALS['lunara_test_runs']['lunara/journal-lane'] 
 
 // Outside an asset hook nothing is skipped, and an earlier answer stands.
 lunara_test_assert( null === apply_filters( 'pre_render_block', null, lunara_test_block( 'lunara/running-order' ), null ), 'outside an asset hook a Home section renders as usual' );
-add_filter( 'pre_render_block', static function ( $pre, $block ) { return 'core/paragraph' === $block['blockName'] ? '<p>cached</p>' : $pre; }, 1, 2 );
+add_filter( 'pre_render_block', static function ( $pre, $block ) { return 'core/paragraph' === $block['blockName'] ? '<p>cached</p>' : $pre; }, 20, 2 );
 $GLOBALS['wp_current_filter'] = array( 'wp_enqueue_scripts' );
 lunara_test_assert( '<p>cached</p>' === apply_filters( 'pre_render_block', null, lunara_test_block( 'core/paragraph' ), null ), 'an answer from an earlier filter passes through' );
 lunara_test_assert( '' === apply_filters( 'pre_render_block', null, lunara_test_block( 'lunara/oscar-picks' ), null ), 'inside wp_enqueue_scripts a Home section answers with an empty string' );

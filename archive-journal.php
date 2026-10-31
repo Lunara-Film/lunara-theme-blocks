@@ -51,7 +51,7 @@ $sort_options  = array_replace(
 		'modified_desc' => $journal_labels['sort_updated'],
 	)
 );
-$sort_base_url = remove_query_arg( array( 'sort', 'paged' ), get_pagenum_link( 1 ) );
+$sort_base_url = lunara_archive_sort_base_url();
 $journal_counts = wp_count_posts( 'journal' );
 $journal_total  = $current_term instanceof WP_Term && $wp_query instanceof WP_Query
 	? (int) $wp_query->found_posts

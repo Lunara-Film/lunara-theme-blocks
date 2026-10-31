@@ -297,6 +297,7 @@ lunara_test_assert( $reviews_projection_accepted && lunara_reviews_archive_studi
 require dirname( __DIR__ ) . '/inc/helpers.php';
 require dirname( __DIR__ ) . '/inc/review-archive-critical.php';
 require dirname( __DIR__ ) . '/inc/review-rendering.php';
+require dirname( __DIR__ ) . '/inc/archive-urls.php';
 
 // --- Label-face resolver token discipline (raw scalar allowlist, no key normalization).
 lunara_test_assert( 'tiempos-text' === lunara_reviews_archive_resolved_label_font_slug(), 'An absent label token must resolve to the approved licensed Tiempos default.' );

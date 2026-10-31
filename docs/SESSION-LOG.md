@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — The scan guard takes effect; lookups skip the slow scan (Theme 3.2.143)
+
+- **Live:** Theme 3.2.142 (merge `31f768f`, #302), deployed by me; `style.css` read 3.2.142 at 14:31:21 UTC. The live Home's head and footer assets (39 entries) and its body HTML (1,059 tags) are identical to before the deploy.
+- **Found (my miss):** 3.2.142's guard never took effect: core's `_wp_add_block_level_preset_styles()` runs on `pre_render_block` at 10 and returns `null` whatever it is given, so the guard's empty string at 5 was discarded, and every Home section still rendered three times (the scans took 765 and 380 ms). My test's hook stub had no core filter, so it passed.
+- **Found:** 62 `attachment_url_to_postid()` calls per Home render, about 23 ms each, 1.43 s in all, 5 of them found. By caller: Running Order posters 817 ms (36), hero carousel artwork 418 ms (18), hero image check 119 ms (5), front-desk stills 68 ms (3). Most asked about TMDB images, which can never be attachments here.
+- **Shipped:** Theme 3.2.143 PR: the guard runs last; `lunara_attachment_id_for_url()` answers 0 at once for a URL outside the uploads and caches local answers until the media library changes; the archive sort links keep every filter. See the 3.2.143 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** whole PHP suite 78/78; new `attachment-lookups-runtime.php` (17 checks) and `archive-sort-base-url-runtime.php` (7 checks); `block-scan-guard-runtime.php` with a stand-in for core's filter fails with the guard at 5 and passes at the new priority; the three archive browser tests pass locally.
+- **Live:** Theme 3.2.142 until 3.2.143 deploys.
+- **Next:** the live Home must show one render per section, the lookups near zero, the same assets and the same body; then anonymous cold times, and the plugin list for Dalton.
+
 ## 2026-10-31 — Home stops rendering itself three times (Theme 3.2.142)
 
 - **Live:** Theme 3.2.141 (merge `b534baf`, #301), deployed by me; `style.css` read 3.2.141 at 14:10:57 UTC. A visitor gets no report, with or without `?lunara-timing` (Home and Reviews checked anonymously); Home and Reviews return 200 with no PHP errors.
@@ -33,6 +43,7 @@ there; `AGENTS.md` is the single canonical copy.)
 - **Shipped:** Theme 3.2.142 PR: a Home section block does not render for an asset scan; the timer also measures `enqueue_block_assets`, logs the queries after the theme loads, and times each attachment lookup. See the 3.2.142 changelog entry. Merged and deployed by me when CI is green.
 - **Verified:** whole PHP suite 76/76; new `block-scan-guard-runtime.php` (43 checks; four deliberate breakages each fail it); `render-timing-runtime.php` 63 checks; the live Home's head and footer asset list saved before deploy for comparison after.
 - **Live:** Theme 3.2.141 until 3.2.142 deploys.
+- **Correction (2026-10-31, later):** 3.2.142's guard never took effect on the live site; core's own `pre_render_block` filter discarded its answer. Fixed in 3.2.143 (entry above).
 - **Found, not fixed:** the site runs two Tiempos font systems: the theme's `woff2` files and Blocksy's custom-font TTF uploads (`ct_font_tiempos_text`/`_headline`, used in more than 100 Blocksy rules), with three TTF preloads in every head (156 KB). Unifying them can change heading weights, so it needs a visual check. Jetpack Boost's concatenated stylesheet on Home is 578 KB before compression. The Reviews sort links copy the query string and turn `&#038;` into `#038;`, so a second parameter falls into the fragment. `lunara_output_runtime_customizer_css` costs 36–39 ms on every page.
 - **Next:** read the timer on Home after 3.2.142; then the Running Order's queries (13 per render) and the plugin list for Dalton.
 

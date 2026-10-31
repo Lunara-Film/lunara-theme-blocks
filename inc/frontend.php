@@ -2867,7 +2867,7 @@ if ( ! function_exists( 'lunara_get_review_social_image_url' ) ) {
                 continue;
             }
 
-            $attachment_id = attachment_url_to_postid( $image_url );
+            $attachment_id = function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( $image_url ) : attachment_url_to_postid( $image_url );
             if ( $attachment_id > 0 ) {
                 $large_url = wp_get_attachment_image_url( $attachment_id, 'large' );
                 if ( $large_url ) {

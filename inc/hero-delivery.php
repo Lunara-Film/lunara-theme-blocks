@@ -83,7 +83,7 @@ if ( ! function_exists( 'lunara_hero_attachment_id_from_url' ) ) {
 			return $cache[ $local_url ];
 		}
 
-		$cache[ $local_url ] = max( 0, (int) attachment_url_to_postid( $local_url ) );
+		$cache[ $local_url ] = max( 0, (int) ( function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( $local_url ) : attachment_url_to_postid( $local_url ) ) );
 		return $cache[ $local_url ];
 	}
 }

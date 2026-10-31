@@ -579,7 +579,7 @@ if ( ! function_exists( 'lunara_home_stills_that_rhyme_still_html' ) ) {
 		}
 
 		$attachment_id = function_exists( 'attachment_url_to_postid' )
-			? (int) attachment_url_to_postid( (string) preg_replace( '/\?.*$/', '', $url ) )
+			? (int) ( function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( (string) preg_replace( '/\?.*$/', '', $url ) ) : attachment_url_to_postid( (string) preg_replace( '/\?.*$/', '', $url ) ) )
 			: 0;
 		if ( $attachment_id > 0 && function_exists( 'wp_get_attachment_image' ) ) {
 			$html = wp_get_attachment_image(
