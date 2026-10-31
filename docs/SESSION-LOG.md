@@ -25,6 +25,17 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — Home stops rendering itself three times (Theme 3.2.142)
+
+- **Live:** Theme 3.2.141 (merge `b534baf`, #301), deployed by me; `style.css` read 3.2.141 at 14:10:57 UTC. A visitor gets no report, with or without `?lunara-timing` (Home and Reviews checked anonymously); Home and Reviews return 200 with no PHP errors.
+- **Measured** with the timer, signed in, three runs per page (server time; the admin bar adds about 220 ms that visitors do not pay): Home 2909 ms; a review 1676; Reviews 1816; Journal 1561; a Journal story 1617; Oscars 1730; Best Picture 1773; Debrief 1534; a 404 1635. On every page, core and the 31 plugins take 520–590 ms before the theme starts, and `init` 260–390 ms (ACF 85–120, GutenKit block registration 61–88, Jetpack modules 33–44, the AI plugin about 22). Each request loads about 3,130 PHP files (95 MB peak): Jetpack 575, core 544, wpcomsh 489, ACF Extended 181, Jetpack Boost 168, ACF Pro 156, Blocksy 133 and its companion 126, GutenKit 107 and Pro 97, AI 105, Code Snippets Pro 96, the theme 84.
+- **Found:** Home's `wp_head` took 1055 ms. GutenKit renders the whole page content twice in the head on a classic theme, only to find its own blocks' CSS: `Gutenkit\Config\Modules::block_assets` inside core's `wp_common_block_scripts_and_styles` (637 ms, 50 queries) and `Gutenkit\Libs\AssetGenerator::enqueue_scripts` (258 ms, 30 queries). So every Home section rendered three times per request, and the hero block that Home leaves out rendered too (210 ms).
+- **Shipped:** Theme 3.2.142 PR: a Home section block does not render for an asset scan; the timer also measures `enqueue_block_assets`, logs the queries after the theme loads, and times each attachment lookup. See the 3.2.142 changelog entry. Merged and deployed by me when CI is green.
+- **Verified:** whole PHP suite 76/76; new `block-scan-guard-runtime.php` (43 checks; four deliberate breakages each fail it); `render-timing-runtime.php` 63 checks; the live Home's head and footer asset list saved before deploy for comparison after.
+- **Live:** Theme 3.2.141 until 3.2.142 deploys.
+- **Found, not fixed:** the site runs two Tiempos font systems: the theme's `woff2` files and Blocksy's custom-font TTF uploads (`ct_font_tiempos_text`/`_headline`, used in more than 100 Blocksy rules), with three TTF preloads in every head (156 KB). Unifying them can change heading weights, so it needs a visual check. Jetpack Boost's concatenated stylesheet on Home is 578 KB before compression. The Reviews sort links copy the query string and turn `&#038;` into `#038;`, so a second parameter falls into the fragment. `lunara_output_runtime_customizer_css` costs 36–39 ms on every page.
+- **Next:** read the timer on Home after 3.2.142; then the Running Order's queries (13 per render) and the plugin list for Dalton.
+
 ## 2026-10-31 — The speed pass starts: a render timer for admins (Theme 3.2.141)
 
 - **Asked:** Dalton, 08:47 CT: "We have to keep going with this. We have to keep going." The next item from "What Done Looks Like" is the whole-site speed pass.
@@ -111,6 +122,7 @@ there; `AGENTS.md` is the single canonical copy.)
 - **Left by design:** the importer's LUNARA DEBRIEF / LUNARA METADATA draft markers (parsed, never shown), stored provenance actor names on Journal records, font-family names, the Studio Search preview's sample query, User-Agent and redirect header values.
 - **Outside the repos, for Dalton:** the IFTTT applet titles ("Run Lunara", "Lunara Morning Desk", "Lunara needs attention"), the ChatGPT GPT name (its OpenAPI titles change on re-import), the Notion page.
 - **Correction to my own audit:** a first post-deploy crawl read cached pages (a fixed `?audit=1` URL), so it repeated pre-deploy text; the rerun with a fresh cache-buster is the one recorded above.
+- **Correction (2026-10-31):** Dispatch 3.4.3 is not live. WordPress.com Deployments wrote it to `lunara-plugin-dispatch`, an inactive duplicate folder; the active Dispatch is still 3.4.2 in `lunara-plugin-dispatch-main` (site plugin list, 2026-10-31), so its own strings still read bare "Lunara". The 2026-10-23 entry "Journal app live, sourcing corrected, first article awaiting approval" already named that active folder. Switching the active copy is a production change and waits on Dalton.
 
 ## 2026-10-24 — Always Lunara Film: the brand sweep (Theme 3.2.134)
 

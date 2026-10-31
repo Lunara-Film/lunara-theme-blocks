@@ -160,7 +160,13 @@ function slowplug_inner() { usleep( 30000 ); }
 function slowplug_append( $value ) { return $value . "+slow"; }
 function slowplug_two( $value, $extra ) { return $value . "+" . $extra; }
 function slowplug_by_ref( &$query ) { $query = "changed"; }
-function slowplug_query() { $GLOBALS["wpdb"]->num_queries += 3; }',
+function slowplug_query() {
+	$GLOBALS["wpdb"]->num_queries += 3;
+	$card = "require(\'wp-blog-header.php\'), lunara_render_home_running_order, lunara_get_review_card_image_data, attachment_url_to_postid";
+	$GLOBALS["wpdb"]->queries[] = array( "SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = \'_wp_attached_file\' AND meta_value = \'2026/07/a.jpg\'", 0.012, $card );
+	$GLOBALS["wpdb"]->queries[] = array( "SELECT   post_id,\n meta_value FROM wp_postmeta WHERE meta_key = \'_wp_attached_file\' AND meta_value = \'2026/07/b.jpg\'", 0.020, $card );
+	$GLOBALS["wpdb"]->queries[] = array( "SELECT option_value FROM wp_options WHERE option_name = \'x\'", 0.001, "require(\'wp-blog-header.php\'), get_option" );
+}',
 	'/wp-content/themes/lunara-theme/inc/hub.php' => '<?php
 function lunara_theme_hub() { do_action( "lunara_inner" ); }',
 	'/wordpress/core/7.1.3/wp-includes/core.php' => '<?php
@@ -171,7 +177,8 @@ foreach ( $files as $path => $source ) {
 	file_put_contents( $root . $path, $source );
 	require $root . $path;
 }
-$GLOBALS['wpdb'] = (object) array( 'num_queries' => 0 );
+// One query ran before the theme loaded; the report counts only later ones.
+$GLOBALS['wpdb'] = (object) array( 'num_queries' => 0, 'queries' => array( array( 'SELECT 1', 0.5, 'wp_load_alloptions' ) ) );
 
 $_GET = array();
 require dirname( __DIR__ ) . '/inc/render-timing.php';
@@ -206,6 +213,8 @@ do_action( 'wp_footer' );
 $GLOBALS['lunara_test_admin'] = true;
 lunara_test_assert( array( 'raw' => '' ) === lunara_test_report(), 'untimed, an admin gets no comment' );
 lunara_test_assert( array() === $GLOBALS['lunara_render_timing']['spans'] && array() === $GLOBALS['lunara_render_timing']['marks'], 'untimed, spans and marks record nothing' );
+lunara_test_assert( ! defined( 'SAVEQUERIES' ), 'untimed, query logging stays off' );
+lunara_test_assert( 1 === apply_filters( 'attachment_url_to_postid', 1, 'https://lunarafilm.com/wp-content/uploads/a.jpg' ) && 0 === $GLOBALS['lunara_render_timing']['lookups']['count'], 'untimed, a lookup is not counted' );
 
 /*
  * Timed. The hooks start fresh, the way a new request starts.
@@ -215,7 +224,8 @@ $GLOBALS['lunara_test_did'] = array();
 $_GET['lunara-timing']      = '1';
 lunara_test_assert( true === lunara_render_timing_requested(), 'the query parameter asks for timing' );
 lunara_render_timing_boot( lunara_render_timing_requested() );
-lunara_test_assert( in_array( 'init lunara_render_timing_wrap_hook', lunara_test_timing_callbacks(), true ) && in_array( 'shutdown lunara_render_timing_print', lunara_test_timing_callbacks(), true ), 'timed, the recorder hooks the page hooks and the shutdown print' );
+lunara_test_assert( in_array( 'init lunara_render_timing_wrap_hook', lunara_test_timing_callbacks(), true ) && in_array( 'enqueue_block_assets lunara_render_timing_wrap_hook', lunara_test_timing_callbacks(), true ) && in_array( 'shutdown lunara_render_timing_print', lunara_test_timing_callbacks(), true ), 'timed, the recorder hooks the page hooks, enqueue_block_assets included, and the shutdown print' );
+lunara_test_assert( defined( 'SAVEQUERIES' ) && true === SAVEQUERIES && 1 === $GLOBALS['lunara_render_timing']['db_from'], 'timed, queries are logged from the moment the theme loads' );
 
 // Callbacks registered after the recorder (as plugins' and the theme's are
 // by the time the hooks run) are measured, and keep their behavior.
@@ -291,6 +301,19 @@ $blocks = $GLOBALS['lunara_render_timing']['blocks'];
 lunara_test_assert( 1 === count( $blocks ) && 'lunara/pairing-desk' === $blocks[0]['block'] && $blocks[0]['ms'] >= 4, 'only the top-level named block is listed, with its inner blocks inside its time' );
 lunara_test_assert( 0 === $GLOBALS['lunara_render_timing']['block_depth'], 'every block that started has finished' );
 
+// Attachment lookups: each one that runs its query is timed; one another
+// filter already answered is not counted.
+$local = 'https://lunarafilm.com/wp-content/uploads/2026/07/a.jpg';
+lunara_test_assert( null === apply_filters( 'pre_attachment_url_to_postid', null, $local ), 'pre_attachment_url_to_postid passes null through' );
+usleep( 3000 );
+lunara_test_assert( 42 === apply_filters( 'attachment_url_to_postid', 42, $local ), 'attachment_url_to_postid passes the ID through' );
+apply_filters( 'pre_attachment_url_to_postid', null, 'https://image.tmdb.org/t/p/w342/x.jpg' );
+apply_filters( 'attachment_url_to_postid', null, 'https://image.tmdb.org/t/p/w342/x.jpg' );
+add_filter( 'pre_attachment_url_to_postid', static function ( $id, $url ) { return false !== strpos( $url, 'cached' ) ? 7 : $id; }, 10, 2 );
+lunara_test_assert( 7 === apply_filters( 'pre_attachment_url_to_postid', null, 'https://lunarafilm.com/wp-content/uploads/cached.jpg' ), 'an answer from an earlier filter passes through' );
+$lookups = $GLOBALS['lunara_render_timing']['lookups'];
+lunara_test_assert( 2 === $lookups['count'] && 1 === $lookups['found'] && $lookups['ms'] >= 2 && array() === $GLOBALS['lunara_render_timing']['lookup_open'], 'two lookups ran their query, one found an attachment, and none is left open' );
+
 // Phase marks and the template.
 do_action( 'wp_head' );
 $template = '/srv/htdocs/wp-content/themes/lunara-theme/front-page.php';
@@ -315,6 +338,12 @@ lunara_test_assert( isset( $report['callbacks']['init | slowplug | slowplug_init
 lunara_test_assert( 'front-door' === $report['spans'][0]['label'] && 'lunara/pairing-desk' === $report['blocks'][0]['block'], 'the report carries the spans and the blocks' );
 lunara_test_assert( ( $report['files_by_owner']['slowplug'] ?? 0 ) >= 1 && ( $report['files_by_owner']['theme:lunara-theme'] ?? 0 ) >= 1 && $report['files'] >= 3, 'the report counts loaded files by owner' );
 lunara_test_assert( $report['total_ms'] > 0 && 3 === $report['queries'] && true === $report['object_cache'], 'the report has the total, the query count and the object cache state' );
+lunara_test_assert( 2 === $report['lookups']['count'] && 42 === $report['lookups']['calls'][0]['id'] && $report['lookups']['calls'][0]['ms'] >= $report['lookups']['calls'][1]['ms'], 'the report lists the lookups, the slowest first' );
+$db = $report['db'];
+lunara_test_assert( true === $db['logged'] && 3 === $db['count'] && abs( $db['ms'] - 33 ) < 0.01, 'the report counts only the queries logged after the theme loaded, with their time' );
+lunara_test_assert( abs( $db['slowest'][0]['ms'] - 20 ) < 0.01 && 0 === strpos( $db['slowest'][0]['sql'], 'SELECT post_id, meta_value FROM wp_postmeta' ), 'the slowest query comes first, its whitespace collapsed' );
+$card_caller = "lunara_render_home_running_order > lunara_get_review_card_image_data > attachment_url_to_postid";
+lunara_test_assert( "require('wp-blog-header.php') > " . $card_caller === array_key_first( $db['by_caller'] ) && 2 === $db['by_caller'][ array_key_first( $db['by_caller'] ) ]['count'] && abs( $db['by_caller'][ array_key_first( $db['by_caller'] ) ]['ms'] - 32 ) < 0.01, 'queries add up by the code that ran them, the costliest first' );
 
 foreach ( array_keys( $files ) as $path ) {
 	@unlink( $root . $path );

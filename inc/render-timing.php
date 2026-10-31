@@ -11,7 +11,11 @@
  *   query count at that moment;
  * - each callback on the main page hooks, with the plugin, theme or core file
  *   that owns it;
- * - each top-level block render, and each Home span front-page.php marks.
+ * - each top-level block render, and each Home span front-page.php marks;
+ * - since 3.2.142, each attachment_url_to_postid() lookup, and the queries
+ *   that ran after the theme loaded (it defines SAVEQUERIES for a timed
+ *   request when wp-config.php has not), with the slowest and the code that
+ *   ran them. Query logging adds a little time of its own to a timed request.
  *
  * At the end of the page, a user who can manage options gets one HTML comment
  * that holds the report as base64 JSON. Nobody else gets output, and a request
@@ -36,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** The hooks whose callbacks a timed request measures one by one. */
 function lunara_render_timing_hooks() {
-	return array( 'after_setup_theme', 'init', 'wp_loaded', 'parse_request', 'pre_get_posts', 'wp', 'template_redirect', 'wp_enqueue_scripts', 'wp_head', 'wp_body_open', 'the_content', 'render_block', 'wp_footer', 'wp_print_footer_scripts' );
+	return array( 'after_setup_theme', 'init', 'wp_loaded', 'parse_request', 'pre_get_posts', 'wp', 'template_redirect', 'wp_enqueue_scripts', 'enqueue_block_assets', 'wp_head', 'wp_body_open', 'the_content', 'render_block', 'wp_footer', 'wp_print_footer_scripts' );
 }
 
 /** True when this request asked for timing. */
@@ -76,9 +80,22 @@ function lunara_render_timing_boot( $on ) {
 		'block_depth' => 0,
 		'block_open'  => null,
 		'template'    => '',
+		'lookups'     => array( 'count' => 0, 'found' => 0, 'ms' => 0.0, 'calls' => array() ),
+		'lookup_open' => array(),
+		'db_from'     => null,
 	);
 	if ( ! $on ) {
 		return;
+	}
+
+	// 3.2.142: log the queries from here on, so the report can name the
+	// slow ones and the code that ran them. Only a timed request does this.
+	global $wpdb;
+	if ( ! defined( 'SAVEQUERIES' ) ) {
+		define( 'SAVEQUERIES', true );
+	}
+	if ( SAVEQUERIES ) {
+		$GLOBALS['lunara_render_timing']['db_from'] = ( is_object( $wpdb ) && isset( $wpdb->queries ) && is_array( $wpdb->queries ) ) ? count( $wpdb->queries ) : 0;
 	}
 
 	lunara_render_timing_mark( 'theme' );
@@ -94,7 +111,77 @@ function lunara_render_timing_boot( $on ) {
 	add_filter( 'template_include', 'lunara_render_timing_template', PHP_INT_MAX, 1 );
 	add_filter( 'pre_render_block', 'lunara_render_timing_block_start', PHP_INT_MAX, 2 );
 	add_filter( 'render_block', 'lunara_render_timing_block_end', PHP_INT_MAX, 2 );
+	add_filter( 'pre_attachment_url_to_postid', 'lunara_render_timing_lookup_start', PHP_INT_MAX, 2 );
+	add_filter( 'attachment_url_to_postid', 'lunara_render_timing_lookup_end', PHP_INT_MAX, 2 );
 	add_action( 'shutdown', 'lunara_render_timing_print', PHP_INT_MAX );
+}
+
+/**
+ * pre_attachment_url_to_postid, last: a lookup starts (3.2.142). A lookup
+ * another filter already answered runs no query, so it is not counted.
+ */
+function lunara_render_timing_lookup_start( $post_id, $url = '' ) {
+	if ( null === $post_id && lunara_render_timing_enabled() ) {
+		$GLOBALS['lunara_render_timing']['lookup_open'][] = array( hrtime( true ), (string) $url );
+	}
+	return $post_id;
+}
+
+/** attachment_url_to_postid, last: the lookup finished. */
+function lunara_render_timing_lookup_end( $post_id, $url = '' ) {
+	if ( ! lunara_render_timing_enabled() || empty( $GLOBALS['lunara_render_timing']['lookup_open'] ) ) {
+		return $post_id;
+	}
+	$state                     = &$GLOBALS['lunara_render_timing'];
+	list( $started, $asked )   = array_pop( $state['lookup_open'] );
+	$ms                        = ( hrtime( true ) - $started ) / 1e6;
+	$state['lookups']['count'] += 1;
+	$state['lookups']['found'] += $post_id ? 1 : 0;
+	$state['lookups']['ms']    += $ms;
+	$state['lookups']['calls'][] = array( 'ms' => round( $ms, 2 ), 'url' => substr( $asked, -100 ), 'id' => (int) $post_id );
+	return $post_id;
+}
+
+/**
+ * The queries this timed request logged after the theme loaded: their count
+ * and time, the slowest, and the time by the code that ran them (the last
+ * four frames of core's caller summary).
+ *
+ * @return array
+ */
+function lunara_render_timing_db_report() {
+	global $wpdb;
+	$from = $GLOBALS['lunara_render_timing']['db_from'];
+	if ( null === $from || ! is_object( $wpdb ) || ! isset( $wpdb->queries ) || ! is_array( $wpdb->queries ) ) {
+		return array( 'logged' => false );
+	}
+	$total     = 0.0;
+	$slowest   = array();
+	$by_caller = array();
+	foreach ( array_slice( $wpdb->queries, (int) $from ) as $row ) {
+		$ms      = isset( $row[1] ) ? (float) $row[1] * 1000 : 0.0;
+		$frames  = array_values( array_filter( array_map( 'trim', explode( ',', isset( $row[2] ) ? (string) $row[2] : '' ) ) ) );
+		$caller  = implode( ' > ', array_slice( $frames, -4 ) );
+		$total  += $ms;
+		if ( ! isset( $by_caller[ $caller ] ) ) {
+			$by_caller[ $caller ] = array( 'ms' => 0.0, 'count' => 0 );
+		}
+		$by_caller[ $caller ]['ms']    += $ms;
+		$by_caller[ $caller ]['count'] += 1;
+		$slowest[] = array( 'ms' => round( $ms, 2 ), 'sql' => substr( (string) preg_replace( '/\s+/', ' ', isset( $row[0] ) ? (string) $row[0] : '' ), 0, 200 ), 'caller' => $caller );
+	}
+	usort( $slowest, static function ( $a, $b ) { return $b['ms'] <=> $a['ms']; } );
+	uasort( $by_caller, static function ( $a, $b ) { return $b['ms'] <=> $a['ms']; } );
+	foreach ( $by_caller as $caller => $row ) {
+		$by_caller[ $caller ]['ms'] = round( $row['ms'], 2 );
+	}
+	return array(
+		'logged'    => true,
+		'count'     => count( $wpdb->queries ) - (int) $from,
+		'ms'        => round( $total, 1 ),
+		'slowest'   => array_slice( $slowest, 0, 25 ),
+		'by_caller' => array_slice( $by_caller, 0, 25, true ),
+	);
 }
 
 /**
@@ -386,8 +473,15 @@ function lunara_render_timing_report() {
 	}
 	arsort( $files );
 
+	$lookups       = $state['lookups'];
+	$lookups['ms'] = round( $lookups['ms'], 2 );
+	usort( $lookups['calls'], static function ( $a, $b ) { return $b['ms'] <=> $a['ms']; } );
+	$lookups['calls'] = array_slice( $lookups['calls'], 0, 12 );
+
 	$uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
 	return array(
+		'lookups'        => $lookups,
+		'db'             => lunara_render_timing_db_report(),
 		'v'              => 1,
 		'path'           => (string) strtok( $uri, '?' ),
 		'template'       => $state['template'],
