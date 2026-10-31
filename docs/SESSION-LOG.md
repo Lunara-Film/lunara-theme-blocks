@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — The speed pass, server side, is live (Theme 3.2.144)
+
+- **Live:** Theme 3.2.144 (merge `00822ee`, #304), deployed by me; `style.css` read 3.2.144 at 14:56:19 UTC. The Debrief page's body (1,046 tags) is identical to before; Home, Reviews, Journal, Oscars, About and a review return 200 with no PHP errors. The Debrief snapshot starts with the first rebuild after this deploy; from the next cache drop on, visitors get it.
+- **Measured (Lighthouse 12.6.1, phone, after 3.2.143):** Home score 66: LCP 3.4 s (first byte 1.48 s, load delay 0.5 s, load 0.36 s, render delay 1.1 s), total blocking time 940 ms, CLS 0.001. Main-thread work 4.7 s, of which style and layout 2.0 s and script 0.76 s. Weight 652 KB: fonts 260 KB in 8 files (the theme's five `woff2` files and Blocksy's three TTF), images 199 KB (the logo loads twice, 38 and 16 KB), CSS 110 KB sent. One Jetpack Boost stylesheet bundle is 565 KB before compression, and the theme's own `style.css` is 486 KB of it (all theme CSS: 1.3 MB). Long tasks include the Boost script bundle (372 ms) and the host's `bilmur.min.js` (367 + 209 ms). Reviews score 93: LCP 2.3 s, blocking 230 ms.
+- **Holding:** Dalton's answers on the plugin changes (2026-10-31 entry below).
+- **Next:** a read-only CSS usage map of `style.css` across every page type, width and interactive state, then a trim plan for Dalton before any rule goes; one Tiempos font system (needs a visual check of heading weights); the logo loaded once.
+- **Found, not fixed:** `lunara_output_runtime_customizer_css` costs 36–39 ms on every page; caching it needs every input, and the Studio section orders may live in options.
+
 ## 2026-10-31 — Home at the origin: 2.5 s to 1.1 s; the Debrief index rebuilds in the background (Theme 3.2.144)
 
 - **Live:** Theme 3.2.143 (merge `9de21b8`, #303), deployed by me; `style.css` read 3.2.143 at 14:44:35 UTC. The live Home's head and footer assets (39) and body (1,059 tags) are identical to before; the Reviews and Journal sort links keep both query parameters.
