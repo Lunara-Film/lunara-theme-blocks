@@ -121,6 +121,9 @@ require_once $lunara_inc . 'live-search.php';
 // Layer 13 — Hybrid homepage composition: the Home page's blocks render the
 // homepage when present; Homepage Studio saves write through to the blocks.
 require_once $lunara_inc . 'home-blocks.php';
+// 3.2.142: a Home section block does not render for an asset scan (GutenKit
+// renders the whole page twice in the head to find its own blocks).
+require_once $lunara_inc . 'block-scan-guard.php';
 
 // Layer 13b — Curated Grids: fully customizable, per-instance Reviews Grid
 // and Journal Grid blocks (hand-picked slots, auto-fill, layout + display
