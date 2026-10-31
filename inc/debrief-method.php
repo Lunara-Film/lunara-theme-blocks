@@ -45,6 +45,18 @@ if ( ! defined( 'LUNARA_DEBRIEF_INDEX_VERSION' ) ) {
 	define( 'LUNARA_DEBRIEF_INDEX_VERSION', 3 );
 }
 
+/*
+ * 3.2.144: the last built index, kept as an option (not autoloaded) with its
+ * build time, and the background event that rebuilds the cache. A visitor
+ * never waits for a rebuild; see lunara_debrief_method_index().
+ */
+if ( ! defined( 'LUNARA_DEBRIEF_INDEX_SNAPSHOT_OPTION' ) ) {
+	define( 'LUNARA_DEBRIEF_INDEX_SNAPSHOT_OPTION', 'lunara_debrief_index_snapshot' );
+}
+if ( ! defined( 'LUNARA_DEBRIEF_INDEX_REBUILD_HOOK' ) ) {
+	define( 'LUNARA_DEBRIEF_INDEX_REBUILD_HOOK', 'lunara_debrief_method_rebuild_index' );
+}
+
 /** Upper bounds the index stores; the page's counts are clamped to these. */
 if ( ! defined( 'LUNARA_DEBRIEF_INDEX_MAX_RECENT' ) ) {
 	define( 'LUNARA_DEBRIEF_INDEX_MAX_RECENT', 12 );
@@ -622,8 +634,17 @@ if ( ! function_exists( 'lunara_debrief_method_index_is_current' ) ) {
 
 if ( ! function_exists( 'lunara_debrief_method_index' ) ) {
 	/**
-	 * Cached Debrief index. Rebuilt at most every 12 hours or when a review's
-	 * pairings, a review's status or a linked movie changes.
+	 * Cached Debrief index. The cache lasts 12 hours and drops when a review's
+	 * pairings, a review's status or a linked movie changes (or when the
+	 * object cache evicts it).
+	 *
+	 * 3.2.144: a rebuild took 7 to 9 s of a visitor's request on the live
+	 * site (2026-10-31, twice in an hour). Now, while the cache is missing, a
+	 * visitor gets the last built index and the rebuild runs in the background.
+	 * Someone who can edit posts gets a fresh build at once, so a change shows
+	 * to the person who made it; and a last build older than a day is rebuilt
+	 * at once for anyone, so the page is never more than a day behind even if
+	 * background events stop.
 	 *
 	 * @return array<string,mixed>
 	 */
@@ -633,10 +654,45 @@ if ( ! function_exists( 'lunara_debrief_method_index' ) ) {
 			return $cached;
 		}
 
+		$snapshot = function_exists( 'get_option' ) ? get_option( LUNARA_DEBRIEF_INDEX_SNAPSHOT_OPTION, null ) : null;
+		$usable   = is_array( $snapshot )
+			&& isset( $snapshot['built_at'], $snapshot['index'] )
+			&& lunara_debrief_method_index_is_current( $snapshot['index'] )
+			&& time() - (int) $snapshot['built_at'] < DAY_IN_SECONDS;
+		if ( $usable && ! ( function_exists( 'current_user_can' ) && current_user_can( 'edit_posts' ) ) ) {
+			lunara_debrief_method_schedule_rebuild();
+			return $snapshot['index'];
+		}
+
+		return lunara_debrief_method_rebuild_index();
+	}
+}
+
+if ( ! function_exists( 'lunara_debrief_method_rebuild_index' ) ) {
+	/**
+	 * Build the index and keep it: the 12-hour cache and the last-built
+	 * snapshot. Also the background event's callback.
+	 *
+	 * @return array<string,mixed>
+	 */
+	function lunara_debrief_method_rebuild_index() {
 		$index = lunara_debrief_method_build_index();
 		set_transient( LUNARA_DEBRIEF_INDEX_CACHE_KEY, $index, 12 * HOUR_IN_SECONDS );
+		if ( function_exists( 'update_option' ) ) {
+			update_option( LUNARA_DEBRIEF_INDEX_SNAPSHOT_OPTION, array( 'built_at' => time(), 'index' => $index ), false );
+		}
 
 		return $index;
+	}
+	add_action( LUNARA_DEBRIEF_INDEX_REBUILD_HOOK, 'lunara_debrief_method_rebuild_index', 10, 0 );
+}
+
+if ( ! function_exists( 'lunara_debrief_method_schedule_rebuild' ) ) {
+	/** Ask for one background rebuild in a minute, unless one is already due. */
+	function lunara_debrief_method_schedule_rebuild() {
+		if ( function_exists( 'wp_next_scheduled' ) && function_exists( 'wp_schedule_single_event' ) && ! wp_next_scheduled( LUNARA_DEBRIEF_INDEX_REBUILD_HOOK ) ) {
+			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, LUNARA_DEBRIEF_INDEX_REBUILD_HOOK );
+		}
 	}
 }
 
@@ -749,6 +805,8 @@ if ( ! function_exists( 'lunara_debrief_method_flush_index' ) ) {
 		foreach ( lunara_debrief_method_retired_cache_keys() as $retired ) {
 			delete_transient( $retired );
 		}
+		// 3.2.144: rebuild in the background; the last build serves until then.
+		lunara_debrief_method_schedule_rebuild();
 	}
 	add_action( 'save_post_review', 'lunara_debrief_method_flush_index', 99, 2 );
 	add_action( 'save_post_movie', 'lunara_debrief_method_flush_index', 99, 2 );

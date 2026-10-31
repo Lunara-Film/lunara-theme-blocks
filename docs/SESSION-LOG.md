@@ -25,6 +25,17 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-10-31 — Home at the origin: 2.5 s to 1.1 s; the Debrief index rebuilds in the background (Theme 3.2.144)
+
+- **Live:** Theme 3.2.143 (merge `9de21b8`, #303), deployed by me; `style.css` read 3.2.143 at 14:44:35 UTC. The live Home's head and footer assets (39) and body (1,059 tags) are identical to before; the Reviews and Journal sort links keep both query parameters.
+- **Measured, signed in, three runs (timer):** Home 2909 ms (3.2.141) to 1648 ms; `wp_head` 1055 to 83 ms; body 592 to 145 ms; GutenKit scans 765 + 380 to 1 + 2 ms; each Home section renders once; attachment lookups 62 (1431 ms) to 0; queries 184 to 84.
+- **Measured, anonymous, cold (the host's `server-timing` origin time):** Home 1048–1273 ms (2507 ms this morning); Reviews 1022–1266; a review 918–1650; Journal 1156–1286; Oscars 1107–1336; Debrief 1145–1237; About 1008–1239; `/robots.txt` 845–1062. So every page now costs about 0.1–0.3 s more than WordPress and the plugins starting up.
+- **Found:** Debrief cold took 7.3 s at 13:50 and 8.7 s at 14:47 UTC: the first request after a cache drop rebuilt the pairing index inline.
+- **Shipped:** Theme 3.2.144 PR: a visitor gets the last built index while a background event rebuilds it; editors and day-old snapshots build at once. See the 3.2.144 changelog entry. Merged and deployed by me when CI is green.
+- **Asked Dalton (waiting):** deactivate GutenKit Blocks + Pro (204 PHP files, 60–90 ms start-up; no published content uses a GutenKit block), ACF Extended (181 files; all 96 fields in the 5 field groups are core ACF types; its modules are empty), and the AI plugin with its 3 providers (about 110 files; no Lunara Film code uses it); and switch Dispatch to the deployed copy (deactivate `lunara-plugin-dispatch-main` 3.4.2, then activate `lunara-plugin-dispatch` 3.4.3). Keep ACF Pro (it registers the Movies post type) and Code Snippets Pro (3 active snippets: Journal REST API Fields, WORLHB, GEMINI).
+- **Live:** Theme 3.2.143 until 3.2.144 deploys.
+- **Next:** Dalton's plugin answers; then the two font systems (a visual check) and the 578 KB stylesheet bundle.
+
 ## 2026-10-31 — The scan guard takes effect; lookups skip the slow scan (Theme 3.2.143)
 
 - **Live:** Theme 3.2.142 (merge `31f768f`, #302), deployed by me; `style.css` read 3.2.142 at 14:31:21 UTC. The live Home's head and footer assets (39 entries) and its body HTML (1,059 tags) are identical to before the deploy.

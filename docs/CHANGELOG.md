@@ -11,6 +11,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-10-31 — Theme 3.2.144: a visitor never waits for the Debrief index
+
+Cold requests to the live Debrief page took 7.3 s (13:50 UTC) and 8.7 s (14:47 UTC) against 1.2–1.6 s otherwise. The page's pairing index (`lunara_debrief_method_index()`) is cached for 12 hours, drops whenever a review's pairings, a review's status or a linked film changes, and can be evicted from the object cache. The first request after that rebuilt it inline: one pass over every published review and its three pairings.
+
+- Every build now also keeps the index as a snapshot (`lunara_debrief_index_snapshot`, not autoloaded, with its build time).
+- While the cache is missing, a visitor gets the snapshot, and one background rebuild is scheduled a minute out (`lunara_debrief_method_rebuild_index`); the event rebuilds the cache and the snapshot. A review or film change also schedules it.
+- Someone who can edit posts gets a fresh build at once, so a change shows to the person who made it. A snapshot older than a day, or of an older index version, is rebuilt at once for anyone, so the page is never more than a day behind even if background events stop.
+- Test: `tests/debrief-index-cache-runtime.php` (new, 12 checks; four deliberate breakages each fail it). `debrief-method-runtime.php` (96 checks) and `site-studio-debrief-method-runtime.php` (364) pass unchanged.
+
 ## 2026-10-31 — Theme 3.2.143: the scan guard takes effect; attachment lookups skip the slow scan; archive sort links keep every filter
 
 The 3.2.142 timer on the live Home (signed in, three runs) found two things.
