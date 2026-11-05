@@ -190,6 +190,13 @@ body.post-type-archive-review .lunara-review-archive-run-grid .lunara-review-gri
         border-inline: 1px solid rgba(201,169,97,.16);
     }
 
+    /* The lead group (role, question, title) keeps the body's rhythm. */
+    .lunara-pair-card-lead {
+        display: grid;
+        gap: 9px;
+        min-width: 0;
+    }
+
     .lunara-pair-card-role {
         text-align: center;
         margin: 0;

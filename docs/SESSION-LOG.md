@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — The Debrief as one composed module (Theme 3.2.147)
+
+- **Asked:** Dalton, 14:20 CT, after 3.2.146 went live: "I really don't think that did anything whatsoever. How can you make that look dynamic and tightened?"
+- **Read:** 3.2.146 trimmed spacing only (2,280px to 1,552px at 1440px) and kept the same five full-width rows, so the section still read as a long stack. A different composition was needed, not smaller gaps.
+- **Built (Theme 3.2.147, PR open, not merged):** band one, the reviewed film's poster beside its signature data at every width (no more stacked poster on phones; the duplicate title under the poster is gone); band two, the three pairings as compact argument cards, three across from 901px with the thread drawn through them, a 104px poster beside the role, question and title (a new `lunara-pair-card-lead` group in `inc/debrief-public.php`), the full note under both, links pinned to the bottom, a 2px accent per card in the pairing's thread colour; one column with the poster beside the whole argument from 641px to 900px; the 96px-poster card on phones. Head on one line. DESIGN.md's pairing and Debrief-frame rules updated. Section on the live Social Reckoning review: 856px at 1440px (was 2,280px before today), 1,765px at 390px (was 3,945px).
+- **Verified:** `tests/article-layout-browser-runtime.js` rewritten for the new geometry and passing in review scope; full suites recorded in the PR. Previewed on the live review by emulating the lead group and injecting the new rules; screenshots at 1440, 768 and 390px sent to Dalton.
+- **Live:** Theme 3.2.146 until Dalton's yes and deploy click.
+- **Next:** on yes: merge, Dalton triggers the deployment, verify the live build and the section geometry; then delete the 2026-09-21 Customizer Additional CSS block.
+- **Found, not fixed:** the canary sentinels still fail on the stale `TiemposText-Bold.woff2` preload rule and the Journal blank-title read (see the 3.2.146 entry); the live where-to-watch "Availability" value for The Social Reckoning reads "Columbia Pictures]" with a stray bracket (content, not theme).
+
 ## 2026-11-05 — The Debrief and Pair It With are tighter (Theme 3.2.146)
 
 - **Asked:** Dalton, with a screenshot of a review's Reviewed Film card and Pair It With: "This all needs to be tighter. It's way too spread out and doesn't look good."
