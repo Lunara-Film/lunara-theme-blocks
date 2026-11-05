@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — Three-up from 1101px; the phone panel keeps its chips (Theme 3.2.149)
+
+- **Asked:** nobody; the review panel (three lenses, adversarial verify) on 3.2.147/3.2.148 reported, and I confirmed on the live 3.2.148: at 901–1100px the three-up cards are 234–266px wide with a 90–122px lead; at 360px the where-to-watch chips (170px minimum columns) run past the 170px panel into the section's hidden overflow; "Reviewed Film" renders at the paragraph size.
+- **Built (Theme 3.2.149, PR open):** three across from 1101px (row cards to 1100px); phones get one chip per line and an 88px poster column under 421px; the kicker is a 13px uppercase label. The pairing test adds 1024px and a band-one assertion at every width.
+- **Live:** Theme 3.2.148 until Dalton's yes and deploy click.
+- **Next:** on yes: merge, deploy click, verify; then the Customizer block and the canary sentinels.
+
 ## 2026-11-05 — The Debrief on a band of the film's imagery; Related whole titles (Theme 3.2.148)
 
 - **Asked:** Dalton, 14:50 CT, with a full-page screenshot of the live 3.2.147 review, More Lunara Film Criticism circled: "this is too truncated and the debrief isnt dynamic enough".

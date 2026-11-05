@@ -58,8 +58,8 @@ and links to the owning Review editor. This does not alter pairing content.
   shows the three pairings as compact argument cards standing on the Debrief
   band: a 128px poster (96px on phones) beside the role, its Method question
   and the title, with the complete note and the links beneath at the card's
-  width; three across from 901px, one column below, and between 641px and
-  900px the poster beside the whole argument. A card is unboxed: a 2px top
+  width; three across from 1101px (a card is then about 300px), one column
+  below, and between 641px and 1100px the poster beside the whole argument. A card is unboxed: a 2px top
   accent in its thread colour (Theme Echo gold, Counter Program terracotta,
   Career Context blue), which the role label shares, and nothing else painted.
   Neither layout uses a painted container inside another.
