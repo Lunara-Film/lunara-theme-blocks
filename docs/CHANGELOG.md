@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.145: `style.css` loses 343 rules that no page can use
+
+A read-only map of `style.css` on the live site found 343 rules, and 81 more selectors inside kept rules, that style classes appearing nowhere. No public page prints them (626 pages crawled; 10 also checked signed in), no page script adds them (55 scripts), and no theme or plugin code names them. Most belonged to old homepage designs (the Living Pulse hero, the Database and Oscar spotlights, Deep Cut stats, the old hero grid and Journal cards), plus print rules for those classes.
+
+- Removed: the 343 rules, the 81 dead selectors, the `lunara-panel-backdrop-in` keyframes that nothing references, and 29 comments that only described removed rules. `style.css` 485,921 to 434,277 bytes; minified 351,254 to 311,971 bytes (-11%); brotli 39,839 to 35,993 bytes.
+- Kept on purpose: classes that WordPress, Jetpack, Blocksy or a future post can produce (captions, alignments, sharing, utilities); rules a script can trigger; and 776 rules (112 KB) for markup that theme code can still print but no page prints today, mostly the `functions.php` duplicates and `single.php`. Those go out with that code, not before it.
+- Proof: on 48 pages (every template), phone and desktop, at five widths, scrolled, with the menu and live search open, none of the removed selectors matches an element. The computed styles of 168,275 element snapshots are identical, except animated values that differ in the same way when the original file is compared with itself. A control that removes one used rule shows the difference at once.
+- Speed: no measurable change, so this is cleanup. On a 4x-slowed phone, `style.css` parses in about 15–20 ms with either file; style recalculation (350–600 ms per page load) and layout do not move outside noise. Every page type uses only 3–15% of `style.css`.
+- Tests: no behavior changed, so no test changed. 79 PHP tests pass locally; CI runs the browser tests.
+
 ## 2026-10-31 — Theme 3.2.144: a visitor never waits for the Debrief index
 
 Cold requests to the live Debrief page took 7.3 s (13:50 UTC) and 8.7 s (14:47 UTC) against 1.2–1.6 s otherwise. The page's pairing index (`lunara_debrief_method_index()`) is cached for 12 hours, drops whenever a review's pairings, a review's status or a linked film changes, and can be evicted from the object cache. The first request after that rebuilt it inline: one pass over every published review and its three pairings.
