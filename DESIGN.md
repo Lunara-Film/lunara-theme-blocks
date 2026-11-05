@@ -55,13 +55,14 @@ and links to the owning Review editor. This does not alter pairing content.
   their visible titles to Echo, Counter or Context, including on phones. Allow
   natural wrapping without truncating the labels. Keep their full arguments and
   film links. Home and archive summaries use editorial columns. A full Review
-  shows the three pairings as compact argument cards: a small poster beside
-  the role, its Method question and the title, with the complete note and the
-  links beneath at the card's width; three across from 901px, one column
-  below, and between 641px and 900px the poster beside the whole argument.
-  Each card carries a 2px top accent in its thread colour (Theme Echo gold,
-  Counter Program terracotta, Career Context blue). Neither layout uses a
-  painted container inside another.
+  shows the three pairings as compact argument cards standing on the Debrief
+  band: a 128px poster (96px on phones) beside the role, its Method question
+  and the title, with the complete note and the links beneath at the card's
+  width; three across from 901px, one column below, and between 641px and
+  900px the poster beside the whole argument. A card is unboxed: a 2px top
+  accent in its thread colour (Theme Echo gold, Counter Program terracotta,
+  Career Context blue), which the role label shares, and nothing else painted.
+  Neither layout uses a painted container inside another.
 - The Home masthead reads as a printed program: a dateline (place, month,
   review count), the mark and dek, then "Now Showing": the lead
   story's landscape still, film and take, beside two companion reviews with
@@ -186,9 +187,14 @@ and links to the owning Review editor. This does not alter pairing content.
   the title ("Directed by …"), never as a side rail. Each pairing card states
   its Method question beneath the role name.
 - Single Reviews own a centered 760px reading frame and below-article navigation.
-  The Debrief is one composed module in a 1060px frame: the reviewed film's
-  poster beside its signature data, then the pairing cards across the same
-  width, one article-grid gap from the reading column and from Related.
+  The Debrief is one composed module in a 1060px frame, on a band of the
+  review's own imagery (the hero still, else the poster; blurred, darkened,
+  drifting slowly where motion is allowed, flat on phones): the reviewed
+  film's poster beside its signature data as a dossier row (no cells), then
+  the pairing cards across the same width, one article-grid gap from the
+  reading column and from Related. Related cards show the whole title with no
+  word broken: three across from 901px (two for two or four cards), two to
+  641px, one on phones, the poster beside the copy.
   Route CSS owns that geometry; late
   Studio output may change supported presentation choices without restoring a
   side rail. Additional CSS must not be required to hold this layout together.

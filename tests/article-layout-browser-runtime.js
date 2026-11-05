@@ -173,13 +173,13 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                 });
                 await assertSquareSurfaces(page, `Pairings ${index}@${width}`);
                 const pairs=pairing.cards, roles=await fullHeadingMetrics(page,'.lunara-pair-card-role');
-                assert(roles.length===3&&roles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='left'&&role.fontSize>=12), `Pairings ${index}@${width}: full role names remain visible beside the poster`, roles);
-                const threeUp=width>=901, rowMode=width>=641&&width<=900, posterWidth=threeUp?104:rowMode?120:96;
-                assert(pairing.width<=width+1&&Math.abs(pairing.section.width-pairing.availableWidth)<=1&&pairing.columns.trim().split(/\s+/).length===(threeUp?3:1)&&pairing.gap===(threeUp?16:14), `Pairings ${index}@${width}: the cards fill the Debrief frame, three across from901px and one column below,16px/14px apart`, pairing);
+                assert(roles.length===3&&roles.every((role,index)=>role.text===expectedRoleNames[index]&&role.visible&&role.fits&&role.clamp==='none'&&role.align==='left'&&role.fontSize>=13), `Pairings ${index}@${width}: full role names remain visible beside the poster`, roles);
+                const threeUp=width>=901, rowMode=width>=641&&width<=900, posterWidth=width<=640?96:128;
+                assert(pairing.width<=width+1&&Math.abs(pairing.section.width-pairing.availableWidth)<=1&&pairing.columns.trim().split(/\s+/).length===(threeUp?3:1)&&pairing.gap===(threeUp?28:20), `Pairings ${index}@${width}: the cards fill the Debrief frame, three across from901px and one column below,28px/20px apart`, pairing);
                 assert(pairs.length===3&&pairs.every((card,i)=>card.box.left>=(width<=640?19:0)&&card.box.right<=width-(width<=640?19:0)&&card.noteSize===15&&card.noteLine<=23&&card.titleMargin===0&&card.textVisible&&card.hasLink&&card.titleClamp==='none'&&card.noteClamp==='none'&&card.noteText===fixture.expected_notes[i]), `Pairings ${index}@${width}: every complete argument and film destination remains readable`, pairs);
-                if(threeUp) assert(pairs.every(card=>Math.abs(card.box.top-pairs[0].box.top)<=1&&Math.abs(card.box.height-pairs[0].box.height)<=1)&&pairs.slice(1).every((card,i)=>Math.abs(card.box.left-pairs[i].box.right-16)<=1), `Pairings ${index}@${width}: three equal-height cards share one row16px apart`, pairs);
-                else assert(pairs.slice(1).every((card,i)=>Math.abs(card.box.top-pairs[i].box.bottom-14)<=1), `Pairings ${index}@${width}: one column of cards14px apart`, pairs);
-                assert(pairs.every(card=>card.padding.every((value,i)=>value===(width<=640?[12,12,10,12]:[14,16,12,16])[i])), `Pairings ${index}@${width}: cards keep their14px/16px inset (12px on phones)`, pairs);
+                if(threeUp) assert(pairs.every(card=>Math.abs(card.box.top-pairs[0].box.top)<=1&&Math.abs(card.box.height-pairs[0].box.height)<=1)&&pairs.slice(1).every((card,i)=>Math.abs(card.box.left-pairs[i].box.right-28)<=1), `Pairings ${index}@${width}: three equal-height cards share one row28px apart`, pairs);
+                else assert(pairs.slice(1).every((card,i)=>Math.abs(card.box.top-pairs[i].box.bottom-20)<=1), `Pairings ${index}@${width}: one column of cards20px apart`, pairs);
+                assert(pairs.every(card=>card.padding.every((value,i)=>value===(width<=640?[12,0,0,0]:[14,0,0,0])[i])), `Pairings ${index}@${width}: cards stand unboxed on the band under a14px accent gap (12px on phones)`, pairs);
                 assert(pairs.every(card=>Math.abs(card.poster.width-posterWidth)<=1&&Math.abs(card.poster.width/card.poster.height-2/3)<.01&&card.poster.right+12<=card.lead.left&&Math.abs(card.poster.top-card.lead.top)<=1&&(!card.imageFit||card.imageFit==='cover')), `Pairings ${index}@${width}: a${posterWidth}px native-ratio poster sits beside the role, question and title`, pairs);
                 if(rowMode) assert(pairs.every(card=>card.note.top>=card.lead.bottom-1&&Math.abs(card.note.left-card.lead.left)<=1&&card.note.left>=card.poster.right+12), `Pairings ${index}@${width}: the note runs beside the poster, under the title`, pairs);
                 else assert(pairs.every(card=>card.note.top>=card.poster.bottom-1&&Math.abs(card.note.left-card.poster.left)<=1&&Math.abs(card.note.right-card.lead.right)<=1), `Pairings ${index}@${width}: the note runs under the poster at the card's full width`, pairs);
@@ -187,6 +187,28 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                 const questions=await fullHeadingMetrics(page,'.lunara-pair-card-question');
                 assert(questions.length===3&&new Set(questions.map(q=>q.text)).size===3&&questions.every(q=>q.text.endsWith('?')&&q.visible&&q.fits&&q.align==='left'&&q.fontSize>=13), `Pairings ${index}@${width}: each row states its Method question beneath the role`, questions);
                 await page.close();
+            }
+            // Related: whole titles, no word broken in half, three across from 901px (two for four cards), the poster beside the copy.
+            for (const count of [4, 6]) {
+                const relatedPage=await browser.newPage({viewport:{width,height:1000},javaScriptEnabled:false});
+                await relatedPage.route('**/*', route => route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#183441"/></svg>'}));
+                const relatedTitles=['Primetime — The Sordid Theater of Our Friday Night Bloodsport','Misty Green – The Price of Second Acts','Resident Evil – The Worst Night of His Life','Hope — The First Hour Is the Movie','The Uprising — What Could Have Been','Nickel Boys — The Eyes Are Not Yours'];
+                const relatedCards=relatedTitles.slice(0,count).map(title=>`<article class="lunara-review-grid-card"><a class="lunara-review-grid-link" href="#review"><div class="lunara-review-grid-poster-wrap"><img class="lunara-review-grid-poster" src="https://example.test/poster.svg" alt=""></div><div class="lunara-review-grid-copy"><p class="lunara-review-grid-kicker">Lunara Film Review</p><h3 class="lunara-review-grid-title">${title}</h3><p class="lunara-review-grid-excerpt lunara-review-grid-quote">A complete quotation from the review that runs well past a single line and is clamped at three lines.</p></div></a></article>`).join('');
+                await relatedPage.setContent(`<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style><style>${sharedCss}\n${reviewCss}</style>${fixtures['review-normal'].authority}<body class="single-review"><main><div class="lunara-review-single-page"><article class="lunara-review-single"><section class="lunara-home-section lunara-review-related lunara-review-related--retention"><div class="lunara-home-section-head"><div><h2 class="lunara-section-title">More Lunara Film Criticism</h2><p class="lunara-home-section-kicker">Further Reading</p></div><a class="lunara-section-link" href="#reviews">Open Reviews</a></div><div class="lunara-review-grid lunara-review-related-grid" data-count="${count}">${relatedCards}</div></section></article></div></main></body>`, {waitUntil:'load'});
+                const related=await relatedPage.evaluate(()=>{
+                    const grid=document.querySelector('.lunara-review-related-grid');
+                    const cards=[...grid.querySelectorAll('.lunara-review-grid-card')].map(card=>{
+                        const title=card.querySelector('.lunara-review-grid-title'), poster=card.querySelector('.lunara-review-grid-poster-wrap'), copy=card.querySelector('.lunara-review-grid-copy');
+                        const text=title.firstChild, words=[]; let offset=0;
+                        for(const word of title.textContent.split(/(\s+)/)){ if(word.trim()){ const range=document.createRange(); range.setStart(text,offset); range.setEnd(text,offset+word.length); words.push({word,lines:range.getClientRects().length}); } offset+=word.length; }
+                        return {title:title.textContent,clamp:getComputedStyle(title).webkitLineClamp,whole:title.scrollHeight<=title.clientHeight+1,wrap:getComputedStyle(title).overflowWrap,brokenWords:words.filter(w=>w.lines>1).map(w=>w.word),posterLeftOfCopy:poster.getBoundingClientRect().right<=copy.getBoundingClientRect().left+1,top:card.getBoundingClientRect().top};
+                    });
+                    return {columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,width:document.documentElement.scrollWidth,cards};
+                });
+                const expectedColumns=width>=901?(count===4?2:3):width>=641?2:1;
+                assert(related.width<=width+1&&related.columns===expectedColumns&&related.cards.length===count, `Related ${count}@${width}: ${expectedColumns} column(s) with no overflow`, related);
+                assert(related.cards.every(card=>card.clamp==='none'&&card.whole&&card.wrap==='normal'&&card.brokenWords.length===0&&card.posterLeftOfCopy), `Related ${count}@${width}: every title shows whole with no word broken in half, the poster beside the copy`, related);
+                await relatedPage.close();
             }
             if(reviewOnly||selectedArticle||[640,641].includes(width)) continue;
             const method=await browser.newPage({viewport:{width,height:1000},javaScriptEnabled:false});

@@ -11,6 +11,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.148: the Debrief on a band of the film's own imagery; Related shows whole titles
+
+Dalton, on the live 3.2.147 review page: "this is too truncated and the debrief isnt dynamic enough" (the circled part was More Lunara Film Criticism).
+
+- **The Debrief band.** The section carries the review's hero still (or its poster when there is no still) as `--lunara-debrief-backdrop` and the class `has-backdrop`: blurred, darkened and faded under the module, drifting slowly on desktop where motion is allowed, flat on phones. The reviewed poster grows to 220px and stands on the band with a shadow. The signature data loses its cells and reads as a dossier row: a gold rule at the left of each item, the heading larger, the stars at 1.5rem.
+- **The pairing cards stand on the band.** No box, no fill: the 2px accent, the role label in the same colour, a 128px poster (96px on phones) with a shadow that brightens as the gold thread reaches it and lifts on hover; 28px between cards. Both effects are off under reduced motion. A missing-poster plate gets a hairline and a faint surface so it reads on the band. The role label returns to 13px (the house floor; 3.2.147 had set it to 12px and lowered the test's threshold, which the review panel caught).
+- **Related shows whole titles.** The grid used to fit as many 188px columns as the width allowed; at 1440px that left 116px for a title, so "Primetime" broke in half and every title was clamped at two lines with an ellipsis. Now: three across from 901px (two when there are two or four cards, by a new `data-count` on the grid), two to 641px, one on phones; a 112px poster beside the copy; the title whole with no clamp and no word broken; the excerpt three lines exactly (the shared 4.74em minimum height used to show a fourth, clipped line; the copy is a block so the clamp box survives).
+- Tests: the article layout browser test pins the cards' new rhythm (28px/20px apart, unboxed, 128px posters, 13px role) and adds a Related check at 320, 640, 641, 768 and 1440px for four and six cards: the column count per width and count, every title whole with no word split across lines, the poster beside the copy. `DESIGN.md` records the band, the unboxed card and the Related rule.
+
 ## 2026-11-05 — Theme 3.2.147: the Debrief is one composed module
 
 Dalton, after 3.2.146: "I really don't think that did anything whatsoever. How can you make that look dynamic and tightened?" 3.2.146 only trimmed spacing; the section was still a vertical stack of five full-width rows, so it read the same. 3.2.147 changes the composition.
