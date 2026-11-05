@@ -4092,9 +4092,11 @@ function lunara_output_review_single_studio_css() {
         overflow-x: clip !important;
     }
 
+    /* 3.2.146: the article grid's row gap is the one space between sections
+       (style.css reads the same variable); margins used to add to it twice. */
     body.single-review .lunara-review-single-body {
         margin-top: 0 !important;
-        margin-bottom: var(--lunara-review-single-section-gap) !important;
+        margin-bottom: 0 !important;
     }
 
     body.single-review .lunara-review-single-content {
@@ -4113,8 +4115,8 @@ function lunara_output_review_single_studio_css() {
     }
 
     body.single-review .lunara-review-single-debrief-section {
-        margin-top: var(--lunara-review-single-section-gap) !important;
-        margin-bottom: var(--lunara-review-single-section-gap) !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
 
     body.single-review .lunara-review-single-debrief-wrap.has-signature-media {
@@ -4132,7 +4134,7 @@ function lunara_output_review_single_studio_css() {
     }
 
     body.single-review .lunara-review-related {
-        margin-top: var(--lunara-review-single-section-gap) !important;
+        margin-top: 0 !important;
     }
 
     body.single-review .lunara-review-related .lunara-review-related-grid {
@@ -4158,10 +4160,6 @@ function lunara_output_review_single_studio_css() {
     <?php endif; ?>
 
     <?php if ( 'signature-forward' === $debrief_prominence ) : ?>
-    body.single-review .lunara-review-single-debrief-section {
-        padding-block: clamp(12px, 2vw, 24px) !important;
-    }
-
     body.single-review .lunara-review-single-debrief-wrap {
         border-color: rgba(244, 210, 126, 0.2) !important;
         box-shadow: 0 20px 46px rgba(0, 0, 0, 0.24) !important;

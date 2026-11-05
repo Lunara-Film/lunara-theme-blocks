@@ -1892,3 +1892,163 @@ body.single-review .lunara-pair-card-title {
         margin-top: 16px !important;
     }
 }
+
+/* lunara-review-debrief-tighten-css */
+/* 3.2.146: the Debrief and Pair It With sit closer together, and each pairing
+   row is as tall as its poster. The reading-column `article p` and `article h3`
+   rules used to reach into the cards (20.8px notes at 1.9 line-height, a 40px
+   title margin); the cards now own their type. Selectors carry the
+   `html body … article.lunara-review-single` prefix so they also win over the
+   2026-09-21 Customizer Additional CSS block, which can be deleted. */
+    html body.single-review .lunara-review-single-page .lunara-review-single-body {
+        margin-bottom: 0 !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief-section {
+        margin-block: 0 !important;
+        padding-block: 0 !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-related {
+        margin-top: 0 !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap {
+        padding: clamp(14px, 1.8vw, 20px) !important;
+    }
+
+    @media (min-width: 901px) {
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media {
+            grid-template-columns: minmax(180px, min(var(--lunara-review-single-debrief-poster-width, 300px), 240px)) minmax(0, 1fr) !important;
+            gap: clamp(16px, 2vw, 24px) !important;
+        }
+
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief-poster-shell {
+            max-width: min(var(--lunara-review-single-debrief-poster-width, 300px), 240px) !important;
+        }
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief-media {
+        gap: 12px !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief-media-copy {
+        padding-top: 10px !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-block--signature {
+        gap: 10px !important;
+    }
+
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-list--signature li {
+        padding: 10px 12px !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards {
+        margin: clamp(16px, 2vw, 24px) auto 0 !important;
+        padding: 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards-head {
+        margin: 0 0 14px !important;
+        padding: 0 0 10px !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards-title {
+        margin: 0 !important;
+        line-height: 1.1 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards-sub {
+        margin: 4px 0 0 !important;
+        font-size: 0.95rem !important;
+        line-height: 1.4 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards-method {
+        margin: 0 !important;
+        padding: 10px 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-cards-grid {
+        gap: 14px !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-body {
+        gap: 6px !important;
+        padding: 14px 22px !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-role {
+        line-height: 1.3 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-question {
+        margin: 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-title {
+        margin: 4px 0 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note {
+        margin: 0 !important;
+        font-size: 1rem !important;
+        line-height: 1.55 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-chips {
+        margin-top: auto !important;
+        padding-top: 8px !important;
+    }
+
+    @media (max-width: 640px) {
+        /* Phones: a 96px poster with the role, question and title beside it;
+           the note and the links run under both at the full column width. */
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card {
+            display: grid !important;
+            grid-template-columns: 96px minmax(0, 1fr) !important;
+            grid-template-rows: auto auto minmax(0, 1fr) auto auto !important;
+            align-items: start !important;
+            column-gap: 14px !important;
+            row-gap: 6px !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-poster {
+            grid-column: 1 !important;
+            grid-row: 1 / span 3 !important;
+            width: 96px !important;
+            max-height: none !important;
+            aspect-ratio: 2 / 3 !important;
+            margin: 0 !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-body {
+            display: contents !important;
+            padding: 0 !important;
+            border: 0 !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-role,
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-question,
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-title {
+            grid-column: 2 !important;
+            margin: 0 !important;
+            text-align: left !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note,
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-chips,
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-watch {
+            grid-column: 1 / -1 !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-note {
+            margin-top: 4px !important;
+        }
+
+        html body.single-review article.lunara-review-single .lunara-pair-cards .lunara-pair-card-chips {
+            justify-content: flex-start !important;
+            margin-top: 0 !important;
+        }
+    }
