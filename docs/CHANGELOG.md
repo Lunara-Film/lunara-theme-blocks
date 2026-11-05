@@ -11,6 +11,17 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.147: the Debrief is one composed module
+
+Dalton, after 3.2.146: "I really don't think that did anything whatsoever. How can you make that look dynamic and tightened?" 3.2.146 only trimmed spacing; the section was still a vertical stack of five full-width rows, so it read the same. 3.2.147 changes the composition.
+
+- **Band one: the reviewed film beside its signature data, at every width.** The poster (200px on desktop, 128px to 900px, 104px on phones) sits beside the Debrief heading, score, year and where-to-watch. The title and year under the poster are gone (the hero carries the title, the panel the year); the phone and tablet no longer stack a 220px poster above the panel.
+- **Band two: Pair It With as three compact argument cards.** From 901px the three pairings sit side by side across the Debrief's 1060px frame; the thread draws horizontally through them. Each card: a 104px poster beside the role, its Method question and the title (a new `lunara-pair-card-lead` group in the public renderer), the complete note under both at the card's width, the links pinned to the bottom; a 1px hairline, a faint surface and a 2px top accent in the pairing's thread colour (Theme Echo gold, Counter Program terracotta, Career Context blue), which the role label shares. Between 641px and 900px, one column with a 120px poster beside the whole argument. On phones, the 96px poster beside the lead with the note under it. The head is one line: title, subtitle and the Method link.
+- Result on the live Social Reckoning review: Debrief section 2,280px (before 3.2.146) to 856px at 1440px; 3,945px to 1,765px at 390px; 768px: 1,183px.
+- Markup: `inc/debrief-public.php` wraps the role, question and title in `div.lunara-pair-card-lead` (the shared components stylesheet gives it the body's 9px rhythm wherever it renders). `DESIGN.md` updates the pairing rules (compact cards, 1060px frame, the accent) and the Debrief frame rule.
+- The selectors keep the `html body … article.lunara-review-single` prefix, so the Customizer Additional CSS block of 2026-09-21 (860px frame, 170px posters, 20px gap) stays beaten; delete it.
+- Tests: `tests/article-layout-browser-runtime.js` pins the new geometry at 320, 640, 641, 768 and 1440px: the cards fill the frame; three equal-height cards 16px apart from 901px, one column 14px apart below; the poster width per mode (104/120/96px) beside the lead; the note under the poster at full width, or beside it between 641px and 900px; 15px notes, no clamp, every link present.
+
 ## 2026-11-05 — Theme 3.2.146: the Debrief and Pair It With sit closer together
 
 Dalton, on a review page: "This all needs to be tighter. It's way too spread out and doesn't look good." Measured on a live review at 1440px: the Debrief section was 2,280px tall. Each Pair It With row was 384px against a 255px poster, because the reading column's `article p` rule (20.8px at 1.9 line-height) and `article h3` rule (40px top margin) reached into the cards. Between the body and the Debrief, three spaces added up: the article grid gap (58px), the body's bottom margin (64px) and the section's top margin (64px), plus 24px of section padding.

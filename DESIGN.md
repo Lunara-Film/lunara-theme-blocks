@@ -55,8 +55,13 @@ and links to the owning Review editor. This does not alter pairing content.
   their visible titles to Echo, Counter or Context, including on phones. Allow
   natural wrapping without truncating the labels. Keep their full arguments and
   film links. Home and archive summaries use editorial columns. A full Review
-  gives each pairing its own row: poster beside the complete argument, stacking
-  at 640px and below. Neither layout uses a painted container inside another.
+  shows the three pairings as compact argument cards: a small poster beside
+  the role, its Method question and the title, with the complete note and the
+  links beneath at the card's width; three across from 901px, one column
+  below, and between 641px and 900px the poster beside the whole argument.
+  Each card carries a 2px top accent in its thread colour (Theme Echo gold,
+  Counter Program terracotta, Career Context blue). Neither layout uses a
+  painted container inside another.
 - The Home masthead reads as a printed program: a dateline (place, month,
   review count), the mark and dek, then "Now Showing": the lead
   story's landscape still, film and take, beside two companion reviews with
@@ -178,10 +183,13 @@ and links to the owning Review editor. This does not alter pairing content.
 - A Review with landscape artwork opens with that still at the Review Studio
   hero width, above the centered title group, with a one-line caption. Poster
   artwork stays in the reading column. Credits read as one centered line under
-  the title ("Directed by …"), never as a side rail. Each pairing row states
+  the title ("Directed by …"), never as a side rail. Each pairing card states
   its Method question beneath the role name.
 - Single Reviews own a centered 760px reading frame and below-article navigation.
-  Pairing rows use a centered 860px frame. Route CSS owns that geometry; late
+  The Debrief is one composed module in a 1060px frame: the reviewed film's
+  poster beside its signature data, then the pairing cards across the same
+  width, one article-grid gap from the reading column and from Related.
+  Route CSS owns that geometry; late
   Studio output may change supported presentation choices without restoring a
   side rail. Additional CSS must not be required to hold this layout together.
 - Journal leads with headlines; dates and useful taxonomy remain readable

@@ -596,6 +596,9 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
             $card  = '<article class="lunara-pair-card lunara-pair-card--' . esc_attr( (string) $row['slug'] ) . '"';
             $card .= '' !== $tt ? ' data-pair-tt="' . esc_attr( $tt ) . '"' : '';
             $card .= '>' . $media . '<div class="lunara-pair-card-body">';
+            // The lead group (role, question, title) sits beside the poster;
+            // the note and links follow at the card's width.
+            $card .= '<div class="lunara-pair-card-lead">';
             $card .= '<p class="lunara-pair-card-role">' . esc_html( (string) $row['label'] ) . '</p>';
             // The Method page owns each relationship's defining question; the
             // card repeats it under the role so the row says what it answers.
@@ -605,6 +608,7 @@ if ( ! function_exists( 'lunara_debrief_render_pair_card_group' ) ) {
                 $card .= '<p class="lunara-pair-card-question">' . esc_html( $question ) . '</p>';
             }
             $card .= '<h3 class="lunara-pair-card-title">' . $title_html . '</h3>';
+            $card .= '</div>';
             if ( '' !== trim( $note ) ) {
                 $card .= '<p class="lunara-pair-card-note">' . esc_html( $note ) . '</p>';
             }
