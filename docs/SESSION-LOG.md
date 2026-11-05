@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — Four plugins get their own repos; every repo is saved in two places (in progress)
+
+- **Asked:** Dalton, 12:58 CT: "all of the plug-ins that are ours have to be updated accordingly with the theme." Then "Yes, all five" (Lunara Film MCP, MCP Abilities, Database Engine, Dossier Audit, Editorial Spotlight get a repo, CI and the WordPress.com connection), and 13:12 CT: "I still want everything to be saved in two places." At 13:26 CT he said "perfect" to the plan: Lunara-Film is the only place that takes changes, and TheAntagonist2020 holds an automatic copy of every repo.
+- **Done:** four private repos, still empty: `lunara-plugin-database-engine`, `lunara-plugin-dossier-audit`, `lunara-plugin-editorial-spotlight`, `lunara-plugin-mcp-abilities`. `lunara-film-mcp` (main `bb44534`, equal to live 1.0.2 on all 9 file hashes) is connected on WordPress.com: `main` to `/wp-content/plugins/lunara-film-mcp`, manual deploys. `TheAntagonist2020/lunara-film-copies` (private) bundles all 12 Lunara-Film repos every hour into its `copies` release; the 7 public repos are copied.
+- **Live reference:** the four plugins as the wp-admin file viewer shows them at 14:05 CT, 18 files, 1.97 MB: IsOnWP MCP Abilities 0.8.0, Database Engine 1.2.0, Dossier Audit 1.0.0, Editorial Spotlight 1.0.0, all active.
+- **Holding (do not take):** the import into the four new repos, waiting for Dalton to attach `lunara-film-plugins-export.json` (the folder prompt for Downloads was refused automatically). Do not connect or deploy these repos before they hold the exact live code: a deploy replaces the plugin folder, so an empty repo removes a live plugin. Branch `claude/agreement-twelve-repos` is ready, not pushed, in the 8 existing repos; it lands with the new repos.
+- **Waiting on Dalton:** a fine-grained token (owner Lunara-Film, Contents: Read-only) saved as `LUNARA_FILM_READ_TOKEN` in `lunara-film-copies`. Until then the 5 private repos are not copied. A missing copy fails the run when it first appears, on every run started by hand, and once a day.
+- **Found:** the Database Engine payload (`/wp-content/plugins/lunara-database-engine/payload/*.json`) downloads without signing in. All 248 records are published reviews, so it shows nothing that the site does not already show.
+- **Next:** import, then one PR per new repo (agreement, CI, brand-name test, "Lunara Film" names, version bump), connect and deploy each plugin, the agreement branches, then the theme docs (`REPOSITORY-ALIGNMENT.md`, `OPERATORS-GUIDE.md`, `CHANGELOG.md`).
+
 ## 2026-11-05 — The Debrief and Pair It With are tighter (Theme 3.2.146)
 
 - **Asked:** Dalton, with a screenshot of a review's Reviewed Film card and Pair It With: "This all needs to be tighter. It's way too spread out and doesn't look good."
