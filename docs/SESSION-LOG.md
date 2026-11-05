@@ -29,8 +29,9 @@ there; `AGENTS.md` is the single canonical copy.)
 
 - **Asked:** nobody; the review panel (three lenses, adversarial verify) on 3.2.147/3.2.148 reported, and I confirmed on the live 3.2.148: at 901–1100px the three-up cards are 234–266px wide with a 90–122px lead; at 360px the where-to-watch chips (170px minimum columns) run past the 170px panel into the section's hidden overflow; "Reviewed Film" renders at the paragraph size.
 - **Built (Theme 3.2.149, PR open):** three across from 1101px (row cards to 1100px); phones get one chip per line and an 88px poster column under 421px; the kicker is a 13px uppercase label. The pairing test adds 1024px and a band-one assertion at every width.
-- **Live:** Theme 3.2.148 until Dalton's yes and deploy click.
-- **Next:** on yes: merge, deploy click, verify; then the Customizer block and the canary sentinels.
+- **Update, 16:40 CT (supersedes "Live" above):** Dalton said yes at 16:57 CT; PR #316 merged (`176edcc`, CI green); Dalton's deployment click landed at 22:32 UTC.
+- **Live:** Theme 3.2.149, build `3.2.149+20261105-223258` on three cache-separated reads; seven public pages return 200, complete, with no PHP error text. On the live Social Reckoning review: 1440px, three cards of 311px with a 167px lead beside each 128px poster; 1024px, one column of row cards (853px, the poster beside the whole argument); 360px, an 88px poster column beside a 186px panel with both where-to-watch chips inside it and the 13px "Reviewed Film" kicker inside its column; no horizontal overflow at any of the three widths.
+- **Next:** delete the 2026-09-21 Customizer Additional CSS block (Appearance, Customize, Additional CSS); then the stale canary sentinels (`tests/tools/lunara-journal-canonical-coherency-gate.js` and the Oscars gate want a `TiemposText-Bold.woff2` preload no theme code names, and the Journal gate reads 8 cards as blank-titled).
 
 ## 2026-11-05 — The Debrief on a band of the film's imagery; Related whole titles (Theme 3.2.148)
 
