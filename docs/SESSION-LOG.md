@@ -25,6 +25,17 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — Dispatch writes with Claude Opus 5 again; Journal notes match Dispatch 3.4 (Journal Foundation 1.5.4)
+
+- **Asked:** Dalton, 11:28 CT: "I don't believe that the Journal plugin is updated accordingly with the Dispatch plugin." Then, on the model question: "Opus 5, 16,000."
+- **Found:** the Journal plugin code was current (live 1.5.3 = main, no open PRs, Dispatch reports Foundation "Ready"). The drift was in the stored Control Plane configuration, which Dispatch obeys: 1.0.31 (saved 11:07 CT today, note "bc") had `claude-sonnet-4-6` and 2,200 tokens. Dispatch 3.4 is built for `claude-opus-5` with 16,000 tokens (adaptive thinking, stop-reason check, server-side fallback). The Foundation's own voice upgrade set Opus 5 on 2026-09-26 (1.0.27); a later version put Sonnet 4.6 back. The screen also still said "Only the cost-safe Dispatch 3.2.5 model allowlist is available".
+- **Changed (Dalton's OK):** Control Plane 1.0.32 (version ID 33): `claude` / `claude-opus-5` / 16,000 / every 4 hours. Everything else unchanged (schedule, sources on/on/off/on, GPT may publish, Notion off). The Dispatch settings screen now reads Active model `claude-opus-5`, max output tokens 16000.
+- **Shipped and live:** Journal Foundation 1.5.4 (#37, merge `bd68a62`), deployed by me: the OpenAI note says "Dispatch accepts only these two cost-safe OpenAI models"; the Claude field states what Dispatch is built for, read from the schema constants. Copy only.
+- **Live:** Theme 3.2.144; Dispatch 3.4.4 (also redeployed late this morning, same commit `8457a31`); Journal Foundation 1.5.4; 24 active plugins. Dispatch is in pitch mode: 775 pitches wait in the Hub, and it writes drafts only from approved pitches.
+- **Holding:** `style.css` dead-rule trim (Theme 3.2.145) on `claude/style-css-dead-rules`, not pushed, waiting for Dalton's yes. It removes 343 rules, 81 selectors and 1 keyframes whose classes appear on none of 626 crawled pages (10 also checked signed in), in none of 55 page scripts and in no repo code; WordPress, Jetpack, Blocksy and author classes are kept. Proof run: 48 pages, phone and desktop, menus and search open: 0 removed selectors match; computed styles identical except animated values that also differ when the file is compared with itself. Effect: minified 343 to 305 KB, brotli 38.9 to 35.1 KB; no measurable speed change (`style.css` parse takes about 15–20 ms on a 4x-slowed phone either way).
+- **Next:** phone style recalculation (350–600 ms per page load at 4x) is the real cost; find what drives it. Larger CSS lever: each page type uses only 3–15% of `style.css`.
+- **Found, not fixed:** origin times today are 200–340 ms slower than on 2026-10-31 on every page, robots.txt included, with the same code and plugins (points to the host). When Dalton is signed in, the toolbar adds 0.4–0.9 s per page (no Lunara Film code; visitors never get it). 776 rules (112 KB) style markup only old code can print (`functions.php` duplicates, `single.php`); retire with that code. The Oscars hero drift animates `background-position` and the Debrief orbit animates `left` (main-thread work every frame; both stop under reduced motion).
+
 ## 2026-10-31 — 24 active plugins; Dispatch runs the deployed copy (Dispatch 3.4.4)
 
 - **Asked:** Dalton, 18:06 CT, on the four plugin changes: "absolutely on the plug-ins ... let's get after those."
