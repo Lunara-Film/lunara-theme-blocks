@@ -1958,7 +1958,14 @@ body.single-review .lunara-pair-card-title {
 
     html body.single-review .lunara-review-single-page .lunara-review-single-debrief-media > .lunara-home-section-kicker {
         margin: 0 !important;
-        white-space: nowrap !important;
+        color: rgba(224, 196, 129, 0.92) !important;
+        font-family: var(--lunara-font-label, "Tiempos Text", Arial, sans-serif) !important;
+        font-size: 0.8125rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.16em !important;
+        line-height: 1.3 !important;
+        text-transform: uppercase !important;
+        white-space: normal !important;
     }
 
     html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-block--signature {
@@ -1996,8 +2003,33 @@ body.single-review .lunara-pair-card-title {
             gap: 14px !important;
         }
 
+        /* The panel beside the poster is narrow: one where-to-watch chip per line, nothing wider than the panel. */
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media > .lunara-review-single-debrief {
+            min-width: 0 !important;
+        }
+
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-list--signature li {
+            min-width: 0 !important;
+        }
+
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-review-watch-links {
+            grid-template-columns: minmax(0, 1fr) !important;
+        }
+
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-review-watch-card {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+    }
+
+    @media (max-width: 420px) {
+        html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media {
+            grid-template-columns: 88px minmax(0, 1fr) !important;
+        }
+
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-media > .lunara-home-section-kicker {
-            font-size: 0.72rem !important;
+            letter-spacing: 0.1em !important;
         }
     }
 
@@ -2177,7 +2209,9 @@ body.single-review .lunara-pair-card-title {
         margin-top: 8px !important;
     }
 
-    @media (min-width: 901px) {
+    /* Three across only once a card can be about 300px wide (3.2.149: from
+       1101px; at 901px a card was 234px and the lead beside the poster 90px). */
+    @media (min-width: 1101px) {
         html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-cards-grid {
             grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             gap: 28px !important;
@@ -2185,7 +2219,7 @@ body.single-review .lunara-pair-card-title {
     }
 
     /* One wide column: the poster beside the whole argument. */
-    @media (min-width: 641px) and (max-width: 900px) {
+    @media (min-width: 641px) and (max-width: 1100px) {
         html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card {
             --lunara-pair-card-poster: 128px;
         }
@@ -2251,7 +2285,7 @@ body.single-review .lunara-pair-card-title {
         to { transform: scale(1.1) translateY(-1.5%); }
     }
 
-    @media (prefers-reduced-motion: no-preference) and (min-width: 901px) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) {
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-section.has-backdrop::before {
             animation: lunaraDebriefDrift 34s ease-in-out infinite alternate !important;
         }
@@ -2262,8 +2296,15 @@ body.single-review .lunara-pair-card-title {
         box-shadow: 0 22px 44px rgba(0, 0, 0, 0.5) !important;
     }
 
-    html body.single-review .lunara-review-single-page .lunara-review-single-debrief-section.has-backdrop .lunara-review-single-debrief-media > .lunara-home-section-kicker {
-        color: rgba(224, 196, 129, 0.92) !important;
+    /* The old boxed look drew a faint gradient and a rotated sheen behind the
+       panel (::before and ::after, 321px wide and clipped). On the band they
+       are invisible and only widen the panel's scroll box; gone. */
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief::before,
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief::after,
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-block--signature::before,
+    html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-block--signature::after {
+        content: none !important;
+        display: none !important;
     }
 
     /* The signature data as a dossier row: no cells, a gold rule at each edge. */

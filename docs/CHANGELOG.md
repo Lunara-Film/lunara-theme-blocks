@@ -11,6 +11,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.149: the three-up grid waits for room; the phone panel keeps its chips
+
+Three findings from the review panel on 3.2.147/3.2.148, each confirmed on the live site.
+
+- **Three across from 1101px, not 901px.** At 901px a pairing card was 234px wide and the lead beside its 128px poster 90px; at 1024px (iPad landscape) 266px and 122px, with "Counter Program" on two lines and titles on three. The row card (poster beside the whole argument) now serves 641px to 1100px, and the backdrop drift starts at 1101px with the grid.
+- **The phone panel keeps its chips.** Beside a 104px poster at 360px the signature panel is 170px wide, but the where-to-watch chips kept their 170px minimum columns and ran past the panel into the section's hidden overflow ("Columbia Pictures]" and "Theatrical [Sony Pictures" were cut). Phones now get one chip per line at the panel's width, and under 421px the poster column is 88px.
+- **"Reviewed Film" is a label.** The kicker over the poster took the reading column's 1.3rem paragraph size (20.8px bold on desktop, 11.5px on phones). It is now the 13px uppercase label the Signature kicker uses, at every width.
+- Tests: the pairing loop adds 1024px and asserts band one at every width (two columns, the poster column per mode, the copy hidden, a 13px kicker, nothing wider than the panel, chips inside it).
+
 ## 2026-11-05 — Theme 3.2.148: the Debrief on a band of the film's own imagery; Related shows whole titles
 
 Dalton, on the live 3.2.147 review page: "this is too truncated and the debrief isnt dynamic enough" (the circled part was More Lunara Film Criticism).
