@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — Session hold at 17:45 CT: Theme 3.2.150 waits in PR #318
+
+- **Asked:** Dalton, 17:45 CT: "save this i have to restart."
+- **Live:** Theme 3.2.149 (#316, merge `176edcc`), build `3.2.149+20261105-223258`, verified at 1440, 1024 and 360px (see the 3.2.149 entry). Nothing is deployed from this hold.
+- **Holding (do not take without reading #318):** Theme 3.2.150, the review panel's polish, is PR #318 on `claude/relaxed-cori-addo6t` at `1438618`: CI green, mergeable, draft, waiting for Dalton's yes. It drops the Pair It With head's hairline when the thread is drawn, starts the Oscar Ledger pill flush with a 44px link, ends the band's `max-width` bounds at .98px, and pins the frame centring and the links' bottom in the layout test. Its own session-log entry rides in the PR and will conflict with this one at the top of the file: keep both, newest first.
+- **Next:** on Dalton's yes, merge #318 with its exact head SHA, he clicks Trigger deployment, verify the live build and the Debrief at 1440/1024/360px, log it. Then: delete the 2026-09-21 Customizer Additional CSS block (the theme carries and out-ranks every rule in it); decide the Site Studio Debrief poster-width control (capped at 220px by the band, so it no longer changes the page: honour it up to 300px, or retire it); update the canary sentinels (`tests/tools/lunara-journal-canonical-coherency-gate.js` and the Oscars gate want a `TiemposText-Bold.woff2` preload no theme code names; the Journal gate reads 8 cards as blank-titled).
+- **Found, not fixed:** on phones the column under the Debrief poster is empty beside a tall panel; the hidden title and year under the poster are still printed (`inc/debrief-public.php`); the thread's horizontal mode is untested under the route CSS (the layout test runs without JavaScript); `inc/debrief.php` and `inc/pairing-showcase.php` build pair cards without the lead group the public renderer has; The Social Reckoning's where-to-watch note carries a stray "]"; The Uprising's title is missing its dash.
+- **How today went, for the next session:** the Debrief on a review page went from a 2,280px stack (3.2.145) to a composed module on a band of the film's still: 3.2.146 trimmed spacing, 3.2.147 recomposed it (three pairing cards, a lead group in the public renderer), 3.2.148 added the backdrop band and fixed Related's cut titles, 3.2.149 fixed the panel's findings. Deploys are Dalton's click on WordPress.com; this cloud session has no browser signed in there.
+
 ## 2026-11-05 — Three-up from 1101px; the phone panel keeps its chips (Theme 3.2.149)
 
 - **Asked:** nobody; the review panel (three lenses, adversarial verify) on 3.2.147/3.2.148 reported, and I confirmed on the live 3.2.148: at 901–1100px the three-up cards are 234–266px wide with a 90–122px lead; at 360px the where-to-watch chips (170px minimum columns) run past the 170px panel into the section's hidden overflow; "Reviewed Film" renders at the paragraph size.
