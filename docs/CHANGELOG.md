@@ -11,6 +11,17 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.146: the Debrief and Pair It With sit closer together
+
+Dalton, on a review page: "This all needs to be tighter. It's way too spread out and doesn't look good." Measured on a live review at 1440px: the Debrief section was 2,280px tall. Each Pair It With row was 384px against a 255px poster, because the reading column's `article p` rule (20.8px at 1.9 line-height) and `article h3` rule (40px top margin) reached into the cards. Between the body and the Debrief, three spaces added up: the article grid gap (58px), the body's bottom margin (64px) and the section's top margin (64px), plus 24px of section padding.
+
+- One space between sections: the article grid's row gap now reads the Site Studio section-gap variable (`--lunara-review-single-section-gap`, 64px on the live site); the body, Debrief and Related margins that used to add to it are 0, and the signature-forward padding is gone.
+- Debrief: wrap padding 30px to 20px, poster column capped at 240px, panel gaps trimmed.
+- Pair It With: section padding 24px to 0, head 163px to 112px (the `article h2` margin no longer applies), rows 14px apart (was 20px), copy inset 14px/22px (was 20px/28px), notes 16px at 1.55 line-height, title margin 4px. A desktop row is now exactly its 255px poster. Phones: a 96px poster beside the role, question and title, with the note and links under both at the full column width (was a full-width poster above the whole argument; each row was 857px).
+- Result at 1440px: Debrief section 2,280px to 1,552px; rows 384px to 255px. At 390px: 3,945px to 2,091px.
+- The selectors carry an `html body … article.lunara-review-single` prefix so they win over the Customizer Additional CSS block dated 2026-09-21, which still sets the old 20px gap and 20px/28px inset; that block can be deleted.
+- Tests: `tests/article-layout-browser-runtime.js` pins the new rhythm (14px gap, 14px/22px inset, 16px notes, phone poster beside the title with the full-width note).
+
 ## 2026-11-05 — Theme 3.2.145: `style.css` loses 343 rules that no page can use
 
 A read-only map of `style.css` on the live site found 343 rules, and 81 more selectors inside kept rules, that style classes appearing nowhere. No public page prints them (626 pages crawled; 10 also checked signed in), no page script adds them (55 scripts), and no theme or plugin code names them. Most belonged to old homepage designs (the Living Pulse hero, the Database and Oscar spotlights, Deep Cut stats, the old hero grid and Journal cards), plus print rules for those classes.

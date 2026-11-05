@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — The Debrief and Pair It With are tighter (Theme 3.2.146)
+
+- **Asked:** Dalton, with a screenshot of a review's Reviewed Film card and Pair It With: "This all needs to be tighter. It's way too spread out and doesn't look good."
+- **Found (live, 1440px):** the Debrief section was 2,280px tall. Pair It With rows were 384px against a 255px poster because the reading column's `article p` (20.8px, 1.9 line-height) and `article h3` (40px top margin) rules reached into the cards; the section head alone was 163px. Body to Debrief: grid gap 58px + body margin 64px + section margin 64px + 24px padding. The Customizer Additional CSS block of 2026-09-21 still sets the 20px row gap and the 20px/28px inset with `!important`.
+- **Changed (Theme 3.2.146, PR open, not merged):** one section space (the article grid row gap reads the Studio section-gap variable; margins 0); Debrief wrap 30px to 20px padding, poster capped at 240px; Pair It With head 112px, rows 14px apart with a 14px/22px inset, 16px notes, a desktop row is its poster's height; phones get a 96px poster beside the title with the full-width note under it. The theme's selectors out-rank the Customizer block. Section 2,280px to 1,552px at 1440px; 3,945px to 2,091px at 390px.
+- **Verified:** `tests/article-layout-browser-runtime.js` (updated to the new rhythm) passes locally with the full PHP suite; the change was previewed on the live Social Reckoning review by injecting the new rules.
+- **Live:** unchanged (Theme 3.2.145). Deploy follows Dalton's look at the PR.
+- **Next:** delete the 2026-09-21 Customizer Additional CSS block once 3.2.146 is live (the theme carries every rule in it now).
+- **Found, not fixed:** on a 390px phone the Reviewed Film poster above the panel is still 330px tall; a side-by-side treatment there is a separate decision.
+
 ## 2026-11-05 — Dispatch writes with Claude Opus 5 again; Journal notes match Dispatch 3.4 (Journal Foundation 1.5.4)
 
 - **Asked:** Dalton, 11:28 CT: "I don't believe that the Journal plugin is updated accordingly with the Dispatch plugin." Then, on the model question: "Opus 5, 16,000."
