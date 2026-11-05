@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — The Debrief on a band of the film's imagery; Related whole titles (Theme 3.2.148)
+
+- **Asked:** Dalton, 14:50 CT, with a full-page screenshot of the live 3.2.147 review, More Lunara Film Criticism circled: "this is too truncated and the debrief isnt dynamic enough".
+- **Shipped and live:** Theme 3.2.147 (#313, merge `42a8b27`, deployed by Dalton's click at 15:28 UTC; build `3.2.147+20261105-202837`). The review panel on 3.2.147 confirmed one finding: the pairing role label at 12px, under the 13px house floor; fixed in 3.2.148.
+- **Built (Theme 3.2.148, PR open):** the Debrief section carries the review's hero still (else the poster) as a blurred, darkened backdrop that drifts slowly on desktop; the reviewed poster 220px with a shadow; the signature data as a dossier row without cells; the pairing cards unboxed on the band with 128px posters that brighten as the thread reaches them and lift on hover. Related: three across from 901px (two for two or four cards), whole titles with no clamp and no word broken, the excerpt exactly three lines, the poster beside the copy. Section heights on the live Social Reckoning review: 981px at 1440px (was 856px in 3.2.147, 2,280px before today); Related 605px for five cards.
+- **Verified:** article layout browser test (review scope) and the PHP suite pass; previews at 1440, 768 and 390px rendered on the live review with the backdrop and the grid count emulated.
+- **Live:** Theme 3.2.147 until Dalton's yes and deploy click.
+- **Next:** on yes: merge, Dalton triggers the deployment, verify the live build and both sections; then delete the 2026-09-21 Customizer Additional CSS block.
+- **Found, not fixed:** the canary sentinels (see the 3.2.146 entry); the stray bracket in The Social Reckoning's where-to-watch note; the missing dash in The Uprising's title ("The Uprising  What Could Have Been", two spaces).
+
 ## 2026-11-05 — The Debrief as one composed module (Theme 3.2.147)
 
 - **Asked:** Dalton, 14:20 CT, after 3.2.146 went live: "I really don't think that did anything whatsoever. How can you make that look dynamic and tightened?"

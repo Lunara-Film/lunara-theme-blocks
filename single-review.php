@@ -406,7 +406,19 @@ if ( have_posts() ) :
                 </section>
 
                 <?php if ( ! empty( $debrief_render['has_content'] ) ) : ?>
-                <section class="lunara-review-single-debrief-section lunara-review-single-debrief-shell<?php echo $is_full_spoiler ? ' lunara-spoiler-protected-content lunara-spoiler-protected-content--module' : ''; ?>" data-lunara-site-studio-section="debrief"<?php echo $is_full_spoiler ? ' data-lunara-spoiler-protected data-lunara-spoiler-post="' . esc_attr( $post_id ) . '"' : ''; ?>>
+                <?php
+                // 3.2.148: the Debrief sits on a band of the review's own
+                // imagery: the hero still, or the reviewed poster when there
+                // is no still. Without either the band stays flat.
+                $debrief_backdrop = '';
+                $debrief_hero     = function_exists( 'lunara_get_review_visual_slot_data' ) ? lunara_get_review_visual_slot_data( $post_id, 'hero_banner' ) : array();
+                if ( ! empty( $debrief_hero['url'] ) ) {
+                    $debrief_backdrop = (string) $debrief_hero['url'];
+                } elseif ( ! empty( $debrief_render['media_html'] ) && preg_match( '/\ssrc="([^"]+)"/i', (string) $debrief_render['media_html'], $debrief_poster_match ) ) {
+                    $debrief_backdrop = html_entity_decode( (string) $debrief_poster_match[1], ENT_QUOTES, 'UTF-8' );
+                }
+                ?>
+                <section class="lunara-review-single-debrief-section lunara-review-single-debrief-shell<?php echo '' !== $debrief_backdrop ? ' has-backdrop' : ''; ?><?php echo $is_full_spoiler ? ' lunara-spoiler-protected-content lunara-spoiler-protected-content--module' : ''; ?>" data-lunara-site-studio-section="debrief"<?php echo '' !== $debrief_backdrop ? ' style="--lunara-debrief-backdrop:url(' . esc_url( $debrief_backdrop ) . ')"' : ''; ?><?php echo $is_full_spoiler ? ' data-lunara-spoiler-protected data-lunara-spoiler-post="' . esc_attr( $post_id ) . '"' : ''; ?>>
                     <div class="lunara-review-single-debrief-wrap<?php echo ! empty( $debrief_render['media_html'] ) ? ' has-signature-media' : ''; ?>">
                         <?php if ( ! empty( $debrief_render['media_html'] ) ) : ?>
                             <?php echo $debrief_render['media_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -439,7 +451,7 @@ if ( have_posts() ) :
                             </a>
                         </div>
 
-                        <div class="lunara-review-grid lunara-review-related-grid">
+                        <div class="lunara-review-grid lunara-review-related-grid" data-count="<?php echo esc_attr( (string) (int) $related_query->post_count ); ?>">
                             <?php
                             while ( $related_query->have_posts() ) :
                                 $related_query->the_post();
