@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.144
+Version: 3.2.145
 Template: blocksy
 Requires at least: 6.2
 Tested up to: 6.4
@@ -357,7 +357,6 @@ body {
     }
 }
 
-
 /* ========================================
    SECTIONS
    ======================================== */
@@ -468,16 +467,6 @@ body {
 
 .lunara-btn:hover {
     background: var(--lunara-gold);
-    color: #0a1520 !important;
-}
-
-.lunara-btn-solid {
-    background: var(--lunara-gold);
-    color: #0a1520 !important;
-}
-
-.lunara-btn-solid:hover {
-    background: var(--lunara-gold-light);
     color: #0a1520 !important;
 }
 
@@ -592,16 +581,6 @@ body.single-post article h1,
     color: var(--lunara-text);
 }
 
-/* Featured Essay */
-.lunara-featured-essay {
-    background: linear-gradient(135deg, var(--lunara-bg-secondary) 0%, var(--lunara-bg-card) 100%);
-    border: 1px solid var(--lunara-border);
-    border-radius: 0;
-    padding: 50px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
 /* ========================================
    SEARCH
    ======================================== */
@@ -626,40 +605,6 @@ body.single-post article h1,
 .lunara-search-input:focus {
     outline: none;
     border-color: var(--lunara-gold);
-}
-
-/* ========================================
-   AWARDS TABLE
-   ======================================== */
-
-.lunara-awards-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-}
-
-.lunara-awards-table th {
-    background: var(--lunara-bg-secondary);
-    color: var(--lunara-gold);
-    padding: 15px;
-    text-align: left;
-    border-bottom: 2px solid var(--lunara-gold);
-}
-
-.lunara-awards-table td {
-    padding: 15px;
-    border-bottom: 1px solid var(--lunara-border);
-    color: var(--lunara-text);
-}
-
-.lunara-awards-table tr:hover {
-    background: rgba(201, 169, 97, 0.05);
-}
-
-.lunara-awards-table .highlight {
-    background: rgba(201, 169, 97, 0.1);
-    color: var(--lunara-gold);
-    font-weight: 600;
 }
 
 /* ========================================
@@ -870,41 +815,6 @@ body.single-post article h1,
     min-width: 0;
 }
 
-/* Debrief: optional poster thumbnails (from Awards DB poster library) */
-.lunara-debrief .lunara-debrief-pairing,
-.lunara-pair-it-with-block .lunara-debrief-pairing{
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.lunara-debrief .lunara-debrief-thumb-wrap,
-.lunara-pair-it-with-block .lunara-debrief-thumb-wrap{
-    flex: 0 0 auto;
-}
-
-.lunara-debrief .lunara-debrief-thumb,
-.lunara-pair-it-with-block .lunara-debrief-thumb{
-    width: 140px;
-    height: auto;
-    border-radius: 0;
-    border: 1px solid rgba(201, 169, 97, 0.28);
-    box-shadow: 0 16px 36px rgba(0,0,0,0.55);
-}
-
-.lunara-debrief .lunara-debrief-pairing-text,
-.lunara-pair-it-with-block .lunara-debrief-pairing-text{
-    display: block;
-    min-width: 0;
-}
-
-@media (max-width: 720px){
-    .lunara-debrief .lunara-debrief-thumb,
-    .lunara-pair-it-with-block .lunara-debrief-thumb{
-        width: 46px;
-    }
-}
-
 /* Pair It With links + reference chips */
 .lunara-pair-title-link{
     color: inherit;
@@ -953,7 +863,6 @@ body.single-post article h1,
     opacity: 0.9;
 }
 
-
 @media (max-width: 768px){
     .lunara-debrief-chip{ margin-left: 8px; padding: 4px 9px; }
 }
@@ -998,13 +907,6 @@ body.single-post article h1,
     padding-right: var(--lunara-header-side-pad, 48px);
 }
 
-.lunara-header .lunara-header-items {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    column-gap: clamp(16px, 2vw, 30px);
-}
-
 /* Nav list: horizontal on desktop */
 .lunara-nav .lunara-nav-list,
 .lunara-nav .menu {
@@ -1013,16 +915,6 @@ body.single-post article h1,
     margin: 0;
     padding: 0;
     align-items: center;
-}
-
-/* Hamburger: hidden on desktop, visible on mobile */
-.lunara-header-trigger {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    color: var(--lunara-text, #FAFBFC);
 }
 
 /* Mobile panel: off-canvas, hidden by default */
@@ -1056,24 +948,6 @@ body.single-post article h1,
 
 .lunara-mobile-panel.is-open .lunara-panel-inner {
     transform: translateX(0);
-}
-
-.lunara-panel-content {
-    padding: 24px;
-}
-
-.lunara-panel-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    margin-bottom: 16px;
-    color: var(--lunara-text, #FAFBFC);
-}
-
-.lunara-panel-close:hover {
-    color: var(--lunara-gold, #c9a961);
 }
 
 /* Mobile menu list */
@@ -1127,38 +1001,12 @@ body.single-post article h1,
     letter-spacing: 0.06em;
 }
 
-/* Prevent body scroll when panel is open */
-body.lunara-panel-open {
-    overflow: hidden;
-}
-
 /* Header actions group (search + hamburger) */
 .lunara-header-actions {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-left: auto;
-}
-
-/* Search trigger button */
-.lunara-search-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 0;
-    color: var(--lunara-text, #FAFBFC);
-    border: 1px solid rgba(201,169,97,0.14);
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.lunara-search-trigger:hover {
-    color: var(--lunara-gold, #c9a961);
-    border-color: rgba(201,169,97,0.32);
-    background: rgba(201,169,97,0.06);
-    transform: translateY(-1px);
 }
 
 /* Constrain embedded menu SVGs so custom Oscars icons can't blow up the whole viewport. */
@@ -1206,12 +1054,6 @@ body.lunara-panel-open {
 .lunara-search-overlay.is-open {
     opacity: 1;
     visibility: visible;
-}
-
-.lunara-search-overlay-inner {
-    width: 90%;
-    max-width: 680px;
-    position: relative;
 }
 
 .lunara-search-overlay .lunara-search-form {
@@ -1278,9 +1120,6 @@ body.lunara-panel-open {
 @media (max-width: 900px) {
     .lunara-nav {
         display: none;
-    }
-    .lunara-header-trigger {
-        display: flex;
     }
 }
 
@@ -1374,13 +1213,11 @@ body.lunara-panel-open {
     color: var(--lunara-gold-light) !important;
 }
 
-.lunara-header .lunara-header-trigger,
 .lunara-header button {
     border-radius: 0;
     transition: color .2s ease, background-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
-.lunara-header .lunara-header-trigger:hover,
 .lunara-header button:hover {
     transform: translateY(-1px);
     background: rgba(201,169,97,.08);
@@ -1502,22 +1339,6 @@ body.lunara-panel-open {
     letter-spacing: 0.14em;
 }
 
-.lunara-debrief-seal-mark{
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    margin-left: 0.18em; /* optical centering because of spacing */
-    line-height: 1;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
-}
-
-.lunara-debrief-seal-text{
-    margin-top: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    opacity: 0.92;
-}
-
 /* Responsive */
 @media (max-width: 768px){
     .lunara-debrief-block{
@@ -1546,12 +1367,7 @@ body.lunara-panel-open {
     .lunara-debrief-seal-inner{
         inset: 16px;
     }
-
-    .lunara-debrief-seal-mark{
-        font-size: 18px;
-    }
 }
-
 
 /* ========================================
    OSCAR LEDGER PILL (links into Lunara DB)
@@ -1603,8 +1419,7 @@ textarea,
 .lunara-container,
 .lunara-card,
 .lunara-home-hero,
-.lunara-home-section,
-.lunara-database-callout-card {
+.lunara-home-section {
     font-family: var(--lunara-body-font-stack, Georgia, "Times New Roman", Times, serif);
 }
 
@@ -1636,11 +1451,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     text-align: center;
 }
 
-.lunara-home-hero-inner {
-    max-width: 920px;
-    margin: 0 auto;
-}
-
 .lunara-home-hero-kicker {
     margin: 0 0 10px;
     color: var(--lunara-gold-light);
@@ -1664,14 +1474,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     color: var(--lunara-text);
     font-size: 1.14rem;
     line-height: 1.7;
-}
-
-.lunara-home-hero-actions {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 28px;
 }
 
 .lunara-home-section {
@@ -1772,10 +1574,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     color: var(--lunara-slider-color, #e0c481);
 }
 
-.lunara-poster-carousel-wrap {
-    overflow: hidden;
-}
-
 .lunara-poster-carousel-track {
     display: grid;
     grid-auto-flow: column;
@@ -1796,16 +1594,12 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     scroll-snap-align: start;
 }
 
-.lunara-poster-card-link,
-.lunara-ledger-card-link,
 .lunara-review-grid-link {
     display: block;
     color: inherit;
     text-decoration: none;
 }
 
-.lunara-poster-card-image-wrap,
-.lunara-ledger-poster-wrap,
 .lunara-review-grid-poster-wrap {
     position: relative;
     overflow: hidden;
@@ -1816,7 +1610,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
 }
 
 .lunara-poster-card-image,
-.lunara-ledger-poster,
 .lunara-review-grid-poster {
     width: 100%;
     height: 100%;
@@ -1834,10 +1627,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     clip: rect(0, 0, 0, 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
-}
-
-.lunara-poster-card-copy {
-    padding: 14px 2px 0;
 }
 
 .lunara-poster-card-kicker {
@@ -1866,57 +1655,7 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
     overflow: hidden;
 }
 
-.lunara-poster-card-image-wrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(180deg, rgba(4, 11, 20, 0.9) 0%, rgba(4, 11, 20, 0.44) 24%, rgba(4, 11, 20, 0.14) 46%, rgba(4, 11, 20, 0.22) 72%, rgba(4, 11, 20, 0.82) 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.lunara-poster-card-title-overlay {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    z-index: 2;
-    color: #f7e7b0;
-    font-family: var(--lunara-font-display, "Cormorant Garamond", serif);
-    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.55rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: 0.01em;
-    text-wrap: balance;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.52);
-    pointer-events: none;
-}
-
-/* Database callout */
-.lunara-database-callout-card {
-    display: grid;
-    gap: 22px;
-    padding: 28px;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-}
-
-.lunara-database-callout-text {
-    max-width: 880px;
-    margin: 0;
-    color: var(--lunara-text);
-    font-size: 1.06rem;
-    line-height: 1.72;
-}
-
 /* Ledger + latest grids */
-.lunara-ledger-grid,
 .lunara-review-grid {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1963,12 +1702,6 @@ h1, h2, h3, h4, h5, h6, .site-title, .entry-title, .lunara-site-title {
 
 .lunara-review-grid-quote {
     color: var(--lunara-gold-light);
-}
-
-.lunara-ledger-card-meta {
-    margin: 0;
-    color: var(--lunara-text-muted);
-    font-size: 0.88rem;
 }
 
 /* Metadata bar */
@@ -3937,18 +3670,9 @@ footer.site-footer .lunara-footer-copyright {
         grid-template-columns: 1fr;
     }
 
-    .lunara-debrief .lunara-debrief-thumb {
-        width: 64px;
-    }
-
     .lunara-debrief-chip {
         margin-left: 0;
         margin-top: 6px;
-    }
-
-    .lunara-debrief .lunara-debrief-pairing {
-        flex-direction: column;
-        gap: 10px;
     }
 
     .lunara-debrief-value {
@@ -4262,22 +3986,6 @@ footer.site-footer .lunara-footer-copyright {
 
 .lunara-review-single-debrief .lunara-debrief-chip {
     margin-left: 0;
-}
-
-.lunara-debrief-title-link {
-    color: var(--lunara-gold);
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.lunara-debrief-title-link:hover,
-.lunara-debrief-title-link:focus-visible {
-    color: #fff2c5;
-}
-
-.lunara-review-single-debrief .aat-ledger-pill {
-    margin-left: 10px;
-    vertical-align: middle;
 }
 
 .lunara-review-archive-shell {
@@ -4846,7 +4554,6 @@ footer.site-footer .lunara-footer-copyright {
 }
 
 @media (max-width: 1200px) {
-    .lunara-ledger-grid,
     .lunara-review-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
@@ -4895,7 +4602,6 @@ footer.site-footer .lunara-footer-copyright {
         padding: 0 24px 56px;
     }
 
-    .lunara-ledger-grid,
     .lunara-review-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -4958,7 +4664,6 @@ footer.site-footer .lunara-footer-copyright {
         align-items: center;
     }
 
-    .lunara-ledger-grid,
     .lunara-review-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -5167,7 +4872,6 @@ footer.site-footer .lunara-footer-copyright {
 
 /* Phase 1 + Phase 2 upgrades */
 .lunara-score-badge{position:absolute;top:12px;right:12px;background:rgba(10,21,32,.88);color:var(--lunara-gold-light);border:1px solid var(--lunara-border);padding:8px 10px;border-radius:0;font-size:0.8125rem;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.lunara-inline-score{color:var(--lunara-gold-light);margin-left:8px;}
 .lunara-poster-card-meta,.lunara-review-grid-meta{margin:6px 0 0;color:var(--lunara-text-muted);font-size:.95rem;line-height:1.4;}
 .lunara-review-grid-updated,.lunara-dispatch-archive-updated{margin:8px 0 0;color:rgba(224,196,129,.94);font-size:0.8125rem;letter-spacing:0;text-transform:none}
 .lunara-review-grid-copy{display:grid;gap:8px;align-content:start;padding-top:12px;}
@@ -5211,88 +4915,41 @@ footer.site-footer .lunara-footer-copyright {
 .lunara-review-feature-quote{color:var(--lunara-gold-light,#e0c481)}
 .lunara-review-grid-footer{display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
 .lunara-review-grid-ledger{display:flex;align-items:center;min-height:32px}
-.lunara-review-grid-card .aat-ledger-pill{max-width:100%}
 .lunara-review-grid-card .lunara-oscar-ledger{font-size:0.8125rem}
 .lunara-review-grid-poster,.lunara-review-grid-poster-placeholder{width:100%;height:100%;display:block;object-fit:cover}
 .lunara-review-grid-poster-placeholder{min-height:100%;display:grid;align-content:end;justify-items:start;padding:22px;background:linear-gradient(180deg, rgba(23,44,67,.92), rgba(7,15,26,.98));}
 .lunara-review-grid-poster-placeholder::after{content:'No poster in archive';display:inline-block;margin-top:12px;padding:6px 10px;border-radius:0;border:1px solid rgba(201,169,97,.26);color:rgba(224,196,129,.92);font-size:0.8125rem;letter-spacing:.14em;text-transform:uppercase}
 .lunara-journal-single-media:hover{transform:translateY(-4px);border-color:rgba(201,169,97,.34);box-shadow:0 30px 66px rgba(0,0,0,.28);}
-.lunara-database-callout-card{border:0;border-radius:0;padding:34px;background:transparent;box-shadow:none;}
 .lunara-home-hero-copy{max-width:860px;}
 .lunara-review-archive-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:26px;}
 .lunara-home-section-kicker{margin:0 0 8px;color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:0;text-transform:none}
 .lunara-home-hero{position:relative;overflow:hidden}
 .lunara-home-hero::before{content:'';position:absolute;inset:auto auto -120px -80px;width:280px;height:280px;border-radius:0;background:transparent;pointer-events:none}
-.lunara-home-hero-shell{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(380px,.98fr);gap:44px;align-items:stretch}
-.lunara-home-hero.has-pulse{text-align:left}
-.lunara-home-hero.has-pulse .lunara-home-hero-inner{max-width:none;margin:0}
-.lunara-home-hero-copy-panel{padding:36px 0 18px}
-.lunara-home-hero.has-pulse .lunara-home-hero-actions{justify-content:flex-start}
 .lunara-home-pulse-card{display:grid;gap:22px;padding:26px;border:0;border-radius:0;background:transparent;box-shadow:none}
 .lunara-home-pulse-card-top{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:26px;align-items:end;padding:28px;border-radius:0;background:transparent;background-size:cover;background-position:center;position:relative;overflow:hidden}
 .lunara-home-pulse-card-top::after{content:'';position:absolute;inset:0;background:transparent;pointer-events:none}
-.lunara-home-pulse-card-copy,.lunara-home-pulse-poster{position:relative;z-index:1}
+.lunara-home-pulse-poster{position:relative;z-index:1}
 .lunara-home-pulse-kicker{margin:0 0 8px;color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:0;text-transform:none}
 .lunara-home-pulse-title{margin:0 0 10px;color:#fff !important;font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.02;text-transform:none}
 .lunara-home-pulse-summary{margin:0;color:#f1ead9;font-size:.98rem;line-height:1.65}
-.lunara-home-pulse-feature{display:grid;gap:6px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)}
 .lunara-home-pulse-feature-label{color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:.14em;text-transform:uppercase}
 .lunara-home-pulse-feature-title{color:var(--lunara-gold);font-size:1.18rem;line-height:1.1}
-.lunara-home-pulse-feature-meta{color:#d9cfb7;font-size:.92rem}
-.lunara-home-pulse-poster,.lunara-home-standout-poster{position:relative;overflow:hidden;border-radius:0;background:rgba(255,255,255,.04)}
+.lunara-home-pulse-poster{position:relative;overflow:hidden;border-radius:0;background:rgba(255,255,255,.04)}
 .lunara-home-pulse-poster{aspect-ratio:2/3;box-shadow:0 18px 36px rgba(0,0,0,.28)}
-.lunara-home-pulse-poster img,
-.lunara-home-standout-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.lunara-home-pulse-poster .aat-entity-poster,
-.lunara-home-standout-poster .aat-entity-poster{width:100%;height:100%;object-fit:cover;display:block}
-.lunara-home-pulse-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.lunara-home-pulse-metric{display:grid;gap:5px;padding:18px 20px;border:1px solid rgba(201,169,97,.16);border-radius:0;background:rgba(255,255,255,.02)}
+.lunara-home-pulse-poster img{width:100%;height:100%;object-fit:cover;display:block}
+.lunara-home-pulse-poster .aat-entity-poster{width:100%;height:100%;object-fit:cover;display:block}
 .lunara-home-pulse-metric-label{color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:.14em;text-transform:uppercase}
-.lunara-home-pulse-metric-value{color:#fff;font-size:1rem;line-height:1.28}
-.lunara-home-pulse-metric-note{color:var(--lunara-text-muted);font-size:.84rem}
-.lunara-home-pulse-actions{display:flex;flex-wrap:wrap;gap:12px}
-.lunara-home-pulse-layout{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:22px;align-items:start}
 .lunara-home-pulse-feature-card{display:grid;gap:14px;padding:24px;border:0;border-radius:0;background:transparent;box-shadow:none}
 .lunara-home-pulse-feature-heading{margin:0;color:var(--lunara-gold) !important;font-size:clamp(1.8rem,3vw,2.35rem);line-height:1.02}
 .lunara-home-pulse-feature-copy{margin:0;color:var(--lunara-text);font-size:1rem;line-height:1.72}
 .lunara-home-pulse-feature-copy.is-secondary{color:#FAFBFC}
-.lunara-home-title-chip-grid{display:grid;gap:14px}
-.lunara-home-title-chip{display:grid;gap:5px;padding:16px 18px;border:1px solid rgba(201,169,97,.14);border-radius:0;background:rgba(255,255,255,.018);color:inherit;text-decoration:none;transition:transform .18s ease, border-color .18s ease, background .18s ease}
-.lunara-home-title-chip:hover{transform:translateY(-2px);border-color:rgba(201,169,97,.35);background:rgba(201,169,97,.05)}
-.lunara-home-title-chip strong{color:var(--lunara-gold);font-size:1rem;line-height:1.2}
-.lunara-home-title-chip span{color:var(--lunara-text-muted);font-size:.87rem}
-.lunara-home-winner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .lunara-home-winner-card{border:0;border-radius:0;background:transparent;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}
 .lunara-home-winner-card:hover{transform:none;border-color:rgba(201,169,97,.32);box-shadow:none}
-.lunara-home-winner-card-link{display:grid;gap:12px;padding:22px;color:inherit;text-decoration:none}
-.lunara-home-winner-category{margin:0;color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:.14em;text-transform:uppercase}
 .lunara-home-winner-title{margin:0;color:#fff !important;font-size:1.18rem;line-height:1.14}
-.lunara-home-winner-meta{margin:0;color:var(--lunara-text-muted);font-size:.92rem;line-height:1.55}
-.lunara-home-standouts-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px}
-.lunara-home-standout-card{border:0;border-radius:0;background:transparent;overflow:hidden;box-shadow:none}
-.lunara-home-standout-link{display:block;color:inherit;text-decoration:none}
-.lunara-home-standout-poster{aspect-ratio:2/3}
-.lunara-home-standout-poster-placeholder{display:grid;place-items:center;width:100%;height:100%;padding:20px;text-align:center;color:#e7dcc0;background:linear-gradient(180deg, rgba(23,44,67,.9), rgba(7,15,26,.96))}
-.lunara-home-standout-badge{position:absolute;top:12px;right:12px;padding:8px 10px;border-radius:0;background:rgba(10,21,32,.88);border:1px solid rgba(201,169,97,.24);color:var(--lunara-gold-light);font-size:0.8125rem;letter-spacing:0;text-transform:none}
-.lunara-home-standout-copy{display:grid;gap:8px;padding:20px 18px 18px}
 .lunara-home-standout-title{margin:0;color:var(--lunara-gold) !important;font-size:1.06rem;line-height:1.16}
-.lunara-home-standout-meta,.lunara-home-standout-context{margin:0;font-size:.9rem;line-height:1.5}
-.lunara-home-standout-meta{color:#f1ead9}
-.lunara-home-standout-context{color:var(--lunara-text-muted)}
-@media (max-width: 1180px){
-    .lunara-home-hero-shell{grid-template-columns:1fr}
-    .lunara-home-pulse-layout{grid-template-columns:1fr}
-    .lunara-home-standouts-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media (max-width: 900px){
-    .lunara-home-pulse-metrics{grid-template-columns:1fr}
-    .lunara-home-winner-grid{grid-template-columns:1fr}
-    .lunara-home-standouts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
 @media (max-width: 680px){
     .lunara-home-pulse-card-top{grid-template-columns:1fr}
     .lunara-home-pulse-poster{max-width:180px}
-    .lunara-home-standouts-grid{grid-template-columns:1fr}
 }
 
 /* Homepage rebuild: minimal masthead, poster-first spotlight, ledger stories */
@@ -5318,9 +4975,6 @@ footer.site-footer .lunara-footer-copyright {
     transform: translateX(-50%);
     background: transparent;
 }
-.lunara-home-hero.is-minimal .lunara-home-hero-inner {
-    max-width: 1040px;
-}
 .lunara-home-hero.is-minimal .lunara-home-hero-title {
     margin-bottom: 18px;
     font-size: clamp(3.2rem, 8vw, 6rem);
@@ -5332,27 +4986,6 @@ footer.site-footer .lunara-footer-copyright {
     line-height: 1.62;
     color: #f1ead9;
 }
-.lunara-home-hero.is-minimal.has-pulse {
-    text-align: left;
-}
-.lunara-home-hero.is-minimal.has-pulse .lunara-home-hero-inner {
-    max-width: none;
-}
-.lunara-home-hero.is-minimal .lunara-home-hero-actions {
-    margin-top: 32px;
-}
-.lunara-home-hero-review-head,
-.lunara-home-hero-review-grid,
-.lunara-home-hero-review-grid .lunara-review-grid-card,
-.lunara-home-hero-review-grid .lunara-review-grid-link,
-.lunara-home-hero-review-grid .lunara-review-grid-copy {
-    position: relative;
-    z-index: 1;
-}
-.lunara-home-hero-review-head{
-    display:grid;
-    gap:12px;
-}
 .lunara-home-hero-review-title{
     margin:0;
     color:var(--lunara-gold) !important;
@@ -5363,157 +4996,28 @@ footer.site-footer .lunara-footer-copyright {
     line-height:.94;
     text-wrap:balance;
 }
-.lunara-home-hero-review-summary{
-    margin:0;
-    max-width:58ch;
-    color:#FAFBFC;
-    font-size:1.02rem;
-    line-height:1.72;
-}
-.lunara-home-hero-review-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:16px;
-    margin-top:28px;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-card{
-    border:0;
-    border-radius:0;
-    background:
-        transparent;
-    box-shadow:none;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-link{
-    grid-template-rows:auto 1fr;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-poster-wrap{
-    aspect-ratio:.76 / 1;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-copy{
-    gap:7px;
-    padding:14px 14px 16px;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-kicker{
-    margin:0;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-title{
-    margin:0;
-    font-family:Georgia, "Times New Roman", Times, serif;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:-0.01em;
-    line-height:1.12;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-meta{
-    margin:0;
-    font-size:.84rem;
-    line-height:1.4;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-card:hover{
-    transform:none;
-}
-.lunara-featured-reviews-section .lunara-poster-carousel-track {
-    grid-auto-columns: minmax(210px, 22%);
-    gap: 28px;
-}
-.lunara-poster-card-featured .lunara-poster-card-copy {
-    padding: 12px 4px 4px;
-}
-.lunara-poster-card-featured .lunara-poster-card-title {
-    margin: 0 0 8px;
-    font-size: 1.18rem;
-    line-height: 1.12;
-}
-.lunara-poster-card-featured .lunara-poster-card-meta {
-    margin-top: 0;
-}
-.lunara-database-spotlight-section {
-    position: relative;
-}
-.lunara-database-spotlight-shell {
-    display: grid;
-    grid-template-columns: minmax(290px, .9fr) minmax(0, 1.35fr);
-    gap: 28px;
-    align-items: start;
-}
-.lunara-database-spotlight-copy {
-    display: grid;
-    gap: 20px;
-    padding: 28px;
-    border: 1px solid rgba(201,169,97,.18);
-    border-radius: 0;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,.024), rgba(255,255,255,.01));
-    box-shadow: 0 18px 42px rgba(0,0,0,.16);
-}
-.lunara-database-spotlight-text {
-    margin: 0;
-    color: #FAFBFC;
-    font-size: 1.04rem;
-    line-height: 1.78;
-}
-.lunara-database-spotlight-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.lunara-database-stat {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 14px;
-    border: 1px solid rgba(201,169,97,.16);
-    border-radius: 0;
-    background: rgba(255,255,255,.02);
-    color: var(--lunara-gold-light);
-    font-size: .84rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-.lunara-database-spotlight-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 18px;
-}
-.lunara-database-spotlight-card {
-    border: 0;
-    border-radius: 0;
-    overflow: hidden;
-    background: transparent;
-    box-shadow: none;
-}
-.lunara-database-spotlight-link,
 .lunara-ledger-story-link {
     display: block;
     color: inherit;
     text-decoration: none;
 }
-.lunara-database-spotlight-poster,
 .lunara-ledger-story-poster {
     position: relative;
     aspect-ratio: 2 / 3;
     overflow: hidden;
     background: rgba(255,255,255,.04);
 }
-.lunara-database-spotlight-poster img,
 .lunara-ledger-story-poster img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
-.lunara-database-spotlight-poster .aat-entity-poster,
 .lunara-ledger-story-poster .aat-entity-poster {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-}
-.lunara-database-spotlight-card-copy,
-.lunara-ledger-story-copy {
-    display: grid;
-    gap: 6px;
-    padding: 16px;
 }
 .lunara-database-spotlight-card-title,
 .lunara-ledger-story-title {
@@ -5522,7 +5026,6 @@ footer.site-footer .lunara-footer-copyright {
     font-size: 1.02rem;
     line-height: 1.16;
 }
-.lunara-database-spotlight-card-meta,
 .lunara-ledger-story-year {
     margin: 0;
     color: var(--lunara-gold-light);
@@ -5530,29 +5033,12 @@ footer.site-footer .lunara-footer-copyright {
     letter-spacing: 0;
     text-transform: none;
 }
-.lunara-database-spotlight-card-context,
 .lunara-ledger-story-categories,
 .lunara-ledger-story-summary {
     margin: 0;
     color: var(--lunara-text-muted);
     font-size: .9rem;
     line-height: 1.56;
-}
-.lunara-ledger-story-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 22px;
-}
-.lunara-ledger-story-card {
-    border: 0;
-    border-radius: 0;
-    overflow: hidden;
-    background:
-        transparent;
-    box-shadow: none;
-}
-.lunara-lore-card .lunara-ledger-story-copy {
-    gap: 8px;
 }
 .lunara-lore-card .lunara-ledger-story-summary {
     display: -webkit-box;
@@ -5565,12 +5051,6 @@ footer.site-footer .lunara-footer-copyright {
 }
 .lunara-latest-reviews-section .lunara-review-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-.lunara-home-pulse-notes {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 18px;
 }
 .lunara-home-pulse-note {
     display: grid;
@@ -5600,16 +5080,6 @@ footer.site-footer .lunara-footer-copyright {
     color: #FAFBFC;
     font-size: .96rem;
     line-height: 1.7;
-}
-.lunara-home-pulse-note-link {
-    color: var(--lunara-gold);
-    font-size: .84rem;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    text-decoration: none;
-}
-.lunara-home-pulse-note-link:hover {
-    color: var(--lunara-gold-light);
 }
 .lunara-home-section-head.is-with-summary {
     align-items: center;
@@ -5653,55 +5123,6 @@ footer.site-footer .lunara-footer-copyright {
     color: var(--lunara-text-muted);
     font-size: .88rem;
     line-height: 1.52;
-}
-.lunara-featured-reviews-section .lunara-home-section-summary {
-    max-width: 720px;
-}
-.lunara-featured-reviews-section .lunara-poster-carousel-track {
-    padding-top: 4px;
-}
-.lunara-poster-card-featured {
-    border: 1px solid rgba(201,169,97,.16);
-    border-radius: 0;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,.026), rgba(255,255,255,.01));
-    box-shadow:
-        0 24px 56px rgba(0,0,0,.2), 0 0 0 1px rgba(255,255,255,.03) inset;
-    overflow: hidden;
-    transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
-}
-.lunara-poster-card-featured .lunara-poster-card-link {
-    height: 100%;
-    display: grid;
-    grid-template-rows: auto 1fr;
-}
-.lunara-poster-card-featured .lunara-poster-card-image-wrap {
-    border-radius: 0;
-    box-shadow: none;
-}
-.lunara-poster-card-featured .lunara-poster-card-copy {
-    display: grid;
-    gap: 9px;
-    padding: 18px 18px 20px;
-}
-.lunara-poster-card-featured .lunara-poster-card-kicker {
-    margin-bottom: 0;
-    color: var(--lunara-gold-light);
-}
-.lunara-poster-card-featured .lunara-poster-card-title {
-    margin: 0;
-    font-size: 1.22rem;
-}
-.lunara-poster-card-featured .lunara-poster-card-meta {
-    margin-top: 0;
-}
-.lunara-poster-card-featured .lunara-poster-card-excerpt {
-    color: #FAFBFC;
-}
-.lunara-poster-card-featured:hover {
-    transform: translateY(-6px);
-    border-color: rgba(201,169,97,.34);
-    box-shadow: 0 30px 68px rgba(0,0,0,.26);
 }
 .lunara-dispatch-shell {
     display: grid;
@@ -6026,25 +5447,9 @@ footer.site-footer .lunara-footer-copyright {
 .lunara-ledger-carousel-track::-webkit-scrollbar {
     display: none;
 }
-.lunara-ledger-story-card {
-    scroll-snap-align: start;
-}
 @media (max-width: 1240px) {
-    .lunara-database-spotlight-shell {
-        grid-template-columns: 1fr;
-    }
-    .lunara-database-spotlight-grid {
-        grid-template-columns: repeat(5, minmax(160px, 1fr));
-    }
-    .lunara-home-pulse-notes {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .lunara-ledger-story-grid,
     .lunara-latest-reviews-section .lunara-review-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-    .lunara-featured-reviews-section .lunara-poster-carousel-track {
-        grid-auto-columns: minmax(220px, 30%);
     }
     .lunara-ledger-carousel-track {
         grid-auto-columns: minmax(240px, 32%);
@@ -6069,34 +5474,12 @@ footer.site-footer .lunara-footer-copyright {
     .lunara-home-hero.is-minimal .lunara-home-hero-copy {
         font-size: 1.08rem;
     }
-    .lunara-home-hero-review-summary{
-        max-width:none;
-        font-size:.98rem;
-    }
-    .lunara-home-hero-review-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:14px;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-copy{
-        padding:13px 13px 14px;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-title{
-        font-size:.96rem;
-    }
-    .lunara-home-pulse-notes {
-        grid-template-columns: 1fr;
-    }
     .lunara-home-oscar-story-section{
         padding: 28px 24px 8px;
         border-radius: 0;
     }
-    .lunara-database-spotlight-grid,
-    .lunara-ledger-story-grid,
     .lunara-latest-reviews-section .lunara-review-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .lunara-featured-reviews-section .lunara-poster-carousel-track {
-        grid-auto-columns: 54%;
     }
     .lunara-ledger-carousel-track {
         grid-auto-columns: 56%;
@@ -6130,29 +5513,8 @@ footer.site-footer .lunara-footer-copyright {
         padding: 22px 18px 4px;
         border-radius: 0;
     }
-    .lunara-home-hero-review-grid{
-        grid-template-columns:1fr;
-        gap:14px;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-poster-wrap{
-        aspect-ratio:1.18 / 1;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-link{
-        grid-template-columns:104px minmax(0,1fr);
-        grid-template-rows:none;
-        gap:0;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-copy{
-        align-content:center;
-        min-height:100%;
-    }
-    .lunara-database-spotlight-grid,
-    .lunara-ledger-story-grid,
     .lunara-latest-reviews-section .lunara-review-grid {
         grid-template-columns: 1fr;
-    }
-    .lunara-featured-reviews-section .lunara-poster-carousel-track {
-        grid-auto-columns: 78%;
     }
     .lunara-ledger-carousel-track {
         grid-auto-columns: 82%;
@@ -6255,11 +5617,6 @@ footer.site-footer .lunara-footer-copyright {
         padding-bottom: calc(var(--lunara-header-pad) * .5);
     }
 
-    .lunara-header .lunara-header-items {
-        column-gap: 12px;
-        row-gap: 10px;
-    }
-
     .lunara-header .site-logo-container img {
         max-height: calc(var(--lunara-logo-max) * .82);
     }
@@ -6285,11 +5642,6 @@ footer.site-footer .lunara-footer-copyright {
         gap: 18px;
     }
 
-    .lunara-home-hero-shell,
-    .lunara-home-pulse-layout {
-        gap: 28px;
-    }
-
     .lunara-home-pulse-card,
     .lunara-home-pulse-feature-card {
         padding: 22px;
@@ -6298,10 +5650,6 @@ footer.site-footer .lunara-footer-copyright {
     .lunara-home-pulse-card-top {
         padding: 22px;
         gap: 18px;
-    }
-
-    .lunara-home-pulse-metric {
-        padding: 15px 16px;
     }
 
 }
@@ -6356,11 +5704,6 @@ footer.site-footer .lunara-footer-copyright {
         font-size: clamp(1.6rem, 5vw, var(--lunara-section-title-size));
     }
 
-    .lunara-home-hero-shell,
-    .lunara-home-pulse-layout {
-        gap: 22px;
-    }
-
     .lunara-home-pulse-card,
     .lunara-home-pulse-feature-card {
         padding: 18px;
@@ -6371,13 +5714,11 @@ footer.site-footer .lunara-footer-copyright {
         gap: 16px;
     }
 
-    .lunara-home-pulse-actions,
     .lunara-review-single-actions {
         display: grid;
         gap: 10px;
     }
 
-    .lunara-home-pulse-actions .lunara-btn,
     .lunara-review-single-actions .lunara-btn {
         width: 100%;
         justify-content: center;
@@ -6385,10 +5726,6 @@ footer.site-footer .lunara-footer-copyright {
 
     .lunara-home-pulse-poster {
         max-width: 160px;
-    }
-
-    .lunara-home-pulse-metric {
-        padding: 14px 15px;
     }
 
     .lunara-review-single-copy,
@@ -6418,8 +5755,7 @@ footer.site-footer .lunara-footer-copyright {
 /* Mobile navigation shell: give the off-canvas experience the same Lunara confidence as the live header. */
 @media (max-width: 900px) {
     .lunara-mobile-panel,
-    .lunara-panel-inner,
-    .lunara-panel-content {
+    .lunara-panel-inner {
         background:
             transparent;
         color: var(--lunara-text);
@@ -6490,13 +5826,6 @@ footer.site-footer .lunara-footer-copyright {
         text-decoration: none;
         font-size: 0.82rem;
     }
-
-    .lunara-panel-close,
-    .lunara-header-trigger {
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-    }
 }
 
 /* Oscars entity/hub pages share the global shell width for visual consistency. */
@@ -6529,36 +5858,11 @@ body.aat-shell-page article {
 /* ========================================
    FEATURE 1: OSCAR SPOTLIGHT SECTION
    ======================================== */
-.lunara-oscar-spotlight-section {
-    position: relative;
-}
 .lunara-oscar-spotlight-layout {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
     gap: 28px;
     align-items: start;
-}
-.lunara-oscar-spotlight-poster {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    aspect-ratio: 2 / 3;
-    border-radius: 0;
-    background: rgba(255,255,255,.04);
-    box-shadow: 0 20px 46px rgba(0,0,0,.24);
-    text-decoration: none;
-}
-.lunara-oscar-spotlight-poster img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.lunara-oscar-spotlight-poster .aat-entity-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
 }
 .lunara-oscar-spotlight-text-panel {
     display: grid;
@@ -6576,11 +5880,6 @@ body.aat-shell-page article {
     font-size: 1.04rem;
     line-height: 1.72;
 }
-.lunara-oscar-spotlight-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
 .lunara-oscar-spotlight-pill {
     display: inline-flex;
     flex-direction: column;
@@ -6596,22 +5895,9 @@ body.aat-shell-page article {
     letter-spacing: .14em;
     text-transform: uppercase;
 }
-.lunara-oscar-spotlight-pill-value {
-    color: #fff;
-    font-size: 1rem;
-    line-height: 1.28;
-}
-.lunara-oscar-spotlight-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
 @media (max-width: 900px) {
     .lunara-oscar-spotlight-layout {
         grid-template-columns: 1fr;
-    }
-    .lunara-oscar-spotlight-poster {
-        max-width: 200px;
     }
 }
 
@@ -6958,11 +6244,6 @@ body.aat-shell-page article {
         grid-template-columns: 1fr;
     }
 }
-@media (max-width: 640px) {
-    .lunara-oscar-spotlight-poster {
-        max-width: 160px;
-    }
-}
 
 /* ========================================
    OSCARS PORTAL: POSTER-LED SPOTLIGHT CARDS
@@ -7064,72 +6345,9 @@ body.aat-shell-page article {
 /* ========================================
    FEATURE 2: DEEP CUT STATS SECTION
    ======================================== */
-.lunara-deep-cut-section {
-    position: relative;
-}
 .lunara-home-oscar-story-section {
     display: grid;
     gap: 28px;
-}
-.lunara-home-oscar-supporting {
-    display: grid;
-    gap: 18px;
-    padding: 24px 28px 0;
-    border-top: 1px solid rgba(201,169,97,.14);
-}
-.lunara-home-oscar-supporting-head {
-    display: grid;
-    gap: 6px;
-    max-width: 760px;
-}
-.lunara-home-oscar-supporting-kicker {
-    margin: 0;
-    color: rgba(224,196,129,.92);
-    letter-spacing: 0;
-    text-transform: none;
-    font-size: 0.8125rem;
-}
-.lunara-home-oscar-supporting-copy {
-    margin: 0;
-    color: var(--lunara-text-muted);
-    line-height: 1.6;
-}
-.lunara-deep-cut-grid.lunara-deep-cut-grid-supporting .lunara-deep-cut-card {
-    background:
-        transparent;
-    box-shadow: none;
-}
-.lunara-deep-cut-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
-}
-.lunara-deep-cut-card {
-    display: grid;
-    gap: 10px;
-    padding: 24px 20px;
-    border: 0;
-    border-radius: 0;
-    background:
-        transparent;
-    box-shadow: none;
-    color: inherit;
-    text-decoration: none;
-    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-}
-.lunara-deep-cut-card:hover {
-    transform: none;
-    border-color: rgba(201,169,97,.38);
-    box-shadow: none;
-}
-.lunara-deep-cut-value {
-    display: block;
-    color: var(--lunara-gold);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    text-shadow: none;
 }
 .lunara-deep-cut-label {
     display: block;
@@ -7137,36 +6355,6 @@ body.aat-shell-page article {
     font-size: .96rem;
     line-height: 1.28;
     font-weight: 600;
-}
-.lunara-deep-cut-context {
-    display: block;
-    color: var(--lunara-text-muted);
-    font-size: .88rem;
-    line-height: 1.48;
-}
-@media (max-width: 1100px) {
-    .lunara-deep-cut-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .lunara-home-oscar-supporting {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-@media (max-width: 640px) {
-    .lunara-deep-cut-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .lunara-deep-cut-card {
-        padding: 18px 16px;
-    }
-    .lunara-deep-cut-value {
-        font-size: 1.8rem;
-    }
-    .lunara-home-oscar-supporting {
-        gap: 14px;
-        padding-top: 18px;
-    }
 }
 
 /* ========================================
@@ -7413,21 +6601,17 @@ body.error404 .page-title {
     border-radius: 0;
 }
 
-.lunara-debrief-title-link,
 .lunara-pair-title-link {
     color: inherit;
     text-decoration: none;
     font-weight: 700;
 }
 
-.lunara-debrief-title-link:hover,
-.lunara-debrief-title-link:focus-visible,
 .lunara-pair-title-link:hover,
 .lunara-pair-title-link:focus-visible {
     color: #fff2c5;
 }
 
-.lunara-debrief-title-link:hover em,
 .lunara-pair-title-link:hover em {
     text-decoration: underline;
     text-decoration-thickness: 1px;
@@ -7437,15 +6621,6 @@ body.error404 .page-title {
 
 .lunara-oscar-ledger,
 .lunara-debrief-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    text-decoration: none;
-    margin-top: 2px;
-}
-
-.lunara-review-single-debrief .aat-ledger-pill {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -7996,31 +7171,24 @@ body.error404 .page-title {
     font-size: 0.96rem;
 }
 
-.lunara-review-single-debrief .lunara-pair-title-line,
-.lunara-review-single-debrief .lunara-pair-note,
-.lunara-review-single-debrief .lunara-pair-summary,
 .lunara-review-single-debrief p,
 .lunara-review-single-postscript p {
     font-size: 1.11rem;
     line-height: 1.84;
 }
 
-.lunara-review-single-debrief .lunara-pair-title,
-.lunara-review-single-debrief .lunara-debrief-title-link {
+.lunara-review-single-debrief .lunara-pair-title {
     color: #f4d27e;
     font-size: 1.34rem;
     line-height: 1.18;
     letter-spacing: 0.01em;
 }
 
-.lunara-review-single-debrief .lunara-pair-title em,
-.lunara-review-single-debrief .lunara-debrief-title-link em {
+.lunara-review-single-debrief .lunara-pair-title em {
     font-style: italic;
 }
 
-.lunara-review-single-debrief .lunara-debrief-note,
-.lunara-review-single-debrief .lunara-pair-note,
-.lunara-review-single-debrief .lunara-pair-summary {
+.lunara-review-single-debrief .lunara-debrief-note {
     color: rgba(240, 235, 222, 0.9);
     font-size: 1.08rem;
     line-height: 1.88;
@@ -8648,41 +7816,8 @@ body.single-review .lunara-review-single-content blockquote {
     align-self: center;
 }
 
-.lunara-home-oscar-story-section .lunara-ledger-story-card {
-    border-color: rgba(201,169,97,.18);
-    background:
-        transparent;
-    box-shadow:
-        none;
-}
-
-.lunara-home-oscar-story-section .lunara-ledger-story-card:hover {
-    border-color: rgba(201,169,97,.32);
-    box-shadow:
-        none;
-}
-
 .lunara-header .lunara-header-row .lunara-container {
     min-height: clamp(74px, 7vw, 88px);
-}
-
-/* Mobile trigger styling — display controlled by @media(max-width:900px) in standalone layout block */
-@media (max-width: 900px) {
-    .lunara-header .lunara-header-trigger {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 42px;
-        min-width: 42px;
-        padding-inline: 13px;
-        border: 1px solid rgba(201,169,97,.18);
-        background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.035);
-    }
-
-    .lunara-header .lunara-header-trigger:hover {
-        border-color: rgba(201,169,97,.34);
-    }
 }
 
 .lunara-nav .sub-menu,
@@ -8739,60 +7874,6 @@ body.single-review .lunara-review-single-content blockquote {
 /* ========================================
    HERO + PULSE COMPOSITION PASS
    ======================================== */
-.lunara-home-hero.has-pulse::after {
-    content: "";
-    position: absolute;
-    inset: 24px 0 auto;
-    height: min(72%, 540px);
-    border-radius: 0;
-    background:
-        linear-gradient(90deg, rgba(255,255,255,.018), rgba(255,255,255,.005) 38%, transparent 72%);
-    border: 1px solid rgba(201,169,97,.08);
-    pointer-events: none;
-}
-
-.lunara-home-hero-shell {
-    gap: 54px;
-    align-items: start;
-    grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-}
-
-.lunara-home-hero-copy-panel {
-    position: relative;
-    padding: 46px 38px 34px;
-    border: 0;
-    border-radius: 0;
-    background:
-        transparent;
-    box-shadow:
-        none;
-}
-
-.lunara-home-hero-copy-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 0;
-    background:
-        transparent;
-    opacity: .9;
-    pointer-events: none;
-}
-
-.lunara-home-hero-copy-panel::after {
-    content: "";
-    position: absolute;
-    inset: auto auto 20px 38px;
-    width: 132px;
-    height: 2px;
-    background: transparent;
-    border-radius: 0;
-}
-
-.lunara-home-hero-copy-panel > * {
-    position: relative;
-    z-index: 1;
-}
 
 .lunara-home-hero-title {
     text-wrap: balance;
@@ -8800,16 +7881,6 @@ body.single-review .lunara-review-single-content blockquote {
 
 .lunara-home-hero-copy {
     max-width: 17ch;
-}
-
-.lunara-home-hero-actions {
-    gap: 14px;
-}
-
-.lunara-home-hero-actions .lunara-btn {
-    min-height: 48px;
-    padding-inline: 20px;
-    box-shadow: 0 16px 28px rgba(0,0,0,.18);
 }
 
 .lunara-home-pulse-card {
@@ -8845,23 +7916,12 @@ body.single-review .lunara-review-single-content blockquote {
     align-items: center;
 }
 
-.lunara-home-pulse-card-copy {
-    display: grid;
-    align-content: start;
-}
-
 .lunara-home-pulse-title {
     max-width: 11ch;
 }
 
 .lunara-home-pulse-summary {
     max-width: 42ch;
-}
-
-.lunara-home-pulse-feature {
-    gap: 8px;
-    margin-top: 24px;
-    padding-top: 22px;
 }
 
 .lunara-home-pulse-poster {
@@ -8876,11 +7936,6 @@ body.single-review .lunara-review-single-content blockquote {
 .lunara-home-pulse-card:focus-within .lunara-home-pulse-poster {
     transform: translateY(4px);
     box-shadow: 0 22px 44px rgba(0,0,0,.3);
-}
-
-.lunara-home-pulse-metric {
-    min-height: 112px;
-    align-content: start;
 }
 
 .lunara-home-pulse-note {
@@ -8922,9 +7977,6 @@ body.single-review .lunara-review-single-content blockquote {
 }
 
 @media (max-width: 1180px) {
-    .lunara-home-hero-shell {
-        gap: 36px;
-    }
 
     .lunara-home-pulse-title,
     .lunara-home-pulse-summary {
@@ -8933,14 +7985,6 @@ body.single-review .lunara-review-single-content blockquote {
 }
 
 @media (max-width: 900px) {
-    .lunara-home-hero.has-pulse::after {
-        inset: 12px 0 auto;
-        height: 420px;
-    }
-
-    .lunara-home-hero-copy-panel {
-        padding: 28px 24px 24px;
-    }
 
     .lunara-home-pulse-card {
         padding: 24px;
@@ -8949,30 +7993,9 @@ body.single-review .lunara-review-single-content blockquote {
     .lunara-home-pulse-card-top {
         padding: 24px;
     }
-
-    .lunara-home-pulse-metric {
-        min-height: auto;
-    }
 }
 
 @media (max-width: 640px) {
-    .lunara-home-hero.has-pulse::after {
-        display: none;
-    }
-
-    .lunara-home-hero-copy-panel {
-        padding: 20px 18px 18px;
-    }
-
-    .lunara-home-hero-copy-panel::after {
-        inset: auto auto 16px 18px;
-        width: 88px;
-    }
-
-    .lunara-home-hero-actions .lunara-btn {
-        width: 100%;
-        justify-content: center;
-    }
 
     .lunara-home-pulse-card {
         padding: 20px;
@@ -9041,21 +8064,6 @@ body.single-review .lunara-review-single-content blockquote {
     transform: translateY(-1px);
 }
 
-.lunara-nav .sub-menu .lunara-menu-icon {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    color: var(--lunara-gold);
-}
-
-.lunara-nav .sub-menu .lunara-menu-icon svg {
-    width: 18px;
-    height: 18px;
-}
-
 .lunara-nav .sub-menu .lunara-menu-fallback-label {
     font-size: 0.8125rem;
     font-weight: 600;
@@ -9075,47 +8083,9 @@ body.single-review .lunara-review-single-content blockquote {
     min-width: 0;
 }
 
-.lunara-home-hero-shell {
-    grid-template-columns: minmax(0, 1.08fr) minmax(350px, 0.92fr);
-    gap: clamp(34px, 4vw, 54px);
-    align-items: stretch;
-}
-
-.lunara-home-hero-copy-panel {
-    max-width: 668px;
-    display: grid;
-    align-content: start;
-    gap: 0;
-    padding: clamp(30px, 3.6vw, 42px);
-    border: 0;
-    border-radius: 0;
-    background:
-        transparent;
-    box-shadow:
-        none;
-    position: relative;
-    overflow: hidden;
-}
-
-.lunara-home-hero-copy-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        transparent;
-    opacity: 0.8;
-    pointer-events: none;
-}
-
-.lunara-home-hero-copy-panel .lunara-home-section-kicker {
-    margin-bottom: 10px;
-}
-
 .lunara-home-hero-kicker,
 .lunara-home-hero-title,
-.lunara-home-hero-copy,
-.lunara-home-hero-actions,
-.lunara-home-hero-details {
+.lunara-home-hero-copy {
     position: relative;
     z-index: 1;
 }
@@ -9133,45 +8103,11 @@ body.single-review .lunara-review-single-content blockquote {
     line-height: 1.76;
 }
 
-.lunara-home-hero-actions {
-    margin-top: 28px;
-}
-
-.lunara-home-hero-details {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 28px;
-}
-
-.lunara-home-hero-detail-card {
-    display: grid;
-    gap: 7px;
-    min-height: 126px;
-    padding: 16px 18px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-}
-
 .lunara-home-hero-detail-label {
     color: var(--lunara-gold-light);
     font-size: 0.8125rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-}
-
-.lunara-home-hero-detail-value {
-    color: #fff;
-    font-size: clamp(1.08rem, 1.8vw, 1.32rem);
-    line-height: 1.08;
-}
-
-.lunara-home-hero-detail-note {
-    color: var(--lunara-text-muted);
-    font-size: 0.87rem;
-    line-height: 1.5;
 }
 
 .lunara-home-pulse-card {
@@ -9203,10 +8139,6 @@ body.single-review .lunara-review-single-content blockquote {
     border-radius: 0;
     box-shadow:
         0 24px 54px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-}
-
-.lunara-home-pulse-metrics {
-    margin-top: 2px;
 }
 
 .lunara-front-page > .lunara-home-section + .lunara-home-section {
@@ -9251,15 +8183,11 @@ body.single-review .lunara-review-single-content blockquote {
     font-size: 0.92rem;
     line-height: 1.6;
 }
-.lunara-home-winner-card,
-.lunara-database-spotlight-card,
-.lunara-ledger-story-card {
+.lunara-home-winner-card {
     position: relative;
     overflow: hidden;
 }
-.lunara-home-winner-card::before,
-.lunara-database-spotlight-card::before,
-.lunara-ledger-story-card::before {
+.lunara-home-winner-card::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -9268,8 +8196,6 @@ body.single-review .lunara-review-single-content blockquote {
     opacity: .82;
     pointer-events: none;
 }
-.lunara-home-winner-card-link,
-.lunara-database-spotlight-link,
 .lunara-ledger-story-link {
     position: relative;
     z-index: 1;
@@ -9280,32 +8206,11 @@ body.single-review .lunara-review-single-content blockquote {
     box-shadow:
         none;
 }
-.lunara-home-winner-card-link {
-    height: 100%;
-    padding: 18px 18px 20px;
-}
-.lunara-home-winner-category {
-    color: var(--lunara-gold-light);
-}
 .lunara-home-winner-title {
     text-wrap: balance;
 }
-.lunara-database-spotlight-card,
-.lunara-ledger-story-card {
-    border-radius: 0;
-    box-shadow:
-        none;
-}
-.lunara-database-spotlight-card-copy,
-.lunara-ledger-story-copy {
-    gap: 8px;
-    padding: 18px;
-}
 
 @media (max-width: 1180px) {
-    .lunara-home-hero-shell {
-        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
-    }
 
     .lunara-nav .sub-menu,
     .lunara-nav .menu-item-has-children > ul {
@@ -9319,25 +8224,8 @@ body.single-review .lunara-review-single-content blockquote {
         padding: 11px 12px;
     }
 
-    .lunara-home-hero-shell {
-        grid-template-columns: 1fr;
-    }
-
-    .lunara-home-hero-copy-panel {
-        max-width: none;
-        padding: 28px 24px 24px;
-    }
-
     .lunara-home-hero-copy {
         max-width: none;
-    }
-
-    .lunara-home-hero-details {
-        grid-template-columns: 1fr;
-    }
-
-    .lunara-home-hero-detail-card {
-        min-height: auto;
     }
 
     .lunara-home-pulse-card-top {
@@ -9346,21 +8234,9 @@ body.single-review .lunara-review-single-content blockquote {
 }
 
 @media (max-width: 640px) {
-    .lunara-home-hero-copy-panel {
-        padding: 22px 18px 18px;
-    }
 
     .lunara-home-hero-title {
         max-width: none;
-    }
-
-    .lunara-home-hero-details {
-        gap: 12px;
-        margin-top: 22px;
-    }
-
-    .lunara-home-hero-detail-card {
-        padding: 14px 15px;
     }
 
     .lunara-home-pulse-card {
@@ -9396,45 +8272,6 @@ body.single-review .lunara-review-single-content blockquote {
     letter-spacing: 0.085em;
 }
 
-@media (max-width: 900px) {
-    .lunara-header .lunara-header-trigger {
-        position: relative;
-        overflow: hidden;
-        min-width: 46px;
-        min-height: 46px;
-        border-color: rgba(201, 169, 97, 0.22);
-        box-shadow:
-            inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 10px 24px rgba(0, 0, 0, 0.16);
-    }
-
-    .lunara-header .lunara-header-trigger::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 44%);
-        opacity: 0.9;
-        pointer-events: none;
-    }
-
-    .lunara-header .lunara-header-trigger > * {
-        position: relative;
-        z-index: 1;
-    }
-
-    .lunara-header .lunara-header-trigger:hover,
-    .lunara-header .lunara-header-trigger:focus-visible,
-    .lunara-header .lunara-header-trigger[aria-expanded="true"] {
-        border-color: rgba(201, 169, 97, 0.4);
-        background: linear-gradient(180deg, rgba(201, 169, 97, 0.12), rgba(201, 169, 97, 0.04));
-        box-shadow:
-            inset 0 0 0 1px rgba(224, 196, 129, 0.16),
-            0 14px 30px rgba(0, 0, 0, 0.2),
-            0 0 26px rgba(201, 169, 97, 0.14);
-    }
-}
-
-.lunara-header .lunara-header-trigger:focus-visible,
 .lunara-nav .sub-menu li > a:focus-visible {
     outline: 2px solid rgba(224, 196, 129, 0.7);
     outline-offset: 2px;
@@ -9528,10 +8365,8 @@ div[class*="likes-widget"],
 
 .lunara-review-grid-poster-wrap,
 .lunara-review-feature-media,
-.lunara-poster-card-image-wrap,
 .lunara-dispatch-archive-thumb-wrap,
-.lunara-dispatch-lead-media,
-.lunara-home-pulse-poster-wrap {
+.lunara-dispatch-lead-media {
     background:
         linear-gradient(
             110deg,
@@ -9546,10 +8381,8 @@ div[class*="likes-widget"],
 
 .lunara-review-grid-poster-wrap:has(.lunara-img-loaded),
 .lunara-review-feature-media:has(.lunara-img-loaded),
-.lunara-poster-card-image-wrap:has(.lunara-img-loaded),
 .lunara-dispatch-archive-thumb-wrap:has(.lunara-img-loaded),
-.lunara-dispatch-lead-media:has(.lunara-img-loaded),
-.lunara-home-pulse-poster-wrap:has(.lunara-img-loaded) {
+.lunara-dispatch-lead-media:has(.lunara-img-loaded) {
     animation: none;
     background: rgba(255,255,255,.03);
 }
@@ -9647,39 +8480,11 @@ div[class*="likes-widget"],
 }
 
 .lunara-oscars-portal-page .lunara-oscars-portal-feature-poster,
-.lunara-oscars-portal-page .lunara-oscars-portal-title-media,
-.lunara-oscars-portal-page .lunara-oscars-portal-spotlight-poster {
+.lunara-oscars-portal-page .lunara-oscars-portal-title-media {
     animation: none !important;
     background-color: rgba(255,255,255,.04) !important;
     background-position: center;
     background-size: cover;
-}
-
-/* Portal spotlight poster cards: ensure fill */
-.lunara-oscars-portal-spotlight-poster {
-    overflow: hidden;
-    aspect-ratio: 2 / 3;
-    border-radius: 0;
-    background: rgba(255,255,255,.04);
-}
-
-.lunara-oscars-portal-spotlight-poster img {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    display: block;
-    object-fit: cover;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-}
-
-.lunara-oscars-portal-spotlight-poster .aat-entity-poster {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    display: block;
-    object-fit: cover;
 }
 
 /* Portal title entry cards: ensure poster fill */
@@ -9741,31 +8546,6 @@ div[class*="likes-widget"],
     }
 }
 
-/* ─── Winner card poster treatment ─── */
-.lunara-home-winner-card.has-poster .lunara-home-winner-card-link {
-    display: grid;
-    grid-template-columns: 64px minmax(0, 1fr);
-    gap: 14px;
-    align-items: center;
-}
-
-.lunara-home-winner-poster-wrap {
-    width: 64px;
-    aspect-ratio: 2 / 3;
-    border-radius: 0;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: rgba(255,255,255,.04);
-}
-
-.lunara-home-winner-poster-wrap img,
-.lunara-home-winner-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
 /* ─── Oscar Lore carousel ─── */
 .lunara-lore-card-poster {
     aspect-ratio: 2 / 3;
@@ -9798,13 +8578,6 @@ div[class*="likes-widget"],
     }
 }
 
-@media (max-width: 640px) {
-    .lunara-header .lunara-header-trigger {
-        min-width: 42px;
-        min-height: 42px;
-    }
-}
-
 /* ========================================
    ADMIN BAR OFFSET
    ======================================== */
@@ -9826,7 +8599,6 @@ body.admin-bar .lunara-header {
 @media print {
     .lunara-header,
 .lunara-mobile-panel,
-.lunara-header-trigger,
 .lunara-nav .sub-menu,
 .lunara-archive-pagination,
 .lunara-review-sidebar {
@@ -9856,18 +8628,6 @@ body.admin-bar .lunara-header {
     }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   HERO: Cinematic Poster Carousel
-   Full-width crossfading poster hero — reviews-first front door
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.lunara-hero-cinema {
-    position: relative;
-    padding: 0;
-    overflow: hidden;
-    text-align: left;
-}
-
 .lunara-hero-cinema-stage {
     position: relative;
     width: 100%;
@@ -9895,53 +8655,6 @@ body.admin-bar .lunara-header {
     pointer-events: auto;
 }
 
-/* Poster image: cover the slide */
-.lunara-hero-cinema-poster {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
-}
-
-.lunara-hero-cinema-poster-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(10,21,32,0.95), rgba(30,45,60,0.85));
-    color: var(--lunara-gold, #c9a961);
-    font-size: 1.5rem;
-    text-align: center;
-    padding: 40px;
-}
-
-/* Gradient overlay for text legibility */
-.lunara-hero-cinema-overlay {
-    position: relative;
-    z-index: 3;
-    width: 100%;
-    padding: 60px 48px 42px;
-    background: linear-gradient(
-        to top,
-        rgba(5, 12, 20, 0.92) 0%,
-        rgba(5, 12, 20, 0.75) 40%,
-        rgba(5, 12, 20, 0.35) 70%,
-        transparent 100%
-    );
-}
-
-.lunara-hero-cinema-kicker {
-    font-size: 0.8125rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--lunara-gold, #c9a961);
-    margin: 0 0 10px;
-    font-weight: 600;
-}
-
 .lunara-hero-cinema-title {
     font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(2rem, 4.5vw, 3.5rem);
@@ -9950,29 +8663,6 @@ body.admin-bar .lunara-header {
     margin: 0 0 8px;
     max-width: 680px;
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
-}
-
-.lunara-hero-cinema-meta {
-    font-size: 0.92rem;
-    color: rgba(212, 212, 212, 0.85);
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.lunara-hero-cinema-score {
-    color: var(--lunara-gold, #c9a961);
-}
-
-/* Navigation pips */
-.lunara-hero-cinema-pips {
-    position: absolute;
-    bottom: 18px;
-    right: 48px;
-    z-index: 10;
-    display: flex;
-    gap: 10px;
 }
 
 .lunara-hero-cinema-pip {
@@ -9996,29 +8686,10 @@ body.admin-bar .lunara-header {
     border-color: var(--lunara-gold, #c9a961);
 }
 
-/* CTA row below the stage */
-.lunara-hero-cinema-actions {
-    display: flex;
-    gap: 16px;
-    padding: 24px 48px 32px;
-    justify-content: flex-start;
-}
-
 /* Responsive */
 @media (max-width: 900px) {
     .lunara-hero-cinema-stage {
         height: clamp(350px, 55vh, 550px);
-    }
-    .lunara-hero-cinema-overlay {
-        padding: 40px 28px 32px;
-    }
-    .lunara-hero-cinema-pips {
-        right: 28px;
-        bottom: 14px;
-    }
-    .lunara-hero-cinema-actions {
-        padding: 20px 28px 28px;
-        flex-wrap: wrap;
     }
 }
 
@@ -10026,18 +8697,8 @@ body.admin-bar .lunara-header {
     .lunara-hero-cinema-stage {
         height: clamp(300px, 50vh, 480px);
     }
-    .lunara-hero-cinema-overlay {
-        padding: 32px 20px 24px;
-    }
     .lunara-hero-cinema-title {
         font-size: 1.75rem;
-    }
-    .lunara-hero-cinema-pips {
-        right: 20px;
-        bottom: 12px;
-    }
-    .lunara-hero-cinema-actions {
-        padding: 16px 20px 24px;
     }
 }
 
@@ -10048,159 +8709,12 @@ body.admin-bar .lunara-header {
     }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   HERO: Poster Grid — reviews-first wall of posters
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.lunara-hero-grid-section {
-    padding: 0;
-    text-align: left;
-}
-
-.lunara-hero-grid-head {
-    padding: 32px 48px 18px;
-}
-
-.lunara-hero-grid-kicker {
-    font-size: 0.8125rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--lunara-gold, #c9a961);
-    margin: 0 0 6px;
-    font-weight: 600;
-}
-
 .lunara-hero-grid-title {
     font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
     margin: 0;
     color: #fff;
-}
-
-.lunara-hero-poster-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-    padding: 0 48px 12px;
-}
-
-.lunara-hero-poster-card {
-    position: relative;
-    border-radius: 0;
-    overflow: hidden;
-    background: rgba(10, 21, 32, 0.6);
-    border: 1px solid rgba(201, 169, 97, 0.12);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.lunara-hero-poster-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-    border-color: rgba(201, 169, 97, 0.35);
-}
-
-.lunara-hero-poster-card.is-upcoming {
-    opacity: 0.7;
-}
-
-.lunara-hero-poster-card.is-upcoming::after {
-    content: 'Coming Soon';
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 0.8125rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(212, 212, 212, 0.7);
-    background: rgba(5, 12, 20, 0.75);
-    padding: 3px 8px;
-    border-radius: 0;
-    z-index: 3;
-}
-
-.lunara-hero-poster-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-
-.lunara-hero-poster-img {
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    display: block;
-}
-
-.lunara-hero-poster-placeholder {
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(10,21,32,0.9), rgba(30,45,60,0.8));
-    color: var(--lunara-gold, #c9a961);
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 12px;
-}
-
-.lunara-hero-poster-caption {
-    padding: 10px 12px 12px;
-    background: linear-gradient(to top, rgba(5,12,20,0.95), rgba(5,12,20,0.6));
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-.lunara-hero-poster-name {
-    font-size: 0.82rem;
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.25;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.lunara-hero-poster-year {
-    font-size: 0.8125rem;
-    color: rgba(201, 169, 97, 0.8);
-    letter-spacing: 0.08em;
-}
-
-.lunara-hero-grid-actions {
-    padding: 18px 48px 32px;
-    display: flex;
-    gap: 16px;
-}
-
-@media (max-width: 900px) {
-    .lunara-hero-grid-head,
-    .lunara-hero-poster-grid,
-    .lunara-hero-grid-actions {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-    .lunara-hero-poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 10px;
-    }
-}
-
-@media (max-width: 500px) {
-    .lunara-hero-poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 8px;
-    }
-    .lunara-hero-poster-caption {
-        padding: 6px 8px 8px;
-    }
-    .lunara-hero-poster-name {
-        font-size: 0.8125rem;
-    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -10313,184 +8827,12 @@ body.admin-bar .lunara-header {
     }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   HERO CAROUSEL — Bigger cards to match the "New Writing" quality bar
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.lunara-hero-carousel-section {
-    padding: 0;
-}
-
-.lunara-hero-carousel-section .lunara-home-section-head {
-    padding: 32px 48px 18px;
-}
-
-/* Wider cards in the hero carousel */
-.lunara-hero-carousel-section .lunara-poster-carousel-track {
-    grid-auto-columns: minmax(320px, 32%);
-    gap: 20px;
-    padding-left: 48px;
-    padding-right: 48px;
-}
-
-/* Taller posters */
-.lunara-hero-carousel-section .lunara-poster-card-image-wrap {
-    aspect-ratio: 2 / 3;
-    border-radius: 0;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* Bigger text */
-.lunara-hero-carousel-section .lunara-poster-card-copy {
-    padding: 16px 4px 8px;
-    text-align: left;
-}
-
-.lunara-hero-carousel-section .lunara-poster-card-kicker {
-    font-size: 0.8125rem;
-    letter-spacing: 0;
-    color: var(--lunara-gold, #c9a961);
-    margin-bottom: 6px;
-}
-
-.lunara-hero-carousel-section .lunara-poster-card-title {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.4rem;
-    line-height: 1.15;
-    color: var(--lunara-gold, #c9a961) !important;
-    text-align: left;
-}
-
-.lunara-hero-carousel-section .lunara-poster-card-meta {
-    font-size: 0.88rem;
-    color: rgba(212, 212, 212, 0.7);
-    text-align: left;
-}
-
-/* Card hover */
-.lunara-hero-carousel-section .lunara-poster-card {
-    transition: transform 0.3s ease;
-}
-
-.lunara-hero-carousel-section .lunara-poster-card:hover {
-    transform: translateY(-4px);
-}
-
-.lunara-hero-carousel-section .lunara-poster-card:hover .lunara-poster-card-image-wrap {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
-}
-
-/* Coming Soon badge */
-.lunara-hero-carousel-section .lunara-poster-card.is-upcoming .lunara-poster-card-kicker {
-    color: rgba(212, 212, 212, 0.5);
-}
-
-.lunara-hero-carousel-section .lunara-poster-card.is-upcoming {
-    opacity: 0.75;
-}
-
-@media (max-width: 900px) {
-    .lunara-hero-carousel-section .lunara-poster-carousel-track {
-        grid-auto-columns: minmax(260px, 45%);
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-    .lunara-hero-carousel-section .lunara-home-section-head {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-}
-
-@media (max-width: 500px) {
-    .lunara-hero-carousel-section .lunara-poster-carousel-track {
-        grid-auto-columns: minmax(220px, 70%);
-    }
-    .lunara-hero-carousel-section .lunara-poster-card-title {
-        font-size: 1.15rem;
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   HOMEPAGE JOURNAL LANE — latest post cards
-   ═══════════════════════════════════════════════════════════════════════ */
-
-.lunara-home-journal-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-}
-
-.lunara-home-journal-card {
-    border-radius: 0;
-    overflow: hidden;
-    background: transparent;
-    border: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.lunara-home-journal-card:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: rgba(201, 169, 97, 0.3);
-}
-
-.lunara-home-journal-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-
-.lunara-home-journal-image {
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-}
-
-.lunara-home-journal-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-
-.lunara-home-journal-card:hover .lunara-home-journal-image img {
-    transform: scale(1.04);
-}
-
-.lunara-home-journal-copy {
-    padding: 22px 26px 26px;
-    display: grid;
-    gap: 10px;
-}
-
-.lunara-home-journal-date {
-    font-size: 0.8125rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--lunara-gold, #c9a961);
-    margin: 0;
-}
-
 .lunara-home-journal-title {
     font-size: 1.2rem;
     font-weight: 700;
     line-height: 1.35;
     margin: 0;
     color: #fff;
-}
-
-.lunara-home-journal-excerpt {
-    font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--lunara-text-muted, #888);
-    margin: 0;
-}
-
-@media (max-width: 900px) {
-    .lunara-home-journal-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -10667,10 +9009,8 @@ body.admin-bar .lunara-header {
     .lunara-dispatch-lead-copy,
     .lunara-dispatch-archive-copy,
     .lunara-dispatch-rail-copy,
-    .lunara-home-pulse-card-copy,
     .lunara-home-pulse-feature-card,
     .lunara-home-pulse-note,
-    .lunara-poster-card-copy,
     .lunara-review-grid-copy {
         min-width: 0;
         overflow: visible;
@@ -10736,7 +9076,6 @@ blockquote,
 }
 
 .lunara-site-title,
-.lunara-site-header,
 .lunara-footer,
 .ct-footer,
 .lunara-archive-hero-title,
@@ -10770,7 +9109,6 @@ blockquote,
 .lunara-oscars-portal-feature-kicker,
 .lunara-oscar-spotlight-pill,
 .lunara-oscar-spotlight-pill-label,
-.lunara-oscar-spotlight-pill-value,
 .lunara-btn,
 .lunara-button-ghost,
 h1,
@@ -10781,7 +9119,6 @@ h5,
 h6 {
     font-family: var(--lunara-heading-font-stack, Georgia, "Times New Roman", "Iowan Old Style", "Palatino Linotype", serif);
 }
-
 
 /* =========================================================================
    OSCAR LORE — carousel motion + inline expansion (Option A)
@@ -11114,12 +9451,10 @@ h6 {
    ================================ */
 .lunara-btn,
 .lunara-button-ghost,
-.lunara-read-more,
 button.lunara-btn,
 a.lunara-btn,
 .lunara-oscars-portal-actions a,
-.lunara-review-single-actions a,
-.lunara-home-pulse-actions a {
+.lunara-review-single-actions a {
     position: relative;
     overflow: hidden;
     transition: transform var(--lunara-dur-fast) var(--lunara-ease), box-shadow var(--lunara-dur-fast) var(--lunara-ease), border-color var(--lunara-dur-fast) var(--lunara-ease), background var(--lunara-dur-fast) var(--lunara-ease), color var(--lunara-dur-fast) var(--lunara-ease);
@@ -11176,7 +9511,6 @@ a.lunara-btn,
 .lunara-home-pulse-feature-card,
 .lunara-home-pulse-note,
 .lunara-home-winner-card,
-.lunara-ledger-story-card,
 .lunara-lore-card,
 .lunara-poster-card,
 .lunara-oscars-portal-link-card,
@@ -11191,7 +9525,6 @@ a.lunara-btn,
 .lunara-journal-archive-card::after,
 .lunara-dispatch-lead::after,
 .lunara-dispatch-archive-card::after,
-.lunara-ledger-story-card::after,
 .lunara-lore-card::after,
 .lunara-oscars-portal-link-card::after,
 .lunara-oscars-research-card::after {
@@ -11214,7 +9547,6 @@ a.lunara-btn,
 .lunara-journal-rail-card:hover,
 .lunara-home-pulse-note:hover,
 .lunara-home-winner-card:hover,
-.lunara-ledger-story-card:hover,
 .lunara-lore-card:hover,
 .lunara-oscars-portal-link-card:hover,
 .lunara-oscars-research-card:hover {
@@ -11228,7 +9560,6 @@ a.lunara-btn,
 .lunara-journal-archive-card:hover::after,
 .lunara-dispatch-lead:hover::after,
 .lunara-dispatch-archive-card:hover::after,
-.lunara-ledger-story-card:hover::after,
 .lunara-lore-card:hover::after,
 .lunara-oscars-portal-link-card:hover::after,
 .lunara-oscars-research-card:hover::after {
@@ -11284,7 +9615,6 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
    ================================ */
 .lunara-review-grid-card .lunara-review-grid-poster,
 .lunara-journal-archive-card .lunara-review-grid-poster,
-.lunara-ledger-story-card img,
 .lunara-lore-card img,
 .lunara-home-pulse-poster img,
 .lunara-poster-card-image,
@@ -11298,7 +9628,6 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
 
 .lunara-review-grid-card:hover .lunara-review-grid-poster,
 .lunara-journal-archive-card:hover .lunara-review-grid-poster,
-.lunara-ledger-story-card:hover img,
 .lunara-lore-card:hover img,
 .lunara-home-pulse-card:hover .lunara-home-pulse-poster img,
 .lunara-poster-card:hover .lunara-poster-card-image,
@@ -11312,21 +9641,11 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
 /* ================================
    Icons — subtle personality on hover
    ================================ */
-.lunara-search-trigger,
-.lunara-header-trigger,
-.lunara-search-overlay-close,
-.lunara-panel-close {
+.lunara-search-overlay-close {
     transition:
         transform var(--lunara-dur-fast) var(--lunara-ease), color var(--lunara-dur-fast) var(--lunara-ease), background-color var(--lunara-dur-fast) var(--lunara-ease);
 }
 
-.lunara-search-trigger:hover {
-    transform: scale(1.1);
-    color: var(--lunara-gold-light, #e0c481);
-}
-
-.lunara-header-trigger:hover svg,
-.lunara-panel-close:hover,
 .lunara-search-overlay-close:hover {
     transform: rotate(8deg);
     color: var(--lunara-gold-light, #e0c481);
@@ -11352,7 +9671,6 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
     background: var(--lunara-slider-hover, rgba(224,196,129,.16));
     color: var(--lunara-slider-color, #e0c481);
 }
-
 
 /* =========================================================================
    DYNAMISM BUCKET 4 — Best Picture Ken-Burns signature moment
@@ -11539,32 +9857,9 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
     }
 }
 
-
 /* ========================================
    Mobile menu panel — backdrop blur + confident slide
    ======================================== */
-
-/* Dim + blur the page behind the open panel */
-body.lunara-panel-open {
-    overflow: hidden; /* prevent background scroll while panel open */
-}
-
-body.lunara-panel-open::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: blur(10px) saturate(0.85);
-    z-index: 9995;
-    pointer-events: none;
-    animation: lunara-panel-backdrop-in .35s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1));
-}
-
-@keyframes lunara-panel-backdrop-in {
-    from { opacity: 0; backdrop-filter: blur(0) saturate(1); -webkit-backdrop-filter: blur(0) saturate(1); }
-    to   { opacity: 1; }
-}
 
 /* Panel itself — stronger slide easing, more presence */
 .lunara-mobile-panel {
@@ -11635,17 +9930,6 @@ body.lunara-panel-open::after {
     padding-left: 0 !important;
 }
 
-/* Close button in panel — rotate + brighten on hover */
-.lunara-mobile-panel .lunara-panel-close {
-    transition: transform .28s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1)), color .2s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1)), border-color .2s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1));
-}
-
-.lunara-mobile-panel .lunara-panel-close:hover {
-    transform: rotate(90deg) scale(1.06);
-    color: var(--lunara-gold-light, #e0c481);
-}
-
-
 /* ========================================
    Search overlay — scale-in with backdrop blur
    ======================================== */
@@ -11659,17 +9943,6 @@ body.lunara-panel-open::after {
 .lunara-search-overlay.is-open {
     backdrop-filter: blur(18px) saturate(0.85);
     -webkit-backdrop-filter: blur(18px) saturate(0.85);
-}
-
-.lunara-search-overlay-inner {
-    opacity: 0;
-    transform: translateY(16px) scale(0.97);
-    transition: opacity .38s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1)) 60ms, transform .42s var(--lunara-ease, cubic-bezier(.2, 0, .2, 1)) 60ms;
-}
-
-.lunara-search-overlay.is-open .lunara-search-overlay-inner {
-    opacity: 1;
-    transform: translateY(0) scale(1);
 }
 
 .lunara-search-input {
@@ -11760,38 +10033,6 @@ body.lunara-panel-open::after {
 }
 
 @media (max-width: 900px) {
-    .lunara-hero-carousel-section .lunara-home-section-head {
-        align-items: center;
-        gap: 14px;
-    }
-
-    .lunara-hero-carousel-section .lunara-poster-carousel-wrap {
-        overflow: visible;
-    }
-
-    .lunara-hero-carousel-section .lunara-poster-carousel-track {
-        grid-auto-columns: minmax(220px, 72vw);
-        gap: 16px;
-        padding: 0 6px 10px 0;
-        overscroll-behavior-x: contain;
-        touch-action: pan-x pinch-zoom;
-    }
-
-    .lunara-hero-carousel-section .lunara-poster-card-title {
-        font-size: 1.08rem;
-    }
-
-    .lunara-hero-carousel-section .lunara-poster-card-copy {
-        padding-top: 12px;
-    }
-
-    .lunara-poster-card-title-overlay {
-        top: 14px;
-        left: 14px;
-        right: 14px;
-        font-size: clamp(0.98rem, 0.92rem + 0.6vw, 1.22rem);
-        line-height: 1.08;
-    }
 
     .lunara-latest-reviews-section .lunara-review-grid {
         grid-template-columns: none;
@@ -11822,10 +10063,6 @@ body.lunara-panel-open::after {
         border-radius: 0;
     }
 
-    .lunara-home-hero-actions {
-        justify-content: flex-start;
-    }
-
     .lunara-review-single-debrief-shell::before {
         display: none;
     }
@@ -11846,26 +10083,10 @@ body.lunara-panel-open::after {
 }
 
 @media (max-width: 520px) {
-    .lunara-hero-carousel-section .lunara-poster-carousel-track {
-        grid-auto-columns: minmax(188px, 66vw);
-        gap: 14px;
-    }
-
-    .lunara-poster-card-title-overlay {
-        top: 12px;
-        left: 12px;
-        right: 12px;
-        font-size: 0.92rem;
-    }
 
     .lunara-latest-reviews-section .lunara-review-grid {
         grid-auto-columns: minmax(182px, 64vw);
         gap: 14px;
-    }
-
-    .lunara-home-hero-actions .lunara-btn {
-        width: 100%;
-        justify-content: center;
     }
 }
 
@@ -12378,10 +10599,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     align-items: start;
 }
 
-.lunara-review-single-hero-grid.has-hero-sidebar {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
-}
-
 .lunara-review-single-hero-sidebar {
     display: grid;
     gap: 18px;
@@ -12407,11 +10624,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
 
 .lunara-review-single-hero-sidebar .lunara-journal-rail-card {
     padding: 22px;
-}
-
-.lunara-review-single-ledger-card .aat-ledger-pill {
-    width: fit-content;
-    max-width: 100%;
 }
 
 /* Film Dossier rail card — the review's doorway into the entity graph. */
@@ -12475,14 +10687,7 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     opacity: 0.95;
 }
 
-.lunara-review-single-hero-grid.has-hero-sidebar .lunara-review-single-hero-inner {
-    max-width: 840px;
-}
-
 @media (max-width: 1120px) {
-    .lunara-review-single-hero-grid.has-hero-sidebar {
-        grid-template-columns: minmax(0, 1fr);
-    }
 
     .lunara-review-single-hero-sidebar {
         max-width: 780px;
@@ -12670,7 +10875,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     }
 }
 
-
 /* ============================================================================
  * HYBRID GRAFT 2026-05-10 — new homepage Journal card architecture
  *
@@ -12732,18 +10936,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     object-fit: cover;
     display: block;
     transition: transform .52s ease, filter .3s ease;
-}
-.lunara-journal-home-card-placeholder {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    background:
-        transparent;
-    color: #FAFBFC;
-    text-transform: uppercase;
-    letter-spacing: .14em;
-    font-size: 0.8125rem;
 }
 .lunara-journal-home-card-copy {
     display: grid;
@@ -12840,7 +11032,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     -webkit-line-clamp: 3;
 }
 
-
 /* ============================================================================
  * LUNARA OSCAR PICKS — homepage carousel (added 2026-05-10)
  *
@@ -12876,8 +11067,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     gap: 10px;
     margin-top: 14px;
 }
-
-
 
 .lunara-oscar-picks-controls .lunara-carousel-control {
     width: 33px;
@@ -12970,18 +11159,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     object-fit: cover;
     display: block;
     transition: transform .52s ease, filter .3s ease;
-}
-.lunara-oscar-pick-card-placeholder {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    background:
-        transparent;
-    color: #FAFBFC;
-    text-transform: uppercase;
-    letter-spacing: .14em;
-    font-size: 0.8125rem;
 }
 
 .lunara-oscar-pick-card-status {
@@ -13087,7 +11264,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
         transform: none;
     }
 }
-
 
 /* ============================================================================
  * LUNARA OSCAR FACTS — text-forward homepage carousel (added 2026-05-10)
@@ -13254,7 +11430,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     }
 }
 
-
 /* ============================================================================
  * LUNARA OSCAR FACTS — POSTER VARIANT (added 2026-05-10)
  *
@@ -13363,7 +11538,6 @@ body[data-rail-card-layout="split"] .lunara-dispatch-rail-copy {
     }
 }
 
-
 /* ============================================================================
  * HOMEPAGE TIGHTENING — added 2026-05-10 (Sitting 3 follow-up)
  *
@@ -13387,14 +11561,6 @@ body.home {
     --lunara-home-gap: 48px !important;
     --lunara-section-gap: 48px !important;
 }
-
-/* Cap hero review posters so 2 cards don't render at 600px wide each */
-body.home .lunara-home-hero-review-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
-    gap: 18px;
-    justify-content: start;
-}
 body.home .lunara-review-grid-card-hero {
     max-width: 280px;
 }
@@ -13411,13 +11577,11 @@ body.home .lunara-review-grid-card-hero .lunara-review-grid-copy {
 }
 
 /* Pulse card on the right — keep proportional, don't let it dominate */
-body.home .lunara-home-pulse-card,
-body.home .lunara-home-hero-pulse {
+body.home .lunara-home-pulse-card {
     max-width: 360px;
     margin-left: auto;
 }
-body.home .lunara-home-pulse-card .lunara-home-pulse-title,
-body.home .lunara-home-hero-pulse .lunara-home-pulse-title {
+body.home .lunara-home-pulse-card .lunara-home-pulse-title {
     font-size: clamp(1.15rem, 1.4vw, 1.42rem);
     line-height: 1.18;
 }
@@ -13431,7 +11595,6 @@ body.home .lunara-home-hero-review-title {
     font-size: clamp(1.5rem, 2.6vw, 2.1rem) !important;
     line-height: 1.16;
 }
-body.home .lunara-home-hero-review-summary,
 body.home .lunara-home-section-summary {
     font-size: .94rem;
     max-width: 56ch;
@@ -13441,10 +11604,6 @@ body.home .lunara-home-section-summary {
 body.home .lunara-home-hero {
     padding-top: 40px !important;
     padding-bottom: 32px !important;
-}
-body.home .lunara-home-hero-shell {
-    padding-top: 0;
-    padding-bottom: 0;
 }
 
 /* Section heads — tighter spacing between kicker / title / summary / link */
@@ -13463,29 +11622,18 @@ body.home .lunara-journal-home-grid {
     margin-top: 16px;
 }
 
-/* When the user has very few published reviews, the hero feels emptier — so
-   shrink the gap between hero copy and the small grid below. */
-body.home .lunara-home-hero-review-head {
-    margin-bottom: 14px;
-}
-
 @media (max-width: 720px) {
     body.home .lunara-home-section,
     body.home .lunara-home-hero {
         margin-bottom: 32px;
     }
-    body.home .lunara-home-hero-review-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    }
     body.home .lunara-review-grid-card-hero {
         max-width: 100%;
     }
-    body.home .lunara-home-pulse-card,
-    body.home .lunara-home-hero-pulse {
+    body.home .lunara-home-pulse-card {
         max-width: 100%;
     }
 }
-
 
 /* ============================================================================
  * HERO REVIEW GRID — HARD OVERRIDE (added 2026-05-10)
@@ -13498,28 +11646,6 @@ body.home .lunara-home-hero-review-head {
  * This block uses !important to guarantee override + max-width on the cards
  * so they cap at 240px regardless of how many reviews are in the grid.
  * ============================================================================ */
-.lunara-home-hero-review-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 240px)) !important;
-    gap: 18px !important;
-    justify-content: start !important;
-    margin-top: 18px !important;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-card,
-.lunara-home-hero-review-grid .lunara-review-grid-card-hero {
-    max-width: 240px !important;
-    width: 100% !important;
-    border-radius: 0 !important;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-poster-wrap {
-    aspect-ratio: 0.74 / 1 !important;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-title {
-    font-size: 1rem !important;
-    line-height: 1.16 !important;
-}
-.lunara-home-hero-review-grid .lunara-review-grid-copy {
-    padding: 12px 14px 14px !important;
-}
 
 /* Same hard-cap on the standalone Latest Reviews section (5-col grid) */
 .lunara-latest-reviews-section .lunara-review-grid {
@@ -13531,42 +11657,15 @@ body.home .lunara-home-hero-review-head {
     max-width: 220px !important;
     width: 100% !important;
 }
-
-/* Pulse card on the right side of hero — also rein in */
-.lunara-home-hero-shell {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px) !important;
-    gap: 32px !important;
-    align-items: start !important;
-}
-.lunara-home-pulse-card,
-.lunara-home-hero-pulse {
+.lunara-home-pulse-card {
     max-width: 340px !important;
 }
 
-@media (max-width: 900px) {
-    .lunara-home-hero-shell {
-        grid-template-columns: 1fr !important;
-    }
-    .lunara-home-hero-review-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 200px)) !important;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-card,
-    .lunara-home-hero-review-grid .lunara-review-grid-card-hero {
-        max-width: 200px !important;
-    }
-}
-
 @media (max-width: 600px) {
-    .lunara-home-hero-review-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-    .lunara-home-hero-review-grid .lunara-review-grid-card,
-    .lunara-home-hero-review-grid .lunara-review-grid-card-hero,
     .lunara-latest-reviews-section .lunara-review-grid-card {
         max-width: 100% !important;
     }
 }
-
 
 /* ============================================================================
  * HOMEPAGE FINAL ORDER + LEAD CARD TAMING (added 2026-05-10)
@@ -13616,7 +11715,6 @@ body.home .lunara-home-section:empty {
     display: none !important;
 }
 
-
 /* ============================================================================
  * HERO SINGLE-COLUMN — when no Pulse panel (added 2026-05-10)
  *
@@ -13625,22 +11723,9 @@ body.home .lunara-home-section:empty {
  * leaving an empty right column. Force single-column when no pulse so the
  * Latest Reviews fill the hero band naturally.
  * ============================================================================ */
-body.home .lunara-home-hero:not(.has-pulse) .lunara-home-hero-shell {
-    grid-template-columns: 1fr !important;
-    gap: 0 !important;
-}
-body.home .lunara-home-hero:not(.has-pulse) .lunara-home-hero-inner {
-    max-width: none !important;
-    margin: 0 !important;
-}
-body.home .lunara-home-hero:not(.has-pulse) .lunara-home-hero-review-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 260px)) !important;
-}
-body.home .lunara-home-hero:not(.has-pulse) .lunara-review-grid-card-hero,
-body.home .lunara-home-hero:not(.has-pulse) .lunara-home-hero-review-grid .lunara-review-grid-card {
+body.home .lunara-home-hero:not(.has-pulse) .lunara-review-grid-card-hero {
     max-width: 260px !important;
 }
-
 
 /* ============================================================================
  * HOMEPAGE CARDS — MASSIVE OVERRIDE (added 2026-05-10)
@@ -13650,30 +11735,6 @@ body.home .lunara-home-hero:not(.has-pulse) .lunara-home-hero-review-grid .lunar
  * carousels: Latest Reviews, Journal, Lunara Picks. (Facts stays text-forward
  * as designed, but bumps a hair larger.)
  * ============================================================================ */
-
-/* ---- LATEST REVIEWS (hero) — big posters, 3 per row max ------------------ */
-body.home .lunara-home-hero-review-grid {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
-    gap: 28px !important;
-    max-width: 1400px;
-    margin-top: 28px !important;
-}
-body.home .lunara-home-hero-review-grid .lunara-review-grid-card,
-body.home .lunara-home-hero-review-grid .lunara-review-grid-card-hero {
-    max-width: 100% !important;
-    width: 100% !important;
-}
-body.home .lunara-home-hero-review-grid .lunara-review-grid-poster-wrap {
-    aspect-ratio: 0.7 / 1 !important; /* taller poster ratio for impact */
-}
-body.home .lunara-home-hero-review-grid .lunara-review-grid-title {
-    font-size: clamp(1.18rem, 1.7vw, 1.5rem) !important;
-    line-height: 1.2 !important;
-}
-body.home .lunara-home-hero-review-grid .lunara-review-grid-copy {
-    padding: 18px 20px 22px !important;
-    gap: 10px !important;
-}
 
 /* ---- JOURNAL — restore lead to BIG hero treatment, larger cards --------- */
 .lunara-journal-home-card.is-lead .lunara-journal-home-card-media {
@@ -13802,7 +11863,6 @@ body.home .lunara-home-hero {
         margin-bottom: 40px !important;
     }
 }
-
 
 /* ============================================================================
  * CINEMATIC HERO — full-viewport, image-first, magazine-cover treatment
@@ -14035,7 +12095,6 @@ body.home .lunara-home-hero {
     }
 }
 
-
 /* ============================================================================
  * CINEMATIC HERO ↔ JOURNAL TRANSITION (added 2026-05-10)
  *
@@ -14092,7 +12151,6 @@ body.home .lunara-cinematic-hero + .lunara-home-section .lunara-home-section-hea
         margin-bottom: 22px;
     }
 }
-
 
 /* ============================================================================
  * CINEMATIC HERO — IMG-BASED REFACTOR + MOBILE EDGE-TO-EDGE + LCP PERF
@@ -14210,7 +12268,6 @@ body.home .lunara-cinematic-hero + .lunara-home-section .lunara-home-section-hea
     }
 }
 
-
 /* ============================================================================
  * MOBILE HEADER DUPLICATE GUARD — added 2026-05-10 (urgent fix)
  *
@@ -14247,7 +12304,6 @@ body.home .lunara-cinematic-hero + .lunara-home-section .lunara-home-section-hea
         display: none !important;
     }
 }
-
 
 /* ============================================================================
  * BLOCKSY HEADER DEVICE-BLOCK GUARD — added 2026-05-10 (urgent fix, REAL one)
@@ -16368,7 +14424,6 @@ body.home main.lunara-front-page > .lunara-home-section,
 .lunara-cinematic-hero-carousel:not(.is-hero-mounted) .splide__list > .splide__slide:not(:first-child) {
     display: none;
 }
-
 
 @media (prefers-reduced-motion: reduce) {
     .lunara-cinematic-hero-carousel.splide--fade > .splide__track > .splide__list > .splide__slide {
