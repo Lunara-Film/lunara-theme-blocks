@@ -25,6 +25,14 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-05 — Polish from the review panel (Theme 3.2.150)
+
+- **Asked:** nobody; the review panel on 3.2.147/3.2.148 finished (26 agents, 23 findings, 18 confirmed after adversarial verification). Six were already fixed and live in 3.2.148/3.2.149.
+- **Built (Theme 3.2.150, PR open):** the Pair It With head drops its hairline when the thread is drawn (one rule above the row instead of three); the Oscar Ledger pill starts flush and its link is a 44px target; the band's `max-width` bounds end at .98px so fractional zoom widths never fall between rules. Tests: the Debrief frame centred (1060px at 1440px); links at the bottom of every three-up card.
+- **Live:** Theme 3.2.149 until Dalton's yes and deploy click.
+- **Found, not fixed (from the panel):** the Site Studio Debrief poster-width control is capped at 220px by the band and no longer changes the page (DESIGN.md says presentation changes must not silently retire Studio controls; decide: honour it up to 300px, or retire the control); on phones the column under the poster is empty beside a tall panel; the hidden title and year under the poster are still printed (`inc/debrief-public.php`); the thread's horizontal mode is untested under the route CSS; `inc/debrief.php` and `inc/pairing-showcase.php` build cards without the lead group the public renderer has, so Home and the showcase block render a different structure from the review; notes at 15px and the Method question at 13px are by choice.
+- **Next:** on yes: merge, deploy click, verify; the Customizer block; the canary sentinels; a decision on the poster-width control.
+
 ## 2026-11-05 — Three-up from 1101px; the phone panel keeps its chips (Theme 3.2.149)
 
 - **Asked:** nobody; the review panel (three lenses, adversarial verify) on 3.2.147/3.2.148 reported, and I confirmed on the live 3.2.148: at 901–1100px the three-up cards are 234–266px wide with a 90–122px lead; at 360px the where-to-watch chips (170px minimum columns) run past the 170px panel into the section's hidden overflow; "Reviewed Film" renders at the paragraph size.
