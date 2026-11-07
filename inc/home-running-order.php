@@ -43,26 +43,19 @@ function lunara_home_running_order_masthead_urls() {
 		return $urls;
 	}
 
+	// 3.2.161: the three doors masthead shows the lead alone (its two
+	// companions left with the doors), so the wall skips only the lead.
 	$lead     = lunara_get_home_front_door_lead();
 	$lead_url = trim( (string) ( $lead['url'] ?? '' ) );
 	if ( '' !== $lead_url ) {
 		$urls[ untrailingslashit( $lead_url ) ] = true;
 	}
 
-	if ( function_exists( 'lunara_get_home_front_door_companions' ) ) {
-		foreach ( (array) lunara_get_home_front_door_companions( $lead_url, 2 ) as $companion ) {
-			$url = trim( (string) ( $companion['url'] ?? '' ) );
-			if ( '' !== $url ) {
-				$urls[ untrailingslashit( $url ) ] = true;
-			}
-		}
-	}
-
 	return $urls;
 }
 
 /**
- * The reviews on the wall: newest first, without the masthead's three.
+ * The reviews on the wall: newest first, without the masthead's lead.
  *
  * @param int $count How many to show.
  * @return WP_Post[]

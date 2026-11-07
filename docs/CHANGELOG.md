@@ -11,6 +11,20 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.161: the three doors. Home says what Lunara Film is
+
+Dalton, on the live Home: "everything is too small, just too small. It's not dynamic enough, and it doesn't shout immediately what this is. We are reviews, news, and Oscars." Two directions were drawn on the live page and sent as pictures; he picked A, the three doors, with one note: the three words on the same level.
+
+**The masthead.** The mark grows to 420px (74px tall on a phone, 124px on desktop). One plain line sits under it: "Reviews, news, and the Oscars. One film desk in Dallas." Then three tall pictures read Reviews, Journal, Oscars in Tiempos Headline at 92px (56px on a phone), each with one live line: the review count and the newest film; the newest Journal entry; the Ledger's ceremony and nomination counts and the Sweep Watch film. Every door reserves two lines for its line and one for its cue, so the three words land on one baseline whatever the lines say (measured equal at 1100 and 1440px). The lead review follows the doors as one wide still beside its 64px title. Its two companions leave the masthead; the Running Order below carries every review after the lead (it skipped three, it skips one).
+
+**The pictures.** The Reviews door shows the lead still from the one URL the lead's preload names, eager and high priority; the lead still below it defers and paints from that download. The Journal door takes the newest entry's picture, the Oscars door the first Oscar pick's artwork; without a pick the door is typographic, because the band's 342px posters would upscale. A door is landscape on a phone and portrait on desktop and its picture covers it, so no single crop fits: the candidates are whole-picture downscales, and the `front-door` sizes slot names the width a covering picture needs (the wider of the measured frame and its height at 16:9: 444px on a phone, 996px at 1440).
+
+**The Home type scale.** Every section under the doors: titles 34px on a phone to 56px on desktop, kickers 15px, summaries and card text 17-18px, card titles 21-26px. The Oscar Ledger band keeps its own full-bleed title.
+
+- Measured on the real template and CSS with JavaScript off at 320, 390, 768, 1100 and 1440px: order, the doors side by side from 821px and stacked below, equal heights, the words on one level, the frame against the sizes attribute, the lead's text beside its still from 1101px, the type scale, square corners, no overflow. The doors start 260px from the top of the page on a phone and 366px at 1440.
+- Tests: `tests/home-front-desk-runtime.php` (the doors, their lines, the shared URL and single high-priority picture, the Sweep Watch artwork, the typographic fallbacks, no crop candidates) and `tests/home-front-desk-browser-runtime.js` rewritten; the Running Order test follows the skip change.
+- Not changed: the older masthead rules stay in `lunara-home-modules.css` and `inc/frontend.php` for the CSS diet to retire; the Customizer's route-card prominence and height settings no longer shape the doors.
+
 ## 2026-11-07 — Theme 3.2.160 / Core 0.8.19: Review metadata and saved pairings share their owning storage
 
 The old unified ACF Review group used names such as `lunara_year`; ACF then stored its reference in `_lunara_year`, the same key the native Review editor and public theme use for the value. Core now aligns the confirmed fields' runtime names and types with canonical Review storage, keeping stable field keys and placing their references under double underscores. Exact legacy selectors and values retain a read-only compatibility path. Native edits, explicit clears and verified importer writes use the same boundary; database field definitions and the disabled group's state are preserved.

@@ -209,13 +209,13 @@ lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-running-orde
 lunara_test_assert( strpos( $html, 'lunara-home-running-order-head' ) < strpos( $html, 'lunara-home-running-order-grid' ), 'the head precedes the wall' );
 lunara_test_assert( false !== strpos( $html, '<a class="lunara-home-running-order-all" href="https://example.test/reviews/">All 248 reviews</a>' ), 'the count link names every published review and opens the archive' );
 
-// Order and count: newest first, the masthead's three skipped, 12 by default.
+// Order and count: newest first, the masthead's lead skipped (3.2.161: its two companions left with the three doors), 12 by default.
 $hrefs = lunara_test_card_hrefs( $html );
 lunara_test_assert( 12 === count( $hrefs ) && 12 === substr_count( $html, '<li class="lunara-home-running-order-item">' ), 'twelve posters by default' );
-lunara_test_assert( ! in_array( 'the-social-reckoning', $hrefs, true ) && ! in_array( 'practical-magic-2', $hrefs, true ) && ! in_array( 'misty-green', $hrefs, true ), 'the lead story and its two companions are not repeated on the wall' );
-$expected = array_merge( array( 'review-fourteen', 'review-fifteen', 'review-sixteen', 'review-seventeen', 'review-eighteen' ), array_map( static fn( $id ) => "review-{$id}", range( 19, 25 ) ) );
-lunara_test_assert( $expected === $hrefs, 'the wall runs newest first from the fourth-newest review' );
-lunara_test_assert( ( WP_Query::$last_args['posts_per_page'] ?? 0 ) === 15 && 'review' === ( WP_Query::$last_args['post_type'] ?? '' ) && 'publish' === ( WP_Query::$last_args['post_status'] ?? '' ) && ! empty( WP_Query::$last_args['no_found_rows'] ), 'one bounded published-review query covers the wall plus the three it skips' );
+lunara_test_assert( ! in_array( 'the-social-reckoning', $hrefs, true ) && 'practical-magic-2' === ( $hrefs[0] ?? '' ) && 'misty-green' === ( $hrefs[1] ?? '' ), 'the lead story is not repeated on the wall; the two reviews after it open the wall, since the masthead no longer shows them' );
+$expected = array_merge( array( 'practical-magic-2', 'misty-green', 'review-fourteen', 'review-fifteen', 'review-sixteen', 'review-seventeen', 'review-eighteen' ), array_map( static fn( $id ) => "review-{$id}", range( 19, 23 ) ) );
+lunara_test_assert( $expected === $hrefs, 'the wall runs newest first from the second-newest review' );
+lunara_test_assert( ( WP_Query::$last_args['posts_per_page'] ?? 0 ) === 13 && 'review' === ( WP_Query::$last_args['post_type'] ?? '' ) && 'publish' === ( WP_Query::$last_args['post_status'] ?? '' ) && ! empty( WP_Query::$last_args['no_found_rows'] ), 'one bounded published-review query covers the wall plus the lead it skips' );
 
 // A poster: lazy, 2:3 dimensions, TMDB right-sized to w342 with a w500 candidate.
 $fourteen = lunara_test_card( $html, 'review-fourteen' );
@@ -244,10 +244,10 @@ lunara_test_assert( 1 === preg_match( '#<span class="lunara-home-running-order-s
 lunara_test_assert( false !== strpos( lunara_test_card( $html, 'review-fifteen' ), 'lunara-star--half' ), 'a half score shows its half star' );
 lunara_test_assert( false === strpos( $seventeen, 'lunara-home-running-order-score' ), 'an unscored review shows no score' );
 
-// Only what the masthead shows is skipped: with a non-review lead, the two companions are the two newest reviews and the wall starts at the third.
+// Only what the masthead shows is skipped: with a non-review lead, no review is skipped and the wall starts at the newest.
 $GLOBALS['lunara_test']['slide_url'] = 'https://example.test/journal/some-entry/';
 $hrefs = lunara_test_card_hrefs( lunara_render_home_running_order() );
-lunara_test_assert( 'misty-green' === ( $hrefs[0] ?? '' ) && ! in_array( 'the-social-reckoning', $hrefs, true ) && ! in_array( 'practical-magic-2', $hrefs, true ) && 12 === count( $hrefs ), 'with a journal lead the wall skips only the two companion reviews' );
+lunara_test_assert( 'the-social-reckoning' === ( $hrefs[0] ?? '' ) && 'practical-magic-2' === ( $hrefs[1] ?? '' ) && 12 === count( $hrefs ), 'with a journal lead the wall skips nothing' );
 $GLOBALS['lunara_test']['slide_url'] = 'https://example.test/reviews/the-social-reckoning/';
 
 // The count filter, clamped to 6–24.
@@ -259,15 +259,15 @@ lunara_test_assert( 6 === count( lunara_test_card_hrefs( lunara_render_home_runn
 $GLOBALS['lunara_test']['filters'] = array();
 add_filter( 'lunara_home_running_order_count', static fn() => 40 );
 $hrefs = lunara_test_card_hrefs( lunara_render_home_running_order() );
-lunara_test_assert( 24 === count( $hrefs ) && 'review-37' === end( $hrefs ), 'the count never exceeds twenty-four' );
+lunara_test_assert( 24 === count( $hrefs ) && 'review-35' === end( $hrefs ), 'the count never exceeds twenty-four' );
 $GLOBALS['lunara_test']['filters'] = array();
 
 // The count link with one review, and nothing to show at all.
 $GLOBALS['lunara_test']['review_count'] = 1;
 lunara_test_assert( false !== strpos( lunara_render_home_running_order(), '>All 1 review</a>' ), 'the count link reads singular for one review' );
 $GLOBALS['lunara_test']['review_count'] = 248;
-$GLOBALS['lunara_test']['reviews'] = array_slice( lunara_test_review_rows(), 0, 3 );
-lunara_test_assert( '' === lunara_render_home_running_order(), 'when the masthead shows every review the wall renders nothing' );
+$GLOBALS['lunara_test']['reviews'] = array_slice( lunara_test_review_rows(), 0, 1 );
+lunara_test_assert( '' === lunara_render_home_running_order(), 'when the masthead shows the only review the wall renders nothing' );
 $GLOBALS['lunara_test']['reviews'] = array();
 $GLOBALS['lunara_test']['slides']  = false;
 lunara_test_assert( '' === lunara_render_home_running_order(), 'with no reviews the wall renders nothing' );
