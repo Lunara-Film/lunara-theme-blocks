@@ -11,6 +11,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.157: the Oscars portal cards stop downloading backdrops nothing paints
+
+The plugin-alignment audit (the lenses that finished before the usage credits ran out) found the four portal cards on `/oscars/` printing inline TMDB backdrops. Measured live at 390 and 1440: `lunara-shell.css` blanks every portal card's background at every width (the flat-card rule, `background: transparent !important`), so the two doors and the two research cards never painted their stills and still downloaded them on every load. Three TMDB w780 files, 145 KB per load: the hero's 27 KB is painted (the band on phones, the hero on desktop); the cards' 118 KB is not.
+
+- **The doors and the research cards print no inline background.** `page-oscars.php` (the doors and the research cards) and `inc/oscars-portal.php` (the portal renderer's doors) keep the `has-backdrop` class, whose shell rules size the card, and drop the `style` attribute. Measured on the live markup with the four attributes removed: full-page screenshots at 390, 768 and 1440 are byte-identical, and TMDB requests per load fall from three to one.
+- Tests: `tests/site-studio-oscars-runtime.php` renders the doors and asserts no inline style on them; `tests/image-sizing-runtime.php` reads the two templates for the no-space `background-image:url(` form the cards used, beside the spaced form it already refused.
+
 ## 2026-11-07 — Theme 3.2.156: the Film Index, the Talent Index and their dossiers fit their frames
 
 The plugin audit (Core lens) found two public routes the speed work had not measured: `/film/` (5,269 published films) and `/talent/` (8,473 people), core-registered post types the theme renders with templates that predate the lessons. Measured on live 3.2.154 at 390px (2x) before this release: ten 170px index posters fetched 683-768px crops (666 KB) under WordPress's default sizes, four uploads with no intermediate sizes printed no candidates at all, and the dossier poster fetched a 780px file for a 218px frame.

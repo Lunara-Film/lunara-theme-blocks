@@ -526,10 +526,10 @@ $command_cards = array(
             <div class="lunara-oscars-portal-link-grid">
                 <?php foreach ( $portal_links as $portal_link ) :
                     $backdrop_url = trim( (string) ( $portal_link['backdrop'] ?? '' ) );
-                    $backdrop_css = '' !== $backdrop_url ? 'background-image:url(' . esc_url( $backdrop_url ) . ')' : '';
+                    // 3.2.157: the door keeps its backdrop class but prints no inline background (see inc/oscars-portal.php).
                     $backdrop_cls = '' !== $backdrop_url ? ' has-backdrop' : '';
                 ?>
-                    <a class="lunara-oscars-portal-link-card<?php echo esc_attr( $backdrop_cls ); ?>" href="<?php echo esc_url( $portal_link['url'] ); ?>"<?php if ( '' !== $backdrop_css ) : ?> style="<?php echo esc_attr( $backdrop_css ); ?>"<?php endif; ?>>
+                    <a class="lunara-oscars-portal-link-card<?php echo esc_attr( $backdrop_cls ); ?>" href="<?php echo esc_url( $portal_link['url'] ); ?>">
                         <p class="lunara-oscars-portal-link-kicker"><?php echo esc_html( $portal_link['kicker'] ); ?></p>
                         <h3><?php echo esc_html( $portal_link['title'] ); ?></h3>
                         <?php if ( '' !== trim( (string) $portal_link['copy'] ) ) : ?>
@@ -668,11 +668,11 @@ $command_cards = array(
 
                 <div class="lunara-oscars-research-card-grid">
                     <?php foreach ( $research_cards as $research_card ) :
+                        // 3.2.157: the card keeps its backdrop class but prints no inline background (see inc/oscars-portal.php).
                         $backdrop_url = trim( (string) ( $research_card['backdrop'] ?? '' ) );
-                        $backdrop_css = '' !== $backdrop_url ? 'background-image:url(' . esc_url( $backdrop_url ) . ')' : '';
                         $backdrop_cls = '' !== $backdrop_url ? ' has-backdrop' : '';
                     ?>
-                        <a class="lunara-oscars-research-card<?php echo esc_attr( $backdrop_cls ); ?>" href="<?php echo esc_url( $research_card['url'] ); ?>"<?php if ( '' !== $backdrop_css ) : ?> style="<?php echo esc_attr( $backdrop_css ); ?>"<?php endif; ?>>
+                        <a class="lunara-oscars-research-card<?php echo esc_attr( $backdrop_cls ); ?>" href="<?php echo esc_url( $research_card['url'] ); ?>">
                             <p class="lunara-oscars-research-card-kicker"><?php echo esc_html( $research_card['kicker'] ); ?></p>
                             <h3><?php echo esc_html( $research_card['title'] ); ?></h3>
                             <?php if ( '' !== trim( (string) $research_card['copy'] ) ) : ?>

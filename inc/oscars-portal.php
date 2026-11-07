@@ -210,11 +210,13 @@ function lunara_render_oscars_portal_markup() {
 
                 <div class="lunara-oscars-portal-link-grid">
                     <?php foreach ( $portal_links as $portal_link ) :
+                        // 3.2.157: the door keeps its backdrop class (the shell sizes a backdrop door) but prints no
+                        // inline background: lunara-shell.css blanks every portal card's background at every width,
+                        // so the still never painted and only downloaded (118 KB per load for the four cards).
                         $bd_url   = trim( (string) ( $portal_link['backdrop'] ?? '' ) );
-                        $bd_style = '' !== $bd_url ? 'background-image:url(' . esc_url( $bd_url ) . ')' : '';
                         $bd_class = '' !== $bd_url ? ' has-backdrop' : '';
                     ?>
-                        <a class="lunara-oscars-portal-link-card<?php echo $bd_class; ?>" href="<?php echo esc_url( $portal_link['url'] ); ?>"<?php if ( '' !== $bd_style ) : ?> style="<?php echo esc_attr( $bd_style ); ?>"<?php endif; ?>>
+                        <a class="lunara-oscars-portal-link-card<?php echo $bd_class; ?>" href="<?php echo esc_url( $portal_link['url'] ); ?>">
                             <p class="lunara-oscars-portal-link-kicker"><?php echo esc_html( $portal_link['kicker'] ); ?></p>
                             <h3><?php echo esc_html( $portal_link['title'] ); ?></h3>
                             <?php if ( '' !== trim( (string) $portal_link['copy'] ) ) : ?>

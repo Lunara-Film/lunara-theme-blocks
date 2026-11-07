@@ -133,6 +133,8 @@ sizing_assert( false !== strpos( $tmdb_person, 'https://i0.wp.com/image.tmdb.org
 $oscars_data = file_get_contents( ABSPATH . 'inc/oscars-data.php' );
 $page_oscars = file_get_contents( ABSPATH . 'page-oscars.php' );
 sizing_assert( false === strpos( $oscars_data, "style=\"background-image: url('" ) && false === strpos( $page_oscars, "style=\"background-image: url('" ), 'No Oscars plate prints an inline background: the deferred stylesheet hid it, but the download had already started (33 plates, 1.4 MB on /oscars/; 3.2.154 took the last eleven).' );
+$oscars_portal = file_get_contents( ABSPATH . 'inc/oscars-portal.php' );
+sizing_assert( false === strpos( $page_oscars, 'background-image:url(' ) && false === strpos( $oscars_portal, 'background-image:url(' ), 'No portal door or research card prints an inline background (3.2.157: the shell blanks every portal card background, so the still only downloaded).' );
 sizing_assert( 1 === preg_match( '/lunara_oscars_winner_photo_img\( \$photo_url, \$photo_alt, \'lunara-winner-photo\', null, array\( 192, 256, 352, 512, 704, 768 \), lunara_oscars_attachment_size\( \$photo_id \) \)/', $oscars_data ), 'A curated photo is shown whole (no frame) with its attachment size as the cap.' );
 sizing_assert( 1 === preg_match( '/lunara_oscars_winner_photo_img\( \$person_visual\[\'poster_url\'\], \$person_alt, \'lunara-winner-photo lunara-winner-photo--person\', array\( 2, 3 \) \)/', $oscars_data ), 'A portrait keeps its 2:3 crop.' );
 sizing_assert( 1 === preg_match( '/lunara_oscars_winner_photo_img\( \$backdrop_url, \$photo_alt, \'lunara-winner-photo\', array\( 16, 9 \), array\( 320, 480, 640, 960 \) \)/', $oscars_data ), 'A still keeps its 16:9 crop at the widths the 960px crop allows.' );
