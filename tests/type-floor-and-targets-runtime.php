@@ -11,44 +11,82 @@ define( 'ABSPATH', dirname( __DIR__ ) . '/' );
 $checks = 0;
 function floor_assert( $condition, $message ) { global $checks; ++$checks; if ( ! $condition ) { fwrite( STDERR, "FAIL: {$message}\n" ); exit( 1 ); } }
 function floor_read( $file ) { return (string) file_get_contents( ABSPATH . $file ); }
-function floor_block( $css, $selector_pattern ) {
-	// The first rule block whose selector matches the pattern, body only.
-	return preg_match( '/' . $selector_pattern . '[^{]*\{([^}]*)\}/s', $css, $m ) ? $m[1] : '';
+function floor_block( $css, $selector_pattern, $must_declare = '' ) {
+	// The first rule block whose selector matches the pattern (and declares
+	// $must_declare when given), body only.
+	if ( ! preg_match_all( '/' . $selector_pattern . '[^{]*\{([^}]*)\}/s', $css, $all ) ) { return ''; }
+	foreach ( $all[1] as $body ) { if ( '' === $must_declare || false !== strpos( $body, $must_declare ) ) { return $body; } }
+	return '';
+}
+// 3.2.154: the floor is a behaviour (at least 13px, at least 44px), not a string.
+function floor_px( $value ) {
+	$value = trim( (string) $value );
+	if ( preg_match( '/^max\((.*)\)$/s', $value, $m ) ) { return max( array_map( 'floor_px', explode( ',', $m[1] ) ) ); }
+	if ( preg_match( '/^([\d.]+)px/', $value, $m ) ) { return (float) $m[1]; }
+	if ( preg_match( '/^([\d.]+)(r?em)/', $value, $m ) ) { return (float) $m[1] * 16; }
+	return 0.0;
+}
+function floor_declared( $body, $property ) {
+	// The last declaration wins within a block.
+	return preg_match_all( '/(?:^|;|\s)' . preg_quote( $property, '/' ) . '\s*:\s*([^;!]+)/', $body, $m ) ? floor_px( end( $m[1] ) ) : 0.0;
 }
 
 // ---- The 13px floor ---------------------------------------------------------------------------------
 $header = floor_read( 'inc/header-command.php' );
-floor_assert( 1 === preg_match( '/\.lunara-header-nav a, \.lunara-header-nav-link \{[^}]*font-size: \.8125rem;/s', $header ), 'The header navigation links are 13px, not 12.8px.' );
+floor_assert( floor_declared( floor_block( $header, preg_quote( '.lunara-header-nav a, .lunara-header-nav-link', '/' ), 'font-size' ), 'font-size' ) >= 13, 'The header navigation links are at least 13px (were 12.8px).' );
 
 $home_modules = floor_read( 'assets/css/lunara-home-modules.css' );
-floor_assert( false !== strpos( $home_modules, '.lunara-home-program.is-cover .lunara-home-program-dateline-items{font-size:.8125rem;' ), 'The Home cover dateline is 13px, not 12px.' );
+floor_assert( floor_declared( floor_block( $home_modules, preg_quote( 'body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items', '/' ), 'font-size' ), 'font-size' ) >= 13, 'The Home cover dateline is at least 13px (was 12px).' );
 
 $review_single = floor_read( 'assets/css/lunara-review-single.css' );
 foreach ( array( 'body.single-review .lunara-review-single-debrief .lunara-debrief-list--signature li strong', 'html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-list--signature li strong' ) as $selector ) {
-	$body = floor_block( $review_single, preg_quote( $selector, '/' ) );
-	floor_assert( '' !== $body && 1 === preg_match( '/font-size: 0\.8125rem !important;/', $body ), "The Signature list labels (Score, Where to Watch) are 13px in `{$selector}`." );
+	$body = floor_block( $review_single, preg_quote( $selector, '/' ), 'font-size' );
+	floor_assert( '' !== $body && floor_declared( $body, 'font-size' ) >= 13, "The Signature list labels (Score, Where to Watch) are at least 13px in `{$selector}`." );
 }
-$plate = floor_block( $review_single, preg_quote( '.lunara-review-single-debrief-section .lunara-pair-card-plate-title', '/' ) );
-floor_assert( '' !== $plate && false !== strpos( $plate, 'font-size: 0.8125rem !important;' ), 'A pairing card title plate reads at 13px, not 12.8px.' );
+$plate = floor_block( $review_single, preg_quote( '.lunara-review-single-debrief-section .lunara-pair-card-plate-title', '/' ), 'font-size' );
+floor_assert( '' !== $plate && floor_declared( $plate, 'font-size' ) >= 13, 'A pairing card title plate reads at 13px or more (was 12.8px).' );
 
 $rendering = floor_read( 'inc/review-rendering.php' );
-foreach ( array( 'lunara-review-watch-eyebrow', 'lunara-review-watch-meta' ) as $class ) {
-	$body = floor_block( $rendering, 'body\.single-review \.' . preg_quote( $class, '/' ) );
-	floor_assert( '' !== $body && false !== strpos( $body, 'font-size: .8125rem !important;' ), "The where-to-watch chip's {$class} is 13px." );
+foreach ( array( 'lunara-review-watch-eyebrow', 'lunara-review-watch-meta', 'lunara-review-watch-disclosure' ) as $class ) {
+	$body = floor_block( $rendering, 'body\.single-review \.' . preg_quote( $class, '/' ), 'font-size' );
+	floor_assert( '' !== $body && floor_declared( $body, 'font-size' ) >= 13, "The where-to-watch chip's {$class} is at least 13px." );
 }
-$affiliate = floor_block( $rendering, 'body\.single-review \.lunara-review-watch-card\.is-affiliate::after' );
-floor_assert( '' !== $affiliate && false !== strpos( $affiliate, 'font-size: .8125rem;' ), 'The chip\'s Affiliate mark is 13px.' );
-floor_assert( false === strpos( $rendering, 'font-size: .66rem' ) && false === strpos( $rendering, 'font-size: .72rem' ) && false === strpos( $rendering, 'font-size: .64rem' ), 'No 10-11px sizes remain in the review Studio CSS.' );
+$affiliate = floor_block( $rendering, 'body\.single-review \.lunara-review-watch-card\.is-affiliate::after', 'font-size' );
+floor_assert( '' !== $affiliate && floor_declared( $affiliate, 'font-size' ) >= 13, 'The chip\'s Affiliate mark is at least 13px.' );
+// The public where-to-watch stylesheet (the editor's own meta box keeps its small print).
+floor_assert( 1 === preg_match( '/<style id="lunara-review-watch-links-css">(.*?)<\/style>/s', $rendering, $watch_css ), 'The where-to-watch stylesheet is printed as one block.' );
+preg_match_all( '/font-size:\s*([^;!]+)/', $watch_css[1], $all_sizes );
+$small = array_filter( array_map( 'floor_px', $all_sizes[1] ), static function ( $px ) { return $px > 0 && $px < 13; } );
+floor_assert( count( $all_sizes[1] ) >= 4 && empty( $small ), 'No font-size under 13px remains in the public where-to-watch CSS (found ' . implode( ', ', $small ) . ').' );
 
 $portal = floor_read( 'assets/css/lunara-oscars-portal.css' );
-$em = floor_block( $portal, preg_quote( 'body.lunara-oscars-portal-page .lunara-oscars-board-call em', '/' ) );
-floor_assert( '' !== $em && false !== strpos( $em, 'font-size: max(0.8125rem, 0.78em);' ), 'A film name on the board never drops under 13px.' );
+$em = floor_block( $portal, preg_quote( 'body.lunara-oscars-portal-page .lunara-oscars-board-call em', '/' ), 'font-size' );
+floor_assert( '' !== $em && floor_declared( $em, 'font-size' ) >= 13 && false !== strpos( $em, 'max(' ), 'A film name on the board never drops under 13px: a max() keeps the floor under a smaller em base.' );
 
 // ---- 44px targets ----------------------------------------------------------------------------------
-foreach ( array( 'assets/css/lunara-shell.css', 'assets/css/lunara-shell-non-portal.css', 'style.css' ) as $file ) {
-	$css = floor_read( $file );
-	$pager = floor_block( $css, preg_quote( '.lunara-archive-pagination .page-numbers', '/' ) );
-	floor_assert( '' !== $pager && false !== strpos( $pager, 'min-width: 44px' ) && false !== strpos( $pager, 'min-height: 44px' ), "Archive pagination targets are 44px in {$file}." );
+// Every control the audit found under 44px, read from its own rule.
+$targets = array(
+	array( 'assets/css/lunara-shell.css', '.lunara-archive-pagination .page-numbers', array( 'min-width', 'min-height' ) ),
+	array( 'assets/css/lunara-shell-non-portal.css', '.lunara-archive-pagination .page-numbers', array( 'min-width', 'min-height' ) ),
+	array( 'style.css', '.lunara-archive-pagination .page-numbers', array( 'min-width', 'min-height' ) ),
+	array( 'assets/css/lunara-shell.css', 'body.lunara-oscars-portal-page .lunara-btn', array( 'min-height' ) ),
+	array( 'assets/css/lunara-shell.css', '.lunara-reader-toc-link', array( 'min-height' ) ),
+	array( 'assets/css/lunara-shell-non-portal.css', '.lunara-reader-toc-link', array( 'min-height' ) ),
+	array( 'style.css', '.lunara-reader-toc-link', array( 'min-height' ) ),
+	array( 'style.css', '.lunara-archive-sort-link', array( 'min-height' ) ),
+	array( 'style.css', '.lunara-nav .lunara-nav-list > li > a', array( 'min-height' ) ),
+	array( 'style.css', '.lunara-review-single-debrief .lunara-oscar-ledger-pill', array( 'min-height' ) ),
+	array( 'style.css', 'body.single-journal .lunara-review-single-rail-actions .lunara-btn', array( 'min-height' ) ),
+	array( 'assets/css/lunara-review-single.css', 'body.single-review .lunara-reader-toc-link', array( 'min-height' ) ),
+	array( 'assets/css/lunara-review-archive.css', '.lunara-review-archive-page .lunara-review-archive-retention-actions a', array( 'min-height' ) ),
+);
+foreach ( $targets as list( $file, $selector, $properties ) ) {
+	$css  = floor_read( $file );
+	$body = floor_block( $css, preg_quote( $selector, '/' ), $properties[0] );
+	floor_assert( '' !== $body, "`{$selector}` in {$file} declares {$properties[0]}." );
+	foreach ( $properties as $property ) {
+		floor_assert( floor_declared( $body, $property ) >= 44, "`{$selector}` in {$file} keeps {$property} at 44px or more." );
+	}
 }
 foreach ( array( 'assets/css/*.css', 'style.css', 'inc/*.php' ) as $pattern ) {
 	foreach ( glob( ABSPATH . $pattern ) as $path ) {
@@ -58,10 +96,11 @@ foreach ( array( 'assets/css/*.css', 'style.css', 'inc/*.php' ) as $pattern ) {
 	}
 }
 $journal = floor_read( 'assets/css/lunara-journal-archive.css' );
-$pill = floor_block( $journal, '#primary\.lunara-journal-archive-page \.lunara-journal-filter-pill,\s*#primary\.lunara-journal-archive-page \.lunara-archive-sort-link' );
-floor_assert( '' !== $pill && false !== strpos( $pill, 'min-height: 44px !important;' ) && false !== strpos( $pill, 'min-width: 44px !important;' ), 'A Journal filter pill is at least 44px wide and tall ("All" was 42px wide).' );
-$critical = floor_read( 'inc/journal-archive-critical.php' );
-floor_assert( false !== strpos( $critical, '.lunara-journal-filter-pill,#primary.lunara-journal-archive-page .lunara-archive-sort-link{min-height:44px!important;min-width:44px!important}' ), 'The Journal first paint says the same 44px pill.' );
+$pill = floor_block( $journal, '#primary\.lunara-journal-archive-page \.lunara-journal-filter-pill,\s*#primary\.lunara-journal-archive-page \.lunara-archive-sort-link', 'min-height' );
+floor_assert( '' !== $pill && floor_declared( $pill, 'min-height' ) >= 44 && floor_declared( $pill, 'min-width' ) >= 44, 'A Journal filter pill is at least 44px wide and tall ("All" was 40.6px wide).' );
+$critical      = floor_read( 'inc/journal-archive-critical.php' );
+$critical_pill = floor_block( $critical, '#primary\.lunara-journal-archive-page \.lunara-journal-filter-pill,#primary\.lunara-journal-archive-page \.lunara-archive-sort-link', 'min-height' );
+floor_assert( '' !== $critical_pill && floor_declared( $critical_pill, 'min-height' ) >= 44 && floor_declared( $critical_pill, 'min-width' ) >= 44, 'The Journal first paint says the same 44px pill.' );
 floor_assert( 1 === preg_match( '/body\.lunara-oscars-portal-page :is\(\.lunara-ceremony-winner-copy, \.lunara-oscars-spotlight-card-copy\) a\.lunara-oscars-text-link \{\s*padding-block: 4px;\s*\}/', $portal ), 'The stacked links in Oscars cards carry 4px of vertical padding, so each is at least 24px to tap.' );
 
 echo "Type floor and targets: {$checks} checks passed.\n";

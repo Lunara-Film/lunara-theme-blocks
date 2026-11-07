@@ -82,6 +82,7 @@ img_assert( array( 250, 500, 1000, 2000, 4000 ) === $widths, 'A 320px debrief po
 // 3.2.152: a TMDB poster is proxied through the CDN and cropped like an upload.
 $tmdb_locked = lunara_lock_review_image_markup( '<img src="https://image.tmdb.org/t/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg" class="lunara-review-single-debrief-poster" alt="A" loading="lazy">', '', $profile );
 img_assert( false !== strpos( $tmdb_locked, 'src="https://i0.wp.com/image.tmdb.org/t/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg?resize=2000%2C3000' ) && false !== strpos( $tmdb_locked, 'resize=250%2C375' ) && substr_count( $tmdb_locked, ' 250w' ) >= 1 && false === strpos( $tmdb_locked, 't/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg"' ), 'A TMDB poster is proxied through the CDN and gets the same crops as an upload (got ' . $tmdb_locked . ').' );
+img_assert( false === strpos( $tmdb_locked, ' 4000w' ) && false !== strpos( $tmdb_locked, ' 2000w' ), 'A TMDB poster offers no candidate wider than its 2000px original: the CDN cannot make a 4000w file (3.2.154).' );
 img_assert( false !== strpos( $locked, 'width="2000"' ) && false !== strpos( $locked, 'height="3000"' ) && false !== strpos( $locked, 'resize=500%2C750' ), 'Locked dimensions stay put; smaller candidates keep the 2:3 crop.' );
 $external = lunara_lock_review_image_markup( '<img src="https://example.org/poster.jpg" alt="A">', '', $profile );
 img_assert( false === strpos( $external, 'srcset=' ), 'Hosts that cannot resize get no invented candidates.' );

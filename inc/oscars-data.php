@@ -338,6 +338,26 @@ function lunara_rightsize_oscars_card_image_url( $url, $width = 780, $height = 1
     return $url;
 }
 
+if ( ! function_exists( 'lunara_oscars_attachment_size' ) ) {
+    /**
+     * An attachment's full size (3.2.154), or an empty array.
+     *
+     * @param int $attachment_id Attachment id.
+     * @return array{width:int,height:int}|array{}
+     */
+    function lunara_oscars_attachment_size( $attachment_id ) {
+        $attachment_id = absint( $attachment_id );
+        if ( $attachment_id < 1 || ! function_exists( 'wp_get_attachment_metadata' ) ) {
+            return array();
+        }
+        $meta = wp_get_attachment_metadata( $attachment_id );
+        if ( ! is_array( $meta ) || absint( $meta['width'] ?? 0 ) < 1 || absint( $meta['height'] ?? 0 ) < 1 ) {
+            return array();
+        }
+        return array( 'width' => absint( $meta['width'] ), 'height' => absint( $meta['height'] ) );
+    }
+}
+
 /**
  * A winner-card <img> that names its width candidates (3.2.152).
  *
@@ -352,9 +372,10 @@ function lunara_rightsize_oscars_card_image_url( $url, $width = 780, $height = 1
  * @param string              $class  Class attribute.
  * @param array<int,int>|null $frame  Frame ratio, e.g. array( 2, 3 ), or null for whole pictures.
  * @param array<int,int>|null $widths Candidate widths; the 2:3 set when null.
+ * @param array<string,int>   $source Known source width and height (3.2.154), so no candidate is scaled up.
  * @return string
  */
-function lunara_oscars_winner_photo_img( $url, $alt, $class = 'lunara-winner-photo', $frame = null, $widths = null ) {
+function lunara_oscars_winner_photo_img( $url, $alt, $class = 'lunara-winner-photo', $frame = null, $widths = null, $source = array() ) {
     $url = trim( (string) $url );
     if ( '' === $url ) {
         return '';
@@ -364,22 +385,23 @@ function lunara_oscars_winner_photo_img( $url, $alt, $class = 'lunara-winner-pho
     $fallback = 512;
     $set      = array( 'src' => '', 'srcset' => '' );
     if ( is_array( $frame ) && 2 === count( $frame ) && function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
-        $set = lunara_image_cdn_crop_srcset( $url, (int) $frame[0], (int) $frame[1], $widths, $fallback );
+        $set = lunara_image_cdn_crop_srcset( $url, (int) $frame[0], (int) $frame[1], $widths, $fallback, $source );
     } elseif ( function_exists( 'lunara_image_cdn_width_srcset' ) ) {
-        $set = lunara_image_cdn_width_srcset( $url, $widths, $fallback );
+        $set = lunara_image_cdn_width_srcset( $url, $widths, $fallback, $source );
     }
 
     $sizes      = function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'oscars-grid' ) : '';
     $candidates = '' !== $set['srcset'] && '' !== $sizes
         ? ' srcset="' . esc_attr( $set['srcset'] ) . '" sizes="' . esc_attr( 'auto, ' . $sizes ) . '"'
         : '';
+    $class      = trim( (string) $class );
 
     return sprintf(
-        '<img src="%s"%s alt="%s" loading="lazy" decoding="async" class="%s" />',
+        '<img src="%s"%s alt="%s" loading="lazy" decoding="async"%s />',
         esc_url( '' !== $set['src'] ? $set['src'] : $url ),
         $candidates,
         esc_attr( $alt ),
-        esc_attr( $class )
+        '' !== $class ? ' class="' . esc_attr( $class ) . '"' : ''
     );
 }
 
@@ -417,7 +439,7 @@ function lunara_get_oscars_curated_visual( $entry, $photo_map ) {
     return array(
         'poster_url'  => $photo_url,
         // 3.2.152: a curated photo may be any shape; it is shown whole, so its candidates are plain downscales.
-        'poster_html' => lunara_oscars_winner_photo_img( $photo_url, $photo_alt, 'lunara-winner-photo', null, array( 192, 256, 352, 512, 704, 768 ) ),
+        'poster_html' => lunara_oscars_winner_photo_img( $photo_url, $photo_alt, 'lunara-winner-photo', null, array( 192, 256, 352, 512, 704, 768 ), lunara_oscars_attachment_size( $photo_id ) ),
     );
 }
 
@@ -558,6 +580,8 @@ function lunara_flush_oscars_home_transients() {
     $today = function_exists( 'wp_date' ) ? intval( wp_date( 'z' ) ) : intval( date( 'z' ) );
     foreach ( array( $today, ( $today + 1 ) % 366 ) as $day ) {
         for ( $limit = 4; $limit <= 16; $limit++ ) {
+            delete_transient( 'lunara_oscars_rotating_showcase_v5_' . $day . '_' . $limit );
+            delete_transient( lunara_oscars_dataset_cache_key( 'lunara_oscars_rotating_showcase_v5_' . $day . '_' . $limit ) );
             delete_transient( 'lunara_oscars_rotating_showcase_v4_' . $day . '_' . $limit );
             delete_transient( lunara_oscars_dataset_cache_key( 'lunara_oscars_rotating_showcase_v4_' . $day . '_' . $limit ) );
             delete_transient( 'lunara_oscars_rotating_showcase_v3_' . $day . '_' . $limit );
@@ -952,7 +976,8 @@ function lunara_render_oscars_winner_media_link( $winner_card, $fallback_url = '
     $poster_style   = '';
     $visual_markup  = $poster_html;
     if ( '' === $visual_markup ) {
-        $visual_markup = '<img src="' . esc_url( $poster_url ) . '" alt="' . esc_attr( $label . ' poster' ) . '" loading="lazy" decoding="async" />';
+        // 3.2.154: a URL-only poster gets the same 2:3 candidates as a portrait.
+        $visual_markup = lunara_oscars_winner_photo_img( $poster_url, $label . ' poster', '', array( 2, 3 ) );
     } elseif ( function_exists( 'lunara_oscars_poster_sizes' ) ) {
         // 3.2.102: the winner grids render posters 96px wide on phones; say so.
         $visual_markup = lunara_oscars_poster_sizes( $visual_markup, lunara_oscars_poster_sizes_for( 'grid' ) );
@@ -1020,8 +1045,10 @@ function lunara_render_oscars_winner_title_card( $winner_card, $fallback_url = '
 function lunara_get_rotating_oscars_ceremony_showcase( $card_limit = 10 ) {
     $card_limit = max( 4, min( 16, absint( $card_limit ) ) );
     $day_index  = function_exists( 'wp_date' ) ? intval( wp_date( 'z' ) ) : intval( date( 'z' ) );
-    // v4 keeps film posters intact for the shared portrait-card presentation.
-    $cache_key  = 'lunara_oscars_rotating_showcase_v4_' . $day_index . '_' . $card_limit;
+    // v4 keeps film posters intact for the shared portrait-card presentation;
+    // v5 (3.2.154): the cards carry 3.2.152's poster candidates, so a copy
+    // stored before the deploy must not outlive it.
+    $cache_key  = 'lunara_oscars_rotating_showcase_v5_' . $day_index . '_' . $card_limit;
     $cache_key  = lunara_oscars_dataset_cache_key( $cache_key );
     $cached     = get_transient( $cache_key );
 

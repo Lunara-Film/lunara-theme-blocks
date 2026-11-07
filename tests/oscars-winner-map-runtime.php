@@ -128,6 +128,28 @@ class Academy_Awards_Table {
 
 // The loader requires the Oscars family module before the data layer; the
 // data layer's cache keys and flush use its lunara_oscars_dataset_cache_key().
+
+// Token-extract the CDN candidate helpers from inc/setup.php (3.2.154), so the
+// markup under test carries the candidates the site prints.
+function lunara_test_extract_setup( $name ) {
+	$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/inc/setup.php' ) );
+	foreach ( $tokens as $i => $token ) {
+		if ( ! is_array( $token ) || T_FUNCTION !== $token[0] ) { continue; }
+		$j = $i + 1; while ( isset( $tokens[ $j ] ) && ( ! is_array( $tokens[ $j ] ) || T_STRING !== $tokens[ $j ][0] ) ) { ++$j; }
+		if ( ( $tokens[ $j ][1] ?? '' ) !== $name ) { continue; }
+		$code = ''; $depth = 0; $opened = false;
+		for ( $k = $i; $k < count( $tokens ); ++$k ) {
+			$part = is_array( $tokens[ $k ] ) ? $tokens[ $k ][1] : $tokens[ $k ]; $code .= $part;
+			if ( '{' === $part ) { ++$depth; $opened = true; } elseif ( '}' === $part && 0 === --$depth && $opened ) { eval( $code ); return; }
+		}
+	}
+	throw new RuntimeException( 'Missing function ' . $name );
+}
+if ( ! function_exists( 'wp_parse_url' ) ) { function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); } }
+if ( ! function_exists( 'remove_query_arg' ) ) { function remove_query_arg( $keys, $url ) { $parts = parse_url( $url ); parse_str( $parts['query'] ?? '', $query ); foreach ( (array) $keys as $key ) { unset( $query[ $key ] ); } return strtok( $url, '?' ) . ( $query ? '?' . http_build_query( $query ) : '' ); } }
+if ( ! function_exists( 'add_query_arg' ) ) { function add_query_arg( $args, $value = null, $url = null ) { if ( ! is_array( $args ) ) { $args = array( $args => $value ); } else { $url = $value; } $parts = parse_url( $url ); parse_str( $parts['query'] ?? '', $query ); return strtok( $url, '?' ) . '?' . http_build_query( array_merge( $query, $args ) ); } }
+foreach ( array( 'lunara_resize_wpcom_image_url', 'lunara_image_cdn_source', 'lunara_image_cdn_crop_url', 'lunara_image_cdn_width_url', 'lunara_image_source_size_from_url', 'lunara_image_cdn_crop_limit', 'lunara_image_cdn_crop_srcset', 'lunara_image_cdn_width_srcset', 'lunara_image_sizes_for' ) as $lunara_helper ) { lunara_test_extract_setup( $lunara_helper ); }
+
 require dirname( __DIR__ ) . '/inc/oscars-family.php';
 require dirname( __DIR__ ) . '/inc/oscars-data.php';
 require dirname( __DIR__ ) . '/inc/home-sections.php';
@@ -198,6 +220,15 @@ lunara_test_assert( 1 === substr_count( $poster_link, 'class="lunara-ceremony-wi
 lunara_test_assert( false !== strpos( $poster_link, 'href="https://example.test/oscars/title/tt28607951/"' ), 'The winner visual must use the canonical film destination when available.' );
 lunara_test_assert( false !== strpos( $poster_link, 'aria-label="View Anora Oscar winner details"' ), 'The winner media destination must expose a name derived from the canonical winner title.' );
 lunara_test_assert( false !== strpos( $poster_link, 'alt="Anora poster"' ), 'A generated poster image must use the canonical winner title as its alternative text.' );
+
+// 3.2.152/3.2.154: the plate prints no inline background (the deferred
+// stylesheet hid it after the download had started), and a URL-only poster
+// the CDN can resize gets 2:3 crops capped at the source's 683px.
+lunara_test_assert( 0 === preg_match( '/<div[^>]*\sstyle=/i', $poster_link ) && 1 === substr_count( $poster_link, 'anora.jpg' ), 'A visual winner plate carries no inline background; the poster the CDN cannot resize is printed once, as given.' );
+$cdn_card            = $posterless_card;
+$cdn_card['_visual'] = array( 'poster_url' => 'https://i0.wp.com/example.test/wp-content/uploads/2026/03/anora-poster.jpg?fit=683%2C1024&ssl=1' );
+$cdn_link            = lunara_render_oscars_winner_media_link( $cdn_card, 'https://example.test/oscars/ceremony/97/' );
+lunara_test_assert( 0 === preg_match( '/<div[^>]*\sstyle=/i', $cdn_link ) && 1 === preg_match( '/<img src="[^"]*resize=512%2C768[^"]*" srcset="[^"]*resize=192%2C288[^"]* 192w, [^"]* 256w, [^"]* 352w, [^"]* 512w, [^"]*resize=682%2C1023[^"]* 682w" sizes="auto, \(max-width: 600px\) 96px[^"]*" alt="Anora poster" loading="lazy" decoding="async" \/>/', $cdn_link ), 'A URL-only winner poster the CDN can resize gets 2:3 crops from 192px to the widest crop of its 683x1024 source (682px), the grid sizes, and no class (got ' . $cdn_link . ').' );
 
 $person_card = array(
 	'primary_label'      => 'Sean Baker',

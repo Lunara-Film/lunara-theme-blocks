@@ -642,23 +642,88 @@ if ( ! function_exists( 'lunara_image_cdn_width_url' ) ) {
     }
 }
 
+if ( ! function_exists( 'lunara_image_source_size_from_url' ) ) {
+    /**
+     * What a URL says about its source's size (3.2.154): a `fit=W,H`,
+     * `resize=W,H` or `w=W` the CDN was already asked for, or a TMDB fixed
+     * width. A lower bound of what the source holds, so a crop asked for at
+     * that size is never scaled up past what the page served before.
+     *
+     * @param string $url Image URL.
+     * @return array{width:int,height:int} Zero where unknown.
+     */
+    function lunara_image_source_size_from_url( $url ) {
+        $url  = html_entity_decode( trim( (string) $url ), ENT_QUOTES, 'UTF-8' );
+        $size = array( 'width' => 0, 'height' => 0 );
+        if ( preg_match( '/[?&](?:fit|resize)=(\d+)(?:,|%2C)(\d+)/i', $url, $m ) ) {
+            $size['width']  = (int) $m[1];
+            $size['height'] = (int) $m[2];
+        } elseif ( preg_match( '/[?&]w=(\d+)/i', $url, $m ) ) {
+            $size['width'] = (int) $m[1];
+        } elseif ( preg_match( '#image\.tmdb\.org/t/p/w(\d+)/#i', $url, $m ) ) {
+            $size['width'] = (int) $m[1];
+        }
+
+        return $size;
+    }
+}
+
+if ( ! function_exists( 'lunara_image_cdn_crop_limit' ) ) {
+    /**
+     * The widest crop of the frame's ratio the source can give without being
+     * scaled up (3.2.154), or 0 when nothing is known about the source.
+     *
+     * @param string               $url          Image URL.
+     * @param int                  $frame_width  Frame ratio width.
+     * @param int                  $frame_height Frame ratio height.
+     * @param array<string,int>    $source       Known source width and height, when the caller has them.
+     * @return int
+     */
+    function lunara_image_cdn_crop_limit( $url, $frame_width, $frame_height, $source = array() ) {
+        $source = is_array( $source ) ? $source : array();
+        $width  = absint( $source['width'] ?? 0 );
+        $height = absint( $source['height'] ?? 0 );
+        if ( $width < 1 && $height < 1 ) {
+            $known  = lunara_image_source_size_from_url( $url );
+            $width  = $known['width'];
+            $height = $known['height'];
+        }
+
+        $limit        = $width;
+        $frame_width  = absint( $frame_width );
+        $frame_height = absint( $frame_height );
+        if ( $height > 0 && $frame_width > 0 && $frame_height > 0 ) {
+            $by_height = (int) floor( $height * $frame_width / $frame_height );
+            $limit     = $limit > 0 ? min( $limit, $by_height ) : $by_height;
+        }
+
+        return max( 0, (int) $limit );
+    }
+}
+
 if ( ! function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
     /**
      * Width candidates for an image in a fixed-ratio frame.
      *
      * Every candidate is cropped to the frame's ratio, so the candidate's
      * width is the width it renders at and the browser chooses by width
-     * alone. Returns empty strings when the host cannot resize, so the
-     * caller prints the image as it was given.
+     * alone. The CDN scales a `resize` crop UP when asked for more than the
+     * source holds (3.2.154), so no candidate is wider than the widest crop
+     * the source can give: $source when the caller knows it, else what the
+     * URL says (lunara_image_source_size_from_url()); the native crop joins
+     * the list when it is wider than the last kept width. Returns empty
+     * strings when the host cannot resize, or fewer than two candidates
+     * remain, so the caller prints the image as it was given.
      *
-     * @param string         $url            Image URL.
-     * @param int            $frame_width    Frame ratio width (for example 2).
-     * @param int            $frame_height   Frame ratio height (for example 3).
-     * @param array<int,int> $widths         Candidate widths in pixels.
-     * @param int            $fallback_width The candidate `src` should be nearest to.
+     * @param string            $url            Image URL.
+     * @param int               $frame_width    Frame ratio width (for example 2).
+     * @param int               $frame_height   Frame ratio height (for example 3).
+     * @param array<int,int>    $widths         Candidate widths in pixels.
+     * @param int               $fallback_width The candidate `src` should be nearest to.
+     * @param array<string,int> $source         Known source width and height, when the caller has them.
      * @return array{src:string,srcset:string}
      */
-    function lunara_image_cdn_crop_srcset( $url, $frame_width, $frame_height, $widths, $fallback_width = 0 ) {
+    function lunara_image_cdn_crop_srcset( $url, $frame_width, $frame_height, $widths, $fallback_width = 0, $source = array() ) {
         $empty        = array( 'src' => '', 'srcset' => '' );
         $frame_width  = absint( $frame_width );
         $frame_height = absint( $frame_height );
@@ -668,6 +733,15 @@ if ( ! function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
 
         $widths = array_values( array_unique( array_filter( array_map( 'absint', (array) $widths ) ) ) );
         sort( $widths, SORT_NUMERIC );
+
+        $limit = lunara_image_cdn_crop_limit( $url, $frame_width, $frame_height, $source );
+        if ( $limit > 0 ) {
+            $widths = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
+            // The native crop joins when it is at least a tenth wider than the last kept width.
+            if ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) {
+                $widths[] = $limit;
+            }
+        }
         if ( count( $widths ) < 2 ) {
             return $empty;
         }
@@ -700,17 +774,34 @@ if ( ! function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
 if ( ! function_exists( 'lunara_image_cdn_width_srcset' ) ) {
     /**
      * Width candidates for an image shown whole (object-fit: contain): plain
-     * downscales, aspect ratio kept. Empty strings when the host cannot resize.
+     * downscales, aspect ratio kept, none wider than the source (3.2.154).
+     * Empty strings when the host cannot resize.
      *
-     * @param string         $url            Image URL.
-     * @param array<int,int> $widths         Candidate widths in pixels.
-     * @param int            $fallback_width The candidate `src` should be nearest to.
+     * @param string            $url            Image URL.
+     * @param array<int,int>    $widths         Candidate widths in pixels.
+     * @param int               $fallback_width The candidate `src` should be nearest to.
+     * @param array<string,int> $source         Known source width and height, when the caller has them.
      * @return array{src:string,srcset:string}
      */
-    function lunara_image_cdn_width_srcset( $url, $widths, $fallback_width = 0 ) {
+    function lunara_image_cdn_width_srcset( $url, $widths, $fallback_width = 0, $source = array() ) {
         $empty  = array( 'src' => '', 'srcset' => '' );
         $widths = array_values( array_unique( array_filter( array_map( 'absint', (array) $widths ) ) ) );
         sort( $widths, SORT_NUMERIC );
+
+        // 3.2.154: a `w=` downscale never grows past the source, but its
+        // descriptor would; keep candidates within the source's width.
+        $source = is_array( $source ) ? $source : array();
+        $limit  = absint( $source['width'] ?? 0 );
+        if ( $limit < 1 ) {
+            $known = lunara_image_source_size_from_url( $url );
+            $limit = $known['width'];
+        }
+        if ( $limit > 0 ) {
+            $widths = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
+            if ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) {
+                $widths[] = $limit;
+            }
+        }
         if ( count( $widths ) < 2 ) {
             return $empty;
         }
@@ -743,21 +834,29 @@ if ( ! function_exists( 'lunara_image_sizes_for' ) ) {
     /**
      * The width a slot renders its image at, as a `sizes` value (3.2.152).
      *
-     * Measured on the live site at 390, 768, 1100, 1440 and 1920px. Pixel
-     * values only: a slot's width is a column of a fixed grid, not a share of
-     * the viewport.
+     * Measured on the live site at 23 widths from 320 to 1920px. Pixel values
+     * for a slot that is a column of a grid; a viewport share only where the
+     * frame really is one (a phone's full-width still).
      *
      * @param string $slot Slot name.
      * @return string '' for an unknown slot.
      */
     function lunara_image_sizes_for( $slot ) {
+        // 3.2.154: re-measured at every breakpoint (320-1920px, 23 widths).
+        // The Oscars grids are one 96px column to 600px, then a fluid two-up
+        // (256-339px), three-up from 821px (234-325px) and a 253-257px four-up
+        // from 1201px; the hero poster paints 120px wide at every width (a
+        // 2:3 image covering a 96x180 box on phones); a Home companion still
+        // is full width to 820px, 328-440px in the two-up and 300-417px
+        // beside the lead from 1101px.
         $sizes = array(
-            'oscars-grid'    => '(max-width: 640px) 96px, (max-width: 900px) 340px, (max-width: 1100px) 320px, 256px',
-            'oscars-board'   => '(max-width: 640px) 96px, (max-width: 900px) 340px, (max-width: 1100px) 320px, 256px',
-            'oscars-hero'    => '(max-width: 480px) 96px, 120px',
-            'debrief-poster' => '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px',
-            'pair-card'      => '(max-width: 640px) 96px, 128px',
-            'related-grid'   => '(max-width: 640px) 96px, 112px',
+            'oscars-grid'          => '(max-width: 600px) 96px, (max-width: 640px) 275px, (max-width: 820px) 340px, (max-width: 1200px) 320px, 256px',
+            'oscars-board'         => '(max-width: 600px) 96px, (max-width: 640px) 275px, (max-width: 820px) 340px, (max-width: 1200px) 320px, 256px',
+            'oscars-hero'          => '120px',
+            'debrief-poster'       => '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px',
+            'pair-card'            => '(max-width: 640px) 96px, 128px',
+            'related-grid'         => '(max-width: 640px) 96px, 112px',
+            'front-desk-companion' => '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px',
         );
 
         return isset( $sizes[ $slot ] ) ? $sizes[ $slot ] : '';
@@ -779,26 +878,6 @@ if ( ! function_exists( 'lunara_image_blur_backdrop_url' ) ) {
         $small = lunara_image_cdn_width_url( $url, 320 );
 
         return '' !== $small ? $small : trim( (string) $url );
-    }
-}
-
-if ( ! function_exists( 'lunara_img_sizes_without_auto' ) ) {
-    /**
-     * Drop a leading `auto, ` from an eager image's `sizes`.
-     *
-     * `auto` is defined for lazy images only. On an eager image Chromium
-     * treats the whole list as invalid and resolves it to 100vw, so a 120px
-     * hero poster fetched its 780px candidate. A lazy image keeps `auto`.
-     *
-     * @param string $html Image markup.
-     * @return string
-     */
-    function lunara_img_sizes_without_auto( $html ) {
-        if ( ! is_string( $html ) || '' === $html || preg_match( '/\sloading=("|\')lazy\1/i', $html ) ) {
-            return $html;
-        }
-
-        return (string) preg_replace( '/(\ssizes=("|\'))\s*auto\s*,\s*/i', '$1', $html, 1 );
     }
 }
 

@@ -456,7 +456,7 @@ $command_cards = array(
                             $hero_feature_poster_url = '';
                         }
                         ?>
-                        <div class="lunara-oscars-portal-feature-poster<?php echo '' !== $hero_feature_poster_url ? ' has-poster-bg' : ''; ?>"<?php if ( '' !== $hero_feature_poster_url ) : ?> style="background-image: url('<?php echo esc_url( $hero_feature_poster_url ); ?>');"<?php endif; ?>>
+                        <div class="lunara-oscars-portal-feature-poster<?php echo '' !== $hero_feature_poster_url ? ' has-poster-bg' : ''; ?>"><?php // 3.2.154: no inline background; the deferred stylesheet hides it, but the download had started. ?>
                             <?php if ( ! empty( $hero_title_card['visual']['poster_html'] ) ) : ?>
                                 <?php echo $hero_feature_poster_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                             <?php elseif ( ! empty( $hero_title_card['visual']['poster_url'] ) ) : ?>
@@ -561,14 +561,14 @@ $command_cards = array(
                             <?php $spotlight_primary_url = ! empty( $spotlight['primary_url'] ) ? $spotlight['primary_url'] : ( $spotlight['url'] ?? $database_url ); ?>
                             <?php if ( ! empty( $sl_visual['poster_html'] ) ) : ?>
                                 <a class="lunara-oscars-spotlight-media-link" href="<?php echo esc_url( $spotlight_primary_url ); ?>">
-                                    <div class="lunara-oscars-spotlight-poster<?php echo '' !== $sl_poster_url ? ' has-poster-bg' : ''; ?>"<?php if ( '' !== $sl_poster_url ) : ?> style="background-image: url('<?php echo esc_url( $sl_poster_url ); ?>');"<?php endif; ?>>
+                                    <div class="lunara-oscars-spotlight-poster<?php echo '' !== $sl_poster_url ? ' has-poster-bg' : ''; ?>"><?php // 3.2.154: no inline background (see the winner plates in inc/oscars-data.php). ?>
                                         <?php echo function_exists( 'lunara_oscars_poster_sizes' ) ? lunara_oscars_poster_sizes( $sl_visual['poster_html'], lunara_oscars_poster_sizes_for( 'grid' ) ) : $sl_visual['poster_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                     </div>
                                 </a>
                             <?php elseif ( ! empty( $sl_visual['poster_url'] ) ) : ?>
                                 <a class="lunara-oscars-spotlight-media-link" href="<?php echo esc_url( $spotlight_primary_url ); ?>">
-                                    <div class="lunara-oscars-spotlight-poster has-poster-bg" style="background-image: url('<?php echo esc_url( $sl_visual['poster_url'] ); ?>');">
-                                        <img src="<?php echo esc_url( $sl_visual['poster_url'] ); ?>" alt="<?php echo esc_attr( $spotlight['primary_label'] ?? '' ); ?>" loading="lazy" decoding="async" />
+                                    <div class="lunara-oscars-spotlight-poster has-poster-bg">
+                                        <?php echo function_exists( 'lunara_oscars_winner_photo_img' ) ? lunara_oscars_winner_photo_img( $sl_visual['poster_url'], (string) ( $spotlight['primary_label'] ?? '' ), '', array( 2, 3 ) ) : '<img src="' . esc_url( $sl_visual['poster_url'] ) . '" alt="' . esc_attr( $spotlight['primary_label'] ?? '' ) . '" loading="lazy" decoding="async" />'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped by the builder. ?>
                                     </div>
                                 </a>
                             <?php else : ?>
@@ -627,11 +627,11 @@ $command_cards = array(
                         $card_poster_url = trim( (string) ( $card_visual['poster_url'] ?? '' ) );
                         ?>
                         <a class="lunara-oscars-portal-title-card" href="<?php echo esc_url( $card['url'] ?? $database_url ); ?>">
-                            <div class="lunara-oscars-portal-title-media<?php echo '' !== $card_poster_url ? ' has-poster-bg' : ''; ?>"<?php if ( '' !== $card_poster_url ) : ?> style="background-image: url('<?php echo esc_url( $card_poster_url ); ?>');"<?php endif; ?>>
+                            <div class="lunara-oscars-portal-title-media<?php echo '' !== $card_poster_url ? ' has-poster-bg' : ''; ?>"><?php // 3.2.154: no inline background. ?>
                                 <?php if ( ! empty( $card_visual['poster_html'] ) ) : ?>
                                     <?php echo function_exists( 'lunara_oscars_poster_sizes' ) ? lunara_oscars_poster_sizes( $card_visual['poster_html'], lunara_oscars_poster_sizes_for( 'grid' ) ) : $card_visual['poster_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 <?php elseif ( ! empty( $card_visual['poster_url'] ) ) : ?>
-                                    <img src="<?php echo esc_url( $card_visual['poster_url'] ); ?>" alt="<?php echo esc_attr( $card['title'] ?? 'Oscar title' ); ?>" loading="lazy" decoding="async" />
+                                    <?php echo function_exists( 'lunara_oscars_winner_photo_img' ) ? lunara_oscars_winner_photo_img( $card_visual['poster_url'], (string) ( $card['title'] ?? 'Oscar title' ), '', array( 2, 3 ) ) : '<img src="' . esc_url( $card_visual['poster_url'] ) . '" alt="' . esc_attr( $card['title'] ?? 'Oscar title' ) . '" loading="lazy" decoding="async" />'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped by the builder. ?>
                                 <?php elseif ( ! empty( $card_visual['card_fallback_html'] ) ) : ?>
                                     <?php echo $card_visual['card_fallback_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 <?php else : ?>
