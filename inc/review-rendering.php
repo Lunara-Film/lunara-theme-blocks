@@ -343,7 +343,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
         }
         body.single-review .lunara-review-watch-eyebrow {
             color: #c9a961 !important;
-            font-size: .66rem !important;
+            font-size: .8125rem !important; /* 3.2.153: the 13px floor (was 10.56px) */
             font-weight: 700 !important;
             letter-spacing: .11em !important;
             line-height: 1 !important;
@@ -357,7 +357,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
         }
         body.single-review .lunara-review-watch-meta {
             color: #A8A8B8 !important;
-            font-size: .72rem !important;
+            font-size: .8125rem !important; /* 3.2.153: the 13px floor (was 11.52px) */
             font-weight: 500 !important;
             line-height: 1.25 !important;
             overflow-wrap: anywhere !important;
@@ -366,7 +366,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
             content: "Affiliate";
             margin-top: 2px;
             color: #e0c481;
-            font-size: .64rem;
+            font-size: .8125rem; /* 3.2.153: the 13px floor (was 10.24px) */
             font-weight: 700;
             letter-spacing: .09em;
             text-transform: uppercase;
@@ -375,7 +375,7 @@ if ( ! function_exists( 'lunara_output_review_watch_link_css' ) ) {
             grid-column: 1 / -1 !important;
             margin: 0 !important;
             color: #A8A8B8 !important;
-            font-size: .72rem !important;
+            font-size: .8125rem !important; /* 3.2.153: the 13px floor (was 11.52px) */
             line-height: 1.4 !important;
         }
         @media (max-width: 900px) {

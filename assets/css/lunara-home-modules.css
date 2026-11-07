@@ -885,7 +885,7 @@ body.home .lunara-home-program.is-cover .lunara-home-masthead-identity{gap:10px!
 body.home .lunara-home-program.is-cover .lunara-home-masthead-dek{max-width:80ch!important;font-size:.98rem!important;line-height:1.5!important;}
 @media(max-width:820px){
 body.home .lunara-home-program.is-cover .lunara-home-masthead-panel{padding-top:min(var(--lunara-home-masthead-mobile-top-setting,30px),16px)!important;gap:14px!important;}
-body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items{font-size:.75rem;letter-spacing:.1em;}
+body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items{font-size:.8125rem;letter-spacing:.1em;}
 body.home .lunara-home-program.is-cover .lunara-home-program-dateline-items span:not(:last-child)::after{margin:0 .6em;}
 body.home .lunara-home-program.is-cover .lunara-home-masthead-dek{max-width:36ch!important;font-size:.94rem!important;line-height:1.48!important;}
 }

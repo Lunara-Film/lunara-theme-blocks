@@ -398,7 +398,7 @@ if ( ! function_exists( 'lunara_header_command_css' ) ) {
 		.lunara-header-nav a, .lunara-header-nav-link {
 			color: rgba(244,239,227,.82); text-decoration: none;
 			font-family: var(--lunara-font-label, sans-serif);
-			font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+			font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase; /* 3.2.153: the 13px floor */
 			padding: 8px 2px; min-height: 44px; display: inline-flex; align-items: center; border-bottom: 1px solid transparent;
 			transition: color .18s ease, border-color .18s ease;
 		}

@@ -233,7 +233,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-call em {
     display: block;
     margin-top: 3px;
     color: rgba(244, 239, 227, 0.8);
-    font-size: 0.78em;
+    font-size: max(0.8125rem, 0.78em); /* 3.2.153: the 13px floor (was 12.48px on phones) */
     font-style: italic;
     font-weight: 400;
 }
@@ -834,7 +834,7 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
         }
 
         body.lunara-oscars-portal-page .lunara-oscars-portal-actions a {
-            min-height: 42px !important;
+            min-height: 44px !important;
             padding: 9px 10px !important;
             text-align: center !important;
             width: 100% !important;
@@ -1622,4 +1622,11 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-hero .lunara-oscars-portal-
         background-position: center top;
         background-repeat: no-repeat;
     }
+}
+
+/* 3.2.153: the stacked links in a winner or spotlight card (category, name,
+   film) were 17-22px tall with about 4px between them. Padding on the inline
+   link grows what a finger can hit to at least 24px without moving a line. */
+body.lunara-oscars-portal-page :is(.lunara-ceremony-winner-copy, .lunara-oscars-spotlight-card-copy) a.lunara-oscars-text-link {
+    padding-block: 4px;
 }
