@@ -101,6 +101,28 @@ function lunara_get_cinematic_hero_slides( $count ) {
 	return array( array( 'kicker' => 'Lead Editorial', 'title' => $lead['title'], 'excerpt' => 'Slide excerpt.', 'url' => $lead['url'], 'cta' => 'Read the review', 'image' => 'https://image.tmdb.org/t/p/w1280/reckoning.jpg' ) );
 }
 
+
+// Token-extract the CDN candidate helpers from inc/setup.php (3.2.154), so the
+// markup under test carries the candidates the site prints.
+function lunara_test_extract_setup( $name ) {
+	$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/inc/setup.php' ) );
+	foreach ( $tokens as $i => $token ) {
+		if ( ! is_array( $token ) || T_FUNCTION !== $token[0] ) { continue; }
+		$j = $i + 1; while ( isset( $tokens[ $j ] ) && ( ! is_array( $tokens[ $j ] ) || T_STRING !== $tokens[ $j ][0] ) ) { ++$j; }
+		if ( ( $tokens[ $j ][1] ?? '' ) !== $name ) { continue; }
+		$code = ''; $depth = 0; $opened = false;
+		for ( $k = $i; $k < count( $tokens ); ++$k ) {
+			$part = is_array( $tokens[ $k ] ) ? $tokens[ $k ][1] : $tokens[ $k ]; $code .= $part;
+			if ( '{' === $part ) { ++$depth; $opened = true; } elseif ( '}' === $part && 0 === --$depth && $opened ) { eval( $code ); return; }
+		}
+	}
+	throw new RuntimeException( 'Missing function ' . $name );
+}
+if ( ! function_exists( 'wp_parse_url' ) ) { function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); } }
+if ( ! function_exists( 'remove_query_arg' ) ) { function remove_query_arg( $keys, $url ) { $parts = parse_url( $url ); parse_str( $parts['query'] ?? '', $query ); foreach ( (array) $keys as $key ) { unset( $query[ $key ] ); } return strtok( $url, '?' ) . ( $query ? '?' . http_build_query( $query ) : '' ); } }
+if ( ! function_exists( 'add_query_arg' ) ) { function add_query_arg( $args, $value = null, $url = null ) { if ( ! is_array( $args ) ) { $args = array( $args => $value ); } else { $url = $value; } $parts = parse_url( $url ); parse_str( $parts['query'] ?? '', $query ); return strtok( $url, '?' ) . '?' . http_build_query( array_merge( $query, $args ) ); } }
+foreach ( array( 'lunara_resize_wpcom_image_url', 'lunara_image_cdn_source', 'lunara_image_cdn_crop_url', 'lunara_image_cdn_width_url', 'lunara_image_source_size_from_url', 'lunara_image_cdn_crop_limit', 'lunara_image_cdn_crop_srcset', 'lunara_image_cdn_width_srcset', 'lunara_image_sizes_for' ) as $lunara_helper ) { lunara_test_extract_setup( $lunara_helper ); }
+
 require dirname( __DIR__ ) . '/inc/helpers.php';
 require dirname( __DIR__ ) . '/inc/home-front-desk.php';
 
@@ -155,7 +177,8 @@ lunara_test_assert( false !== strpos( $html, '<h2 class="lunara-home-front-desk-
 lunara_test_assert( 2 === substr_count( $html, 'class="lunara-home-front-desk-companion ' ), 'two companions' );
 lunara_test_assert( false === strpos( $html, 'href="https://example.test/reviews/the-social-reckoning/"><span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-companion-media' ), 'the lead is not repeated as a companion' );
 lunara_test_assert( false !== strpos( $html, 'class="lunara-home-front-desk-companion has-no-image" href="https://example.test/reviews/practical-magic-2/"' ), 'a review without a still is a text companion, not an empty frame' );
-lunara_test_assert( 1 === preg_match( '#class="lunara-home-front-desk-companion has-image" href="https://example.test/reviews/misty-green/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-companion-media" src="https://image.tmdb.org/t/p/w1280/misty.jpg" alt="" width="1920" height="1080" loading="lazy" decoding="async" sizes="#s', $html ), 'a companion still loads lazily' );
+lunara_test_assert( 1 === preg_match( '#class="lunara-home-front-desk-companion has-image" href="https://example.test/reviews/misty-green/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-companion-media" src="https://i0.wp.com/image.tmdb.org/t/p/original/misty.jpg\?resize=1200%2C675[^"]*" alt="" width="1920" height="1080" loading="lazy" decoding="async" sizes="\(max-width: 820px\) calc\(100vw - 64px\), \(max-width: 1100px\) 440px, \(max-width: 1280px\) 340px, 420px" srcset="[^"]*resize=420%2C236[^"]* 420w, [^"]* 640w, [^"]* 840w, [^"]*resize=1200%2C675[^"]* 1200w">#s', $html ), 'a companion still loads lazily from 16:9 crops at 420-1200px (its TMDB source is 1280 wide, so no 1600w and no 1280w a tenth above 1200), says the measured companion widths, and its src is the widest candidate (3.2.154)' );
+lunara_test_assert( 1 === preg_match( '#<img class="lunara-home-front-desk-lead-media skip-lazy no-lazy" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" sizes="\(max-width: 1100px\) calc\(100vw - 32px\), 860px">#', $html ), 'the lead still keeps its one preloaded source and no srcset' );
 lunara_test_assert( false === strpos( $html, 'lurker' ), 'only two companions render' );
 lunara_test_assert( false !== strpos( $html, '<span class="lunara-home-front-desk-film">Practical Magic 2</span><span class="lunara-screen-reader-text"> – </span><span class="lunara-home-front-desk-take">The Curdled Spell</span>' ), 'companion headlines split and decode the entity dash' );
 

@@ -1602,8 +1602,14 @@ if ( ! function_exists( 'lunara_lock_review_image_markup' ) ) {
         // and a 112px one (3.2.152) can take 250w. The width and height
         // attributes stay locked, so layout does not change.
         $candidates = array();
+        // 3.2.154: a TMDB poster is at most 2000px wide and the CDN cannot
+        // make more of it, so the retina candidate stops at the source.
+        $tmdb_ceiling = false !== stripos( $source_url, 'image.tmdb.org/' ) ? max( $width, 2000 ) : 0;
         foreach ( array( (int) round( $width / 8 ), (int) round( $width / 4 ), (int) round( $width / 2 ), $width, $width * 2 ) as $candidate_width ) {
             if ( $candidate_width < 150 && $candidate_width !== $width ) {
+                continue;
+            }
+            if ( $tmdb_ceiling > 0 && $candidate_width > $tmdb_ceiling ) {
                 continue;
             }
             $candidate_profile           = $profile;

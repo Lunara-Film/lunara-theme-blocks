@@ -139,7 +139,11 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 	}
 
 	$class = $is_lead ? 'lunara-home-front-desk-lead-media skip-lazy no-lazy' : 'lunara-home-front-desk-companion-media';
-	$sizes = $is_lead ? '(max-width: 1100px) calc(100vw - 32px), 860px' : '(max-width: 1100px) calc(100vw - 32px), 420px';
+	// 3.2.154: a companion is full width to 820px, 328-440px in the two-up
+	// to 1100px and 300-417px beside the lead above; it is not the lead's width.
+	$sizes = $is_lead
+		? '(max-width: 1100px) calc(100vw - 32px), 860px'
+		: ( function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'front-desk-companion' ) : '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px' );
 	$attrs = array(
 		'class'    => $class,
 		'alt'      => '',
@@ -173,7 +177,7 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 	return sprintf(
 		'<img class="%1$s" src="%2$s" alt="" width="1920" height="1080" loading="%3$s" decoding="async"%4$s sizes="%5$s"%6$s>',
 		esc_attr( $class ),
-		esc_url( $image_url ),
+		esc_url( '' !== $still_set['src'] ? $still_set['src'] : $image_url ),
 		$is_lead ? 'eager' : 'lazy',
 		$is_lead ? ' fetchpriority="high"' : '',
 		esc_attr( $sizes ),

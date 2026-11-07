@@ -504,7 +504,7 @@ if ( ! function_exists( 'lunara_render_oscars_prediction_board' ) ) {
 							// candidate is a CDN crop to that frame, so a phone no longer fetches a
 							// 768px landscape still for a 96px slot.
 							$art_set = function_exists( 'lunara_image_cdn_crop_srcset' )
-								? lunara_image_cdn_crop_srcset( $art_src, 2, 3, array( 96, 192, 256, 352, 512, 704 ), 352 )
+								? lunara_image_cdn_crop_srcset( $art_src, 2, 3, array( 96, 192, 256, 352, 512, 704 ), 352, array( 'width' => (int) ( $art['width'] ?? 0 ), 'height' => (int) ( $art['height'] ?? 0 ) ) )
 								: array( 'src' => '', 'srcset' => '' );
 							$art_attr = '' !== $art_set['srcset']
 								? ' srcset="' . esc_attr( $art_set['srcset'] ) . '" sizes="' . esc_attr( 'auto, ' . lunara_image_sizes_for( 'oscars-board' ) ) . '"'
@@ -768,7 +768,8 @@ if ( ! function_exists( 'lunara_oscars_pick_visuals' ) ) {
 		if ( empty( $stamp_parts ) ) {
 			return array();
 		}
-		$key    = 'lunara_oscars_board_art_' . md5( implode( '|', $stamp_parts ) . '|' . lunara_oscars_board_visuals_stamp() );
+		// 3.2.154: the map carries the source's size, so the key moved (v2).
+		$key    = 'lunara_oscars_board_art_' . md5( implode( '|', $stamp_parts ) . '|' . lunara_oscars_board_visuals_stamp() . '|v2' );
 		$cached = get_transient( $key );
 		if ( is_array( $cached ) ) {
 			return $cached;
@@ -785,6 +786,7 @@ if ( ! function_exists( 'lunara_oscars_pick_visuals' ) ) {
 			}
 			$src    = '';
 			$kind   = '';
+			$size   = array();
 			$person = trim( (string) ( $row['person'] ?? '' ) );
 			$url    = (string) ( $row['url'] ?? '' );
 
@@ -792,6 +794,7 @@ if ( ! function_exists( 'lunara_oscars_pick_visuals' ) ) {
 			if ( is_string( $thumb ) && '' !== $thumb ) {
 				$src  = $thumb;
 				$kind = 'photo';
+				$size = function_exists( 'lunara_oscars_attachment_size' ) ? lunara_oscars_attachment_size( get_post_thumbnail_id( $id ) ) : array();
 			}
 
 			if ( '' === $src && '' !== $person && $aat && method_exists( $aat, 'get_person_visual_package' ) ) {
@@ -844,12 +847,14 @@ if ( ! function_exists( 'lunara_oscars_pick_visuals' ) ) {
 					if ( is_string( $thumb ) && '' !== $thumb ) {
 						$src  = $thumb;
 						$kind = 'poster';
+						$size = function_exists( 'lunara_oscars_attachment_size' ) ? lunara_oscars_attachment_size( get_post_thumbnail_id( $post_id ) ) : array();
 					}
 				}
 			}
 
 			if ( '' !== $src ) {
-				$map[ $id ] = array( 'src' => $src, 'kind' => $kind );
+				// 3.2.154: the source's size travels with the art, so no crop candidate asks the CDN to scale up.
+				$map[ $id ] = array( 'src' => $src, 'kind' => $kind, 'width' => (int) ( $size['width'] ?? 0 ), 'height' => (int) ( $size['height'] ?? 0 ) );
 			}
 		}
 

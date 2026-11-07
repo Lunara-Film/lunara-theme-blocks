@@ -861,7 +861,7 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
             $class = 'lunara-debrief-thumb';
         }
 
-        $build_img = static function( $url, $resolved_title ) use ( $class, $loading ) {
+        $build_img = static function( $url, $resolved_title ) use ( $class, $loading, $sizes ) {
             $url = trim( (string) $url );
             if ( '' === $url ) {
                 return '';
@@ -869,12 +869,25 @@ if ( ! function_exists( 'lunara_get_title_poster_html' ) ) {
 
             $alt = '' !== $resolved_title ? $resolved_title . ' poster' : __( 'Film poster', 'lunara-film' );
 
+            // 3.2.154: a caller that knows its frame width gets 2:3 crops of
+            // the poster at 96-384px instead of the one w500 file for every
+            // width. Without a width hint the <img> stays as it was.
+            $candidates = '';
+            if ( '' !== $sizes && function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
+                $set = lunara_image_cdn_crop_srcset( $url, 2, 3, array( 96, 128, 192, 256, 384 ), 256 );
+                if ( '' !== $set['srcset'] ) {
+                    $candidates = ' srcset="' . esc_attr( $set['srcset'] ) . '" sizes="' . esc_attr( ( 'lazy' === $loading ? 'auto, ' : '' ) . $sizes ) . '"';
+                    $url        = $set['src'];
+                }
+            }
+
             return sprintf(
-                '<img class="%1$s" src="%2$s" alt="%3$s" loading="%4$s" decoding="async" data-no-lazy="1" data-skip-lazy="1">',
+                '<img class="%1$s" src="%2$s"%5$s alt="%3$s" loading="%4$s" decoding="async" data-no-lazy="1" data-skip-lazy="1">',
                 esc_attr( $class ),
                 esc_url( $url ),
                 esc_attr( $alt ),
-                esc_attr( $loading )
+                esc_attr( $loading ),
+                $candidates
             );
         };
 
@@ -1567,11 +1580,13 @@ if ( ! function_exists( 'lunara_pair_relational_data' ) ) {
                     'class'    => 'lunara-pair-preview-thumb',
                     'loading'  => 'lazy',
                     'decoding' => 'async',
+                    'sizes'    => function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'pair-card' ) : '(max-width: 640px) 96px, 128px',
                 )
             );
         }
         if ( '' === trim( $poster_html ) && '' !== $tt && function_exists( 'lunara_get_title_poster_html' ) ) {
-            $poster_html = (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-pair-preview-thumb', $title_base, 'lazy', '(max-width: 680px) 116px, (max-width: 879px) 45vw, 340px' );
+            // 3.2.154: the pairing card's poster is 128px wide, 96px on phones.
+            $poster_html = (string) lunara_get_title_poster_html( $tt, 'medium', 'lunara-pair-preview-thumb', $title_base, 'lazy', function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'pair-card' ) : '(max-width: 640px) 96px, 128px' );
         }
 
         $dossier_href = (string) get_permalink( $movie_id );

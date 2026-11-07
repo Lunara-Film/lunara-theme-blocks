@@ -52,7 +52,7 @@ $day       = intval( wp_date( 'z' ) );
 $tomorrow  = ( $day + 1 ) % 366;
 $literals  = array(
 	'person_index'  => 'lunara_oscars_person_index_v1',
-	'showcase'      => 'lunara_oscars_rotating_showcase_v4_' . $day . '_10',
+	'showcase'      => 'lunara_oscars_rotating_showcase_v5_' . $day . '_10',
 	'story_cards'   => 'lunara_home_ledger_story_cards_v2',
 	'spotlight'     => 'lunara_home_oscar_spotlight_v1',
 	'deep_cuts'     => 'lunara_home_deep_cuts_v1',
@@ -143,7 +143,7 @@ if ( $no_reader ) {
 	// tests/site-studio-oscars-winner-cases.php:28 seeds the unstamped key.
 	foreach ( array( 4, 10, 16 ) as $count ) {
 		$seeded = array( 'winner_cards' => array( array( 'primary_label' => 'Cached winner ' . $count ) ), 'ceremony_label' => 'Cached ceremony ' . $count );
-		set_transient( 'lunara_oscars_rotating_showcase_v4_' . $day . '_' . $count, $seeded, 86400 );
+		set_transient( 'lunara_oscars_rotating_showcase_v5_' . $day . '_' . $count, $seeded, 86400 );
 		lunara_test_assert( $seeded === lunara_get_rotating_oscars_ceremony_showcase( $count ), 'The seeded unstamped showcase key for ' . $count . ' cards must still hit.' );
 	}
 
@@ -221,8 +221,8 @@ $expect = array(
 	'inc/oscars-portal.php lunara_oscars_portal_warm_visuals'        => array( $literals['person_index'] ),
 );
 for ( $limit = 4; $limit <= 16; $limit++ ) {
-	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v4_' . $day . '_' . $limit;
-	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v4_' . $tomorrow . '_' . $limit;
+	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v5_' . $day . '_' . $limit;
+	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v5_' . $tomorrow . '_' . $limit;
 }
 $sites = lunara_test_delete_sites();
 foreach ( $expect as $site => $plain_keys ) {
