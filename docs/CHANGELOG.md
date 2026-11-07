@@ -11,6 +11,18 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.155: the cap trusts only what the CDN answered
+
+The adversarial review of 3.2.154 (three lenses, three refuters per finding) stood up four correctness findings against the new source-size cap. All four are fixed here; the measured numbers are in the review's own words.
+
+- **A `resize=` the theme wrote is not a source size.** The person portraits carry `resize=780,1170` from `lunara_rightsize_oscars_card_image_url()`, and 3.2.154 read that as the source, so a 724, 666 or 500px upload (three of the ten portraits on the live portal) still got 704w and 780w crops the CDN scales up. `lunara_image_source_size_from_url()` now reads only `fit=` and `w=`, which the CDN never scales up; a site upload with neither is measured through its attachment (`lunara_image_upload_size()`, through the lookup that remembers its answers), so the 666x1000 portrait stops at 666px.
+- **The native crop never joins above the widths asked for.** 3.2.154 appended the source's widest crop whenever it was wider than the last kept width, so a 6240x4160 board still offered a 2773x4160 candidate (807 KB) and a 3417px one joined for a Getty upload; a 3x phone or any browser resolving `sizes` to a wide value would have fetched them. The native crop joins only in place of widths the cap removed.
+- **A TMDB rendition width says nothing about the original.** The CDN crops the original (2000px for most posters), so a `w342` or `w500` URL no longer caps the candidates at 342 or 500px.
+- **The board stops at 512px.** A 704px crop in the 2:3 frame carried more pixels than the landscape file it replaced on 2x tablets (788 KB to 903 KB across the board at 768 and 1100px); at 512px the frame keeps the density the old file gave, for fewer bytes.
+- **Locked review markup caps uploads too.** `lunara_lock_review_image_markup()` skips candidates wider than the upload's own widest crop (its `fit=` or attachment size); the locked width itself always prints, so layout does not move.
+- Recorded, not changed: the retired `v1` board-art maps expire within twelve hours (their keys are hashes and cannot be enumerated); `has-poster-bg` is a vestigial class on plates that paint no background; the spotlight plates keep 3.2.151's single-source person markup for up to fifteen minutes after the deploy (the snapshot's own lifetime).
+- Tests: the source-size, join and upload-lookup rules in `tests/image-sizing-runtime.php`; `tests/debrief-poster-candidates-runtime.php` (new) runs the legacy title-poster builder for a pairing card, an eager caller, a caller with no width and a remote host; the board-art, front-desk, winner-map and dataset-cache tests follow (the flush clears the retired `v4` showcase copies).
+
 ## 2026-11-07 — Theme 3.2.154: corrections to 3.2.152 and 3.2.153, before they deploy
 
 An adversarial review of the two releases (four lenses, three refuters per finding) ran before Dalton's deploy click. Nine findings stood. Everything below is measured on the live 3.2.151 or on the code.
