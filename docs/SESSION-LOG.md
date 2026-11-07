@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-07 — "Refine, refine, refine, and optimize. Make it dynamic." (Theme 3.2.150 live, 3.2.151 in PR)
+
+- **Asked:** Dalton, 19:28 CT on 11-06: "yes to Theme 3.2.150 keep going. Refine, refine, refine, and optimize. Make it dynamic. We are all about reviews, news, and Oscars. Simple, sublime, fast, and exciting."
+- **Shipped:** Theme 3.2.150 (#318, merge `7681bc3`), merged on Dalton's yes; Dalton's deploy click pending at the time of writing (see the update line below once it lands).
+- **Found (live, 2026-11-07 01:40 UTC):** running the canary against 3.2.149, the first canonical read of `/journal/` returned 3.2.146 beside two 3.2.149 reads, and the Social Reckoning review served 3.2.148 as `x-ac STALE` then `UPDATING` until a fresh fetch replaced it. Cause: the WordPress.com edge keeps a page until its lifetime ends and serves it stale while revalidating, and pages Batcache had not stored carried no Cache-Control at all, so their edge lifetime was long. My own verifications used `?v=` cache-busters, which bypass the edge, so they could not see it.
+- **Built (Theme 3.2.151, PR open):** a five-minute `Cache-Control` lifetime on every public, anonymous, cacheable page (nothing that set its own header is touched); a `:has()` fallback so a review page cached before 3.2.147 (no lead group) still reads beside the poster; the two canary sentinels updated to the Semibold preload the font diet kept and to the lead card's `h2` title; the runbook explains the three reads and when Clear cache is the deploy's last step. Tests: a new decision-table test for the header, the stale-markup case in the article layout test.
+- **Running:** a three-lens audit (speed, design, motion) with adversarial verification over Home, Reviews, a review, Journal and Oscars, ranked into release batches; its plan drives the next releases.
+- **Live:** Theme 3.2.149 until Dalton's click lands 3.2.150.
+- **Next:** 3.2.151 on yes; the audit's batch 1 (speed and defects), batch 2 (design, with screenshots for Dalton), batch 3 (motion); the Customizer block; the poster-width control decision.
+
 ## 2026-11-05 — Session hold at 17:45 CT: Theme 3.2.150 waits in PR #318
 
 - **Asked:** Dalton, 17:45 CT: "save this i have to restart."

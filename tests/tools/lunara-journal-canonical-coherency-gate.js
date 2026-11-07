@@ -32,7 +32,8 @@ const JOURNAL_ROOT_CLASS = 'lunara-journal-archive-page';
 const JOURNAL_CARD_CLASS = 'lunara-journal-archive-card';
 const JOURNAL_LEAD_CLASS = 'is-lead';
 const TIEMPOS_MARKER_CLASS = 'is-label-font-tiempos';
-const TIEMPOS_BOLD_PRELOAD_FILE = 'TiemposText-Bold.woff2';
+// 3.2.151: the theme preloads the Semibold label weight (inc/frontend.php), not a Bold file.
+const TIEMPOS_BOLD_PRELOAD_FILE = 'TiemposText-Semibold.woff2';
 const MODERN_ROOT_ID = 'primary';
 const VERSION_ATTRIBUTE = 'data-lunara-theme-version';
 const STRUCTURAL_VARS_STYLE_ID = 'lunara-journal-archive-vars';
@@ -262,8 +263,9 @@ function analyzeJournalCanonicalCoherency({
 		if (tokens.includes(JOURNAL_LEAD_CLASS)) {
 			detail.leadCount += 1;
 		}
-		const titleMatch = article.match(/<h3\b[^>]*class\s*=\s*["'][^"']*\blunara-review-grid-title\b[^"']*["'][^>]*>([\s\S]*?)<\/h3>/i);
-		const titleText = titleMatch ? visibleTextContent(titleMatch[1]) : '';
+		// The lead card's title is an h2, the others h3; any heading level carries the title class.
+		const titleMatch = article.match(/<(h[2-4])\b[^>]*class\s*=\s*["'][^"']*\blunara-review-grid-title\b[^"']*["'][^>]*>([\s\S]*?)<\/\1>/i);
+		const titleText = titleMatch ? visibleTextContent(titleMatch[2]) : '';
 		if (titleText !== '') {
 			detail.nonblankCardCount += 1;
 		}
