@@ -72,10 +72,10 @@ add_action( 'wp_head', 'lunara_oscars_hero_backdrop_preload', 4 );
 /**
  * Tell a poster <img> how wide the portal renders it.
  *
- * Replaces the `sizes` attribute on the first <img> in $html, keeping a
- * leading `auto, ` (WordPress adds it for lazy images; Chromium uses the
- * laid-out width) in front of the new value. An <img> with no srcset is
- * returned unchanged: `sizes` means nothing without candidates.
+ * Replaces the `sizes` attribute on the first <img> in $html. A lazy image
+ * keeps a leading `auto, ` (WordPress adds it; Chromium then sizes from
+ * layout); an eager image gets none. An <img> with no srcset is returned
+ * unchanged: `sizes` means nothing without candidates.
  *
  * @param string $html  Poster markup from the Ledger.
  * @param string $sizes The sizes value, e.g. "(max-width: 480px) 96px, 300px".
@@ -87,11 +87,13 @@ function lunara_oscars_poster_sizes( $html, $sizes ) {
 	if ( '' === $html || '' === $sizes || ! preg_match( '/<img\b[^>]*\bsrcset="/i', $html ) ) {
 		return $html;
 	}
+	// 3.2.152: `auto` is for lazy images only. An eager image keeping it
+	// resolved its sizes to 100vw in Chromium, so the 120px hero poster
+	// fetched its 780px candidate.
+	$auto = preg_match( '/\sloading="lazy"/i', $html ) ? 'auto, ' : '';
 	if ( preg_match( '/\ssizes="([^"]*)"/i', $html, $m ) ) {
-		$auto = preg_match( '/^\s*auto\s*,/i', $m[1] ) ? 'auto, ' : '';
 		return preg_replace( '/\ssizes="[^"]*"/i', ' sizes="' . esc_attr( $auto . $sizes ) . '"', $html, 1 );
 	}
-	$auto = preg_match( '/\sloading="lazy"/i', $html ) ? 'auto, ' : '';
 	return preg_replace( '/<img\b/i', '<img sizes="' . esc_attr( $auto . $sizes ) . '"', $html, 1 );
 }
 
@@ -103,9 +105,12 @@ function lunara_oscars_poster_sizes( $html, $sizes ) {
  */
 function lunara_oscars_poster_sizes_for( $slot ) {
 	switch ( $slot ) {
+		// 3.2.152: measured again at 390, 768, 1100, 1440 and 1920px. The hero
+		// poster is 96px on phones and 120px above; a grid poster 96px, then
+		// ~340px, ~315px and ~250px (see lunara_image_sizes_for()).
 		case 'hero':
-			return '(max-width: 480px) 96px, (max-width: 900px) 124px, 300px';
+			return function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'oscars-hero' ) : '(max-width: 480px) 96px, 120px';
 		default:
-			return '(max-width: 640px) 96px, (max-width: 900px) 340px, 300px';
+			return function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'oscars-grid' ) : '(max-width: 640px) 96px, (max-width: 900px) 340px, (max-width: 1100px) 320px, 256px';
 	}
 }

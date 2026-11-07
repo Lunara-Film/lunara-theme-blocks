@@ -559,6 +559,249 @@ if ( ! function_exists( 'lunara_image_url_width_srcset' ) ) {
     }
 }
 
+if ( ! function_exists( 'lunara_image_cdn_source' ) ) {
+    /**
+     * The URL the WordPress.com image CDN can resize, with no size arguments,
+     * or '' when the host cannot resize (3.2.152).
+     *
+     * A site upload keeps its host (the CDN already fronts it, and the i0.wp.com
+     * form is kept as it is). A TMDB image is proxied from its original through
+     * i0.wp.com, so every candidate is one CDN resize of one source.
+     *
+     * @param string $url Image URL.
+     * @return string
+     */
+    function lunara_image_cdn_source( $url ) {
+        $url = html_entity_decode( trim( (string) $url ), ENT_QUOTES, 'UTF-8' );
+        if ( '' === $url ) {
+            return '';
+        }
+
+        if ( preg_match( '#^https?://image\.tmdb\.org/t/p/(?:w\d+|original)/([^\s?\#"\'<>]+)#i', $url, $tmdb ) ) {
+            return 'https://i0.wp.com/image.tmdb.org/t/p/original/' . $tmdb[1];
+        }
+
+        $host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+        if ( '' === $host ) {
+            return '';
+        }
+
+        $base = remove_query_arg( array( 'w', 'h', 'fit', 'resize', 'crop', 'zoom', '_jb' ), $url );
+        if ( 1 === preg_match( '/^i[0-3]\.wp\.com$/', $host ) ) {
+            return $base;
+        }
+
+        $home_host = strtolower( (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST ) );
+        $is_site   = '' !== $home_host && ( $host === $home_host || 'www.' . $host === $home_host || $host === 'www.' . $home_host );
+        $is_wpcom  = 1 === preg_match( '/(^|\.)(wp|wordpress)\.com$/', $host );
+        if ( ( ! $is_site && ! $is_wpcom ) || false === strpos( $base, '/wp-content/uploads/' ) ) {
+            return '';
+        }
+
+        return $base;
+    }
+}
+
+if ( ! function_exists( 'lunara_image_cdn_crop_url' ) ) {
+    /**
+     * One CDN crop of an image to an exact frame, or '' when it cannot resize.
+     *
+     * @param string $url    Image URL.
+     * @param int    $width  Frame width in pixels.
+     * @param int    $height Frame height in pixels.
+     * @return string
+     */
+    function lunara_image_cdn_crop_url( $url, $width, $height ) {
+        $source = lunara_image_cdn_source( $url );
+        $width  = absint( $width );
+        $height = absint( $height );
+        if ( '' === $source || $width < 1 || $height < 1 || ! function_exists( 'lunara_resize_wpcom_image_url' ) ) {
+            return '';
+        }
+
+        return (string) lunara_resize_wpcom_image_url( $source, $width, $height );
+    }
+}
+
+if ( ! function_exists( 'lunara_image_cdn_width_url' ) ) {
+    /**
+     * One CDN downscale of an image to a width, aspect ratio kept, or ''.
+     *
+     * @param string $url   Image URL.
+     * @param int    $width Width in pixels.
+     * @return string
+     */
+    function lunara_image_cdn_width_url( $url, $width ) {
+        $source = lunara_image_cdn_source( $url );
+        $width  = absint( $width );
+        if ( '' === $source || $width < 1 ) {
+            return '';
+        }
+
+        return esc_url( add_query_arg( array( 'w' => $width, 'quality' => '86', 'ssl' => '1' ), $source ) );
+    }
+}
+
+if ( ! function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
+    /**
+     * Width candidates for an image in a fixed-ratio frame.
+     *
+     * Every candidate is cropped to the frame's ratio, so the candidate's
+     * width is the width it renders at and the browser chooses by width
+     * alone. Returns empty strings when the host cannot resize, so the
+     * caller prints the image as it was given.
+     *
+     * @param string         $url            Image URL.
+     * @param int            $frame_width    Frame ratio width (for example 2).
+     * @param int            $frame_height   Frame ratio height (for example 3).
+     * @param array<int,int> $widths         Candidate widths in pixels.
+     * @param int            $fallback_width The candidate `src` should be nearest to.
+     * @return array{src:string,srcset:string}
+     */
+    function lunara_image_cdn_crop_srcset( $url, $frame_width, $frame_height, $widths, $fallback_width = 0 ) {
+        $empty        = array( 'src' => '', 'srcset' => '' );
+        $frame_width  = absint( $frame_width );
+        $frame_height = absint( $frame_height );
+        if ( $frame_width < 1 || $frame_height < 1 ) {
+            return $empty;
+        }
+
+        $widths = array_values( array_unique( array_filter( array_map( 'absint', (array) $widths ) ) ) );
+        sort( $widths, SORT_NUMERIC );
+        if ( count( $widths ) < 2 ) {
+            return $empty;
+        }
+
+        $candidates     = array();
+        $src            = '';
+        $nearest        = PHP_INT_MAX;
+        $fallback_width = absint( $fallback_width );
+        foreach ( $widths as $width ) {
+            $height    = (int) round( $width * $frame_height / $frame_width );
+            $candidate = lunara_image_cdn_crop_url( $url, $width, $height );
+            if ( '' === $candidate ) {
+                return $empty;
+            }
+            $candidates[] = $candidate . ' ' . $width . 'w';
+            $distance     = abs( $width - $fallback_width );
+            if ( '' === $src || $distance < $nearest ) {
+                $src     = $candidate;
+                $nearest = $distance;
+            }
+        }
+
+        return array(
+            'src'    => $src,
+            'srcset' => implode( ', ', $candidates ),
+        );
+    }
+}
+
+if ( ! function_exists( 'lunara_image_cdn_width_srcset' ) ) {
+    /**
+     * Width candidates for an image shown whole (object-fit: contain): plain
+     * downscales, aspect ratio kept. Empty strings when the host cannot resize.
+     *
+     * @param string         $url            Image URL.
+     * @param array<int,int> $widths         Candidate widths in pixels.
+     * @param int            $fallback_width The candidate `src` should be nearest to.
+     * @return array{src:string,srcset:string}
+     */
+    function lunara_image_cdn_width_srcset( $url, $widths, $fallback_width = 0 ) {
+        $empty  = array( 'src' => '', 'srcset' => '' );
+        $widths = array_values( array_unique( array_filter( array_map( 'absint', (array) $widths ) ) ) );
+        sort( $widths, SORT_NUMERIC );
+        if ( count( $widths ) < 2 ) {
+            return $empty;
+        }
+
+        $candidates     = array();
+        $src            = '';
+        $nearest        = PHP_INT_MAX;
+        $fallback_width = absint( $fallback_width );
+        foreach ( $widths as $width ) {
+            $candidate = lunara_image_cdn_width_url( $url, $width );
+            if ( '' === $candidate ) {
+                return $empty;
+            }
+            $candidates[] = $candidate . ' ' . $width . 'w';
+            $distance     = abs( $width - $fallback_width );
+            if ( '' === $src || $distance < $nearest ) {
+                $src     = $candidate;
+                $nearest = $distance;
+            }
+        }
+
+        return array(
+            'src'    => $src,
+            'srcset' => implode( ', ', $candidates ),
+        );
+    }
+}
+
+if ( ! function_exists( 'lunara_image_sizes_for' ) ) {
+    /**
+     * The width a slot renders its image at, as a `sizes` value (3.2.152).
+     *
+     * Measured on the live site at 390, 768, 1100, 1440 and 1920px. Pixel
+     * values only: a slot's width is a column of a fixed grid, not a share of
+     * the viewport.
+     *
+     * @param string $slot Slot name.
+     * @return string '' for an unknown slot.
+     */
+    function lunara_image_sizes_for( $slot ) {
+        $sizes = array(
+            'oscars-grid'    => '(max-width: 640px) 96px, (max-width: 900px) 340px, (max-width: 1100px) 320px, 256px',
+            'oscars-board'   => '(max-width: 640px) 96px, (max-width: 900px) 340px, (max-width: 1100px) 320px, 256px',
+            'oscars-hero'    => '(max-width: 480px) 96px, 120px',
+            'debrief-poster' => '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px',
+            'pair-card'      => '(max-width: 640px) 96px, 128px',
+            'related-grid'   => '(max-width: 640px) 96px, 112px',
+        );
+
+        return isset( $sizes[ $slot ] ) ? $sizes[ $slot ] : '';
+    }
+}
+
+if ( ! function_exists( 'lunara_image_blur_backdrop_url' ) ) {
+    /**
+     * The source for a backdrop the stylesheet blurs by 20px: 320px wide.
+     *
+     * The blur hides more detail than a 320px source lacks at any band width,
+     * so the full still (often 2,000px and more) is never downloaded for it.
+     * A host that cannot resize keeps its URL.
+     *
+     * @param string $url Image URL.
+     * @return string
+     */
+    function lunara_image_blur_backdrop_url( $url ) {
+        $small = lunara_image_cdn_width_url( $url, 320 );
+
+        return '' !== $small ? $small : trim( (string) $url );
+    }
+}
+
+if ( ! function_exists( 'lunara_img_sizes_without_auto' ) ) {
+    /**
+     * Drop a leading `auto, ` from an eager image's `sizes`.
+     *
+     * `auto` is defined for lazy images only. On an eager image Chromium
+     * treats the whole list as invalid and resolves it to 100vw, so a 120px
+     * hero poster fetched its 780px candidate. A lazy image keeps `auto`.
+     *
+     * @param string $html Image markup.
+     * @return string
+     */
+    function lunara_img_sizes_without_auto( $html ) {
+        if ( ! is_string( $html ) || '' === $html || preg_match( '/\sloading=("|\')lazy\1/i', $html ) ) {
+            return $html;
+        }
+
+        return (string) preg_replace( '/(\ssizes=("|\'))\s*auto\s*,\s*/i', '$1', $html, 1 );
+    }
+}
+
 if ( ! function_exists( 'lunara_resize_tmdb_image_markup' ) ) {
     function lunara_resize_tmdb_image_markup( $html, $size = 'w500' ) {
         if ( ! is_string( $html ) || '' === $html ) {

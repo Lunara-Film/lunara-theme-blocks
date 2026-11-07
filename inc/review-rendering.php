@@ -1438,12 +1438,16 @@ if ( ! function_exists( 'lunara_get_review_image_profile' ) ) {
                 'height' => 2000,
                 'sizes'  => '(max-width: 900px) 88vw, 520px',
             );
+        } elseif ( false !== stripos( $class_string, 'lunara-review-grid-poster--related' ) ) {
+            // 3.2.152: the Related grid under a review has a 112px poster column (96px on phones).
+            $profile['sizes'] = function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'related-grid' ) : '(max-width: 640px) 96px, 112px';
         } elseif ( false !== stripos( $class_string, 'lunara-review-single-debrief-poster' ) ) {
             $profile = array(
                 'size'   => 'lunara-poster-library',
                 'width'  => 2000,
                 'height' => 3000,
-                'sizes'  => '(max-width: 900px) 42vw, 320px',
+                // 3.2.152: the poster column of the Debrief band (88/104/128/220px).
+                'sizes'  => function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'debrief-poster' ) : '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px',
             );
         } elseif ( false !== stripos( $class_string, 'lunara-review-visual--poster-hero' ) ) {
             $profile = array(
@@ -1556,6 +1560,16 @@ if ( ! function_exists( 'lunara_lock_review_image_markup' ) ) {
             $source_url = $src_match[2];
         }
 
+        // 3.2.152: a TMDB poster in locked markup is proxied through the CDN, so
+        // it gets the same crops as an upload instead of its 2000x3000 original.
+        // (The hero keeps TMDB's own widths through lunara_render_review_visual_slot().)
+        if ( function_exists( 'lunara_image_cdn_source' ) && false !== stripos( $source_url, 'image.tmdb.org/' ) ) {
+            $cdn_source = lunara_image_cdn_source( $source_url );
+            if ( '' !== $cdn_source ) {
+                $source_url = $cdn_source;
+            }
+        }
+
         $width  = isset( $profile['width'] ) ? absint( $profile['width'] ) : 0;
         $height = isset( $profile['height'] ) ? absint( $profile['height'] ) : 0;
         $src    = lunara_lock_review_image_url( $source_url, $profile );
@@ -1583,12 +1597,13 @@ if ( ! function_exists( 'lunara_lock_review_image_markup' ) ) {
             $html = lunara_replace_img_attribute( $html, 'sizes', $profile['sizes'] );
         }
 
-        // Same aspect ratio at a quarter, half, the locked size and retina, so a
-        // 320px poster slot stops downloading the 2000px source. The width and
-        // height attributes stay locked, so layout does not change.
+        // Same aspect ratio at an eighth, a quarter, half, the locked size and
+        // retina, so a 320px poster slot stops downloading the 2000px source
+        // and a 112px one (3.2.152) can take 250w. The width and height
+        // attributes stay locked, so layout does not change.
         $candidates = array();
-        foreach ( array( (int) round( $width / 4 ), (int) round( $width / 2 ), $width, $width * 2 ) as $candidate_width ) {
-            if ( $candidate_width < 200 && $candidate_width !== $width ) {
+        foreach ( array( (int) round( $width / 8 ), (int) round( $width / 4 ), (int) round( $width / 2 ), $width, $width * 2 ) as $candidate_width ) {
+            if ( $candidate_width < 150 && $candidate_width !== $width ) {
                 continue;
             }
             $candidate_profile           = $profile;
@@ -2908,7 +2923,7 @@ if ( ! function_exists( 'lunara_get_related_review_posts' ) ) {
 /**
  * Render a review archive card.
  */
-function lunara_render_review_grid_card( $post_id, $card_index = null ) {
+function lunara_render_review_grid_card( $post_id, $card_index = null, $args = array() ) {
     $post_id = intval( $post_id );
     if ( $post_id <= 0 ) {
         return '';
@@ -2933,6 +2948,14 @@ function lunara_render_review_grid_card( $post_id, $card_index = null ) {
 
     if ( $has_position && 1 === $card_index ) {
         $thumb_attrs['fetchpriority'] = 'high';
+    }
+
+    // 3.2.152: a caller that renders the card in a narrower grid names the
+    // poster column through a class the image profile knows (see
+    // lunara_get_review_image_profile()).
+    $poster_class = is_array( $args ) && ! empty( $args['poster_class'] ) ? trim( (string) $args['poster_class'] ) : '';
+    if ( '' !== $poster_class ) {
+        $thumb_attrs['class'] .= ' ' . $poster_class;
     }
 
     $image_data      = lunara_get_review_card_image_data( $post_id, 'lunara-review-card', $thumb_attrs );

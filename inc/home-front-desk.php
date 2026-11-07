@@ -162,13 +162,22 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 		}
 	}
 
+	// 3.2.152: a companion frame is 358px wide on a phone and 420px on desktop,
+	// but its only source was the 1600px crop. The candidates are CDN crops to
+	// the same 16:9 frame. The lead keeps its single source: its preload names
+	// that exact URL, and a second candidate would be a second download.
+	$still_set = ! $is_lead && function_exists( 'lunara_image_cdn_crop_srcset' )
+		? lunara_image_cdn_crop_srcset( $image_url, 16, 9, array( 420, 640, 840, 1200, 1600 ), 1600 )
+		: array( 'src' => '', 'srcset' => '' );
+
 	return sprintf(
-		'<img class="%1$s" src="%2$s" alt="" width="1920" height="1080" loading="%3$s" decoding="async"%4$s sizes="%5$s">',
+		'<img class="%1$s" src="%2$s" alt="" width="1920" height="1080" loading="%3$s" decoding="async"%4$s sizes="%5$s"%6$s>',
 		esc_attr( $class ),
 		esc_url( $image_url ),
 		$is_lead ? 'eager' : 'lazy',
 		$is_lead ? ' fetchpriority="high"' : '',
-		esc_attr( $sizes )
+		esc_attr( $sizes ),
+		'' !== $still_set['srcset'] ? ' srcset="' . esc_attr( $still_set['srcset'] ) . '"' : ''
 	);
 }
 

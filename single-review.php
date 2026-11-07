@@ -417,6 +417,11 @@ if ( have_posts() ) :
                 } elseif ( ! empty( $debrief_render['media_html'] ) && preg_match( '/\ssrc="([^"]+)"/i', (string) $debrief_render['media_html'], $debrief_poster_match ) ) {
                     $debrief_backdrop = html_entity_decode( (string) $debrief_poster_match[1], ENT_QUOTES, 'UTF-8' );
                 }
+                // 3.2.152: the band blurs its image by 20px, so a 320px source
+                // is all it can show; the full still stays with the hero.
+                if ( '' !== $debrief_backdrop && function_exists( 'lunara_image_blur_backdrop_url' ) ) {
+                    $debrief_backdrop = lunara_image_blur_backdrop_url( $debrief_backdrop );
+                }
                 ?>
                 <section class="lunara-review-single-debrief-section lunara-review-single-debrief-shell<?php echo '' !== $debrief_backdrop ? ' has-backdrop' : ''; ?><?php echo $is_full_spoiler ? ' lunara-spoiler-protected-content lunara-spoiler-protected-content--module' : ''; ?>" data-lunara-site-studio-section="debrief"<?php echo '' !== $debrief_backdrop ? ' style="--lunara-debrief-backdrop:url(' . esc_url( $debrief_backdrop ) . ')"' : ''; ?><?php echo $is_full_spoiler ? ' data-lunara-spoiler-protected data-lunara-spoiler-post="' . esc_attr( $post_id ) . '"' : ''; ?>>
                     <div class="lunara-review-single-debrief-wrap<?php echo ! empty( $debrief_render['media_html'] ) ? ' has-signature-media' : ''; ?>">
@@ -455,7 +460,8 @@ if ( have_posts() ) :
                             <?php
                             while ( $related_query->have_posts() ) :
                                 $related_query->the_post();
-                                echo lunara_render_review_grid_card( get_the_ID() );
+                                // 3.2.152: the Related poster column is 112px (96px on phones).
+                                echo lunara_render_review_grid_card( get_the_ID(), null, array( 'poster_class' => 'lunara-review-grid-poster--related' ) );
                             endwhile;
                             wp_reset_postdata();
                             ?>
