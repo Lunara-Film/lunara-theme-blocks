@@ -3767,6 +3767,27 @@ function lunara_control_desk_is_plugin_active( $relative_file ) {
     return function_exists( 'is_plugin_active' ) && is_plugin_active( ltrim( $relative_file, '/\\' ) );
 }
 
+/**
+ * The oldest Oscars Ledger plugin the theme's seams accept: inc/oscars-family.php and
+ * inc/oscars-data.php use accessors and hooks the plugin added in 2.8.1 (3.2.158).
+ */
+if ( ! defined( 'LUNARA_OSCARS_LEDGER_SEAM' ) ) {
+    define( 'LUNARA_OSCARS_LEDGER_SEAM', '2.8.1' );
+}
+
+/**
+ * The readiness word for the Oscars Ledger plugin row: 'needs' when no plugin is found, 'weak' below the
+ * seam, 'ready' at the seam or newer. Until 3.2.158 the row read 'ready' only at exactly 2.7.89, so every
+ * release since then showed as 'weak'.
+ */
+function lunara_control_desk_oscars_plugin_state( $version ) {
+    $version = trim( (string) $version );
+    if ( '' === $version ) {
+        return 'needs';
+    }
+    return version_compare( $version, LUNARA_OSCARS_LEDGER_SEAM, '>=' ) ? 'ready' : 'weak';
+}
+
 function lunara_control_desk_get_system_status() {
     $theme        = wp_get_theme();
     $parent       = $theme->parent();
@@ -3817,8 +3838,12 @@ function lunara_control_desk_get_system_status() {
         array(
             'label' => __( 'Academy Awards plugin', 'lunara-film' ),
             'value' => $aat_version ? $aat_version : __( 'Not detected', 'lunara-film' ),
-            'state' => '2.7.89' === $aat_version ? 'ready' : ( $aat_version ? 'weak' : 'needs' ),
-            'note'  => __( 'Canonical source: TheAntagonist2020/lunara-plugin-oscars-ledger.', 'lunara-film' ),
+            'state' => lunara_control_desk_oscars_plugin_state( $aat_version ),
+            'note'  => sprintf(
+                /* translators: %s: the oldest plugin version the theme's seams accept. */
+                __( 'Canonical source: Lunara-Film/lunara-plugin-oscars-ledger. The theme\'s seams need %s or newer.', 'lunara-film' ),
+                LUNARA_OSCARS_LEDGER_SEAM
+            ),
         ),
         array(
             'label' => __( 'Object cache', 'lunara-film' ),
@@ -3924,33 +3949,33 @@ function lunara_control_desk_get_source_status() {
     return array(
         array(
             'label' => __( 'Theme repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-theme-blocks',
+            'value' => 'Lunara-Film/lunara-theme-blocks',
             'state' => 'ready',
             'note'  => __( 'GitHub main is the canonical source; live identity is measured below.', 'lunara-film' ),
         ),
         array(
             'label' => __( 'AI Classic repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-plugin-ai-assistant-classic',
+            'value' => 'Lunara-Film/lunara-plugin-ai-assistant-classic',
             'state' => 'ready',
         ),
         array(
             'label' => __( 'Core repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-plugin-core',
+            'value' => 'Lunara-Film/lunara-plugin-core',
             'state' => 'ready',
         ),
         array(
             'label' => __( 'Oscars repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-plugin-oscars-ledger',
+            'value' => 'Lunara-Film/lunara-plugin-oscars-ledger',
             'state' => 'ready',
         ),
         array(
             'label' => __( 'Dispatch repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-plugin-dispatch',
+            'value' => 'Lunara-Film/lunara-plugin-dispatch',
             'state' => 'ready',
         ),
         array(
             'label' => __( 'IMDb Guard repository', 'lunara-film' ),
-            'value' => 'TheAntagonist2020/lunara-plugin-imdb-guard',
+            'value' => 'Lunara-Film/lunara-plugin-imdb-guard',
             'state' => 'ready',
         ),
     );
@@ -4008,7 +4033,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live theme', 'lunara-film' ),
             $theme_version,
             get_stylesheet_directory() . '/style.css',
-            'TheAntagonist2020/lunara-theme-blocks',
+            'Lunara-Film/lunara-theme-blocks',
             'LUNARA_THEME_COMMIT',
             'lunara_theme_deploy_commit'
         ),
@@ -4016,7 +4041,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live Core', 'lunara-film' ),
             lunara_control_desk_plugin_file_version( 'lunara-core/lunara-core.php' ),
             $plugin_dir . 'lunara-core/lunara-core.php',
-            'TheAntagonist2020/lunara-plugin-core',
+            'Lunara-Film/lunara-plugin-core',
             'LUNARA_CORE_COMMIT',
             'lunara_core_deploy_commit'
         ),
@@ -4024,7 +4049,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live Oscars', 'lunara-film' ),
             defined( 'AAT_VERSION' ) ? AAT_VERSION : lunara_control_desk_plugin_file_version( 'academy-awards-table-optimized/academy-awards-table.php' ),
             $plugin_dir . 'academy-awards-table-optimized/academy-awards-table.php',
-            'TheAntagonist2020/lunara-plugin-oscars-ledger',
+            'Lunara-Film/lunara-plugin-oscars-ledger',
             'LUNARA_OSCARS_COMMIT',
             'lunara_oscars_deploy_commit'
         ),
@@ -4032,7 +4057,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live Dispatch', 'lunara-film' ),
             defined( 'LUNARA_DISPATCH_VERSION' ) ? LUNARA_DISPATCH_VERSION : lunara_control_desk_plugin_file_version( 'lunara-dispatch/lunara-dispatch.php' ),
             $plugin_dir . 'lunara-dispatch/lunara-dispatch.php',
-            'TheAntagonist2020/lunara-plugin-dispatch',
+            'Lunara-Film/lunara-plugin-dispatch',
             'LUNARA_DISPATCH_COMMIT',
             'lunara_dispatch_deploy_commit'
         ),
@@ -4040,7 +4065,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live IMDb Guard', 'lunara-film' ),
             lunara_control_desk_plugin_file_version( 'lunara-imdb-guard/lunara-imdb-guard.php' ),
             $plugin_dir . 'lunara-imdb-guard/lunara-imdb-guard.php',
-            'TheAntagonist2020/lunara-plugin-imdb-guard',
+            'Lunara-Film/lunara-plugin-imdb-guard',
             'LUNARA_IMDB_GUARD_COMMIT',
             'lunara_imdb_guard_deploy_commit'
         ),
@@ -4048,7 +4073,7 @@ function lunara_control_desk_get_source_control_status() {
             __( 'Live AI Classic', 'lunara-film' ),
             lunara_control_desk_plugin_file_version( 'lunara-ai-assistant-classic/lunara-ai-assistant-classic.php' ),
             $plugin_dir . 'lunara-ai-assistant-classic/lunara-ai-assistant-classic.php',
-            'TheAntagonist2020/lunara-plugin-ai-assistant-classic',
+            'Lunara-Film/lunara-plugin-ai-assistant-classic',
             'LUNARA_AI_CLASSIC_COMMIT',
             'lunara_ai_classic_deploy_commit'
         ),
@@ -6239,7 +6264,7 @@ function lunara_control_desk_render_operating_plan_tab() {
         array( __( 'Website changelog', 'lunara-film' ), 'C:\\Users\\silve_i21do49\\OneDrive\\Desktop\\New folder\\LUNARA_WORLD_CHANGELOG.md' ),
         array( __( 'Visual QA / evidence', 'lunara-film' ), 'C:\\Users\\silve_i21do49\\OneDrive\\Desktop\\New folder\\10_VISUAL_EVIDENCE' ),
         array( __( 'Forbidden website artifact path', 'lunara-film' ), 'C:\\Users\\silve_i21do49\\OneDrive\\Documents\\New project' ),
-        array( __( 'Canonical theme repository', 'lunara-film' ), 'github.com/TheAntagonist2020/lunara-theme-blocks' ),
+        array( __( 'Canonical theme repository', 'lunara-film' ), 'github.com/Lunara-Film/lunara-theme-blocks' ),
         array( __( 'Live deployment identity', 'lunara-film' ), __( 'System Status > Deploy Truth (version, deploy time, and SHA256)', 'lunara-film' ) ),
         array( __( 'Latest remote backup', 'lunara-film' ), '/home/151589083/lunara-backups/lunara-review-card-exact-quote-20260601-0408' ),
     );
