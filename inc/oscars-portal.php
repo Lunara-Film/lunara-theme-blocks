@@ -499,8 +499,18 @@ if ( ! function_exists( 'lunara_render_oscars_prediction_board' ) ) {
 					$row_class = 'lunara-oscars-board-row' . ( '' !== $row['status'] ? ' is-status-' . esc_attr( $row['status'] ) : '' ) . ( '' !== $art_src ? ' has-art' . ( '' !== $art_kind ? ' has-art-' . $art_kind : '' ) : '' );
 				?>
 					<li class="<?php echo esc_attr( $row_class ); ?>">
-						<?php if ( '' !== $art_src ) : ?>
-							<span class="lunara-oscars-board-art" aria-hidden="true"><img src="<?php echo esc_url( $art_src ); ?>" alt="" loading="lazy" decoding="async" /></span>
+						<?php if ( '' !== $art_src ) :
+							// 3.2.152: the art fills a 2:3 frame (96px on phones, up to ~340px). Each
+							// candidate is a CDN crop to that frame, so a phone no longer fetches a
+							// 768px landscape still for a 96px slot.
+							$art_set = function_exists( 'lunara_image_cdn_crop_srcset' )
+								? lunara_image_cdn_crop_srcset( $art_src, 2, 3, array( 96, 192, 256, 352, 512, 704 ), 352 )
+								: array( 'src' => '', 'srcset' => '' );
+							$art_attr = '' !== $art_set['srcset']
+								? ' srcset="' . esc_attr( $art_set['srcset'] ) . '" sizes="' . esc_attr( 'auto, ' . lunara_image_sizes_for( 'oscars-board' ) ) . '"'
+								: '';
+						?>
+							<span class="lunara-oscars-board-art" aria-hidden="true"><img src="<?php echo esc_url( '' !== $art_set['src'] ? $art_set['src'] : $art_src ); ?>"<?php echo $art_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?> alt="" loading="lazy" decoding="async" /></span>
 						<?php endif; ?>
 						<span class="lunara-oscars-board-category"><?php echo esc_html( $row['category'] ); ?></span>
 						<span class="lunara-oscars-board-call">

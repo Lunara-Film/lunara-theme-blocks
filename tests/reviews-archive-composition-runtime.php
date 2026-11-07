@@ -193,7 +193,7 @@ foreach ( $debrief_sources as $post_id => $source ) {
     lunara_test_assert( false === strpos( $debrief_html, 'data-no-lazy=' ) && false === strpos( $debrief_html, 'data-skip-lazy=' ), 'Lazy debrief posters must not retain optimizer bypass flags.' );
     lunara_test_assert( false !== strpos( $debrief_html, 'src="' . $source . '"' ), 'Deferring a debrief poster must preserve its source.' );
     lunara_test_assert( false !== strpos( $debrief_html, 'width="2000"' ) && false !== strpos( $debrief_html, 'height="3000"' ), 'Deferred debrief posters must retain reserved dimensions.' );
-    lunara_test_assert( false !== strpos( $debrief_html, 'sizes="(max-width: 900px) 42vw, 320px"' ), 'Deferred debrief posters must retain responsive sizing.' );
+    lunara_test_assert( false !== strpos( $debrief_html, 'sizes="(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px"' ), 'Deferred debrief posters must retain responsive sizing (3.2.152: the Debrief band\'s poster column).' );
     lunara_test_assert( false !== strpos( $debrief_html, 'alt="Runtime Review poster"' ) && false !== strpos( $debrief_html, 'lunara-review-single-debrief-poster-shell' ), 'Deferring a debrief poster must preserve its accessible label and shell.' );
 }
 lunara_test_assert( '' === lunara_get_review_debrief_signature_media_html( 904 ), 'Missing debrief media must not create an empty poster shell.' );

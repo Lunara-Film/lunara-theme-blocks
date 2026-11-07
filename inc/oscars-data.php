@@ -339,6 +339,51 @@ function lunara_rightsize_oscars_card_image_url( $url, $width = 780, $height = 1
 }
 
 /**
+ * A winner-card <img> that names its width candidates (3.2.152).
+ *
+ * A card's frame is 96px wide on phones and about 250-340px above, but the
+ * image arrived as one 780px file for every screen. With a frame ratio, each
+ * candidate is a CDN crop to that ratio (the framing the card already shows);
+ * without one, each is a plain downscale, so a curated photo keeps its whole
+ * picture. A host the CDN cannot resize prints the image as it was given.
+ *
+ * @param string              $url    Image URL.
+ * @param string              $alt    Alternative text.
+ * @param string              $class  Class attribute.
+ * @param array<int,int>|null $frame  Frame ratio, e.g. array( 2, 3 ), or null for whole pictures.
+ * @param array<int,int>|null $widths Candidate widths; the 2:3 set when null.
+ * @return string
+ */
+function lunara_oscars_winner_photo_img( $url, $alt, $class = 'lunara-winner-photo', $frame = null, $widths = null ) {
+    $url = trim( (string) $url );
+    if ( '' === $url ) {
+        return '';
+    }
+
+    $widths   = is_array( $widths ) && ! empty( $widths ) ? $widths : array( 192, 256, 352, 512, 704, 780 );
+    $fallback = 512;
+    $set      = array( 'src' => '', 'srcset' => '' );
+    if ( is_array( $frame ) && 2 === count( $frame ) && function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
+        $set = lunara_image_cdn_crop_srcset( $url, (int) $frame[0], (int) $frame[1], $widths, $fallback );
+    } elseif ( function_exists( 'lunara_image_cdn_width_srcset' ) ) {
+        $set = lunara_image_cdn_width_srcset( $url, $widths, $fallback );
+    }
+
+    $sizes      = function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'oscars-grid' ) : '';
+    $candidates = '' !== $set['srcset'] && '' !== $sizes
+        ? ' srcset="' . esc_attr( $set['srcset'] ) . '" sizes="' . esc_attr( 'auto, ' . $sizes ) . '"'
+        : '';
+
+    return sprintf(
+        '<img src="%s"%s alt="%s" loading="lazy" decoding="async" class="%s" />',
+        esc_url( '' !== $set['src'] ? $set['src'] : $url ),
+        $candidates,
+        esc_attr( $alt ),
+        esc_attr( $class )
+    );
+}
+
+/**
  * Build a curated media-library visual override for an Oscars winner card.
  */
 function lunara_get_oscars_curated_visual( $entry, $photo_map ) {
@@ -371,11 +416,8 @@ function lunara_get_oscars_curated_visual( $entry, $photo_map ) {
 
     return array(
         'poster_url'  => $photo_url,
-        'poster_html' => sprintf(
-            '<img src="%s" alt="%s" loading="lazy" decoding="async" class="lunara-winner-photo" />',
-            esc_url( $photo_url ),
-            esc_attr( $photo_alt )
-        ),
+        // 3.2.152: a curated photo may be any shape; it is shown whole, so its candidates are plain downscales.
+        'poster_html' => lunara_oscars_winner_photo_img( $photo_url, $photo_alt, 'lunara-winner-photo', null, array( 192, 256, 352, 512, 704, 768 ) ),
     );
 }
 
@@ -431,11 +473,8 @@ function lunara_get_oscars_entry_visual( $entry, $aat_instance = null, $args = a
         if ( ! empty( $person_visual['poster_url'] ) && empty( $person_visual['poster_html'] ) ) {
             $person_alt = ! empty( $entry['name'] ) ? $entry['name'] : ( $person_visual['name'] ?? '' );
             if ( '' !== trim( (string) $person_alt ) ) {
-                $person_visual['poster_html'] = sprintf(
-                    '<img src="%s" alt="%s" loading="lazy" decoding="async" class="lunara-winner-photo lunara-winner-photo--person" />',
-                    esc_url( $person_visual['poster_url'] ),
-                    esc_attr( $person_alt )
-                );
+                // 3.2.152: the portrait was cropped 2:3 above; every candidate keeps that crop.
+                $person_visual['poster_html'] = lunara_oscars_winner_photo_img( $person_visual['poster_url'], $person_alt, 'lunara-winner-photo lunara-winner-photo--person', array( 2, 3 ) );
             }
         }
 
@@ -484,11 +523,8 @@ function lunara_get_oscars_entry_visual( $entry, $aat_instance = null, $args = a
             $backdrop_url           = lunara_rightsize_oscars_card_image_url( $backdrop_url, 960, 540 );
             $photo_alt             = ! empty( $entry['film'] ) ? $entry['film'] : ( $entry['name'] ?? '' );
             $visual['poster_url']  = $backdrop_url;
-            $visual['poster_html'] = sprintf(
-                '<img src="%s" alt="%s" loading="lazy" decoding="async" class="lunara-winner-photo" />',
-                esc_url( $backdrop_url ),
-                esc_attr( $photo_alt )
-            );
+            // 3.2.152: the still was cropped 16:9 above; every candidate keeps that crop.
+            $visual['poster_html'] = lunara_oscars_winner_photo_img( $backdrop_url, $photo_alt, 'lunara-winner-photo', array( 16, 9 ), array( 320, 480, 640, 960 ) );
         }
     }
 
@@ -909,7 +945,11 @@ function lunara_render_oscars_winner_media_link( $winner_card, $fallback_url = '
     }
 
     $poster_classes = 'lunara-ceremony-winner-poster' . ( '' !== $poster_url ? ' has-poster-bg' : '' );
-    $poster_style   = '' !== $poster_url ? ' style="background-image: url(\'' . esc_url( $poster_url ) . '\');"' : '';
+    // 3.2.152: no inline background behind the <img>. The stylesheet hides it,
+    // but the stylesheet is deferred, so the browser had already started a
+    // full-size download for each of 33 plates (1.4 MB on /oscars/) that no
+    // one ever saw.
+    $poster_style   = '';
     $visual_markup  = $poster_html;
     if ( '' === $visual_markup ) {
         $visual_markup = '<img src="' . esc_url( $poster_url ) . '" alt="' . esc_attr( $label . ' poster' ) . '" loading="lazy" decoding="async" />';

@@ -54,7 +54,7 @@ function img_extract( $file, $name ) {
 	}
 	throw new RuntimeException( 'Missing function ' . $name );
 }
-foreach ( array( 'lunara_tmdb_image_srcset', 'lunara_image_url_width_srcset', 'lunara_resize_tmdb_image_url', 'lunara_resize_wpcom_image_url' ) as $name ) { img_extract( 'inc/setup.php', $name ); }
+foreach ( array( 'lunara_tmdb_image_srcset', 'lunara_image_url_width_srcset', 'lunara_resize_tmdb_image_url', 'lunara_resize_wpcom_image_url', 'lunara_image_cdn_source' ) as $name ) { img_extract( 'inc/setup.php', $name ); }
 foreach ( array( 'lunara_get_review_image_profile', 'lunara_review_image_can_use_wpcom_resize', 'lunara_lock_review_image_url', 'lunara_replace_img_attribute', 'lunara_remove_img_attribute', 'lunara_lock_review_image_markup', 'lunara_render_review_visual_slot' ) as $name ) { img_extract( 'inc/review-rendering.php', $name ); }
 foreach ( array( 'lunara_output_home_hero_geometry_css', 'lunara_output_entity_geometry_css', 'lunara_rocket_preserve_front_door_css' ) as $name ) { img_extract( 'inc/frontend.php', $name ); }
 
@@ -78,7 +78,10 @@ $profile = lunara_get_review_image_profile( 'lunara-review-single-debrief-poster
 $locked  = lunara_lock_review_image_markup( '<img src="https://i0.wp.com/lunarafilm.com/wp-content/uploads/2026/07/poster.jpg?quality=86&ssl=1" class="lunara-review-single-debrief-poster" alt="A" loading="lazy">', '', $profile );
 preg_match( '/\ssrcset="([^"]+)"/', $locked, $srcset );
 $widths = array_map( static function ( $candidate ) { return (int) substr( strrchr( trim( $candidate ), ' ' ), 1 ); }, explode( ',', $srcset[1] ?? '' ) );
-img_assert( array( 500, 1000, 2000, 4000 ) === $widths, 'A 320px debrief poster can now choose 500w or 1000w instead of only 2000w/4000w.' );
+img_assert( array( 250, 500, 1000, 2000, 4000 ) === $widths, 'A 320px debrief poster can choose 500w or 1000w, and a 112px one 250w (3.2.152), instead of only 2000w/4000w.' );
+// 3.2.152: a TMDB poster is proxied through the CDN and cropped like an upload.
+$tmdb_locked = lunara_lock_review_image_markup( '<img src="https://image.tmdb.org/t/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg" class="lunara-review-single-debrief-poster" alt="A" loading="lazy">', '', $profile );
+img_assert( false !== strpos( $tmdb_locked, 'src="https://i0.wp.com/image.tmdb.org/t/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg?resize=2000%2C3000' ) && false !== strpos( $tmdb_locked, 'resize=250%2C375' ) && substr_count( $tmdb_locked, ' 250w' ) >= 1 && false === strpos( $tmdb_locked, 't/p/original/7jK6NuxVg1XuEV7UdNa6KO03IgZ.jpg"' ), 'A TMDB poster is proxied through the CDN and gets the same crops as an upload (got ' . $tmdb_locked . ').' );
 img_assert( false !== strpos( $locked, 'width="2000"' ) && false !== strpos( $locked, 'height="3000"' ) && false !== strpos( $locked, 'resize=500%2C750' ), 'Locked dimensions stay put; smaller candidates keep the 2:3 crop.' );
 $external = lunara_lock_review_image_markup( '<img src="https://example.org/poster.jpg" alt="A">', '', $profile );
 img_assert( false === strpos( $external, 'srcset=' ), 'Hosts that cannot resize get no invented candidates.' );

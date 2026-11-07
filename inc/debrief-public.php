@@ -348,7 +348,8 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_media' ) ) {
                 'class'          => 'lunara-review-single-debrief-poster',
                 'loading'        => 'lazy',
                 'decoding'       => 'async',
-                'sizes'          => '(max-width: 900px) 42vw, 320px',
+                // 3.2.152: the poster column of the Debrief band (88/104/128/220px).
+                'sizes'          => function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'debrief-poster' ) : '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px',
                 'alt'            => '' !== $title ? $title . ' poster' : __( 'Reviewed film poster', 'lunara-film' ),
                 'data-image-title' => $title,
             )
@@ -409,7 +410,8 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_pairing_cards' ) ) {
                         'class'    => 'lunara-pair-preview-thumb',
                         'loading'  => 'lazy',
                         'decoding' => 'async',
-                        'sizes'    => '(max-width: 680px) 32vw, 180px',
+                        // 3.2.152: a pairing card's poster is 128px wide, 96px on phones.
+                        'sizes'    => function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'pair-card' ) : '(max-width: 640px) 96px, 128px',
                         'alt'      => '' !== $title ? $title . ' poster' : __( 'Companion film poster', 'lunara-film' ),
                     )
                 );

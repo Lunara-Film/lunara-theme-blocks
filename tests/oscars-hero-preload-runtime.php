@@ -88,11 +88,16 @@ lunara_test_assert( false !== strpos( $template, '$hero_backdrop_url = function_
 // 3. Poster sizes.
 $lazy = '<img width="200" height="300" src="https://x.test/p-200x300.jpg" class="aat-entity-poster" alt="P poster" decoding="async" loading="lazy" srcset="https://x.test/p-200x300.jpg 200w, https://x.test/p.jpg 780w" sizes="auto, (max-width: 820px) 180px, 340px" />';
 $out  = lunara_oscars_poster_sizes( $lazy, lunara_oscars_poster_sizes_for( 'grid' ) );
-lunara_test_assert( 1 === preg_match( '/\ssizes="auto, \(max-width: 640px\) 96px, \(max-width: 900px\) 340px, 300px"/', $out ), 'A lazy poster gets the grid widths with WordPress\'s auto kept in front (got ' . $out . ').' );
+lunara_test_assert( 1 === preg_match( '/\ssizes="auto, \(max-width: 640px\) 96px, \(max-width: 900px\) 340px, \(max-width: 1100px\) 320px, 256px"/', $out ), 'A lazy poster gets the grid widths with WordPress\'s auto kept in front (got ' . $out . ').' );
 lunara_test_assert( 1 === substr_count( $out, 'sizes="' ), 'Exactly one sizes attribute remains.' );
 $eager = str_replace( array( 'loading="lazy"', 'sizes="auto, (max-width: 820px) 180px, 340px"' ), array( 'loading="eager" fetchpriority="high"', 'sizes="(max-width: 820px) 180px, 340px"' ), $lazy );
 $out   = lunara_oscars_poster_sizes( $eager, lunara_oscars_poster_sizes_for( 'hero' ) );
-lunara_test_assert( false !== strpos( $out, 'sizes="(max-width: 480px) 96px, (max-width: 900px) 124px, 300px"' ), 'An eager poster gets the hero widths with no auto (got ' . $out . ').' );
+lunara_test_assert( false !== strpos( $out, 'sizes="(max-width: 480px) 96px, 120px"' ), 'An eager poster gets the hero widths with no auto (got ' . $out . ').' );
+// 3.2.152: an eager poster that arrived with WordPress's auto loses it. Chromium
+// resolves `auto` on an eager image to 100vw, so the 120px hero fetched 780px.
+$eager_auto = str_replace( 'loading="lazy"', 'loading="eager" fetchpriority="high"', $lazy );
+$out        = lunara_oscars_poster_sizes( $eager_auto, lunara_oscars_poster_sizes_for( 'hero' ) );
+lunara_test_assert( false !== strpos( $out, 'sizes="(max-width: 480px) 96px, 120px"' ) && false === strpos( $out, 'auto' ), 'An eager poster that arrived with auto loses it (got ' . $out . ').' );
 $nosizes = preg_replace( '/\ssizes="[^"]*"/', '', $lazy );
 $out     = lunara_oscars_poster_sizes( $nosizes, '96px' );
 lunara_test_assert( false !== strpos( $out, 'sizes="auto, 96px"' ), 'A lazy poster with srcset but no sizes gets one, with auto (got ' . $out . ').' );
