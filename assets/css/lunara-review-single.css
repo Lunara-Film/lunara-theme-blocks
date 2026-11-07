@@ -2120,6 +2120,24 @@ body.single-review .lunara-pair-card-title {
         display: contents !important;
     }
 
+    /* A page the edge cached before 3.2.147 has no lead group: the body then
+       takes the lead's place beside the poster and its children stack in
+       source order (browsers without :has() keep the contents fallback). */
+    html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-body:not(:has(> .lunara-pair-card-lead)) {
+        display: grid !important;
+        grid-column: 2 !important;
+        grid-row: 1 / span 3 !important;
+        align-content: start !important;
+        gap: 6px !important;
+        min-width: 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-body:not(:has(> .lunara-pair-card-lead)) > * {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        margin: 0 !important;
+    }
+
     html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-lead {
         grid-column: 2 !important;
         grid-row: 1 !important;

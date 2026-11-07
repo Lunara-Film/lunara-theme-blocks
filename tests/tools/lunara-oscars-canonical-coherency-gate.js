@@ -44,7 +44,8 @@ const CANONICAL_OSCARS_URL = 'https://lunarafilm.com/oscars/';
 const APPROVED_DEFAULT_LABEL_TOKEN = 'tiempos-text';
 const PORTAL_ROOT_CLASS = 'lunara-oscars-portal';
 const TIEMPOS_MARKER_CLASS = 'is-label-font-tiempos';
-const TIEMPOS_BOLD_PRELOAD_FILE = 'TiemposText-Bold.woff2';
+// 3.2.151: the theme preloads the Semibold label weight (inc/frontend.php), not a Bold file.
+const TIEMPOS_BOLD_PRELOAD_FILE = 'TiemposText-Semibold.woff2';
 const MODERN_ROOT_ID = 'primary';
 const VERSION_ATTRIBUTE = 'data-lunara-theme-version';
 const STRUCTURAL_VARS_STYLE_ID = 'lunara-oscars-portal-vars';

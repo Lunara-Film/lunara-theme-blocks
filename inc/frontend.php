@@ -5664,3 +5664,56 @@ function lunara_news_grid_content_filter( $content ) {
     return $grid_html;
 }
 add_filter( 'the_content', 'lunara_news_grid_content_filter', 8 );
+
+/**
+ * 3.2.151: bound how long a public page may be served from a cache.
+ *
+ * The WordPress.com edge keeps a page's HTML until its lifetime ends and
+ * serves it stale while it revalidates. Pages Batcache stores carry
+ * `max-age=300`; pages it does not store carried no lifetime at all, so after
+ * a deploy the edge served day-old HTML on canonical URLs (on 2026-11-07 the
+ * canary's three reads of /journal/ returned 3.2.146 beside 3.2.149). Every
+ * public, anonymous, cacheable 200 now carries the same five-minute lifetime,
+ * so a deploy is fully live within five minutes of each page's next request.
+ * Anything that already set a Cache-Control header (Studio previews, feeds,
+ * nocache_headers()) keeps its own.
+ *
+ * @param array $context Request facts: admin, headers_sent, logged_in, preview,
+ *                       customize_preview, feed, not_found, do_not_cache,
+ *                       preview_query (booleans) and headers (headers_list()).
+ * @return string The header to send, or '' to send nothing.
+ */
+function lunara_public_page_cache_lifetime_value( $context ) {
+    foreach ( array( 'admin', 'headers_sent', 'logged_in', 'preview', 'customize_preview', 'feed', 'not_found', 'do_not_cache', 'preview_query' ) as $flag ) {
+        if ( ! empty( $context[ $flag ] ) ) {
+            return '';
+        }
+    }
+    foreach ( (array) ( $context['headers'] ?? array() ) as $sent ) {
+        if ( 0 === stripos( (string) $sent, 'Cache-Control:' ) ) {
+            return '';
+        }
+    }
+    return 'Cache-Control: max-age=300, must-revalidate';
+}
+
+function lunara_public_page_cache_lifetime_header() {
+    $value = lunara_public_page_cache_lifetime_value(
+        array(
+            'admin'            => is_admin(),
+            'headers_sent'     => headers_sent(),
+            'logged_in'        => is_user_logged_in(),
+            'preview'          => is_preview(),
+            'customize_preview' => is_customize_preview(),
+            'feed'             => is_feed(),
+            'not_found'        => is_404(),
+            'do_not_cache'     => defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE,
+            'preview_query'    => ! empty( $_GET['preview'] ),
+            'headers'          => headers_list(),
+        )
+    );
+    if ( '' !== $value ) {
+        header( $value, true );
+    }
+}
+add_action( 'template_redirect', 'lunara_public_page_cache_lifetime_header', 1000 );

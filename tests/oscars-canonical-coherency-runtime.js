@@ -80,7 +80,7 @@ function candidateHtml({
 } = {}) {
 	const markerClass = marker ? ' is-label-font-tiempos' : '';
 	const preloadTag = preload
-		? '<link rel="' + preloadRel + '" href="https://lunarafilm.com/wp-content/uploads/lunara-fonts/v1/TiemposText-Bold.woff2" as="' + preloadAs + '" type="font/woff2" crossorigin />'
+		? '<link rel="' + preloadRel + '" href="https://lunarafilm.com/wp-content/uploads/lunara-fonts/v1/TiemposText-Semibold.woff2" as="' + preloadAs + '" type="font/woff2" crossorigin />'
 		: '';
 	const seedTag = seed ? '<style id="' + STRUCTURAL_SEED_STYLE_ID + '">#primary.lunara-oscars-portal{display:grid}</style>' : '';
 	const routeLinkTag = routeLink

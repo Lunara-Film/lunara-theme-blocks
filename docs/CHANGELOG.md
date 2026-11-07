@@ -11,6 +11,13 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.151: a five-minute lifetime for public pages; the canary's sentinels match the theme again
+
+- **Every public page carries a cache lifetime.** `lunara_public_page_cache_lifetime_header()` (inc/frontend.php, `template_redirect` at priority 1000) sends `Cache-Control: max-age=300, must-revalidate` on anonymous, cacheable 200s that set no Cache-Control of their own; admin, logged-in, previews, feeds, 404s and `DONOTCACHEPAGE` are left alone. Why: the WordPress.com edge keeps a page until its lifetime ends and serves it stale while revalidating; pages Batcache had not stored carried no lifetime, so after a deploy the canonical `/journal/` still served 3.2.146 beside 3.2.149 and a review page served 3.2.148 for a day and a half. Now a deploy is fully live within five minutes of each page's next request. `tests/public-cache-lifetime-runtime.php` pins the decision table.
+- **A stale review page still reads.** A page the edge cached before 3.2.147 has no `lunara-pair-card-lead` group; with the current stylesheet its role, question and title would have been auto-placed around the grid. A `:has()` fallback lets the card body stand in for the lead beside the poster with its children in source order. The article layout test strips the lead group from the real fixture and checks the argument still reads beside the poster at 390 and 1440px.
+- **The canary's sentinels match the theme.** Both coherency gates wanted a `TiemposText-Bold.woff2` preload; the 3.2.101 font diet dropped that cut and the theme preloads `TiemposText-Semibold.woff2` for the label face. The Journal gate matched only an `h3` title, but the lead card's title is an `h2`; any heading level with the title class counts now. The Oscars sentinel passes on the live site; the Journal sentinel passes once a deploy's edge window has closed.
+- `docs/GO-LIVE-RUNBOOK.md` §3 explains the three reads, the edge's stale-while-revalidate window and when Clear cache is the deploy's last step.
+
 ## 2026-11-05 — Theme 3.2.150: polish from the review panel
 
 A three-lens review (cascade, design, test coverage) with adversarial verification ran on 3.2.147/3.2.148: 26 agents, 23 findings, 18 confirmed. Six were already fixed in 3.2.148 and 3.2.149 (the 12px role label, the 901px three-up, the phone chips, the kicker size and wrap, the band-one test). This release takes the rest that is worth its code.

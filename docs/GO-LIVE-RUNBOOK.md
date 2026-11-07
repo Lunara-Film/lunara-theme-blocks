@@ -94,6 +94,22 @@ and accept only the exact anonymous no-query canonical URL. A cache-busted or
 query-bearing probe can never satisfy them, because that is not what a visitor
 receives.
 
+### Why three reads, and what a split brain means
+
+The WordPress.com edge keeps each page's HTML until its lifetime ends, then
+serves the old copy (`x-ac: … STALE`, then `UPDATING`) while it fetches a new
+one; the request after that gets the fresh page. On 2026-11-07 the canary's
+first canonical read of `/journal/` returned 3.2.146 beside two 3.2.149 reads,
+and a review page served 3.2.148 for a day and a half, because pages Batcache
+had not stored carried no lifetime at all. Since Theme 3.2.151 every public,
+anonymous page carries `Cache-Control: max-age=300, must-revalidate`, so a
+deploy is fully live within five minutes of each page's next request. A
+split brain inside that window is the edge finishing its revalidation; one
+older than that is a real fault. When a release changes the shape of the
+markup and the five minutes matter, the last step of the deploy is the Clear
+cache button on WordPress.com's Performance settings for the site, not a
+purge after the fact (3.2.48 rule).
+
 ## 4. Rollback
 
 Rollback is one revert commit plus a redeploy. Keep a **standing exact-rollback
