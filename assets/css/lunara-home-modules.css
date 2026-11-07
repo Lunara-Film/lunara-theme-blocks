@@ -941,8 +941,8 @@ body.home:has(.lunara-front-page>.lunara-home-section.is-home-panel-last) .lunar
 
 /* The three doors (3.2.161). Dalton's direction A: the first screen says
    what Lunara Film is. The mark grows to 420px, one plain line sits under it,
-   and three tall pictures read Reviews, Journal, Oscars in the display face
-   with one live line each. The three words share one level: every door
+   and three tall pictures read Reviews, Journal, Oscars in the display face,
+   gold (Dalton's pick over white), with one live line each. The three words share one level: every door
    reserves exactly two lines for its line and one for its cue, so the word
    above them lands on the same baseline whatever the line says. The lead
    review follows the doors as one wide still beside its title. The older
@@ -962,7 +962,7 @@ body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door-media{displa
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door:hover .lunara-home-door-media{transform:scale(1.04);}
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door-veil{position:absolute;inset:0;z-index:-1;display:block;background:linear-gradient(180deg,rgba(10,21,32,.04) 18%,rgba(10,21,32,.93) 76%);}
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door.has-no-image .lunara-home-door-veil{background:linear-gradient(180deg,rgba(201,169,97,.06),rgba(201,169,97,.2));}
-body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-route-label{display:block!important;grid-row:2;margin:0!important;color:var(--lunara-text,#fafbfc)!important;font-family:var(--lunara-font-display,"Tiempos Headline",Georgia,serif)!important;font-size:clamp(3.5rem,6.4vw,5.75rem)!important;font-weight:400!important;line-height:.95!important;letter-spacing:-.02em!important;text-transform:none!important;transition:color .2s ease;}
+body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-route-label{display:block!important;grid-row:2;margin:0!important;color:var(--lunara-gold,#c9a961)!important;font-family:var(--lunara-font-display,"Tiempos Headline",Georgia,serif)!important;font-size:clamp(3.5rem,6.4vw,5.75rem)!important;font-weight:400!important;line-height:.95!important;letter-spacing:-.02em!important;text-transform:none!important;transition:color .2s ease;}
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door:hover .lunara-home-masthead-route-label,body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door:focus-visible .lunara-home-masthead-route-label{color:var(--lunara-gold-light,#e0c481)!important;}
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door-line{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;grid-row:3;overflow:hidden;min-height:calc(2 * 1.4em);margin:clamp(10px,1.1vw,16px) 0 0!important;color:var(--lunara-gold-light,#e0c481)!important;font-family:var(--lunara-font-body,"Tiempos Text",Georgia,serif)!important;font-size:clamp(.9375rem,1.25vw,1.125rem)!important;line-height:1.4!important;}
 body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door-cta{display:block!important;grid-row:4;margin:clamp(12px,1.4vw,20px) 0 0!important;color:var(--lunara-gold,#c9a961)!important;font-family:var(--lunara-font-label,"Tiempos Text",Arial,sans-serif)!important;font-size:.8125rem!important;font-weight:600!important;letter-spacing:.18em!important;line-height:1!important;text-transform:uppercase!important;}
