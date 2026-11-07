@@ -125,6 +125,50 @@ and other authorized agents. Follow the shared
   public square geometry. Visitor output and public-content previews are not.
 - Read-only probes against production. No staging writes.
 
+## Unison checklist (plugins and theme move together)
+
+Every plugin that prints public markup follows the theme's measured rules.
+Check each line before a plugin release, and check the plugin side again
+after a theme release that changes one of them (2026-11-07, theme 3.2.155,
+Oscars Ledger 2.8.28, Core 0.8.18).
+
+1. **No CDN upscale.** Every `srcset` candidate stops at the source picture's
+   measured size. A `resize=` crop asks the image CDN to scale up past the
+   original, so a candidate list is capped by the attachment's metadata
+   (theme `lunara_image_cdn_crop_srcset()`, Ledger
+   `get_attachment_crop_srcset()`). A URL with no attachment behind it is
+   never trusted for a size.
+2. **No inline backgrounds.** A `style="background-image: url()"` downloads
+   before the stylesheet can hide or shrink it. Plates are typographic; a
+   backdrop is an `<img>` with candidates or a 320px CDN source for a blur.
+3. **Sizes match the measured frame.** Each image slot carries a `sizes`
+   value measured at the breakpoints (theme `lunara_image_sizes_for()`,
+   Ledger `poster_sizes_for()`), never a viewport width unless the frame is
+   one. An eager image never carries a leading `auto, ` (Chromium then
+   resolves it to 100vw); only a lazy image keeps WordPress's `auto`.
+4. **Cache keys move with the markup.** A change to cached rendered markup
+   bumps its key or generation (theme showcase `_v5`, Ledger page-store
+   generation); an import that changes what a page shows retires the stored
+   page. Every public route sends the same edge lifetime,
+   `max-age=300`.
+5. **13px floor, 44px targets.** No functional text below 13px
+   (`0.8125rem`); controls are 44px tall. Inline text links inside cards
+   take 4px of vertical padding, which moves no line; a flex-item link needs
+   a decision with pictures before it grows.
+6. **CSS diet.** A route loads the stylesheet it uses. Dead motion rules
+   (hover zooms, sheens, transform/filter transitions) are deleted, not
+   neutralised; motion is transform/opacity only and honours
+   `prefers-reduced-motion`.
+7. **Contracts both ways.** When a plugin hands the theme a picture, it hands
+   the attachment id and the measured size, not only a URL (Core
+   `resolve_slot()`); when the theme sizes a plugin frame (the Oscars profile
+   hero), the plugin's `sizes` follows the theme's breakpoints and the
+   plugin's fixture carries the theme rule that sets the frame.
+8. **Tests measure, never pin.** A rendered route's images are checked in the
+   browser for eager/no-auto, candidates and sizes against the painted frame
+   (Ledger `tests/ledger-routes-browser.js`); a stylesheet change is proven
+   pixel-neutral with before/after screenshots.
+
 ## Frozen
 
 The site's feature set is frozen as of 2026-10-10. Defect fixes ship any time.
