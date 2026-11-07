@@ -25,6 +25,15 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-07 — Review title fix deployed and verified (Theme 3.2.159)
+
+- **Shipped:** [Theme PR #331](https://github.com/Lunara-Film/lunara-theme-blocks/pull/331), exact-head merge `85a5bd6ad5438af2f643a932312f9e36e0ce5d5f` from tested head `70d8d9d877c18e90be20093451c3a001762471a5`; their trees match. All six browser shards, PHP/syntax checks and required `ci` passed. Main's exact-tree reuse check passed. This receipt completes the holding/next gates in the preceding implementation entry below.
+- **Live:** manually deployed by Codex through existing WordPress.com connection 7478, main to the existing theme directory. Host reports commit `85a5bd6` Deployed. Public build `3.2.159+20261107-220401`; automatic deployments remain off. No plugin deployment, settings change, editorial/data write or manual cache clear.
+- **Verified live:** anonymous canonical Toy Story review at 390px and 1440px returns 200 with the new build, complete loaded artwork, title-before-image in document and measured painted order, zero `field_lunara_*` references in its article, and no horizontal overflow. Public screenshots and metrics are in `_carousel-artifacts/review-title-fix-20261107` in the parent workspace. The authenticated review in Dalton's Chrome also reads the new build, with the complete title group above the still. Home, Reviews, another Review and a film dossier return 200 with the new build and no PHP error text.
+- **Canaries:** first Journal/Oscars reads after deployment still held 3.2.154 HTML; after normal cache expiry, both anonymous canonical canaries pass all contracts with `proof:true`, version 3.2.159, and no failures. No purge was used to obtain that result.
+- **Holding:** nothing for this requested layout fix. Runtime changes are deployed and verified; this documentation receipt needs no separate runtime deployment.
+- **Next / found, not fixed:** repair the underlying ACF/legacy metadata-key collision and evaluate how the production Debrief should consume the saved relational choices. The Toy Story review still has empty actual year/viewing/pairing text fields; this release omits their internal references and does not fabricate replacements. An existing score value of `0` leaves an empty score separator in the title credits, visible as a trailing slash; it was not changed in this layout fix.
+
 ## 2026-11-07 — Review title above artwork (Theme 3.2.159)
 
 - **Asked:** Dalton's screenshot of the Toy Story review, with "Below Title" already selected: "The title needs to be above it." This defect-fix request authorizes the existing branch/PR/manual-release process.
