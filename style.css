@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.155
+Version: 3.2.156
 Template: blocksy
 Requires at least: 6.2
 Tested up to: 6.4
@@ -14064,6 +14064,14 @@ body.home main.lunara-front-page > .lunara-home-section,
     background-size: cover;
     filter: saturate(0.92);
 }
+/* 3.2.156: the backdrop is a picture with candidates, not an inline background. */
+.lunara-entity-hero-backdrop img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+}
 .lunara-entity-hero-overlay {
     position: absolute;
     inset: 0;
@@ -14194,6 +14202,8 @@ body.home main.lunara-front-page > .lunara-home-section,
     color: var(--lunara-gold-light, #e0c481);
     text-decoration: none;
     border-bottom: 1px solid rgba(201, 169, 97, 0.35);
+    /* 3.2.156: an inline link's vertical padding grows the hit area (30px to 38px) without moving its row. */
+    padding-block: 4px;
 }
 .lunara-entity-award-state {
     margin-left: auto;
@@ -14271,6 +14281,10 @@ body.home main.lunara-front-page > .lunara-home-section,
     margin: 18px 0 8px;
 }
 .lunara-entity-sort a {
+    /* 3.2.156: 44px controls (they measured 42px). */
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     padding: 8px 16px;
     border: 1px solid rgba(201, 169, 97, 0.3);
     border-radius: 0;
@@ -14301,6 +14315,10 @@ body.home main.lunara-front-page > .lunara-home-section,
     margin-left: 6px;
 }
 .lunara-entity-ledger-link a {
+    /* 3.2.156: the dossier's one action is a 44px control (it measured 20px). */
+    display: inline-block;
+    min-height: 44px;
+    padding-block: 11px;
     color: var(--lunara-gold-light, #e0c481);
     text-decoration: none;
     border-bottom: 1px solid rgba(201, 169, 97, 0.4);

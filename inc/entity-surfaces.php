@@ -258,6 +258,69 @@ function lunara_entity_render_award_history( $rows, $context = 'movie' ) {
 }
 
 /**
+ * 3.2.156: the poster or portrait of a film or talent record, sized to its
+ * frame. The 2:3 frames (index cards, the dossier hero) get CDN crops at the
+ * frame's 1x and 2x widths, capped by the attachment's measured size (the
+ * CDN scales a `resize` up past the source), and the slot's measured sizes;
+ * WordPress's default sizes ("100vw, 768px") made a phone fetch 683-768px
+ * files for a 170px column. An eager hero keeps its sizes without "auto, ";
+ * a lazy card keeps WordPress's "auto, " in front of them.
+ *
+ * @param int    $post_id  Film or talent record.
+ * @param string $size     Registered size for the tag's width/height and fallback src.
+ * @param array  $attrs    Attributes (loading, fetchpriority, class, ...).
+ * @param string $slot     Slot in lunara_image_sizes_for().
+ * @param int[]  $widths   Crop widths, 1x and 2x of the measured frame.
+ * @param int    $fallback Crop width the src falls back to.
+ * @return string
+ */
+function lunara_entity_poster_img( $post_id, $size, $attrs, $slot, $widths, $fallback ) {
+    $attachment_id = (int) get_post_thumbnail_id( $post_id );
+    if ( $attachment_id < 1 ) {
+        return '';
+    }
+    $attrs = array_merge( array( 'loading' => 'lazy', 'decoding' => 'async' ), (array) $attrs );
+    $sizes = function_exists( 'lunara_image_sizes_for' ) ? (string) lunara_image_sizes_for( $slot ) : '';
+    if ( '' !== $sizes ) {
+        $attrs['sizes'] = $sizes;
+    }
+    $full   = (string) wp_get_attachment_image_url( $attachment_id, 'full' );
+    $source = function_exists( 'lunara_oscars_attachment_size' ) ? lunara_oscars_attachment_size( $attachment_id ) : array();
+    // Crops only for a measured upload: the CDN scales a crop up past an
+    // unmeasured source, so that picture keeps WordPress's own candidates.
+    if ( '' !== $full && '' !== $sizes && ! empty( $source ) && function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
+        $set = lunara_image_cdn_crop_srcset( $full, 2, 3, $widths, $fallback, $source );
+        if ( '' !== $set['srcset'] ) {
+            $attrs['srcset'] = $set['srcset'];
+            $attrs['src']    = $set['src'];
+        }
+    }
+    return (string) wp_get_attachment_image( $attachment_id, $size, false, $attrs );
+}
+
+/**
+ * 3.2.156: a dossier backdrop as a picture, never an inline background.
+ * Core writes a TMDB original (2,000-3,840px); the CDN proxies it and offers
+ * widths from 640 to 1920px, so the hero never downloads the original.
+ *
+ * @param string $url Backdrop URL.
+ * @return string
+ */
+function lunara_entity_backdrop_img( $url ) {
+    $url = trim( (string) $url );
+    if ( '' === $url ) {
+        return '';
+    }
+    $set = function_exists( 'lunara_image_cdn_width_srcset' ) ? lunara_image_cdn_width_srcset( $url, array( 640, 960, 1280, 1600, 1920 ), 1280 ) : array( 'src' => '', 'srcset' => '' );
+    $candidates = '' !== $set['srcset'] ? ' srcset="' . esc_attr( $set['srcset'] ) . '" sizes="100vw"' : '';
+    return sprintf(
+        '<img src="%s"%s alt="" loading="eager" fetchpriority="low" decoding="async" />',
+        esc_url( '' !== $set['src'] ? $set['src'] : $url ),
+        $candidates
+    );
+}
+
+/**
  * Poster card for archive grids and filmography lanes.
  */
 function lunara_entity_render_film_card( $movie_id ) {
@@ -268,7 +331,7 @@ function lunara_entity_render_film_card( $movie_id ) {
         <a class="lunara-entity-card-link" href="<?php echo esc_url( get_permalink( $movie_id ) ); ?>">
             <div class="lunara-entity-card-poster">
                 <?php if ( has_post_thumbnail( $movie_id ) ) : ?>
-                    <?php echo get_the_post_thumbnail( $movie_id, 'medium_large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+                    <?php echo lunara_entity_poster_img( $movie_id, 'medium_large', array( 'loading' => 'lazy' ), 'entity-card', array( 170, 200, 256, 340, 400, 512, 680 ), 340 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 <?php else : ?>
                     <span class="lunara-entity-card-plate"><?php echo esc_html( get_the_title( $movie_id ) ); ?></span>
                 <?php endif; ?>
@@ -293,7 +356,7 @@ function lunara_entity_render_person_card( $person_id ) {
         <a class="lunara-entity-card-link" href="<?php echo esc_url( get_permalink( $person_id ) ); ?>">
             <div class="lunara-entity-card-poster is-portrait">
                 <?php if ( has_post_thumbnail( $person_id ) ) : ?>
-                    <?php echo get_the_post_thumbnail( $person_id, 'medium_large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+                    <?php echo lunara_entity_poster_img( $person_id, 'medium_large', array( 'loading' => 'lazy' ), 'entity-card', array( 170, 200, 256, 340, 400, 512, 680 ), 340 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 <?php else : ?>
                     <span class="lunara-entity-card-plate"><?php echo esc_html( get_the_title( $person_id ) ); ?></span>
                 <?php endif; ?>

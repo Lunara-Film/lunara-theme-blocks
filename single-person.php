@@ -27,7 +27,7 @@ while ( have_posts() ) :
             <div class="lunara-entity-hero-overlay" aria-hidden="true"></div>
             <div class="lunara-entity-hero-inner">
                 <?php if ( has_post_thumbnail() ) : ?>
-                    <div class="lunara-entity-hero-poster is-portrait"><?php the_post_thumbnail( 'large', array( 'fetchpriority' => 'high' ) ); ?></div>
+                    <div class="lunara-entity-hero-poster is-portrait"><?php echo function_exists( 'lunara_entity_poster_img' ) ? lunara_entity_poster_img( get_the_ID(), 'large', array( 'loading' => 'eager', 'fetchpriority' => 'high' ), 'entity-hero', array( 160, 220, 250, 320, 440, 500 ), 250 ) : get_the_post_thumbnail( get_the_ID(), 'large', array( 'fetchpriority' => 'high' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                 <?php endif; ?>
                 <div class="lunara-entity-hero-copy">
                     <h1 class="lunara-entity-title"><?php the_title(); ?></h1>
