@@ -3,10 +3,11 @@
  * Behavior contract for the Home front desk (the program masthead, 3.2.119).
  *
  * Renders inc/home-front-desk.php against stubbed WordPress and asserts what
- * a visitor gets: the dateline, the lead story with its still and split
- * headline, two companions that skip the lead, lazy companions, the three
- * doors, and the retired signal bar staying retired. Also covers the shared
- * headline splitter the Review page uses.
+ * a visitor gets: the dateline, the mark, the three doors (3.2.161: Reviews,
+ * Journal, Oscars, each a picture with one live line, the Reviews door
+ * sharing the lead's one still), the lead story below them with its deferred
+ * still and split headline, and the retired signal bar staying retired. Also
+ * covers the shared headline splitter the Review page uses.
  */
 
 declare( strict_types=1 );
@@ -22,6 +23,12 @@ $GLOBALS['lunara_test'] = array(
 		array( 'ID' => 14, 'title' => 'Lurker', 'url' => 'https://example.test/reviews/lurker/', 'still' => 'https://image.tmdb.org/t/p/original/lurker.jpg' ),
 	),
 	'slides'  => true,
+	// The newest Journal entry (the Journal door) and the Ledger band's cached
+	// counts (the Oscars door); no Oscar pick until the Sweep Watch scenario.
+	'journal' => array(
+		array( 'ID' => 21, 'title' => 'Gremlins 3 Slides to 2028, and It Needs to Pick a Lane', 'url' => 'https://example.test/journal/gremlins-3-slides-to-2028/', 'thumb' => 2101, 'image' => 'https://example.test/wp-content/uploads/2026/09/gremlins-3-set-for-october-2028.jpg' ),
+	),
+	'band'    => array( 'ceremonies' => 98, 'record' => array( 'scope' => 'ledger', 'categories' => 66, 'nominations' => 12138, 'winners' => 2800 ), 'posters' => array() ),
 );
 
 function lunara_test_assert( $condition, string $message ): void {
@@ -41,9 +48,17 @@ class WP_Post {
 }
 
 class WP_Query {
+	public static $journal_args = array();
 	public $posts = array();
 	public function __construct( array $args = array() ) {
 		$limit = (int) ( $args['posts_per_page'] ?? 10 );
+		if ( 'journal' === ( $args['post_type'] ?? '' ) ) {
+			self::$journal_args = $args;
+			foreach ( array_slice( $GLOBALS['lunara_test']['journal'], 0, $limit ) as $row ) {
+				$this->posts[] = new WP_Post( $row['ID'], $row['title'] );
+			}
+			return;
+		}
 		foreach ( array_slice( $GLOBALS['lunara_test']['reviews'], 0, $limit ) as $row ) {
 			$this->posts[] = new WP_Post( $row['ID'], $row['title'] );
 		}
@@ -51,7 +66,7 @@ class WP_Query {
 }
 
 function lunara_test_review( int $id ): array {
-	foreach ( $GLOBALS['lunara_test']['reviews'] as $row ) {
+	foreach ( array_merge( $GLOBALS['lunara_test']['reviews'], $GLOBALS['lunara_test']['journal'] ) as $row ) {
 		if ( $row['ID'] === $id ) {
 			return $row;
 		}
@@ -80,7 +95,7 @@ function untrailingslashit( $s ) { return rtrim( (string) $s, '/' ); }
 function wp_strip_all_tags( $s ) { return strip_tags( (string) $s ); }
 function wp_trim_words( $text, $num, $more ) { $w = preg_split( '/\s+/', trim( (string) $text ) ); return count( $w ) > $num ? implode( ' ', array_slice( $w, 0, $num ) ) . $more : $text; }
 function get_permalink( $post ) { return lunara_test_review( is_object( $post ) ? (int) $post->ID : (int) $post )['url']; }
-function get_the_title( $post ) { return lunara_test_review( is_object( $post ) ? (int) $post->ID : (int) $post )['title']; }
+function get_the_title( $post ) { $row = lunara_test_review( is_object( $post ) ? (int) $post->ID : (int) $post ); return '' !== $row['title'] ? $row['title'] : ( is_object( $post ) ? (string) $post->post_title : '' ); }
 function get_the_excerpt( $post ) { return 'An excerpt for the lead story.'; }
 function attachment_url_to_postid( $url ) { return 0; }
 function wp_get_attachment_image( ...$args ) { return ''; }
@@ -93,6 +108,9 @@ function lunara_get_latest_review_post() { return new WP_Post( 11, lunara_test_r
 function lunara_home_cover_is_enabled() { return $GLOBALS['lunara_test']['cover'] ?? true; }
 function lunara_get_review_hero_image_url( $id ) { return lunara_test_review( (int) $id )['still']; }
 function lunara_rightsize_backdrop_url( $url ) { return str_replace( '/original/', '/w1280/', (string) $url ); }
+function get_post_thumbnail_id( $id ) { return (int) ( lunara_test_review( (int) $id )['thumb'] ?? 0 ); }
+function wp_get_attachment_image_url( $id, $size = 'full' ) { foreach ( $GLOBALS['lunara_test']['journal'] as $row ) { if ( ( $row['thumb'] ?? 0 ) === (int) $id ) { return $row['image']; } } return ( $GLOBALS['lunara_test']['artwork'] ?? array() )[ (int) $id ] ?? ''; }
+function lunara_get_home_ledger_band_data() { return $GLOBALS['lunara_test']['band']; }
 function lunara_get_cinematic_hero_slides( $count ) {
 	if ( ! $GLOBALS['lunara_test']['slides'] ) {
 		return array();
@@ -151,15 +169,32 @@ if ( in_array( '--fixture', $argv ?? array(), true ) ) {
 	exit( 0 );
 }
 
-// Structure.
-lunara_test_assert( 1 === substr_count( $html, 'class="lunara-home-masthead lunara-home-front-desk lunara-home-program is-cover' ), 'one program masthead section, and on Home it is the cover' );
+// Structure: the doors section, dateline, mark, the three doors, then Now Showing.
+lunara_test_assert( 1 === substr_count( $html, 'class="lunara-home-masthead lunara-home-front-desk lunara-home-program lunara-home-doors is-cover' ), 'one program masthead section, the three-doors masthead, and on Home it is the cover' );
 lunara_test_assert( false === strpos( $html, 'lunara-home-signal-bar' ) && false === strpos( $html, 'lunara-home-front-desk-signal' ) && false === strpos( $html, 'lunara-home-front-desk-search' ), 'the signal bar and signal cards are retired' );
-lunara_test_assert( strpos( $html, 'lunara-home-program-dateline' ) < strpos( $html, 'lunara-home-masthead-identity' ) && strpos( $html, 'lunara-home-masthead-identity' ) < strpos( $html, 'lunara-home-front-desk-grid' ) && strpos( $html, 'lunara-home-front-desk-grid' ) < strpos( $html, 'lunara-home-masthead-routes' ), 'dateline, identity, Now Showing, doors: in that order' );
+lunara_test_assert( strpos( $html, 'lunara-home-program-dateline' ) < strpos( $html, 'lunara-home-masthead-identity' ) && strpos( $html, 'lunara-home-masthead-identity' ) < strpos( $html, 'lunara-home-masthead-routes' ) && strpos( $html, 'lunara-home-masthead-routes' ) < strpos( $html, 'lunara-home-front-desk-grid' ), 'dateline, identity, the doors, then Now Showing: in that order' );
 lunara_test_assert( false !== strpos( $html, '<span>Dallas</span>' ) && false !== strpos( $html, '<span>October 2026</span>' ) && false !== strpos( $html, '<span>248 reviews</span>' ), 'the dateline carries place, month and the review count' );
+lunara_test_assert( false !== strpos( $html, '<p class="lunara-home-masthead-dek">Reviews, news, and the Oscars. One film desk in Dallas.</p>' ), 'the dek says what Lunara Film is in one plain line' );
 // The cover (3.2.130): the header keeps the search and drops its wordmark,
 // so the masthead prints no second Search; it is the one mark on the page.
 lunara_test_assert( false === strpos( $html, 'data-lunara-search-open' ) && false === strpos( $html, 'lunara-home-program-search' ), 'the cover masthead prints no second Search control' );
-lunara_test_assert( 3 === substr_count( $html, 'class="lunara-home-masthead-route"' ), 'three section doors remain' );
+
+// The three doors: Reviews, Journal, Oscars, in that order, each with a word, one live line and a cue.
+lunara_test_assert( 3 === substr_count( $html, 'class="lunara-home-masthead-route lunara-home-door ' ), 'three doors' );
+lunara_test_assert( 1 === preg_match( '#<span class="lunara-home-masthead-route-label">Reviews</span>.*<span class="lunara-home-masthead-route-label">Journal</span>.*<span class="lunara-home-masthead-route-label">Oscars</span>#s', $html ), 'the doors read Reviews, Journal, Oscars, in that order' );
+lunara_test_assert( 3 === substr_count( $html, '<span class="lunara-home-door-line">' ) && 3 === substr_count( $html, '<span class="lunara-home-door-cta">Enter <span aria-hidden="true">&rarr;</span></span>' ), 'every door carries one line and the Enter cue' );
+lunara_test_assert( 1 === preg_match( '#<a class="lunara-home-masthead-route lunara-home-door is-door-reviews has-image" href="https://example.test/reviews/">\s*<span class="lunara-home-door-frame" aria-hidden="true"><img class="lunara-home-door-media skip-lazy no-lazy" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" sizes="\(max-width: 820px\) max\(calc\(100vw - 68px\), 444px\), \(max-width: 1300px\) 69\.4vw, min\(69\.4vw, 996px\)"></span>\s*<span class="lunara-home-door-veil" aria-hidden="true"></span>\s*<span class="lunara-home-masthead-route-label">Reviews</span>\s*<span class="lunara-home-door-line">248 reviews. Newest: The Social Reckoning.</span>#s', $html ), 'the Reviews door opens the reviews archive, carries the lead still as the one eager, high-priority source with the measured door widths and no srcset, and says the count and the newest film' );
+lunara_test_assert( 1 === preg_match( '#<a class="lunara-home-masthead-route lunara-home-door is-door-journal has-image" href="https://example.test/journals/">\s*<span class="lunara-home-door-frame" aria-hidden="true"><img class="lunara-home-door-media" src="https://example.test/wp-content/uploads/2026/09/gremlins-3-set-for-october-2028.jpg[^"]*" alt="" width="1920" height="1080" loading="eager" decoding="async" sizes="\(max-width: 820px\) max\(calc\(100vw - 68px\), 444px\)[^"]*" srcset="[^"]* 420w, [^"]* 640w, [^"]* 840w, [^"]* 1200w, [^"]* 1600w"></span>\s*<span class="lunara-home-door-veil" aria-hidden="true"></span>\s*<span class="lunara-home-masthead-route-label">Journal</span>\s*<span class="lunara-home-door-line">Film news. Latest: Gremlins 3 Slides to 2028, and It Needs to Pick a Lane.</span>#s', $html ), 'the Journal door opens the Journal, shows the newest entry\'s picture from whole-picture downscales (a door is landscape on a phone and portrait on desktop; no crop fits both) with the width a covering picture needs, and names the newest entry' );
+lunara_test_assert( 'journal' === ( WP_Query::$journal_args['post_type'] ?? '' ) && 'publish' === ( WP_Query::$journal_args['post_status'] ?? '' ) && 1 === ( WP_Query::$journal_args['posts_per_page'] ?? 0 ) && ! empty( WP_Query::$journal_args['no_found_rows'] ), 'the Journal door asks for one published entry and no row count' );
+lunara_test_assert( 1 === preg_match( '#<a class="lunara-home-masthead-route lunara-home-door is-door-oscars has-no-image" href="https://example.test/oscars/">\s*<span class="lunara-home-door-veil" aria-hidden="true"></span>\s*<span class="lunara-home-masthead-route-label">Oscars</span>\s*<span class="lunara-home-door-line">98 ceremonies and 12,138 nominations, every nominee on record.</span>#s', $html ), 'without an Oscar pick the Oscars door is typographic (no 342px poster upscaled) and says the Ledger\'s counts' );
+lunara_test_assert( 1 === substr_count( $html, 'fetchpriority="high"' ) && 2 === substr_count( $html, 'src="https://image.tmdb.org/t/p/w1280/reckoning.jpg"' ), 'one high-priority picture on the first screen, and the lead still is that same URL' );
+lunara_test_assert( 0 === preg_match( '#class="lunara-home-door-media[^>]*%2C#', $html ), 'no door candidate is a crop: a door is landscape on a phone and portrait on desktop' );
+
+// Lead story: below the doors, its still deferred (the Reviews door already fetched it), the split headline beside it.
+lunara_test_assert( 1 === preg_match( '#<article class="lunara-home-front-desk-lead has-image">\s*<a class="lunara-home-front-desk-lead-link" href="https://example.test/reviews/the-social-reckoning/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-lead-media" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="lazy" decoding="async" sizes="\(max-width: 1100px\) calc\(100vw - 32px\), 860px"></span>\s*<div class="lunara-home-front-desk-text">\s*<span class="lunara-home-front-desk-label">Now Showing</span>#s', $html ), 'the lead opens with its still deferred (one preloaded source, no srcset, no second priority) and its text block beside it' );
+lunara_test_assert( false !== strpos( $html, '<h2 class="lunara-home-front-desk-title"><span class="lunara-home-front-desk-film">The Social Reckoning</span><span class="lunara-screen-reader-text"> – </span><span class="lunara-home-front-desk-take">A Procedural Without a Pulse</span></h2>' ), 'the lead headline splits into film and take with the separator kept for assistive technology' );
+lunara_test_assert( false === strpos( $html, 'lunara-home-front-desk-companion' ) && false === strpos( $html, 'lunara-home-front-desk-stack' ) && false === strpos( $html, 'misty' ), 'the companions left with the doors: the Running Order carries every review' );
+lunara_test_assert( false !== strpos( $html, 'lunara-home-front-desk-grid has-no-companions' ), 'the lead grid says it stands alone' );
 
 // Cover off (the lunara_home_cover_enabled filter): the header carries the
 // wordmark again, and the masthead gets its Search button back.
@@ -168,28 +203,34 @@ $uncovered = lunara_render_home_front_door();
 $GLOBALS['lunara_test']['cover'] = true;
 lunara_test_assert( false === strpos( $uncovered, ' is-cover' ) && 1 === substr_count( $uncovered, 'class="lunara-home-program-search" data-lunara-search-open' ), 'with the cover off the masthead keeps its own Search button' );
 
-// Lead story.
-lunara_test_assert( 1 === preg_match( '#<article class="lunara-home-front-desk-lead has-image">\s*<a class="lunara-home-front-desk-lead-link" href="https://example.test/reviews/the-social-reckoning/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-lead-media skip-lazy no-lazy" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high"#s', $html ), 'the lead opens with its still as the eager, high-priority LCP image' );
-lunara_test_assert( false !== strpos( $html, '<span class="lunara-home-front-desk-label">Now Showing</span>' ), 'the lead is labelled Now Showing' );
-lunara_test_assert( false !== strpos( $html, '<h2 class="lunara-home-front-desk-title"><span class="lunara-home-front-desk-film">The Social Reckoning</span><span class="lunara-screen-reader-text"> – </span><span class="lunara-home-front-desk-take">A Procedural Without a Pulse</span></h2>' ), 'the lead headline splits into film and take with the separator kept for assistive technology' );
+// Sweep Watch: with an Oscar pick the Oscars door takes its artwork and names the film.
+$GLOBALS['lunara_test']['artwork'] = array( 3101 => 'https://example.test/wp-content/uploads/2026/07/The-Odyssey.jpg' );
+// Declared conditionally so they exist only from here: PHP hoists unconditional declarations, and the first render must see no pick.
+if ( ! function_exists( 'lunara_home_oscars_selection' ) ) {
+	function lunara_home_oscars_selection( $kind, $year = 0 ) { return array( 'mode' => 'legacy', 'ids' => array() ); }
+	function lunara_site_studio_home_oscars_lineup( $kind, $mode, $ids, $count, $year ) { $GLOBALS['lunara_test']['lineup_args'] = func_get_args(); return array( 31 ); }
+	function get_post( $id ) { return 31 === (int) $id ? new WP_Post( 31, 'The Odyssey' ) : null; }
+	function lunara_home_oscar_artwork( $kind, $post_id, $use_overrides = true ) { return array( 'image_id' => 3101, 'url' => $GLOBALS['lunara_test']['artwork'][3101], 'has_image' => true ); }
+}
+$sweep = lunara_render_home_front_door();
+lunara_test_assert( array( 'picks', 'legacy', array(), 1, 0 ) === ( $GLOBALS['lunara_test']['lineup_args'] ?? null ), 'the Oscars door asks the picks lineup for one pick through the published selection' );
+lunara_test_assert( 1 === preg_match( '#<a class="lunara-home-masthead-route lunara-home-door is-door-oscars has-image" href="https://example.test/oscars/">\s*<span class="lunara-home-door-frame" aria-hidden="true"><img class="lunara-home-door-media" src="https://example.test/wp-content/uploads/2026/07/The-Odyssey.jpg[^"]*" alt="" width="1920" height="1080" loading="eager" decoding="async" sizes="\(max-width: 820px\) max\(calc\(100vw - 68px\), 444px\)[^"]*" srcset="[^"]*420w, [^"]*1600w"></span>\s*<span class="lunara-home-door-veil" aria-hidden="true"></span>\s*<span class="lunara-home-masthead-route-label">Oscars</span>\s*<span class="lunara-home-door-line">98 ceremonies, 12,138 nominations, and Sweep Watch: The Odyssey.</span>#s', $sweep ), 'with a pick the Oscars door shows the Sweep Watch artwork from whole-picture downscales and names the film' );
 
-// Companions: the two newest reviews that are not the lead, lazy stills, title-card state when there is none.
-lunara_test_assert( 2 === substr_count( $html, 'class="lunara-home-front-desk-companion ' ), 'two companions' );
-lunara_test_assert( false === strpos( $html, 'href="https://example.test/reviews/the-social-reckoning/"><span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-companion-media' ), 'the lead is not repeated as a companion' );
-lunara_test_assert( false !== strpos( $html, 'class="lunara-home-front-desk-companion has-no-image" href="https://example.test/reviews/practical-magic-2/"' ), 'a review without a still is a text companion, not an empty frame' );
-lunara_test_assert( 1 === preg_match( '#class="lunara-home-front-desk-companion has-image" href="https://example.test/reviews/misty-green/">\s*<span class="lunara-home-front-desk-frame"><img class="lunara-home-front-desk-companion-media" src="https://i0.wp.com/image.tmdb.org/t/p/original/misty.jpg\?resize=1600%2C900[^"]*" alt="" width="1920" height="1080" loading="lazy" decoding="async" sizes="\(max-width: 820px\) calc\(100vw - 64px\), \(max-width: 1100px\) 440px, \(max-width: 1280px\) 340px, 420px" srcset="[^"]*resize=420%2C236[^"]* 420w, [^"]* 640w, [^"]* 840w, [^"]* 1200w, [^"]*resize=1600%2C900[^"]* 1600w">#s', $html ), 'a companion still loads lazily from 16:9 crops of the TMDB original at 420-1600px (a rendition width in the URL says nothing about the original; 3.2.155), says the measured companion widths, and its src is the widest candidate' );
-lunara_test_assert( 1 === preg_match( '#<img class="lunara-home-front-desk-lead-media skip-lazy no-lazy" src="https://image.tmdb.org/t/p/w1280/reckoning.jpg" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" sizes="\(max-width: 1100px\) calc\(100vw - 32px\), 860px">#', $html ), 'the lead still keeps its one preloaded source and no srcset' );
-lunara_test_assert( false === strpos( $html, 'lurker' ), 'only two companions render' );
-lunara_test_assert( false !== strpos( $html, '<span class="lunara-home-front-desk-film">Practical Magic 2</span><span class="lunara-screen-reader-text"> – </span><span class="lunara-home-front-desk-take">The Curdled Spell</span>' ), 'companion headlines split and decode the entity dash' );
+// Without the Ledger's counts the Oscars door still says what the Oscars are.
+$GLOBALS['lunara_test']['band'] = array();
+$no_counts = lunara_render_home_front_door();
+$GLOBALS['lunara_test']['band'] = array( 'ceremonies' => 98, 'record' => array( 'nominations' => 12138 ), 'posters' => array() );
+lunara_test_assert( false !== strpos( $no_counts, '<span class="lunara-home-door-line">Every ceremony, every nominee, and Sweep Watch: The Odyssey.</span>' ), 'without counts the Oscars door keeps its plain line' );
 
 // Without hero slides the lead falls back to the newest review with its right-sized still.
 $GLOBALS['lunara_test']['slides'] = false;
 $fallback = lunara_render_home_front_door();
 lunara_test_assert( false !== strpos( $fallback, 'src="https://image.tmdb.org/t/p/w1280/reckoning.jpg"' ) && false !== strpos( $fallback, '>Now Showing<' ), 'the newest review leads when no hero slide is saved' );
 
-// No companions: the grid says so, no empty stack.
-$GLOBALS['lunara_test']['reviews'] = array( $GLOBALS['lunara_test']['reviews'][0] );
-$alone = lunara_render_home_front_door();
-lunara_test_assert( false !== strpos( $alone, 'lunara-home-front-desk-grid has-no-companions' ) && false === strpos( $alone, 'lunara-home-front-desk-stack' ), 'a lone review renders no empty companion stack' );
+// No Journal entry yet, no lead still: typographic doors, no empty frame.
+$GLOBALS['lunara_test']['journal'] = array();
+$GLOBALS['lunara_test']['reviews'][0]['still'] = '';
+$bare = lunara_render_home_front_door();
+lunara_test_assert( false !== strpos( $bare, 'is-door-reviews has-no-image' ) && false !== strpos( $bare, 'is-door-journal has-no-image' ) && 1 === substr_count( $bare, 'lunara-home-door-frame' ) && false !== strpos( $bare, '<span class="lunara-home-door-line">Film news, trailers, and quick reactions from the desk.</span>' ) && false !== strpos( $bare, 'lunara-home-front-desk-lead has-no-image' ) && 0 === preg_match( '#<span class="lunara-home-(door|front-desk)-frame"[^>]*>\s*</span>#', $bare ), 'a door or lead without a picture is typographic, never an empty frame' );
 
-fwrite( STDOUT, "Home front desk: program masthead contract passed.\n" );
+fwrite( STDOUT, "Home front desk: the three doors contract passed.\n" );

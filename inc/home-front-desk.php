@@ -85,60 +85,25 @@ function lunara_home_front_door_review_still_url( $review_id ) {
 }
 
 /**
- * The two newest reviews after the lead story, each with its still.
- *
- * @param string $lead_url Permalink of the lead story, skipped here.
- * @param int    $count    How many companions.
- * @return array<int,array{title:string,url:string,image:string}>
- */
-function lunara_get_home_front_door_companions( $lead_url, $count = 2 ) {
-	$query = new WP_Query(
-		array(
-			'post_type'           => 'review',
-			'post_status'         => 'publish',
-			'posts_per_page'      => absint( $count ) + 1,
-			'no_found_rows'       => true,
-			'ignore_sticky_posts' => true,
-		)
-	);
-
-	$companions = array();
-	foreach ( (array) $query->posts as $post ) {
-		if ( ! $post instanceof WP_Post ) {
-			continue;
-		}
-		$url = (string) get_permalink( $post );
-		if ( '' !== $lead_url && untrailingslashit( $url ) === untrailingslashit( (string) $lead_url ) ) {
-			continue;
-		}
-		$companions[] = array(
-			'title' => (string) get_the_title( $post ),
-			'url'   => $url,
-			'image' => lunara_home_front_door_review_still_url( $post->ID ),
-		);
-		if ( count( $companions ) >= $count ) {
-			break;
-		}
-	}
-
-	return $companions;
-}
-
-/**
- * Render a front-desk still. The lead is the first-viewport LCP candidate;
- * companions load lazily.
+ * Render a front-desk still. Until 3.2.161 the lead was the first-viewport
+ * LCP candidate and two companions followed it; the companions left with the
+ * three doors, and the lead now defers behind the Reviews door.
  *
  * @param string $image_url Image URL.
  * @param bool   $is_lead   Whether this is the lead still.
  * @return string
  */
-function lunara_home_front_door_still( $image_url, $is_lead ) {
+function lunara_home_front_door_still( $image_url, $is_lead, $deferred = false ) {
 	$image_url = trim( (string) $image_url );
 	if ( '' === $image_url ) {
 		return '';
 	}
 
-	$class = $is_lead ? 'lunara-home-front-desk-lead-media skip-lazy no-lazy' : 'lunara-home-front-desk-companion-media';
+	// 3.2.161: under the three doors the lead still is below the first screen
+	// and the Reviews door already carries this exact URL eagerly, so the
+	// lead's own copy defers and the browser paints it from the one download.
+	$deferred = $is_lead && $deferred;
+	$class    = $is_lead ? 'lunara-home-front-desk-lead-media' . ( $deferred ? '' : ' skip-lazy no-lazy' ) : 'lunara-home-front-desk-companion-media';
 	// 3.2.154: a companion is full width to 820px, 328-440px in the two-up
 	// to 1100px and 300-417px beside the lead above; it is not the lead's width.
 	$sizes = $is_lead
@@ -147,11 +112,11 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 	$attrs = array(
 		'class'    => $class,
 		'alt'      => '',
-		'loading'  => $is_lead ? 'eager' : 'lazy',
+		'loading'  => $is_lead && ! $deferred ? 'eager' : 'lazy',
 		'decoding' => 'async',
 		'sizes'    => $sizes,
 	);
-	if ( $is_lead ) {
+	if ( $is_lead && ! $deferred ) {
 		$attrs['fetchpriority'] = 'high';
 	}
 
@@ -178,11 +143,201 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 		'<img class="%1$s" src="%2$s" alt="" width="1920" height="1080" loading="%3$s" decoding="async"%4$s sizes="%5$s"%6$s>',
 		esc_attr( $class ),
 		esc_url( '' !== $still_set['src'] ? $still_set['src'] : $image_url ),
-		$is_lead ? 'eager' : 'lazy',
-		$is_lead ? ' fetchpriority="high"' : '',
+		$is_lead && ! $deferred ? 'eager' : 'lazy',
+		$is_lead && ! $deferred ? ' fetchpriority="high"' : '',
 		esc_attr( $sizes ),
 		'' !== $still_set['srcset'] ? ' srcset="' . esc_attr( $still_set['srcset'] ) . '"' : ''
 	);
+}
+
+/**
+ * A door's picture (3.2.161): the still behind one of the three doors.
+ *
+ * A door is landscape on a phone and portrait on desktop, and its picture
+ * covers the door, so no single crop fits: the candidates are whole-picture
+ * downscales (the attachment's own sizes for an upload, CDN widths
+ * otherwise), and the 'front-door' sizes slot names the width a covering
+ * picture needs, the wider of the frame and its height at 16:9. The Reviews
+ * door shares the lead's exact URL as a single source, so its eager fetch
+ * (the first screen's largest picture) is the one download the lead's
+ * preload and the lead still below both use.
+ *
+ * @param string $image_url Image URL.
+ * @param int    $image_id  Attachment ID when the picture is an upload, else 0.
+ * @param bool   $shared    Whether the URL is the lead still (single source, high priority).
+ * @return string
+ */
+function lunara_home_front_door_door_still( $image_url, $image_id = 0, $shared = false ) {
+	$image_url = trim( (string) $image_url );
+	if ( '' === $image_url ) {
+		return '';
+	}
+
+	$sizes = function_exists( 'lunara_image_sizes_for' )
+		? lunara_image_sizes_for( 'front-door' )
+		: '(max-width: 820px) max(calc(100vw - 68px), 444px), (max-width: 1300px) 69.4vw, min(69.4vw, 996px)';
+	$attrs = array(
+		'class'    => 'lunara-home-door-media' . ( $shared ? ' skip-lazy no-lazy' : '' ),
+		'alt'      => '',
+		'loading'  => 'eager',
+		'decoding' => 'async',
+		'sizes'    => $sizes,
+	);
+	if ( $shared ) {
+		$attrs['fetchpriority'] = 'high';
+	}
+
+	if ( ! $shared ) {
+		$image_id = absint( $image_id );
+		if ( ! $image_id && function_exists( 'attachment_url_to_postid' ) ) {
+			$clean    = (string) preg_replace( '/\?.*$/', '', $image_url );
+			$image_id = absint( function_exists( 'lunara_attachment_id_for_url' ) ? lunara_attachment_id_for_url( $clean ) : attachment_url_to_postid( $clean ) );
+		}
+		if ( $image_id && function_exists( 'wp_get_attachment_image' ) ) {
+			// 'full' with its sizes: WordPress lists the same-ratio renditions.
+			$image_html = wp_get_attachment_image( $image_id, 'full', false, $attrs );
+			if ( '' !== trim( (string) $image_html ) ) {
+				return (string) $image_html;
+			}
+		}
+	}
+
+	$still_set = ! $shared && function_exists( 'lunara_image_cdn_width_srcset' )
+		? lunara_image_cdn_width_srcset( $image_url, array( 420, 640, 840, 1200, 1600 ), 1600 )
+		: array( 'src' => '', 'srcset' => '' );
+
+	return sprintf(
+		'<img class="%1$s" src="%2$s" alt="" width="1920" height="1080" loading="eager" decoding="async"%3$s sizes="%4$s"%5$s>',
+		esc_attr( $attrs['class'] ),
+		esc_url( '' !== $still_set['src'] ? $still_set['src'] : $image_url ),
+		$shared ? ' fetchpriority="high"' : '',
+		esc_attr( $sizes ),
+		'' !== $still_set['srcset'] ? ' srcset="' . esc_attr( $still_set['srcset'] ) . '"' : ''
+	);
+}
+
+/**
+ * The film name alone from a review headline ("Film – Take" gives "Film").
+ *
+ * @param string $title Plain-text headline.
+ * @return string
+ */
+function lunara_home_front_door_film_name( $title ) {
+	$parts = function_exists( 'lunara_split_review_headline' ) ? lunara_split_review_headline( $title ) : array( (string) $title );
+
+	return trim( (string) ( $parts[0] ?? $title ) );
+}
+
+/**
+ * The newest published Journal entry, for the Journal door (3.2.161).
+ *
+ * @return array{title:string,url:string,image:string,image_id:int}
+ */
+function lunara_get_home_front_door_journal() {
+	$empty = array(
+		'title'    => '',
+		'url'      => '',
+		'image'    => '',
+		'image_id' => 0,
+	);
+	if ( ! class_exists( 'WP_Query' ) ) {
+		return $empty;
+	}
+
+	$query = new WP_Query(
+		array(
+			'post_type'           => 'journal',
+			'post_status'         => 'publish',
+			'posts_per_page'      => 1,
+			'no_found_rows'       => true,
+			'ignore_sticky_posts' => true,
+		)
+	);
+	$post  = $query->posts[0] ?? null;
+	if ( ! $post instanceof WP_Post ) {
+		return $empty;
+	}
+
+	$image_id = function_exists( 'get_post_thumbnail_id' ) ? absint( get_post_thumbnail_id( $post->ID ) ) : 0;
+	$image    = $image_id && function_exists( 'wp_get_attachment_image_url' ) ? trim( (string) wp_get_attachment_image_url( $image_id, 'full' ) ) : '';
+
+	return array(
+		'title'    => trim( wp_strip_all_tags( (string) get_the_title( $post ) ) ),
+		'url'      => (string) get_permalink( $post ),
+		'image'    => $image,
+		'image_id' => $image_id,
+	);
+}
+
+/**
+ * What the Oscars door says and shows (3.2.161): the Ledger's ceremony and
+ * nomination counts from the band's cached data, and the Sweep Watch film from
+ * the first Oscar pick with its artwork. Without a pick the door is
+ * typographic: the band's posters are 342px renditions, and a door never
+ * upscales a picture.
+ *
+ * @return array{line:string,image:string,image_id:int,ceremonies:int,nominations:int,sweep:string}
+ */
+function lunara_get_home_front_door_oscars() {
+	$out = array(
+		'line'        => '',
+		'image'       => '',
+		'image_id'    => 0,
+		'ceremonies'  => 0,
+		'nominations' => 0,
+		'sweep'       => '',
+	);
+
+	if ( function_exists( 'lunara_get_home_ledger_band_data' ) ) {
+		$band = lunara_get_home_ledger_band_data();
+		if ( is_array( $band ) && ! empty( $band['ceremonies'] ) ) {
+			$out['ceremonies']  = absint( $band['ceremonies'] );
+			$out['nominations'] = absint( $band['record']['nominations'] ?? 0 );
+		}
+	}
+
+	if ( function_exists( 'lunara_home_oscars_selection' ) && function_exists( 'lunara_site_studio_home_oscars_lineup' ) ) {
+		$selection = lunara_home_oscars_selection( 'picks' );
+		$lineup    = lunara_site_studio_home_oscars_lineup( 'picks', (string) ( $selection['mode'] ?? 'legacy' ), (array) ( $selection['ids'] ?? array() ), 1, 0 );
+		$pick      = ! empty( $lineup[0] ) && function_exists( 'get_post' ) ? get_post( (int) $lineup[0] ) : null;
+		if ( $pick instanceof WP_Post ) {
+			$out['sweep'] = trim( wp_strip_all_tags( (string) get_the_title( $pick ) ) );
+			if ( function_exists( 'lunara_home_oscar_artwork' ) ) {
+				$artwork = lunara_home_oscar_artwork( 'picks', $pick->ID );
+				if ( is_array( $artwork ) && ! empty( $artwork['has_image'] ) && ! empty( $artwork['url'] ) ) {
+					$out['image']    = trim( (string) $artwork['url'] );
+					$out['image_id'] = absint( $artwork['image_id'] ?? 0 );
+				}
+			}
+		}
+	}
+
+	if ( $out['ceremonies'] > 0 && $out['nominations'] > 0 ) {
+		$out['line'] = '' !== $out['sweep']
+			? sprintf(
+				/* translators: 1: number of ceremonies, 2: number of nominations, 3: the Sweep Watch film. */
+				__( '%1$s ceremonies, %2$s nominations, and Sweep Watch: %3$s.', 'lunara-film' ),
+				number_format_i18n( $out['ceremonies'] ),
+				number_format_i18n( $out['nominations'] ),
+				$out['sweep']
+			)
+			: sprintf(
+				/* translators: 1: number of ceremonies, 2: number of nominations. */
+				__( '%1$s ceremonies and %2$s nominations, every nominee on record.', 'lunara-film' ),
+				number_format_i18n( $out['ceremonies'] ),
+				number_format_i18n( $out['nominations'] )
+			);
+	} else {
+		$out['line'] = '' !== $out['sweep']
+			? sprintf(
+				/* translators: %s: the Sweep Watch film. */
+				__( 'Every ceremony, every nominee, and Sweep Watch: %s.', 'lunara-film' ),
+				$out['sweep']
+			)
+			: __( 'Every ceremony, every nominee, and Sweep Watch.', 'lunara-film' );
+	}
+
+	return $out;
 }
 
 /**
@@ -227,10 +382,14 @@ function lunara_render_home_front_door() {
 	$density     = lunara_home_select_setting( 'lunara_home_front_door_density', 'editorial', array( 'compact', 'editorial', 'showcase' ) );
 	$prominence  = lunara_home_select_setting( 'lunara_home_route_card_prominence', 'strong', array( 'quiet', 'standard', 'strong' ) );
 	$lead        = lunara_get_home_front_door_lead();
-	$lead_image  = lunara_home_front_door_still( $lead['image'], true );
-	$companions  = lunara_get_home_front_door_companions( $lead['url'], 2 );
+	// 3.2.161: the three doors carry the first screen; the lead still below
+	// them defers and paints from the Reviews door's download of the same URL.
+	$lead_image  = lunara_home_front_door_still( $lead['image'], true, true );
+	$journal     = lunara_get_home_front_door_journal();
+	$oscars      = lunara_get_home_front_door_oscars();
 	$counts      = function_exists( 'wp_count_posts' ) ? wp_count_posts( 'review' ) : null;
 	$review_total = is_object( $counts ) && isset( $counts->publish ) ? absint( $counts->publish ) : 0;
+	$lead_film    = lunara_home_front_door_film_name( $lead['title'] );
 	// The cover (3.2.130): the header above carries no wordmark and keeps the
 	// search, so this masthead is the brand and prints no second Search.
 	$cover = ! function_exists( 'lunara_home_cover_is_enabled' ) || lunara_home_cover_is_enabled();
@@ -268,24 +427,61 @@ function lunara_render_home_front_door() {
 		}
 	}
 
+	// The three doors (3.2.161): Reviews, Journal, Oscars, each a tall picture
+	// with one live line under its word. The Reviews door shows the lead still
+	// (one URL, one download, shared with the lead below); the Journal door the
+	// newest entry's picture; the Oscars door the Sweep Watch artwork.
+	if ( $review_total > 0 && '' !== $lead_film ) {
+		$reviews_line = sprintf(
+			/* translators: 1: number of published reviews, 2: the newest review's film. */
+			_n( '%1$s review. Newest: %2$s.', '%1$s reviews. Newest: %2$s.', $review_total, 'lunara-film' ),
+			number_format_i18n( $review_total ),
+			$lead_film
+		);
+	} elseif ( $review_total > 0 ) {
+		$reviews_line = sprintf(
+			/* translators: %s: number of published reviews. */
+			_n( '%s review, argued and scored.', '%s reviews, argued and scored.', $review_total, 'lunara-film' ),
+			number_format_i18n( $review_total )
+		);
+	} else {
+		$reviews_line = __( 'Every film, argued and scored.', 'lunara-film' );
+	}
+
 	$routes = array(
 		array(
-			'label' => __( 'Criticism', 'lunara-film' ),
-			'title' => __( 'Read Reviews', 'lunara-film' ),
-			'copy'  => __( 'Arguments, scores, trailers, Debrief notes, and spoiler files when the film needs a second door.', 'lunara-film' ),
-			'url'   => $reviews_url,
+			'key'    => 'reviews',
+			'label'  => __( 'Reviews', 'lunara-film' ),
+			'line'   => $reviews_line,
+			'url'    => $reviews_url,
+			'image'  => $lead['image'],
+			'id'     => 0,
+			'shared' => true,
 		),
 		array(
-			'label' => __( 'Journal', 'lunara-film' ),
-			'title' => __( 'Open Journal', 'lunara-film' ),
-			'copy'  => __( 'Industry movement, trailer files, quick reactions, and larger work from the desk.', 'lunara-film' ),
-			'url'   => $journal_url,
+			'key'    => 'journal',
+			'label'  => __( 'Journal', 'lunara-film' ),
+			// The line reserves two lines on the door; a headline alone fits them.
+			'line'   => '' !== $journal['title']
+				? sprintf(
+					/* translators: %s: the newest Journal entry's title. */
+					__( 'Film news. Latest: %s.', 'lunara-film' ),
+					$journal['title']
+				)
+				: __( 'Film news, trailers, and quick reactions from the desk.', 'lunara-film' ),
+			'url'    => $journal_url,
+			'image'  => $journal['image'],
+			'id'     => $journal['image_id'],
+			'shared' => false,
 		),
 		array(
-			'label' => __( 'Oscar Ledger', 'lunara-film' ),
-			'title' => __( 'Explore Ledger', 'lunara-film' ),
-			'copy'  => __( 'Films, people, categories, and ceremonies connected across the record.', 'lunara-film' ),
-			'url'   => home_url( '/oscars/' ),
+			'key'    => 'oscars',
+			'label'  => __( 'Oscars', 'lunara-film' ),
+			'line'   => $oscars['line'],
+			'url'    => home_url( '/oscars/' ),
+			'image'  => $oscars['image'],
+			'id'     => $oscars['image_id'],
+			'shared' => false,
 		),
 	);
 
@@ -303,7 +499,7 @@ function lunara_render_home_front_door() {
 
 	ob_start();
 	?>
-	<section class="lunara-home-masthead lunara-home-front-desk lunara-home-program<?php echo $cover ? ' is-cover' : ''; ?> is-density-<?php echo esc_attr( $density ); ?> is-route-<?php echo esc_attr( $prominence ); ?>" aria-labelledby="lunara-home-masthead-title">
+	<section class="lunara-home-masthead lunara-home-front-desk lunara-home-program lunara-home-doors<?php echo $cover ? ' is-cover' : ''; ?> is-density-<?php echo esc_attr( $density ); ?> is-route-<?php echo esc_attr( $prominence ); ?>" aria-labelledby="lunara-home-masthead-title">
 		<div class="lunara-home-masthead-panel">
 			<div class="lunara-home-program-dateline">
 				<p class="lunara-home-program-dateline-items"><?php echo implode( '', array_map( static function ( $item ) { return '<span>' . esc_html( $item ) . '</span>'; }, $dateline ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
@@ -325,49 +521,41 @@ function lunara_render_home_front_door() {
 					}
 					?>
 				</div>
-				<p class="lunara-home-masthead-dek"><?php esc_html_e( 'Reviews, Journal files, and the Oscar Ledger, edited as one publication in motion.', 'lunara-film' ); ?></p>
+				<p class="lunara-home-masthead-dek"><?php esc_html_e( 'Reviews, news, and the Oscars. One film desk in Dallas.', 'lunara-film' ); ?></p>
 			</div>
 
-			<div class="lunara-home-front-desk-grid<?php echo empty( $companions ) ? ' has-no-companions' : ''; ?>">
+			<nav class="lunara-home-masthead-routes" aria-label="<?php esc_attr_e( 'Lunara Film section doors', 'lunara-film' ); ?>">
+				<?php foreach ( $routes as $route ) : ?>
+					<?php $door_image = lunara_home_front_door_door_still( $route['image'], $route['id'], $route['shared'] ); ?>
+					<a class="lunara-home-masthead-route lunara-home-door is-door-<?php echo esc_attr( $route['key'] ); ?><?php echo $door_image ? ' has-image' : ' has-no-image'; ?>" href="<?php echo esc_url( $route['url'] ); ?>">
+						<?php if ( $door_image ) : ?>
+							<span class="lunara-home-door-frame" aria-hidden="true"><?php echo $door_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+						<?php endif; ?>
+						<span class="lunara-home-door-veil" aria-hidden="true"></span>
+						<span class="lunara-home-masthead-route-label"><?php echo esc_html( $route['label'] ); ?></span>
+						<span class="lunara-home-door-line"><?php echo esc_html( $route['line'] ); ?></span>
+						<span class="lunara-home-door-cta"><?php esc_html_e( 'Enter', 'lunara-film' ); ?> <span aria-hidden="true">&rarr;</span></span>
+					</a>
+				<?php endforeach; ?>
+			</nav>
+
+			<div class="lunara-home-front-desk-grid has-no-companions">
 				<article class="lunara-home-front-desk-lead<?php echo $lead_image ? ' has-image' : ' has-no-image'; ?>">
 					<a class="lunara-home-front-desk-lead-link" href="<?php echo esc_url( $lead['url'] ); ?>">
 						<?php if ( $lead_image ) : ?>
 							<span class="lunara-home-front-desk-frame"><?php echo $lead_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
-						<span class="lunara-home-front-desk-label"><?php esc_html_e( 'Now Showing', 'lunara-film' ); ?></span>
-						<h2 class="lunara-home-front-desk-title"><?php echo lunara_home_front_door_headline_html( $lead['title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h2>
-						<?php if ( ! empty( $lead['excerpt'] ) ) : ?>
-							<p class="lunara-home-front-desk-copy"><?php echo esc_html( $lead['excerpt'] ); ?></p>
-						<?php endif; ?>
-						<span class="lunara-home-front-desk-cta"><?php echo esc_html( $lead['cta'] ); ?> <span aria-hidden="true">&rarr;</span></span>
+						<div class="lunara-home-front-desk-text">
+							<span class="lunara-home-front-desk-label"><?php esc_html_e( 'Now Showing', 'lunara-film' ); ?></span>
+							<h2 class="lunara-home-front-desk-title"><?php echo lunara_home_front_door_headline_html( $lead['title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h2>
+							<?php if ( ! empty( $lead['excerpt'] ) ) : ?>
+								<p class="lunara-home-front-desk-copy"><?php echo esc_html( $lead['excerpt'] ); ?></p>
+							<?php endif; ?>
+							<span class="lunara-home-front-desk-cta"><?php echo esc_html( $lead['cta'] ); ?> <span aria-hidden="true">&rarr;</span></span>
+						</div>
 					</a>
 				</article>
-
-				<?php if ( ! empty( $companions ) ) : ?>
-					<div class="lunara-home-front-desk-stack" aria-label="<?php esc_attr_e( 'Also showing', 'lunara-film' ); ?>">
-						<?php foreach ( $companions as $companion ) : ?>
-							<?php $companion_image = lunara_home_front_door_still( $companion['image'], false ); ?>
-							<a class="lunara-home-front-desk-companion<?php echo $companion_image ? ' has-image' : ' has-no-image'; ?>" href="<?php echo esc_url( $companion['url'] ); ?>">
-								<?php if ( $companion_image ) : ?>
-									<span class="lunara-home-front-desk-frame"><?php echo $companion_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-								<?php endif; ?>
-								<span class="lunara-home-front-desk-label"><?php esc_html_e( 'Review', 'lunara-film' ); ?></span>
-								<strong class="lunara-home-front-desk-companion-title"><?php echo lunara_home_front_door_headline_html( $companion['title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
-							</a>
-						<?php endforeach; ?>
-					</div>
-				<?php endif; ?>
 			</div>
-
-			<nav class="lunara-home-masthead-routes" aria-label="<?php esc_attr_e( 'Lunara Film section doors', 'lunara-film' ); ?>">
-				<?php foreach ( $routes as $route ) : ?>
-					<a class="lunara-home-masthead-route" href="<?php echo esc_url( $route['url'] ); ?>">
-						<span class="lunara-home-masthead-route-label"><?php echo esc_html( $route['label'] ); ?></span>
-						<strong><?php echo esc_html( $route['title'] ); ?></strong>
-						<span><?php echo esc_html( $route['copy'] ); ?></span>
-					</a>
-				<?php endforeach; ?>
-			</nav>
 		</div>
 	</section>
 	<?php
