@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-05 — Theme 3.2.150: polish from the review panel
+
+A three-lens review (cascade, design, test coverage) with adversarial verification ran on 3.2.147/3.2.148: 26 agents, 23 findings, 18 confirmed. Six were already fixed in 3.2.148 and 3.2.149 (the 12px role label, the 901px three-up, the phone chips, the kicker size and wrap, the band-one test). This release takes the rest that is worth its code.
+
+- **One rule above the card row, not three.** With the thread drawn across the three cards, the head's hairline, the thread and the cards' accents stacked within 24px. The head loses its hairline when the thread is present; the thread is the rule.
+- **The Oscar Ledger pill starts flush.** The shared `.lunara-oscar-ledger-pill` 10px/8px left margin indented a wrapped ledger line; it is 0 in the cards, and the ledger link is a 44px tap target like the IMDb chip.
+- **No half-pixel gaps between breakpoints.** The band's `max-width` bounds end at .98px (420.98, 640.98, 900.98, 1100.98) so a zoomed, fractional viewport such as 900.5px never falls between a `max-width: 900px` and a `min-width: 901px` rule onto the base one-column card.
+- Tests: the Debrief frame is centred at every width and 1060px wide at 1440px; in the three-up the links sit at the bottom of every card.
+- Not changed, recorded: the Site Studio Debrief poster-width control (220–360px) is capped at 220px by the band, so it no longer changes the page; on phones the panel beside the poster leaves the column under the poster empty; the hidden title and year under the poster are still printed; the thread's horizontal mode has no route-CSS test (the layout test runs without JavaScript); the Home and showcase card builders do not emit the lead group the public renderer does; notes read at 15px and the Method question at 13px by choice.
+
 ## 2026-11-05 — Theme 3.2.149: the three-up grid waits for room; the phone panel keeps its chips
 
 Three findings from the review panel on 3.2.147/3.2.148, each confirmed on the live site.
@@ -34,7 +44,7 @@ Dalton, on the live 3.2.147 review page: "this is too truncated and the debrief 
 Dalton, after 3.2.146: "I really don't think that did anything whatsoever. How can you make that look dynamic and tightened?" 3.2.146 only trimmed spacing; the section was still a vertical stack of five full-width rows, so it read the same. 3.2.147 changes the composition.
 
 - **Band one: the reviewed film beside its signature data, at every width.** The poster (200px on desktop, 128px to 900px, 104px on phones) sits beside the Debrief heading, score, year and where-to-watch. The title and year under the poster are gone (the hero carries the title, the panel the year); the phone and tablet no longer stack a 220px poster above the panel.
-- **Band two: Pair It With as three compact argument cards.** From 901px the three pairings sit side by side across the Debrief's 1060px frame; the thread draws horizontally through them. Each card: a 104px poster beside the role, its Method question and the title (a new `lunara-pair-card-lead` group in the public renderer), the complete note under both at the card's width, the links pinned to the bottom; a 1px hairline, a faint surface and a 2px top accent in the pairing's thread colour (Theme Echo gold, Counter Program terracotta, Career Context blue), which the role label shares. Between 641px and 900px, one column with a 120px poster beside the whole argument. On phones, the 96px poster beside the lead with the note under it. The head is one line: title, subtitle and the Method link.
+- **Band two: Pair It With as three compact argument cards.** From 901px the three pairings sit side by side across the Debrief's 1060px frame; the thread draws horizontally through them. Each card: a 104px poster beside the role, its Method question and the title (a new `lunara-pair-card-lead` group in the public renderer), the complete note under both at the card's width, the links pinned to the bottom; a 1px hairline, a faint surface and a 2px top accent in the pairing's thread colour (Theme Echo gold, Counter Program terracotta, Career Context blue), which the role label shares. Between 641px and 900px, one column with a 120px poster beside the whole argument. On phones, the 96px poster beside the lead with the note under it. The head is one line on desktop: title, subtitle and the Method link; it wraps on phones.
 - Result on the live Social Reckoning review: Debrief section 2,280px (before 3.2.146) to 856px at 1440px; 3,945px to 1,765px at 390px; 768px: 1,183px.
 - Markup: `inc/debrief-public.php` wraps the role, question and title in `div.lunara-pair-card-lead` (the shared components stylesheet gives it the body's 9px rhythm wherever it renders). `DESIGN.md` updates the pairing rules (compact cards, 1060px frame, the accent) and the Debrief frame rule.
 - The selectors keep the `html body … article.lunara-review-single` prefix, so the Customizer Additional CSS block of 2026-09-21 (860px frame, 170px posters, 20px gap) stays beaten; delete it.

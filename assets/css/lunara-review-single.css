@@ -1980,7 +1980,7 @@ body.single-review .lunara-pair-card-title {
         padding: 10px 12px !important;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 900.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: 128px minmax(0, 1fr) !important;
             align-items: start !important;
@@ -1997,7 +1997,7 @@ body.single-review .lunara-pair-card-title {
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 640.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: 104px minmax(0, 1fr) !important;
             gap: 14px !important;
@@ -2023,7 +2023,7 @@ body.single-review .lunara-pair-card-title {
         }
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 420.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-wrap.has-signature-media {
             grid-template-columns: 88px minmax(0, 1fr) !important;
         }
@@ -2188,6 +2188,17 @@ body.single-review .lunara-pair-card-title {
         padding: 5px 9px !important;
     }
 
+    /* The Oscar Ledger pill loses the shared 10px/8px left margin so a wrapped
+       ledger line starts flush with the links; the link is a 44px tap target. */
+    html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-chips .lunara-oscar-ledger-pill {
+        margin-left: 0 !important;
+    }
+
+    html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-chips .lunara-oscar-ledger {
+        min-height: 44px !important;
+        align-items: center !important;
+    }
+
     /* The title plate for a missing poster, at the compact poster size. */
     html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-plate {
         padding: 8px !important;
@@ -2216,10 +2227,17 @@ body.single-review .lunara-pair-card-title {
             grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             gap: 28px !important;
         }
+
+        /* With the thread drawn across the row, the head's hairline would be a
+           third rule within 24px (hairline, thread, accents); the thread is the rule. */
+        html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-cards.has-pair-thread .lunara-pair-cards-head {
+            border-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
     }
 
     /* One wide column: the poster beside the whole argument. */
-    @media (min-width: 641px) and (max-width: 1100px) {
+    @media (min-width: 641px) and (max-width: 1100.98px) {
         html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card {
             --lunara-pair-card-poster: 128px;
         }
@@ -2235,7 +2253,7 @@ body.single-review .lunara-pair-card-title {
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 640.98px) {
         html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card {
             --lunara-pair-card-poster: 96px;
             column-gap: 12px !important;
@@ -2380,7 +2398,7 @@ body.single-review .lunara-pair-card-title {
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 640.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-single-debrief-section.has-backdrop::before {
             display: none !important;
         }
@@ -2503,14 +2521,14 @@ body.single-review .lunara-pair-card-title {
         font-size: 0.86rem !important;
     }
 
-    @media (min-width: 641px) and (max-width: 900px) {
+    @media (min-width: 641px) and (max-width: 900.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-related .lunara-review-related-grid,
         html body.single-review .lunara-review-single-page .lunara-review-related .lunara-review-related-grid[data-count="4"] {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 640.98px) {
         html body.single-review .lunara-review-single-page .lunara-review-related .lunara-review-related-grid,
         html body.single-review .lunara-review-single-page .lunara-review-related .lunara-review-related-grid[data-count="2"],
         html body.single-review .lunara-review-single-page .lunara-review-related .lunara-review-related-grid[data-count="4"] {
