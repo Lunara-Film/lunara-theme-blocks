@@ -317,9 +317,8 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
         return;
     }
 
-    // Helper: only set if the user didn't manually type something in the meta box.
-    // We check $_POST to see if the form field was submitted empty — if so, the user
-    // didn't fill it, and we should auto-fill from the content.
+    // Content is a fallback for missing metadata. Saved values and submitted
+    // edits (including deliberate clears) are owned by their editor.
     $fill = static function( $post_id, $meta_key, $value ) {
         $value = trim( (string) $value );
         if ( '' === $value ) {
@@ -341,9 +340,22 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
             '_lunara_studio'           => 'lunara_studio',
         );
 
-        // If the form field was submitted with a value, the user typed something — don't overwrite.
+        // A present field is an explicit edit, even when its value is empty.
         $form_field = isset( $form_field_map[ $meta_key ] ) ? $form_field_map[ $meta_key ] : '';
-        if ( '' !== $form_field && isset( $_POST[ $form_field ] ) && '' !== trim( (string) $_POST[ $form_field ] ) ) {
+        $acf_key    = 'field_' . ltrim( $meta_key, '_' );
+        if (
+            ( '' !== $form_field && array_key_exists( $form_field, $_POST ) ) ||
+            ( isset( $_POST['acf'] ) && is_array( $_POST['acf'] ) && array_key_exists( $acf_key, $_POST['acf'] ) )
+        ) {
+            return;
+        }
+
+        $stored = get_post_meta( $post_id, $meta_key, true );
+        if (
+            ! is_scalar( $stored ) ||
+            '' !== trim( lunara_get_review_display_meta( $post_id, $meta_key ) ) ||
+            $acf_key === get_post_meta( $post_id, '_' . $meta_key, true )
+        ) {
             return;
         }
 

@@ -23,6 +23,10 @@ if ( ! function_exists( 'lunara_get_review_display_meta' ) ) {
      * @return string
      */
     function lunara_get_review_display_meta( $post_id, $key ) {
+        if ( class_exists( 'Lunara_Review_Metadata' ) ) {
+            return Lunara_Review_Metadata::read( $post_id, $key );
+        }
+
         $value = get_post_meta( $post_id, $key, true );
         if ( ! is_scalar( $value ) ) {
             return '';

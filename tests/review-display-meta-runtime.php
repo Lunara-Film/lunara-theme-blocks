@@ -103,4 +103,17 @@ review_meta_assert( false !== strpos( $pairs, 'A Real Film' ) && false === strpo
 $GLOBALS['meta_image_slot']['mode'] = 'off';
 review_meta_assert( '' === lunara_render_review_visual_slot( 33224, 'hero_banner' ), 'The Image Studio off setting remains authoritative.' );
 
+// The current Core owns scalar conversion; an older Core keeps the fallback
+// exercised above. Defining the class here happens only after those checks.
+if ( ! class_exists( 'Lunara_Review_Metadata' ) ) {
+    class Lunara_Review_Metadata {
+        public static function read( $post_id, $key ) {
+            $GLOBALS['meta_core_read_args'] = array( $post_id, $key );
+            return 'Core-normalized value';
+        }
+    }
+}
+review_meta_assert( 'Core-normalized value' === lunara_get_review_display_meta( 33224, '_lunara_where' ), 'Public display uses the Core storage boundary when it is available.' );
+review_meta_assert( array( 33224, '_lunara_where' ) === $GLOBALS['meta_core_read_args'], 'The Core boundary receives the requested Review and canonical key.' );
+
 echo "Review display metadata: {$meta_checks} checks passed.\n";

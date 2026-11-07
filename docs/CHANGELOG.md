@@ -11,6 +11,17 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.160 / Core 0.8.19: Review metadata and saved pairings share their owning storage
+
+The old unified ACF Review group used names such as `lunara_year`; ACF then stored its reference in `_lunara_year`, the same key the native Review editor and public theme use for the value. Core now aligns the confirmed fields' runtime names and types with canonical Review storage, keeping stable field keys and placing their references under double underscores. Exact legacy selectors and values retain a read-only compatibility path. Native edits, explicit clears and verified importer writes use the same boundary; database field definitions and the disabled group's state are preserved.
+
+The public theme delegates scalar conversion to Core when available, with its previous fallback for older Core versions. Content autofill fills genuinely empty values and respects saved overrides, submitted edits and explicit canonical clears instead of replacing them from prose.
+
+The production Debrief compatibility path now renders a complete trio of saved relational movie choices and notes using its existing adapter and public card renderer. Partial, invalid or unpublished choices retain the entire legacy fallback. Relational-only pairings can render without a legacy signature. The staging-only canonical renderer remains unchanged.
+
+- Tests exercise actual ACF save/read/reference mechanics and type conversion in Core, native versus stale ACF submission precedence, importer fill/preserve behavior, Theme autofill preservation, 62 real relational-renderer checks and the resulting Review geometry at phone and desktop widths.
+- The authorized Toy Story repair uses its saved original metadata and existing selected movies/notes. The private before snapshot and per-key repair plan are outside Git in the parent workspace's `_carousel-artifacts/review-metadata-fix-20261107` directory. No bulk content migration is part of this release.
+
 ## 2026-11-07 — Theme 3.2.159: review titles appear above the image
 
 The Review template placed landscape artwork before the title regardless of the parent Customizer's "Below Title" selection. The full centered title group now precedes the landscape still on every screen. The still retains the Review Studio hero width; posters stay below the title in the reading column, and missing artwork emits no empty frame. The article grid supplies the gap after the title without a second image margin.

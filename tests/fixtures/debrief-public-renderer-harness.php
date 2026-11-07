@@ -144,6 +144,7 @@ function get_post_meta( $post_id, $key, $single = true ) {
 }
 
 function get_the_title( $post_id = 0 ) {
+    $post_id = is_object( $post_id ) ? $post_id->ID : $post_id;
     return $GLOBALS['lunara_test']['titles'][ (int) $post_id ] ?? 'Harness Review';
 }
 
@@ -230,11 +231,17 @@ function lunara_debrief_resolve_movie( $movie_id, $args = array() ) {
 
 function lunara_debrief_shortcode( $atts ) {
     ++$GLOBALS['lunara_test']['legacy_calls'];
+    if ( array_key_exists( 'legacy_block', $GLOBALS['lunara_test'] ) ) {
+        return $GLOBALS['lunara_test']['legacy_block'];
+    }
     return '<section class="legacy-block">LEGACY BLOCK ' . get_the_ID() . '</section>';
 }
 
 function lunara_split_review_debrief_block( $html ) {
     ++$GLOBALS['lunara_test']['split_calls'];
+    if ( '' === trim( $html ) ) {
+        return array( 'signature' => '', 'pairings' => '' );
+    }
     return array(
         'signature' => '<section class="legacy-signature">LEGACY SIGNATURE</section>',
         'pairings'  => '<section class="legacy-split-pairings">LEGACY SPLIT PAIRINGS</section>',
@@ -243,6 +250,9 @@ function lunara_split_review_debrief_block( $html ) {
 
 function lunara_get_review_debrief_signature_media_html( $review_id ) {
     ++$GLOBALS['lunara_test']['legacy_media_calls'];
+    if ( array_key_exists( 'legacy_media', $GLOBALS['lunara_test'] ) ) {
+        return $GLOBALS['lunara_test']['legacy_media'];
+    }
     return '<aside class="legacy-media">LEGACY MEDIA ' . (int) $review_id . '</aside>';
 }
 
