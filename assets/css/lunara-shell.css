@@ -555,8 +555,8 @@ body.post-type-archive-review .lunara-review-archive-sort-link.is-active {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
     padding: 8px 12px !important;
     border: 1px solid rgba(201, 169, 97, 0.24) !important;
     border-radius: 0 !important;
@@ -642,7 +642,7 @@ body.single-journal .lunara-review-single-content h3 {
 .lunara-reader-toc-link {
     display: inline-flex !important;
     align-items: center !important;
-    min-height: 40px !important;
+    min-height: 44px !important; /* 3.2.153: controls aim for 44px (was 40px) */
     padding: 8px 12px !important;
     border: 1px solid rgba(224, 196, 129, 0.28) !important;
     border-radius: 0 !important;
@@ -1038,7 +1038,7 @@ body.lunara-oscars-portal-page .lunara-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
     padding: 10px 16px !important;
     border: 1px solid rgba(237, 210, 150, 0.34) !important;
     border-radius: 0 !important;

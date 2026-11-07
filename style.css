@@ -4,7 +4,7 @@ Theme URI: https://lunarafilm.com
 Author: Lunara Film
 Author URI: https://lunarafilm.com
 Description: A sophisticated film criticism theme with cinematic aesthetics. Living Pulse build dated 2026-05-03.
-Version: 3.2.152
+Version: 3.2.153
 Template: blocksy
 Requires at least: 6.2
 Tested up to: 6.4
@@ -4016,7 +4016,7 @@ footer.site-footer .lunara-footer-copyright {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px;
+    min-height: 44px;
     padding: 10px 16px;
     border-radius: 0;
     border: 1px solid rgba(201,169,97,.18);
@@ -8014,7 +8014,7 @@ body.single-review .lunara-review-single-content blockquote {
 }
 
 .lunara-nav .lunara-nav-list > li > a {
-    min-height: 42px;
+    min-height: 44px;
     padding: 8px 0;
     letter-spacing: 0.08em;
 }
@@ -10103,7 +10103,7 @@ article.lunara-journal-single a:not(.lunara-btn):not(.lunara-button-ghost):not(.
 
 .lunara-review-single-debrief .lunara-debrief-chip,
 .lunara-review-single-debrief .lunara-oscar-ledger-pill {
-    min-height: 42px;
+    min-height: 44px;
     padding: 8px 16px;
     font-size: 0.96rem;
     font-weight: 700;
@@ -13252,7 +13252,7 @@ body.single-journal .lunara-review-single-rail-actions .lunara-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
     padding: 10px 16px !important;
     border: 1px solid rgba(201, 169, 97, .28) !important;
     border-radius: 0 !important;
@@ -13519,7 +13519,7 @@ body.single-journal .lunara-review-single-content a:not(.lunara-reader-toc-link)
 .lunara-reader-toc-link {
     display: inline-flex !important;
     align-items: center !important;
-    min-height: 40px !important;
+    min-height: 44px !important; /* 3.2.153: controls aim for 44px (was 40px) */
     padding: 8px 12px !important;
     border: 1px solid rgba(224, 196, 129, 0.28) !important;
     border-radius: 0 !important;
@@ -13690,8 +13690,8 @@ body.post-type-archive-review .lunara-review-archive-uniform {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
     padding: 8px 12px !important;
     border: 1px solid rgba(201, 169, 97, 0.24) !important;
     border-radius: 0 !important;

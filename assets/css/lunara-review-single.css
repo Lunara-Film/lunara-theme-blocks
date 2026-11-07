@@ -592,7 +592,7 @@ body.single-review .lunara-review-single-content blockquote {
         body.single-review .lunara-reader-toc-link {
             display: flex !important;
             align-items: center !important;
-            min-height: 42px !important;
+            min-height: 44px !important;
             padding: 9px 12px !important;
             border-radius: 0 !important;
             color: #e0c481 !important;
@@ -805,7 +805,7 @@ body.single-review .lunara-review-single-content blockquote {
         body.single-review .lunara-reader-toc-link {
             display: flex !important;
             align-items: center !important;
-            min-height: 42px !important;
+            min-height: 44px !important;
             width: 100% !important;
             max-width: none !important;
             padding: 9px 12px !important;
@@ -2230,7 +2230,7 @@ body.single-review .lunara-pair-card-title {
 
     html body.single-review article.lunara-review-single .lunara-review-single-debrief-section .lunara-pair-card-plate-title {
         -webkit-line-clamp: 4 !important;
-        font-size: 0.8rem !important;
+        font-size: 0.8125rem !important; /* 3.2.153: the 13px floor (was 12.8px) */
         line-height: 1.15 !important;
     }
 
@@ -2363,7 +2363,7 @@ body.single-review .lunara-pair-card-title {
     }
 
     html body.single-review .lunara-review-single-page .lunara-review-single-debrief .lunara-debrief-list--signature li strong {
-        font-size: 0.75rem !important;
+        font-size: 0.8125rem !important; /* 3.2.153: the 13px floor (was 12px) */
         letter-spacing: 0.18em !important;
     }
 

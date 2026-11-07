@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.153: the 13px floor and the 44px targets
+
+Batch 1b of the "refine, optimize" programme: defects against the house rules (`DESIGN.md`: functional metadata and controls at least 13px; controls aim for 44px targets), found by a Playwright audit of Home, Reviews, a review, Journal and Oscars at 390 and 1440px on the live 3.2.151. No layout moves; where a size grows, it grows by 2px or less.
+
+- **Labels under 13px.** The header navigation links (12.8px), the Home cover dateline (12px), the Signature list labels "Score" and "Where to Watch" (12px), the where-to-watch chip's eyebrow (10.56px), meta (11.52px), disclosure (11.52px) and Affiliate mark (10.24px), a pairing card's title plate (12.8px) and a film name on the Oscars board (12.48px on phones, `0.78em`) now read at 13px (`max(0.8125rem, 0.78em)` on the board).
+- **Controls under 44px.** Archive pagination numbers were 42px; the Journal filter pill "All" 42px wide; the portal's action links, `.lunara-btn`, the archive sort link, the navigation list links and the Debrief chips carried a 42px minimum; the reader's contents links and the Reviews archive's retention actions a 40px one. Every one is 44px, in the stylesheet and in the Journal first-paint CSS.
+- **The stacked links in Oscars cards.** A winner or spotlight card stacks its category, name and film links 17-22px tall with 4px between them. The inline links carry 4px of vertical padding: at least 24px to tap, and no line moves.
+- Seen, not changed: at 320px two words still break ("Skinamarink" in a 91px Home caption, "CINEMATOGRAPHY" in a 124px winner link); no word breaks at 390px and above on the five pages. A director's name in the review hero is a link inside a sentence.
+- Tests: `tests/type-floor-and-targets-runtime.php` (new) reads each rule from the theme and refuses any 40-43px minimum in public CSS.
+
 ## 2026-11-07 — Theme 3.2.152: images fit their frames
 
 The first speed batch of the "refine, optimize, make it dynamic" programme. Measured on the live 3.2.151 with Playwright at 390, 768, 1100, 1440 and 1920px before any change: the Oscars portal downloaded 3.0 MB of imagery on desktop and 2.5 MB on a phone (15.6 s to load at 1.6 Mbps), a review page 384 KB for one 220px poster, and every poster, portrait and still arrived as one 700-2,000px file whatever its frame.
