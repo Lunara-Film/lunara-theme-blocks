@@ -79,6 +79,9 @@ $targets = array(
 	array( 'style.css', 'body.single-journal .lunara-review-single-rail-actions .lunara-btn', array( 'min-height' ) ),
 	array( 'assets/css/lunara-review-single.css', 'body.single-review .lunara-reader-toc-link', array( 'min-height' ) ),
 	array( 'assets/css/lunara-review-archive.css', '.lunara-review-archive-page .lunara-review-archive-retention-actions a', array( 'min-height' ) ),
+	// 3.2.156: the Film Index sort links (42px) and the dossier's Ledger action (20px).
+	array( 'style.css', '.lunara-entity-sort a', array( 'min-height' ) ),
+	array( 'style.css', '.lunara-entity-ledger-link a', array( 'min-height' ) ),
 );
 foreach ( $targets as list( $file, $selector, $properties ) ) {
 	$css  = floor_read( $file );

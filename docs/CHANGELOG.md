@@ -11,6 +11,16 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.156: the Film Index, the Talent Index and their dossiers fit their frames
+
+The plugin audit (Core lens) found two public routes the speed work had not measured: `/film/` (5,269 published films) and `/talent/` (8,473 people), core-registered post types the theme renders with templates that predate the lessons. Measured on live 3.2.154 at 390px (2x) before this release: ten 170px index posters fetched 683-768px crops (666 KB) under WordPress's default sizes, four uploads with no intermediate sizes printed no candidates at all, and the dossier poster fetched a 780px file for a 218px frame.
+
+- **Index cards and dossier heroes print through one builder** (`lunara_entity_poster_img()`): 2:3 CDN crops at the frame's 1x and 2x widths, capped by the attachment's measured size, with the slot's measured sizes (`entity-card`: the one column to 389px, then a share of the viewport while the grid is fluid, 170px from 1024px; `entity-hero`: `min(58vw, 220px)` to 760px, then `clamp(160px, 18vw, 250px)`, the frame's own rule). A lazy card keeps WordPress's `auto, `; the eager hero carries none. Measured at 15 widths on live.
+- **The dossier backdrop is a picture.** `single-movie.php` painted core's `tmdb_backdrop_url` (a TMDB original) as an inline background; it is now an `<img>` of the proxied original at 640-1920px widths, `fetchpriority="low"`, under the same saturate filter and breath animation. Latent today (no published dossier carries a backdrop yet), live the day one does.
+- **Targets:** the Film Index sort links are 44px (42px); the dossier's one action, the link to the Oscars Ledger, is a 44px control (20px, the one visible change: the line grows by 24px); the award links take 4px of vertical padding (30px to 38px) without moving their row.
+- Not changed, for Dalton: whether `/film/` and `/talent/` stay public (CORE-4). They duplicate the Ledger's title and name pages for the same data; keeping them means they join the measured routes (this release), closing them is one line in core plus a redirect.
+- Tests: `tests/entity-surfaces-posters-runtime.php` (new) runs the real builders against WordPress-shaped stubs (crop widths, the cap on a 500px upload and a 683px portrait, no candidates for an unmeasured upload, the eager hero without auto, the backdrop picture, no inline background in the templates); `tests/image-sizing-runtime.php` checks the two slots; `tests/type-floor-and-targets-runtime.php` reads the two 44px rules.
+
 ## 2026-11-07 — Theme 3.2.155: the cap trusts only what the CDN answered
 
 The adversarial review of 3.2.154 (three lenses, three refuters per finding) stood up four correctness findings against the new source-size cap. All four are fixed here; the measured numbers are in the review's own words.

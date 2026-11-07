@@ -107,6 +107,10 @@ sizing_assert( 1 === preg_match( '/^\(max-width: 600px\) 96px, \(max-width: 640p
 $companion = lunara_image_sizes_for( 'front-desk-companion' );
 sizing_assert( 0 === strpos( $companion, '(max-width: 820px) calc(100vw - 64px)' ) && false !== strpos( $companion, '(max-width: 1100px) 440px' ) && 1 === preg_match( '/\d+px$/', $companion ), 'A Home companion still is full width to 820px (the measured gutters), 440px at most in the two-up, and a fixed width beside the lead (got ' . $companion . ').' );
 sizing_assert( '(max-width: 420px) 88px, (max-width: 640px) 104px, (max-width: 900px) 128px, 220px' === lunara_image_sizes_for( 'debrief-poster' ), 'The Debrief poster column is 88/104/128/220px, as the band lays it out.' );
+// 3.2.156: the Film Index and Talent Index cards and the dossier hero, measured at 15 widths on live.
+$entity_card = lunara_image_sizes_for( 'entity-card' );
+sizing_assert( 1 === preg_match( '/^\(max-width: 389px\) calc\(100vw - 32px\), \(max-width: 599px\) 50vw, \(max-width: 759px\) 34vw, \(max-width: 1023px\) 25vw, 170px$/', $entity_card ), 'An index card is the one column on the smallest phones, a share of the viewport while the grid is fluid, and 170px from 1024px (it measured 166-172px).' );
+sizing_assert( '(max-width: 760px) min(58vw, 220px), clamp(160px, 18vw, 250px)' === lunara_image_sizes_for( 'entity-hero' ), 'The dossier hero poster says the frame its own rule paints: min(58vw, 220px) to 760px, then clamp(160px, 18vw, 250px).' );
 
 // ---- The blurred backdrop and auto ---------------------------------------------------------------
 sizing_assert( false !== strpos( lunara_image_blur_backdrop_url( 'https://i0.wp.com/lunarafilm.com/wp-content/uploads/2026/10/still.jpg?fit=2841%2C1598&quality=82&ssl=1' ), 'still.jpg?quality=82&#038;ssl=1&#038;w=320' ) || false !== strpos( lunara_image_blur_backdrop_url( 'https://i0.wp.com/lunarafilm.com/wp-content/uploads/2026/10/still.jpg?fit=2841%2C1598&quality=82&ssl=1' ), 'w=320' ), 'A blurred backdrop asks for a 320px source.' );

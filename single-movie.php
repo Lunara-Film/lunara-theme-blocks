@@ -32,12 +32,12 @@ while ( have_posts() ) :
     <div id="primary" class="site-main lunara-entity-page lunara-film-dossier">
         <header class="lunara-entity-hero<?php echo '' !== $backdrop ? ' has-backdrop' : ''; ?>">
             <?php if ( '' !== $backdrop ) : ?>
-                <div class="lunara-entity-hero-backdrop" style="background-image:url('<?php echo esc_url( $backdrop ); ?>');" aria-hidden="true"></div>
+                <div class="lunara-entity-hero-backdrop" aria-hidden="true"><?php echo function_exists( 'lunara_entity_backdrop_img' ) ? lunara_entity_backdrop_img( $backdrop ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
             <?php endif; ?>
             <div class="lunara-entity-hero-overlay" aria-hidden="true"></div>
             <div class="lunara-entity-hero-inner">
                 <?php if ( has_post_thumbnail() ) : ?>
-                    <div class="lunara-entity-hero-poster"><?php the_post_thumbnail( 'large', array( 'fetchpriority' => 'high' ) ); ?></div>
+                    <div class="lunara-entity-hero-poster"><?php echo function_exists( 'lunara_entity_poster_img' ) ? lunara_entity_poster_img( get_the_ID(), 'large', array( 'loading' => 'eager', 'fetchpriority' => 'high' ), 'entity-hero', array( 160, 220, 250, 320, 440, 500 ), 250 ) : get_the_post_thumbnail( get_the_ID(), 'large', array( 'fetchpriority' => 'high' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
                 <?php endif; ?>
                 <div class="lunara-entity-hero-copy">
                     <h1 class="lunara-entity-title"><?php the_title(); ?></h1>

@@ -904,6 +904,13 @@ if ( ! function_exists( 'lunara_image_sizes_for' ) ) {
             'pair-card'            => '(max-width: 640px) 96px, 128px',
             'related-grid'         => '(max-width: 640px) 96px, 112px',
             'front-desk-companion' => '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px',
+            // 3.2.156: the Film Index and the Talent Index cards (one column
+            // to 389px, then a fluid auto-fill grid of 158px minimums: 172-241px
+            // two-up, 175-187px three-up, 163-194px four-up, 166-172px from
+            // 1024px) and the dossier hero poster (min(58vw, 220px) to 760px,
+            // then clamp(160px, 18vw, 250px)), measured at 15 widths on live.
+            'entity-card'          => '(max-width: 389px) calc(100vw - 32px), (max-width: 599px) 50vw, (max-width: 759px) 34vw, (max-width: 1023px) 25vw, 170px',
+            'entity-hero'          => '(max-width: 760px) min(58vw, 220px), clamp(160px, 18vw, 250px)',
         );
 
         return isset( $sizes[ $slot ] ) ? $sizes[ $slot ] : '';
