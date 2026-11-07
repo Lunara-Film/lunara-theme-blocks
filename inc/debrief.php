@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/review-display-meta.php';
+
 /* ========================================
    LUNARA DEBRIEF - REVIEW METADATA
    ======================================== */
@@ -1637,19 +1639,19 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
                 'slug'     => 'theme',
                 'relation' => 'theme_echo',
                 'label'    => __( 'Theme Echo', 'lunara-film' ),
-                'value'    => get_post_meta( $post_id, '_lunara_theme_echo', true ),
+                'value'    => lunara_get_review_display_meta( $post_id, '_lunara_theme_echo' ),
             ),
             array(
                 'slug'     => 'counter',
                 'relation' => 'counter_program',
                 'label'    => __( 'Counter Program', 'lunara-film' ),
-                'value'    => get_post_meta( $post_id, '_lunara_counter_program', true ),
+                'value'    => lunara_get_review_display_meta( $post_id, '_lunara_counter_program' ),
             ),
             array(
                 'slug'     => 'career',
                 'relation' => 'career_context',
                 'label'    => __( 'Career Context', 'lunara-film' ),
-                'value'    => lunara_get_career_context_meta( $post_id ),
+                'value'    => ( trim( lunara_get_review_display_meta( $post_id, '_lunara_career_context' ) ) ?: lunara_get_review_display_meta( $post_id, '_lunara_craft_mirror' ) ),
             ),
         );
 
@@ -1778,13 +1780,13 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
 function lunara_debrief_shortcode( $atts ) {
     $post_id = get_the_ID();
 
-    $score = get_post_meta( $post_id, '_lunara_score', true );
-    $year = get_post_meta( $post_id, '_lunara_year', true );
-    $where = get_post_meta( $post_id, '_lunara_where', true );
-    $theme_echo = get_post_meta( $post_id, '_lunara_theme_echo', true );
-    $counter = get_post_meta( $post_id, '_lunara_counter_program', true );
-    $craft = lunara_get_career_context_meta( $post_id );
-    $review_tt = get_post_meta( $post_id, '_lunara_imdb_title_id', true );
+    $score = lunara_get_review_display_meta( $post_id, '_lunara_score' );
+    $year = lunara_get_review_display_meta( $post_id, '_lunara_year' );
+    $where = lunara_get_review_display_meta( $post_id, '_lunara_where' );
+    $theme_echo = lunara_get_review_display_meta( $post_id, '_lunara_theme_echo' );
+    $counter = lunara_get_review_display_meta( $post_id, '_lunara_counter_program' );
+    $craft = ( trim( lunara_get_review_display_meta( $post_id, '_lunara_career_context' ) ) ?: lunara_get_review_display_meta( $post_id, '_lunara_craft_mirror' ) );
+    $review_tt = lunara_get_review_display_meta( $post_id, '_lunara_imdb_title_id' );
     if ( is_string( $review_tt ) && preg_match( '#imdb\.com/title/(tt\d{7,8})#i', $review_tt, $mtt ) ) { $review_tt = $mtt[1]; }
     $review_tt = strtolower( trim( (string) $review_tt ) );
 

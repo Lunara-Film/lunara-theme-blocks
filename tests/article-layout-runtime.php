@@ -133,6 +133,7 @@ function article_fixture_function( $file, $name ) {
     eval( $code );
 }
 $root = dirname( __DIR__ );
+require_once $root . '/inc/review-display-meta.php';
 article_fixture_function( $root . '/inc/setup.php', 'lunara_resolve_theme_asset' );
 article_fixture_function( $root . '/inc/setup.php', 'lunara_theme_asset_version' );
 article_fixture_function( $root . '/inc/review-rendering.php', 'lunara_render_review_visual_slot' );

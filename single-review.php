@@ -31,18 +31,18 @@ if ( have_posts() ) :
         the_post();
 
         $post_id          = get_the_ID();
-        $score            = trim( (string) get_post_meta( $post_id, '_lunara_score', true ) );
-        $year             = trim( (string) get_post_meta( $post_id, '_lunara_year', true ) );
-        $director         = trim( (string) get_post_meta( $post_id, '_lunara_director', true ) );
-        $runtime          = trim( (string) get_post_meta( $post_id, '_lunara_runtime', true ) );
-        $studio           = trim( (string) get_post_meta( $post_id, '_lunara_studio', true ) );
-        $where            = trim( (string) get_post_meta( $post_id, '_lunara_where', true ) );
+        $score            = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_score' ) );
+        $year             = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_year' ) );
+        $director         = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_director' ) );
+        $runtime          = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_runtime' ) );
+        $studio           = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_studio' ) );
+        $where            = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_where' ) );
         $is_full_spoiler  = function_exists( 'lunara_is_full_spoiler_review' ) && lunara_is_full_spoiler_review( $post_id );
         $review_meta_line = lunara_get_review_card_meta( $post_id );
-        $review_label     = trim( (string) get_post_meta( $post_id, '_lunara_review_lane_label_override', true ) );
-        $standfirst       = trim( (string) get_post_meta( $post_id, '_lunara_review_standfirst', true ) );
+        $review_label     = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_review_lane_label_override' ) );
+        $standfirst       = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_review_standfirst' ) );
         $hide_standfirst  = '1' === get_post_meta( $post_id, '_lunara_review_hide_standfirst', true );
-        $archive_url_meta = trim( (string) get_post_meta( $post_id, '_lunara_review_archive_url_override', true ) );
+        $archive_url_meta = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_review_archive_url_override' ) );
         $hide_where_card  = '1' === get_post_meta( $post_id, '_lunara_review_hide_where_card', true );
         $hide_detail_card = '1' === get_post_meta( $post_id, '_lunara_review_hide_details_card', true );
         $default_label    = trim( (string) get_theme_mod( 'lunara_review_default_label', 'Lunara Film Review' ) );
@@ -203,9 +203,9 @@ if ( have_posts() ) :
         // text is unchanged.
         $title_html  = get_the_title( $post_id );
         $title_parts = function_exists( 'lunara_split_review_headline' ) ? lunara_split_review_headline( $title_html ) : array( html_entity_decode( $title_html, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
-        // A landscape still opens the page at full frame width; a poster keeps
-        // its place inside the reading column.
-        $still_leads = '' !== trim( $hero_visual ) && false === strpos( $hero_visual, 'lunara-review-visual--poster-hero' );
+        // Artwork follows the title group. Landscape stills use the wider hero
+        // frame; posters keep their place inside the reading column.
+        $has_landscape_hero = '' !== trim( $hero_visual ) && false === strpos( $hero_visual, 'lunara-review-visual--poster-hero' );
         $still_caption = implode(
             '. ',
             array_filter(
@@ -222,16 +222,6 @@ if ( have_posts() ) :
         ?>
         <div id="primary" class="site-main lunara-archive-page lunara-review-single-page<?php echo $is_full_spoiler ? ' lunara-review-single-page--full-spoiler' : ''; ?>">
             <article <?php post_class( 'lunara-journal-single lunara-review-single' . ( $is_full_spoiler ? ' lunara-review-single--full-spoiler' : '' ) ); ?>>
-                <?php if ( $still_leads ) : ?>
-                <section class="lunara-review-single-still">
-                    <div class="lunara-review-single-cinematic-hero">
-                        <?php echo $hero_visual; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                    </div>
-                    <?php if ( '' !== $still_caption ) : ?>
-                        <p class="lunara-review-single-still-caption"><?php echo esc_html( $still_caption ); ?></p>
-                    <?php endif; ?>
-                </section>
-                <?php endif; ?>
                 <section class="lunara-review-single-hero" data-lunara-site-studio-section="hero">
                     <div class="lunara-review-single-hero-inner">
                         <h1 class="lunara-review-single-title"><?php
@@ -252,7 +242,7 @@ if ( have_posts() ) :
                             <?php if ( '' !== $review_meta_line ) : ?>
                                 <?php
                                 // The director's name is the review's one route to the director archive.
-                                $review_meta_year = trim( (string) get_post_meta( $post_id, '_lunara_year', true ) );
+                                $review_meta_year = $year;
                                 ?>
                                 <?php if ( '' !== $director ) : ?>
                                     <span class="lunara-review-single-credit"><?php esc_html_e( 'Directed by', 'lunara-film' ); ?>&nbsp;<?php if ( '' !== $director_url ) : ?><a class="lunara-review-single-director-link" href="<?php echo esc_url( $director_url ); ?>"><?php echo esc_html( $director ); ?></a><?php else : ?><?php echo esc_html( $director ); ?><?php endif; ?></span>
@@ -271,10 +261,21 @@ if ( have_posts() ) :
                     </div>
                 </section>
 
+                <?php if ( $has_landscape_hero ) : ?>
+                <section class="lunara-review-single-still">
+                    <div class="lunara-review-single-cinematic-hero">
+                        <?php echo $hero_visual; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                    <?php if ( '' !== $still_caption ) : ?>
+                        <p class="lunara-review-single-still-caption"><?php echo esc_html( $still_caption ); ?></p>
+                    <?php endif; ?>
+                </section>
+                <?php endif; ?>
+
                 <section class="lunara-review-single-body" data-lunara-site-studio-section="criticism">
                     <div class="lunara-review-single-body-grid">
                         <div class="lunara-review-single-content">
-                            <?php if ( '' !== trim( $hero_visual ) && ! $still_leads ) : ?>
+                            <?php if ( '' !== trim( $hero_visual ) && ! $has_landscape_hero ) : ?>
                                 <div class="lunara-review-single-cinematic-hero">
                                     <?php echo $hero_visual; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                 </div>

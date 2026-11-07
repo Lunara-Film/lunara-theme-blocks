@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/review-display-meta.php';
+
 /* ========================================
    WHERE TO WATCH - affiliate-ready review links
    ======================================== */
@@ -1064,8 +1066,8 @@ function lunara_home_dispatch_archive_url() {
  */
 function lunara_get_review_card_meta( $post_id ) {
     $post_id  = intval( $post_id );
-    $year     = trim( (string) get_post_meta( $post_id, '_lunara_year', true ) );
-    $director = trim( (string) get_post_meta( $post_id, '_lunara_director', true ) );
+    $year     = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_year' ) );
+    $director = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_director' ) );
     $parts    = array();
 
     if ( '' !== $year ) {
@@ -1996,7 +1998,7 @@ if ( ! function_exists( 'lunara_get_review_debrief_signature_media_html' ) ) {
         }
 
         $title = trim( wp_strip_all_tags( get_the_title( $post_id ) ) );
-        $year  = trim( (string) get_post_meta( $post_id, '_lunara_year', true ) );
+        $year  = trim( (string) lunara_get_review_display_meta( $post_id, '_lunara_year' ) );
         $meta  = '' !== $year ? $year : __( 'Review anchor', 'lunara-film' );
 
         if ( '' === trim( $poster_html ) ) {
@@ -2082,8 +2084,8 @@ if ( ! function_exists( 'lunara_get_review_visual_slot_data' ) ) {
 
         $url     = ! empty( $core_source['url'] )
             ? trim( (string) $core_source['url'] )
-            : trim( (string) get_post_meta( $post_id, $config['url_key'], true ) );
-        $caption = trim( (string) get_post_meta( $post_id, $config['caption_key'], true ) );
+            : trim( (string) lunara_get_review_display_meta( $post_id, $config['url_key'] ) );
+        $caption = trim( (string) lunara_get_review_display_meta( $post_id, $config['caption_key'] ) );
 
         if ( '' === $url ) {
             $presets = lunara_get_review_visual_slot_presets( $post_id );
