@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/review-display-meta.php';
+
 /* ========================================
    LUNARA DEBRIEF - REVIEW METADATA
    ======================================== */
@@ -315,9 +317,8 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
         return;
     }
 
-    // Helper: only set if the user didn't manually type something in the meta box.
-    // We check $_POST to see if the form field was submitted empty — if so, the user
-    // didn't fill it, and we should auto-fill from the content.
+    // Content is a fallback for missing metadata. Saved values and submitted
+    // edits (including deliberate clears) are owned by their editor.
     $fill = static function( $post_id, $meta_key, $value ) {
         $value = trim( (string) $value );
         if ( '' === $value ) {
@@ -339,9 +340,22 @@ function lunara_autofill_review_meta_from_content( $post_id ) {
             '_lunara_studio'           => 'lunara_studio',
         );
 
-        // If the form field was submitted with a value, the user typed something — don't overwrite.
+        // A present field is an explicit edit, even when its value is empty.
         $form_field = isset( $form_field_map[ $meta_key ] ) ? $form_field_map[ $meta_key ] : '';
-        if ( '' !== $form_field && isset( $_POST[ $form_field ] ) && '' !== trim( (string) $_POST[ $form_field ] ) ) {
+        $acf_key    = 'field_' . ltrim( $meta_key, '_' );
+        if (
+            ( '' !== $form_field && array_key_exists( $form_field, $_POST ) ) ||
+            ( isset( $_POST['acf'] ) && is_array( $_POST['acf'] ) && array_key_exists( $acf_key, $_POST['acf'] ) )
+        ) {
+            return;
+        }
+
+        $stored = get_post_meta( $post_id, $meta_key, true );
+        if (
+            ! is_scalar( $stored ) ||
+            '' !== trim( lunara_get_review_display_meta( $post_id, $meta_key ) ) ||
+            $acf_key === get_post_meta( $post_id, '_' . $meta_key, true )
+        ) {
             return;
         }
 
@@ -1637,19 +1651,19 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
                 'slug'     => 'theme',
                 'relation' => 'theme_echo',
                 'label'    => __( 'Theme Echo', 'lunara-film' ),
-                'value'    => get_post_meta( $post_id, '_lunara_theme_echo', true ),
+                'value'    => lunara_get_review_display_meta( $post_id, '_lunara_theme_echo' ),
             ),
             array(
                 'slug'     => 'counter',
                 'relation' => 'counter_program',
                 'label'    => __( 'Counter Program', 'lunara-film' ),
-                'value'    => get_post_meta( $post_id, '_lunara_counter_program', true ),
+                'value'    => lunara_get_review_display_meta( $post_id, '_lunara_counter_program' ),
             ),
             array(
                 'slug'     => 'career',
                 'relation' => 'career_context',
                 'label'    => __( 'Career Context', 'lunara-film' ),
-                'value'    => lunara_get_career_context_meta( $post_id ),
+                'value'    => ( trim( lunara_get_review_display_meta( $post_id, '_lunara_career_context' ) ) ?: lunara_get_review_display_meta( $post_id, '_lunara_craft_mirror' ) ),
             ),
         );
 
@@ -1778,13 +1792,13 @@ if ( ! function_exists( 'lunara_render_pair_it_with_cards' ) ) {
 function lunara_debrief_shortcode( $atts ) {
     $post_id = get_the_ID();
 
-    $score = get_post_meta( $post_id, '_lunara_score', true );
-    $year = get_post_meta( $post_id, '_lunara_year', true );
-    $where = get_post_meta( $post_id, '_lunara_where', true );
-    $theme_echo = get_post_meta( $post_id, '_lunara_theme_echo', true );
-    $counter = get_post_meta( $post_id, '_lunara_counter_program', true );
-    $craft = lunara_get_career_context_meta( $post_id );
-    $review_tt = get_post_meta( $post_id, '_lunara_imdb_title_id', true );
+    $score = lunara_get_review_display_meta( $post_id, '_lunara_score' );
+    $year = lunara_get_review_display_meta( $post_id, '_lunara_year' );
+    $where = lunara_get_review_display_meta( $post_id, '_lunara_where' );
+    $theme_echo = lunara_get_review_display_meta( $post_id, '_lunara_theme_echo' );
+    $counter = lunara_get_review_display_meta( $post_id, '_lunara_counter_program' );
+    $craft = ( trim( lunara_get_review_display_meta( $post_id, '_lunara_career_context' ) ) ?: lunara_get_review_display_meta( $post_id, '_lunara_craft_mirror' ) );
+    $review_tt = lunara_get_review_display_meta( $post_id, '_lunara_imdb_title_id' );
     if ( is_string( $review_tt ) && preg_match( '#imdb\.com/title/(tt\d{7,8})#i', $review_tt, $mtt ) ) { $review_tt = $mtt[1]; }
     $review_tt = strtolower( trim( (string) $review_tt ) );
 

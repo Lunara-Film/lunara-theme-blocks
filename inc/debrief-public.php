@@ -4,8 +4,9 @@
  *
  * The canonical renderer is staging-only and opt-in during the compatibility
  * window. It resolves the complete Review-owned record before emitting markup;
- * any missing or invalid canonical value falls back to the complete legacy
- * module without mixing sources.
+ * any missing or invalid canonical value falls back to the compatibility
+ * module. Its complete saved relational trio takes precedence over legacy
+ * text; an incomplete trio never mixes individual rows into legacy output.
  *
  * @package Lunara_Film
  */
@@ -13,6 +14,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
+require_once __DIR__ . '/review-display-meta.php';
 
 if ( ! function_exists( 'lunara_is_debrief_renderer_staging_environment' ) ) {
     /**
@@ -288,9 +291,9 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_signature' ) ) {
      * @return string
      */
     function lunara_debrief_render_canonical_signature( $review_id, $film ) {
-        $score  = trim( (string) get_post_meta( $review_id, '_lunara_score', true ) );
-        $year   = trim( (string) get_post_meta( $review_id, '_lunara_year', true ) );
-        $where  = trim( (string) get_post_meta( $review_id, '_lunara_where', true ) );
+        $score  = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_score' ) );
+        $year   = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_year' ) );
+        $where  = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_where' ) );
         $kicker = trim( (string) get_theme_mod( 'lunara_debrief_kicker_text', 'A LUNARA FILM SIGNATURE' ) );
 
         if ( '' === $year ) {
@@ -442,7 +445,7 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_pairing_cards' ) ) {
 
 if ( ! function_exists( 'lunara_debrief_build_legacy_render_parts' ) ) {
     /**
-     * Preserve the complete verified legacy module without relational mixing.
+     * Render saved compatibility data without mixing partial pairing sources.
      *
      * @param int $review_id Review post ID.
      * @return array<string,mixed>
@@ -458,17 +461,17 @@ if ( ! function_exists( 'lunara_debrief_build_legacy_render_parts' ) ) {
             ? (string) lunara_get_review_debrief_signature_media_html( $review_id )
             : '';
 
-        $has_content = '' !== trim( wp_strip_all_tags( $block ) );
-        $pairings    = '';
-
-        if ( $has_content ) {
+        $cards = lunara_debrief_render_relational_pairing_cards( $review_id );
+        if ( '' === trim( $cards ) ) {
             $cards = lunara_debrief_render_legacy_pairing_cards( $review_id );
-            if ( '' !== trim( $cards ) ) {
-                $pairings = '<div class="lunara-review-single-debrief-pairings-modern">' . $cards . '</div>';
-            } elseif ( ! empty( $split['pairings'] ) ) {
-                $pairings = '<div class="lunara-review-single-debrief lunara-review-single-debrief--pairings">' . $split['pairings'] . '</div>';
-            }
         }
+        $pairings = '';
+        if ( '' !== trim( $cards ) ) {
+            $pairings = '<div class="lunara-review-single-debrief-pairings-modern">' . $cards . '</div>';
+        } elseif ( ! empty( $split['pairings'] ) ) {
+            $pairings = '<div class="lunara-review-single-debrief lunara-review-single-debrief--pairings">' . $split['pairings'] . '</div>';
+        }
+        $has_content = '' !== trim( wp_strip_all_tags( $block . $pairings ) );
 
         return array(
             'source'         => $has_content ? 'legacy' : 'none',
@@ -477,6 +480,57 @@ if ( ! function_exists( 'lunara_debrief_build_legacy_render_parts' ) ) {
             'media_html'     => $media,
             'pairings_html'  => $pairings,
         );
+    }
+}
+
+if ( ! function_exists( 'lunara_debrief_render_relational_pairing_cards' ) ) {
+    /**
+     * Render a complete saved relational trio through the shared public cards.
+     *
+     * These fixed movie/note fields predate the canonical renderer switch.
+     * Each role must resolve to a published Movie and have its own saved note;
+     * otherwise the caller retains the entire legacy pairing group.
+     *
+     * @param int $review_id Review post ID.
+     * @return string
+     */
+    function lunara_debrief_render_relational_pairing_cards( $review_id ) {
+        if ( ! function_exists( 'lunara_pair_relational_data' ) ) {
+            return '';
+        }
+
+        $roles = array(
+            array( 'slug' => 'theme', 'relation' => 'theme_echo', 'label' => __( 'Theme Echo', 'lunara-film' ) ),
+            array( 'slug' => 'counter', 'relation' => 'counter_program', 'label' => __( 'Counter Program', 'lunara-film' ) ),
+            array( 'slug' => 'career', 'relation' => 'career_context', 'label' => __( 'Career Context', 'lunara-film' ) ),
+        );
+        $rows = array();
+        // ACF post-object fields store decimal IDs and notes store text. Check
+        // the entire saved group before the shared adapter casts either value.
+        foreach ( $roles as $role ) {
+            $movie_id = get_post_meta( $review_id, $role['relation'] . '_movie', true );
+            $note     = get_post_meta( $review_id, $role['relation'] . '_note', true );
+            if (
+                ( ! is_int( $movie_id ) && ! is_string( $movie_id ) )
+                || ! preg_match( '/^[1-9][0-9]*$/D', trim( (string) $movie_id ) )
+                || ! is_scalar( $note )
+                || '' === trim( (string) $note )
+            ) {
+                return '';
+            }
+        }
+        foreach ( $roles as $role ) {
+            $data = lunara_pair_relational_data( $review_id, $role['relation'] );
+            if ( ! is_array( $data ) || '' === trim( (string) ( $data['title_base'] ?? '' ) ) || '' === trim( (string) ( $data['note'] ?? '' ) ) ) {
+                return '';
+            }
+            $data['watch_html'] = function_exists( 'lunara_pair_render_where_to_watch' )
+                ? (string) lunara_pair_render_where_to_watch( (string) ( $data['tt'] ?? '' ), $review_id )
+                : '';
+            $rows[] = array( 'slug' => $role['slug'], 'label' => $role['label'], 'data' => $data );
+        }
+
+        return lunara_debrief_render_pair_card_group( $review_id, $rows );
     }
 }
 
@@ -492,14 +546,14 @@ if ( ! function_exists( 'lunara_debrief_render_legacy_pairing_cards' ) ) {
             return '';
         }
 
-        $career = trim( (string) get_post_meta( $review_id, '_lunara_career_context', true ) );
+        $career = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_career_context' ) );
         if ( '' === $career ) {
-            $career = trim( (string) get_post_meta( $review_id, '_lunara_craft_mirror', true ) );
+            $career = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_craft_mirror' ) );
         }
 
         $legacy_rows = array(
-            array( 'slug' => 'theme', 'label' => __( 'Theme Echo', 'lunara-film' ), 'value' => get_post_meta( $review_id, '_lunara_theme_echo', true ) ),
-            array( 'slug' => 'counter', 'label' => __( 'Counter Program', 'lunara-film' ), 'value' => get_post_meta( $review_id, '_lunara_counter_program', true ) ),
+            array( 'slug' => 'theme', 'label' => __( 'Theme Echo', 'lunara-film' ), 'value' => lunara_get_review_display_meta( $review_id, '_lunara_theme_echo' ) ),
+            array( 'slug' => 'counter', 'label' => __( 'Counter Program', 'lunara-film' ), 'value' => lunara_get_review_display_meta( $review_id, '_lunara_counter_program' ) ),
             array( 'slug' => 'career', 'label' => __( 'Career Context', 'lunara-film' ), 'value' => $career ),
         );
         $rows = array();

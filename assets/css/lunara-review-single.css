@@ -1778,8 +1778,8 @@ body.single-review .lunara-review-single-content blockquote {
         }
     }
 
-/* Direction D (3.2.118): the printed-program review.
-   One wide still opens the page at the Studio hero width, the headline splits
+/* The printed-program review opens with its title group above the wide still.
+   The still keeps the Studio hero width, the headline splits
    into the film (signature face) and the take (reading italic), and Pair It
    With reads as a program: role, its Method question, the film, the argument.
    Geometry stays inside the centered 760px reading frame and 860px pairing
@@ -1790,7 +1790,8 @@ body.single-review .lunara-review-single-still {
     gap: 10px !important;
     min-width: 0 !important;
     width: min(var(--lunara-review-single-hero-max, 980px), calc(100% - 48px)) !important;
-    margin: clamp(20px, 2.6vw, 32px) auto 0 !important;
+    /* The article grid supplies the single gap after the title group. */
+    margin: 0 auto !important;
 }
 
 body.single-review .lunara-review-single-still .lunara-review-single-cinematic-hero {
@@ -1889,7 +1890,6 @@ body.single-review .lunara-pair-card-title {
 @media (max-width: 760px) {
     body.single-review .lunara-review-single-still {
         width: 100% !important;
-        margin-top: 16px !important;
     }
 }
 

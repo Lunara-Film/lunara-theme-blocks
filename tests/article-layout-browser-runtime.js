@@ -14,6 +14,10 @@ const reviewCss = fs.readFileSync(path.join(root, 'assets/css/lunara-review-sing
 const debriefCss = fs.readFileSync(path.join(root, 'assets/css/lunara-debrief-method.css'), 'utf8');
 const debriefMethod = execFileSync('php', [path.join(__dirname, 'debrief-method-runtime.php'), '--fixture'], { encoding: 'utf8' });
 const pairFixtures = JSON.parse(execFileSync('php', ['-r', `ob_start();require '${path.join(__dirname, 'fixtures/debrief-public-renderer-harness.php').replace(/\\/g, '/')}';ob_end_clean();$canonical['expected_notes']=array_column(lunara_test_record(201)['pairings'],'editorial_reason');$poster_fallback['expected_notes']=array_column(lunara_test_record(206)['pairings'],'editorial_reason');echo json_encode(array($canonical, $poster_fallback));`], { encoding: 'utf8' }));
+// The production compatibility path consumes the saved fixed movie/note trio
+// independently of the staging-only canonical renderer. Exercise its real
+// complete and missing-art outputs in the same public geometry contract.
+pairFixtures.push(...JSON.parse(execFileSync('php', [path.join(__dirname, 'debrief-relational-public-runtime.php'), '--fixture'], { encoding: 'utf8' })));
 // Route each real canonical/missing-art fragment through the unchanged Review
 // template, so pairing geometry includes the actual Debrief section wrapper.
 const pairingTemplates=pairFixtures.map(parts=>JSON.parse(execFileSync('php',['-r',`$GLOBALS['article_pair_parts']=json_decode(stream_get_contents(STDIN),true);function lunara_get_review_debrief_render_parts($id){return $GLOBALS['article_pair_parts'];}require '${path.join(__dirname,'article-layout-runtime.php').replace(/\\/g,'/')}';`],{encoding:'utf8',input:JSON.stringify(parts)}))['review-normal']);
@@ -89,17 +93,37 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                     } else assert(data.rail===null, `${label}: no empty rail is emitted`, layout);
                 }
                 if (fixture.type === 'review') {
-                    // Direction D: landscape art opens the page above the title; a poster
-                    // stays in the reading column. The headline splits into film and take
-                    // without changing the heading's text.
+                    // The complete title group precedes artwork in both the document
+                    // and the painted layout. Landscape art keeps its wide frame; a
+                    // poster stays in the reading column.
                     const d = await page.evaluate(() => {
                         const still = document.querySelector('.lunara-review-single-still'), hero = document.querySelector('.lunara-review-single-hero');
+                        const image = document.querySelector('.lunara-review-single-cinematic-hero img');
+                        const body = document.querySelector('.lunara-review-single-body');
                         const film = document.querySelector('.lunara-review-single-title-film'), take = document.querySelector('.lunara-review-single-title-take');
-                        return { still: !!still, stillFirst: !!still && !!(still.compareDocumentPosition(hero) & Node.DOCUMENT_POSITION_FOLLOWING), heroInColumn: !!document.querySelector('.lunara-review-single-content .lunara-review-single-cinematic-hero'), film: film && film.textContent, take: take && take.textContent, filmFont: film && getComputedStyle(film).fontFamily, takeStyle: take && getComputedStyle(take).fontStyle };
+                        const titleBox = hero.getBoundingClientRect(), imageBox = image && image.getBoundingClientRect();
+                        const stillBox = still && still.getBoundingClientRect(), bodyBox = body.getBoundingClientRect();
+                        return {
+                            still: !!still,
+                            titleBeforeImage: !image || !!(hero.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING),
+                            titleBottom: titleBox.bottom, imageTop: imageBox && imageBox.top,
+                            stillGap: stillBox && stillBox.top - titleBox.bottom,
+                            sectionGap: parseFloat(getComputedStyle(hero.parentElement).rowGap),
+                            stillBeforeBody: !still || !!(still.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING),
+                            stillBottom: stillBox && stillBox.bottom, bodyTop: bodyBox.top,
+                            stillWidth: stillBox && stillBox.width,
+                            expectedStillWidth: Math.min(parseFloat(getComputedStyle(document.querySelector('.lunara-review-single-page')).getPropertyValue('--lunara-review-single-hero-max')) || 980, innerWidth - (innerWidth <= 760 ? 40 : 48)),
+                            heroInColumn: !!document.querySelector('.lunara-review-single-content .lunara-review-single-cinematic-hero'),
+                            film: film && film.textContent, take: take && take.textContent,
+                            filmFont: film && getComputedStyle(film).fontFamily, takeStyle: take && getComputedStyle(take).fontStyle
+                        };
                     });
-                    if (fixture.art === 'landscape') assert(d.still && d.stillFirst && !d.heroInColumn, `${label}: a landscape still opens the page above the title`, d);
-                    else if (fixture.art === 'poster') assert(!d.still && d.heroInColumn, `${label}: a poster keeps its place in the reading column`, d);
-                    else assert(!d.still && !d.heroInColumn, `${label}: missing artwork emits no still`, d);
+                    assert(d.titleBeforeImage && (d.imageTop === null || d.imageTop >= d.titleBottom - 1), `${label}: the complete title group precedes artwork in document and painted order`, d);
+                    if (fixture.art === 'landscape') {
+                        assert(d.still && !d.heroInColumn && d.stillBeforeBody && d.bodyTop >= d.stillBottom - 1, `${label}: landscape artwork follows the heading and precedes criticism`, d);
+                        assert(Math.abs(d.stillWidth - d.expectedStillWidth) <= 1 && Math.abs(d.stillGap - d.sectionGap) <= 1, `${label}: landscape artwork retains its Studio width with one opening gap`, d);
+                    } else if (fixture.art === 'poster') assert(!d.still && d.heroInColumn, `${label}: a poster keeps its place below the heading in the reading column`, d);
+                    else assert(!d.still && !d.heroInColumn && d.imageTop === null, `${label}: missing artwork emits no still or empty media frame`, d);
                     assert(d.film && d.filmFont.startsWith('"GT Sectra Display"'), `${label}: the film name carries the signature face`, d);
                     if (fixture.title.includes(' – ')) assert(d.film === fixture.title.split(' – ')[0] && d.take === fixture.title.split(' – ')[1] && d.takeStyle === 'italic', `${label}: the take line sits beneath the film name in reading italic`, d);
                     else assert(d.take === null && d.film === fixture.title, `${label}: a title without a take stays whole`, d);
@@ -131,7 +155,7 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                     if(data.galleryControls.length) assert(data.markers.includes('gallery')&&data.galleryControls.every(box=>box.width>=44&&box.height>=44), `${label}: gallery controls have reachable44px targets and a real preview marker`, data);
                     if(fixture.private) assert(fixture.public_unchanged&&data.metadata.includes('6 min read')&&!data.metadata.includes('September 13')&&data.metadata.includes('Dalton Johnson')===fixture.mods.lunara_journal_show_byline, `${label}: private provider filters reach actual metadata without public writes`, data);
                 }
-                if (process.env.LUNARA_ARTICLE_ARTIFACT_DIR && ((fixture.scenario === 'normal' && [390, 1440].includes(width)) || (width === 390 && fixture.scenario !== 'normal'))) {
+                if (process.env.LUNARA_ARTICLE_ARTIFACT_DIR && (((fixture.scenario === 'normal' || fixture.art === 'landscape') && [390, 1440].includes(width)) || (width === 390 && fixture.scenario !== 'normal'))) {
                     fs.mkdirSync(process.env.LUNARA_ARTICLE_ARTIFACT_DIR, { recursive: true });
                     await page.screenshot({ path: path.join(process.env.LUNARA_ARTICLE_ARTIFACT_DIR, label.replace('@', '-') + '.png'), fullPage: true });
                 }
@@ -185,7 +209,7 @@ const fullHeadingMetrics = (page, selector) => page.locator(selector).evaluateAl
                 assert(pairs.every(card=>Math.abs(card.poster.width-posterWidth)<=1&&Math.abs(card.poster.width/card.poster.height-2/3)<.01&&card.poster.right+12<=card.lead.left&&Math.abs(card.poster.top-card.lead.top)<=1&&(!card.imageFit||card.imageFit==='cover')), `Pairings ${index}@${width}: a${posterWidth}px native-ratio poster sits beside the role, question and title`, pairs);
                 if(rowMode) assert(pairs.every(card=>card.note.top>=card.lead.bottom-1&&Math.abs(card.note.left-card.lead.left)<=1&&card.note.left>=card.poster.right+12), `Pairings ${index}@${width}: the note runs beside the poster, under the title`, pairs);
                 else assert(pairs.every(card=>card.note.top>=card.poster.bottom-1&&Math.abs(card.note.left-card.poster.left)<=1&&Math.abs(card.note.right-card.lead.right)<=1), `Pairings ${index}@${width}: the note runs under the poster at the card's full width`, pairs);
-                if(index===1) assert(pairs.some(card=>card.fallback), `Pairings ${index}@${width}: missing optional artwork retains its real title plate`, pairs);
+                if(index===1||fixture.expected_missing_poster) assert(pairs.some(card=>card.fallback), `Pairings ${index}@${width}: missing optional artwork retains its real title plate`, pairs);
                 // Band one: the reviewed film's poster beside its signature data at every width, the copy hidden, nothing wider than the panel.
                 const bandOne=await page.evaluate(()=>{const wrap=document.querySelector('.lunara-review-single-debrief-wrap');if(!wrap)return null;const r=el=>el.getBoundingClientRect();const media=wrap.querySelector('.lunara-review-single-debrief-media'),panel=wrap.querySelector('.lunara-review-single-debrief'),copy=wrap.querySelector('.lunara-review-single-debrief-media-copy'),kicker=wrap.querySelector('.lunara-review-single-debrief-media > .lunara-home-section-kicker');return {hasMedia:wrap.classList.contains('has-signature-media'),columns:getComputedStyle(wrap).gridTemplateColumns.trim().split(/\s+/).length,mediaWidth:media?r(media).width:null,mediaRight:media?r(media).right:null,mediaTop:media?r(media).top:null,panelLeft:r(panel).left,panelTop:r(panel).top,copyDisplay:copy?getComputedStyle(copy).display:'none',kickerSize:kicker?parseFloat(getComputedStyle(kicker).fontSize):null,kickerInside:kicker?(r(kicker).right<=r(panel).left+1&&kicker.scrollWidth<=kicker.clientWidth+1):true,panelOverflow:panel.scrollWidth>panel.clientWidth+1,chipsInside:[...panel.querySelectorAll('.lunara-review-watch-card')].every(chip=>r(chip).right<=r(panel).right+1)};});
                 if(bandOne&&bandOne.hasMedia){const posterColumn=width<=420?88:width<=640?104:width<=900?128:220;assert(bandOne.columns===2&&Math.abs(bandOne.mediaWidth-posterColumn)<=1&&bandOne.mediaRight<=bandOne.panelLeft+1&&(width>900||Math.abs(bandOne.mediaTop-bandOne.panelTop)<=2)&&bandOne.copyDisplay==='none'&&bandOne.kickerSize>=13&&bandOne.kickerInside&&!bandOne.panelOverflow&&bandOne.chipsInside, `Debrief band one ${index}@${width}: a${posterColumn}px poster column beside the signature data, the copy hidden, a13px kicker inside its column, nothing wider than the panel`, bandOne);}
