@@ -1604,12 +1604,15 @@ if ( ! function_exists( 'lunara_lock_review_image_markup' ) ) {
         $candidates = array();
         // 3.2.154: a TMDB poster is at most 2000px wide and the CDN cannot
         // make more of it, so the retina candidate stops at the source.
-        $tmdb_ceiling = false !== stripos( $source_url, 'image.tmdb.org/' ) ? max( $width, 2000 ) : 0;
+        // 3.2.155: an upload stops at the widest crop its own size allows
+        // (the CDN scales a crop up); the locked width itself always prints.
+        $is_tmdb = false !== stripos( $source_url, 'image.tmdb.org/' );
+        $ceiling = $is_tmdb ? max( $width, 2000 ) : ( function_exists( 'lunara_image_cdn_crop_limit' ) ? lunara_image_cdn_crop_limit( $source_url, $width, $height ) : 0 );
         foreach ( array( (int) round( $width / 8 ), (int) round( $width / 4 ), (int) round( $width / 2 ), $width, $width * 2 ) as $candidate_width ) {
             if ( $candidate_width < 150 && $candidate_width !== $width ) {
                 continue;
             }
-            if ( $tmdb_ceiling > 0 && $candidate_width > $tmdb_ceiling ) {
+            if ( $ceiling > 0 && $candidate_width > $ceiling && $candidate_width !== $width ) {
                 continue;
             }
             $candidate_profile           = $profile;

@@ -223,6 +223,9 @@ $expect = array(
 for ( $limit = 4; $limit <= 16; $limit++ ) {
 	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v5_' . $day . '_' . $limit;
 	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v5_' . $tomorrow . '_' . $limit;
+	// 3.2.154 moved the key to v5; the retired v4 copies are cleared too (the 3.2.53 scar).
+	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v4_' . $day . '_' . $limit;
+	$expect['inc/oscars-data.php lunara_flush_oscars_home_transients'][] = 'lunara_oscars_rotating_showcase_v4_' . $tomorrow . '_' . $limit;
 }
 $sites = lunara_test_delete_sites();
 foreach ( $expect as $site => $plain_keys ) {

@@ -502,9 +502,10 @@ if ( ! function_exists( 'lunara_render_oscars_prediction_board' ) ) {
 						<?php if ( '' !== $art_src ) :
 							// 3.2.152: the art fills a 2:3 frame (96px on phones, up to ~340px). Each
 							// candidate is a CDN crop to that frame, so a phone no longer fetches a
-							// 768px landscape still for a 96px slot.
+							// 768px landscape still for a 96px slot. 3.2.155: the list stops at 512px;
+							// a 704px crop weighed more than the landscape file it replaced on 2x tablets.
 							$art_set = function_exists( 'lunara_image_cdn_crop_srcset' )
-								? lunara_image_cdn_crop_srcset( $art_src, 2, 3, array( 96, 192, 256, 352, 512, 704 ), 352, array( 'width' => (int) ( $art['width'] ?? 0 ), 'height' => (int) ( $art['height'] ?? 0 ) ) )
+								? lunara_image_cdn_crop_srcset( $art_src, 2, 3, array( 96, 192, 256, 352, 512 ), 352, array( 'width' => (int) ( $art['width'] ?? 0 ), 'height' => (int) ( $art['height'] ?? 0 ) ) )
 								: array( 'src' => '', 'srcset' => '' );
 							$art_attr = '' !== $art_set['srcset']
 								? ' srcset="' . esc_attr( $art_set['srcset'] ) . '" sizes="' . esc_attr( 'auto, ' . lunara_image_sizes_for( 'oscars-board' ) ) . '"'

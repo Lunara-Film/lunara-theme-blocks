@@ -644,10 +644,12 @@ if ( ! function_exists( 'lunara_image_cdn_width_url' ) ) {
 
 if ( ! function_exists( 'lunara_image_source_size_from_url' ) ) {
     /**
-     * What a URL says about its source's size (3.2.154): a `fit=W,H`,
-     * `resize=W,H` or `w=W` the CDN was already asked for, or a TMDB fixed
-     * width. A lower bound of what the source holds, so a crop asked for at
-     * that size is never scaled up past what the page served before.
+     * What a URL says about its source's size (3.2.154): a `fit=W,H` or
+     * `w=W` the CDN already answered, which the CDN never scales up, so it
+     * is a true lower bound of the source. A `resize=` is a request the
+     * theme itself wrote and may already be an upscale; a TMDB rendition
+     * width says nothing about the original the CDN crops (3.2.155): both
+     * give no size.
      *
      * @param string $url Image URL.
      * @return array{width:int,height:int} Zero where unknown.
@@ -655,16 +657,46 @@ if ( ! function_exists( 'lunara_image_source_size_from_url' ) ) {
     function lunara_image_source_size_from_url( $url ) {
         $url  = html_entity_decode( trim( (string) $url ), ENT_QUOTES, 'UTF-8' );
         $size = array( 'width' => 0, 'height' => 0 );
-        if ( preg_match( '/[?&](?:fit|resize)=(\d+)(?:,|%2C)(\d+)/i', $url, $m ) ) {
+        if ( preg_match( '/[?&]fit=(\d+)(?:,|%2C)(\d+)/i', $url, $m ) ) {
             $size['width']  = (int) $m[1];
             $size['height'] = (int) $m[2];
         } elseif ( preg_match( '/[?&]w=(\d+)/i', $url, $m ) ) {
             $size['width'] = (int) $m[1];
-        } elseif ( preg_match( '#image\.tmdb\.org/t/p/w(\d+)/#i', $url, $m ) ) {
-            $size['width'] = (int) $m[1];
         }
 
         return $size;
+    }
+}
+
+if ( ! function_exists( 'lunara_image_upload_size' ) ) {
+    /**
+     * The full size of the site upload behind a URL (3.2.155), through the
+     * attachment lookup that remembers its answers, or an empty array when
+     * the URL is not one of this site's uploads.
+     *
+     * @param string $url Image URL, site-hosted or through the CDN proxy.
+     * @return array{width:int,height:int}|array{}
+     */
+    function lunara_image_upload_size( $url ) {
+        if ( ! function_exists( 'lunara_attachment_id_for_url' ) || ! function_exists( 'wp_get_attachment_metadata' ) ) {
+            return array();
+        }
+        $url = html_entity_decode( trim( (string) $url ), ENT_QUOTES, 'UTF-8' );
+        $url = (string) preg_replace( '#^https?://i[0-3]\.wp\.com/#i', 'https://', $url );
+        $url = (string) preg_replace( '/\?.*$/', '', $url );
+        if ( '' === $url || false === strpos( $url, '/wp-content/uploads/' ) ) {
+            return array();
+        }
+        $attachment_id = (int) lunara_attachment_id_for_url( $url );
+        if ( $attachment_id < 1 ) {
+            return array();
+        }
+        $meta = wp_get_attachment_metadata( $attachment_id );
+        if ( ! is_array( $meta ) || absint( $meta['width'] ?? 0 ) < 1 || absint( $meta['height'] ?? 0 ) < 1 ) {
+            return array();
+        }
+
+        return array( 'width' => absint( $meta['width'] ), 'height' => absint( $meta['height'] ) );
     }
 }
 
@@ -687,6 +719,13 @@ if ( ! function_exists( 'lunara_image_cdn_crop_limit' ) ) {
             $known  = lunara_image_source_size_from_url( $url );
             $width  = $known['width'];
             $height = $known['height'];
+        }
+        if ( $width < 1 && $height < 1 ) {
+            // 3.2.155: a site upload the URL does not size (a `resize=` the
+            // theme wrote) is measured through its attachment.
+            $known  = lunara_image_upload_size( $url );
+            $width  = absint( $known['width'] ?? 0 );
+            $height = absint( $known['height'] ?? 0 );
         }
 
         $limit        = $width;
@@ -736,9 +775,12 @@ if ( ! function_exists( 'lunara_image_cdn_crop_srcset' ) ) {
 
         $limit = lunara_image_cdn_crop_limit( $url, $frame_width, $frame_height, $source );
         if ( $limit > 0 ) {
-            $widths = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
-            // The native crop joins when it is at least a tenth wider than the last kept width.
-            if ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) {
+            $requested = empty( $widths ) ? 0 : max( $widths );
+            $widths    = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
+            // The native crop joins only in place of widths the cap removed
+            // (3.2.155: never above the widest width asked for), and only when
+            // it is at least a tenth wider than the last kept width.
+            if ( $limit < $requested && ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) ) {
                 $widths[] = $limit;
             }
         }
@@ -796,9 +838,14 @@ if ( ! function_exists( 'lunara_image_cdn_width_srcset' ) ) {
             $known = lunara_image_source_size_from_url( $url );
             $limit = $known['width'];
         }
+        if ( $limit < 1 ) {
+            $known = lunara_image_upload_size( $url );
+            $limit = absint( $known['width'] ?? 0 );
+        }
         if ( $limit > 0 ) {
-            $widths = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
-            if ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) {
+            $requested = empty( $widths ) ? 0 : max( $widths );
+            $widths    = array_values( array_filter( $widths, static function ( $width ) use ( $limit ) { return $width <= $limit; } ) );
+            if ( $limit < $requested && ( empty( $widths ) || $limit >= max( $widths ) * 1.1 ) ) {
                 $widths[] = $limit;
             }
         }

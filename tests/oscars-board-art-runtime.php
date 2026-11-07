@@ -18,7 +18,7 @@ function add_query_arg( $args, $value = null, $url = null ) { if ( ! is_array( $
 
 require __DIR__ . '/fixtures/oscars-portal-board-harness.php';
 
-foreach ( array( 'lunara_resize_wpcom_image_url', 'lunara_image_cdn_source', 'lunara_image_cdn_crop_url', 'lunara_image_source_size_from_url', 'lunara_image_cdn_crop_limit', 'lunara_image_cdn_crop_srcset', 'lunara_image_sizes_for' ) as $name ) {
+foreach ( array( 'lunara_resize_wpcom_image_url', 'lunara_image_cdn_source', 'lunara_image_cdn_crop_url', 'lunara_image_source_size_from_url', 'lunara_image_upload_size', 'lunara_image_cdn_crop_limit', 'lunara_image_cdn_crop_srcset', 'lunara_image_sizes_for' ) as $name ) {
 	eval( lunara_extract_named_function( $root . '/inc/setup.php', $name, $name ) );
 }
 
@@ -30,7 +30,7 @@ $picks = array(
 $html = lunara_board_render_with_picks(
 	$picks,
 	array(
-		// A 1920x1280 still the caller measured: every width stays, and the 853px native crop joins.
+		// A 1920x1280 still the caller measured: every width stays; nothing joins above the list.
 		401 => array( 'src' => 'https://i0.wp.com/lunarafilm.com/wp-content/uploads/2026/07/still.jpg?fit=768%2C512&quality=82&ssl=1', 'kind' => 'photo', 'width' => 1920, 'height' => 1280 ),
 		// A 640x385 still with no measured size: the URL's fit= caps the crops at 256px.
 		402 => array( 'src' => 'https://i0.wp.com/lunarafilm.com/wp-content/uploads/2026/08/portrait.jpg?fit=640%2C385&quality=82&ssl=1', 'kind' => 'portrait' ),
@@ -44,8 +44,8 @@ list( $measured, $capped, $remote ) = $arts[1];
 
 board_art_assert( 1 === preg_match( '/^<img src="[^"]*resize=352%2C528[^"]*" srcset="([^"]*)" sizes="auto, \(max-width: 600px\) 96px, \(max-width: 640px\) 275px, \(max-width: 820px\) 340px, \(max-width: 1200px\) 320px, 256px" alt="" loading="lazy" decoding="async" \/>$/', $measured, $m ), 'The measured still prints a 352px crop as src, the board widths after auto, and no alt text (got ' . $measured . ').' );
 $widths = array_map( static function ( $candidate ) { return (int) substr( strrchr( trim( $candidate ), ' ' ), 1 ); }, explode( ',', $m[1] ) );
-board_art_assert( array( 96, 192, 256, 352, 512, 704, 853 ) === $widths, 'A 1920x1280 still keeps every width and gains its 853px native 2:3 crop (got ' . implode( ',', $widths ) . ').' );
-board_art_assert( 1 === preg_match( '/resize=96%2C144[^ ]* 96w/', $m[1] ) && 1 === preg_match( '/resize=853%2C1280[^ ]* 853w/', $m[1] ) && 7 === preg_match_all( '/resize=(\d+)%2C(\d+)/', $m[1], $pairs ), 'Every candidate is a 2:3 crop of the source.' );
+board_art_assert( array( 96, 192, 256, 352, 512 ) === $widths, 'A 1920x1280 still keeps every width the board asks for (96-512px; 3.2.155 dropped 704) and gains nothing above it (got ' . implode( ',', $widths ) . ').' );
+board_art_assert( 1 === preg_match( '/resize=96%2C144[^ ]* 96w/', $m[1] ) && 1 === preg_match( '/resize=512%2C768[^ ]* 512w/', $m[1] ) && 5 === preg_match_all( '/resize=(\d+)%2C(\d+)/', $m[1], $pairs ), 'Every candidate is a 2:3 crop of the source.' );
 foreach ( $pairs[1] as $i => $w ) { board_art_assert( abs( (int) $pairs[2][ $i ] - round( (int) $w * 1.5 ) ) <= 1, "Candidate {$w} is cropped 2:3 (height {$pairs[2][$i]})." ); }
 
 board_art_assert( 1 === preg_match( '/srcset="([^"]*)"/', $capped, $c ), 'The uncapped-by-caller still has candidates.' );
