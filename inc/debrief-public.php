@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+require_once __DIR__ . '/review-display-meta.php';
+
 if ( ! function_exists( 'lunara_is_debrief_renderer_staging_environment' ) ) {
     /**
      * Whether this request is running on the WordPress.com staging site.
@@ -288,9 +290,9 @@ if ( ! function_exists( 'lunara_debrief_render_canonical_signature' ) ) {
      * @return string
      */
     function lunara_debrief_render_canonical_signature( $review_id, $film ) {
-        $score  = trim( (string) get_post_meta( $review_id, '_lunara_score', true ) );
-        $year   = trim( (string) get_post_meta( $review_id, '_lunara_year', true ) );
-        $where  = trim( (string) get_post_meta( $review_id, '_lunara_where', true ) );
+        $score  = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_score' ) );
+        $year   = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_year' ) );
+        $where  = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_where' ) );
         $kicker = trim( (string) get_theme_mod( 'lunara_debrief_kicker_text', 'A LUNARA FILM SIGNATURE' ) );
 
         if ( '' === $year ) {
@@ -492,14 +494,14 @@ if ( ! function_exists( 'lunara_debrief_render_legacy_pairing_cards' ) ) {
             return '';
         }
 
-        $career = trim( (string) get_post_meta( $review_id, '_lunara_career_context', true ) );
+        $career = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_career_context' ) );
         if ( '' === $career ) {
-            $career = trim( (string) get_post_meta( $review_id, '_lunara_craft_mirror', true ) );
+            $career = trim( (string) lunara_get_review_display_meta( $review_id, '_lunara_craft_mirror' ) );
         }
 
         $legacy_rows = array(
-            array( 'slug' => 'theme', 'label' => __( 'Theme Echo', 'lunara-film' ), 'value' => get_post_meta( $review_id, '_lunara_theme_echo', true ) ),
-            array( 'slug' => 'counter', 'label' => __( 'Counter Program', 'lunara-film' ), 'value' => get_post_meta( $review_id, '_lunara_counter_program', true ) ),
+            array( 'slug' => 'theme', 'label' => __( 'Theme Echo', 'lunara-film' ), 'value' => lunara_get_review_display_meta( $review_id, '_lunara_theme_echo' ) ),
+            array( 'slug' => 'counter', 'label' => __( 'Counter Program', 'lunara-film' ), 'value' => lunara_get_review_display_meta( $review_id, '_lunara_counter_program' ) ),
             array( 'slug' => 'career', 'label' => __( 'Career Context', 'lunara-film' ), 'value' => $career ),
         );
         $rows = array();

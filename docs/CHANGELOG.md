@@ -11,6 +11,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.159: review titles appear above the image
+
+The Review template placed landscape artwork before the title regardless of the parent Customizer's "Below Title" selection. The full centered title group now precedes the landscape still on every screen. The still retains the Review Studio hero width; posters stay below the title in the reading column, and missing artwork emits no empty frame. The article grid supplies the gap after the title without a second image margin.
+
+The same review exposed ACF reference names as its image caption, year, viewing information and pairing titles. A public-only metadata reader recognizes the exact reference for the requested field and reads its actual ACF value, or omits it when empty. Ordinary legacy values remain authoritative. The existing legacy Debrief policy is preserved; empty references do not become invented film information. Stored review content, metadata and relational choices are unchanged.
+
+- Browser coverage renders the real template and CSS with JavaScript disabled at 320, 390, 640, 641, 768 and 1440px, measuring document and painted title-before-image order, the Studio image width and gap, poster fallback and missing artwork.
+- `tests/review-display-meta-runtime.php` exercises the real caption, title metadata, signature and pairing renderers, actual ACF values, exact-reference suppression, legitimate field-like prose, escaping and unchanged saved metadata.
+
 ## 2026-11-07 — Theme 3.2.158: the Control Desk readiness card reads the Oscars plugin's version, and names the repos that exist
 
 The plugin-alignment audit found the Control Desk's system-status row for the Academy Awards plugin pinned to one version: it read "ready" only when `AAT_VERSION` was exactly 2.7.89, so every release since (2.8.29 today) showed as "weak". The same screen named the six repositories under the retired `TheAntagonist2020/` paths fourteen times.

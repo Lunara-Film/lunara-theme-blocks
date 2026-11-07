@@ -181,9 +181,10 @@ and links to the owning Review editor. This does not alter pairing content.
   ceremony. Copy stands beside the strip from 1000px and above it below;
   phones show three posters. A winner without a poster is skipped, never
   framed empty; under three posters the band renders without the strip.
-- A Review with landscape artwork opens with that still at the Review Studio
-  hero width, above the centered title group, with a one-line caption. Poster
-  artwork stays in the reading column. Credits read as one centered line under
+- A Review opens with its centered title group, followed by landscape artwork
+  at the Review Studio hero width with a one-line caption. The full heading,
+  editorial label, standfirst and credits precede the artwork on every screen.
+  Poster artwork stays in the reading column. Credits read as one centered line under
   the title ("Directed by …"), never as a side rail. Each pairing card states
   its Method question beneath the role name.
 - Single Reviews own a centered 760px reading frame and below-article navigation.

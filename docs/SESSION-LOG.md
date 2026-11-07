@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-07 — Review title above artwork (Theme 3.2.159)
+
+- **Asked:** Dalton's screenshot of the Toy Story review, with "Below Title" already selected: "The title needs to be above it." This defect-fix request authorizes the existing branch/PR/manual-release process.
+- **Built:** the actual Review template places the complete title group before landscape artwork, retains its Studio width, and removes the duplicate top margin. Poster and missing-art paths are preserved. A public-only scalar metadata reader stops exact ACF reference names from rendering as captions, year, viewing information or pairing titles; ordinary legacy text and real ACF values keep their existing escaping. No saved review content or metadata was changed.
+- **Verified before release:** all 86 PHP behavior suites pass; the real Review template/CSS with JavaScript disabled passes 30 scenarios and 888 assertions at 320/390/640/641/768/1440px. The ordering regression fails against the original landscape template. The new metadata suite passes 24 checks; independent diff/loading-order audit found no blocking issues. Evidence in the parent workspace: `_carousel-artifacts/review-title-fix-20261107` and `_carousel-artifacts/review-title-20261107`.
+- **Live before release:** Theme 3.2.154, build `3.2.154+20261107-063535`; anonymous canonical Toy Story HTML confirms image-first order and leaked caption reference. Journal and Oscars canonical canaries both pass against that baseline. Existing WordPress.com connection 7478 verified: Lunara-Film/lunara-theme-blocks, main, `/wp-content/themes/lunara-theme-blocks-20260513-2300`, Simple deployment, automated deployments off.
+- **Holding:** final PR CI, exact-head merge and manual theme deployment. No plugin code changes are needed for this fix. The current task branch starts at main `90a3753` (3.2.158), preserving its already-merged corrections.
+- **Next:** verify the deployed build and title/image order on the actual review at phone/desktop widths, then append the release receipt.
+- **Found, not fixed:** Toy Story's actual ACF year/viewing/pairing text fields are empty while the underscored keys hold references. Its separate relational movie choices remain stored, but the existing production legacy-only Debrief renderer does not use them. This release hides bogus reference-only content; it does not invent metadata or change the Debrief renderer policy. Follow up on the ACF/legacy storage collision at the write boundary.
+
 ## 2026-11-07 — Plugins in unison: Oscars Ledger 2.8.28 and Core 0.8.18 merged, the checklist in every repo, Theme 3.2.156 in PR
 
 - **Asked:** Dalton, 06:30 UTC: "We have to be cognizant that we are keeping all of our created plug-ins in alignment with the updating theme so everything stays in unison." The standing "keep going" confirmation covers the releases.
