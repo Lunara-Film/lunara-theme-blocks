@@ -11,6 +11,14 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-07 — Theme 3.2.158: the Control Desk readiness card reads the Oscars plugin's version, and names the repos that exist
+
+The plugin-alignment audit found the Control Desk's system-status row for the Academy Awards plugin pinned to one version: it read "ready" only when `AAT_VERSION` was exactly 2.7.89, so every release since (2.8.29 today) showed as "weak". The same screen named the six repositories under the retired `TheAntagonist2020/` paths fourteen times.
+
+- **The row compares against the theme's seam.** `LUNARA_OSCARS_LEDGER_SEAM` (2.8.1, the newest accessor and hook `inc/oscars-family.php` and `inc/oscars-data.php` rely on) is the one place that version lives; `lunara_control_desk_oscars_plugin_state()` returns "needs" with no plugin, "weak" below the seam and "ready" at the seam or newer, and the row's note says which version the seams need.
+- **The source and deploy cards name `Lunara-Film/…`.** Fourteen `TheAntagonist2020/` paths become `Lunara-Film/`, the organisation every pull request of this session merged into.
+- Tests: `tests/control-desk-readiness-runtime.php` (new) runs the real function at the seam, above it, below it and with no plugin, never pinning a release number, and reads `inc/control-desk.php` for the retired paths.
+
 ## 2026-11-07 — Theme 3.2.157: the Oscars portal cards stop downloading backdrops nothing paints
 
 The plugin-alignment audit (the lenses that finished before the usage credits ran out) found the four portal cards on `/oscars/` printing inline TMDB backdrops. Measured live at 390 and 1440: `lunara-shell.css` blanks every portal card's background at every width (the flat-card rule, `background: transparent !important`), so the two doors and the two research cards never painted their stills and still downloaded them on every load. Three TMDB w780 files, 145 KB per load: the hero's 27 KB is painted (the band on phones, the hero on desktop); the cards' 118 KB is not.
