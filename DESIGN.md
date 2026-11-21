@@ -72,7 +72,7 @@ and links to the owning Review editor. This does not alter pairing content.
   The wordmark in the masthead is a modest centered mark (at most about 104px
   tall on desktop, 72px on phones, never wider than 560px), not a second
   header; the Brand console logo sizes can shrink it, never enlarge it, and
-  the dek always sits below it.   On inner pages the site header shows the
+  the dek always sits below it. On inner pages the site header shows the
   wordmark at its own proportions, contained, never cropped.
 - The Journal archive, the Reviews archive, and the Oscars portal each carry
   the same three-pillar desk under the masthead: Journal, Reviews, Oscars.
