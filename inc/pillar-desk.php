@@ -4,8 +4,10 @@
  *
  * Home already opens on the three doors. The Journal archive, the Reviews
  * archive, and the Oscars portal use this same trio so a visitor can see what
- * moved and step to the other two pillars. No new palette, no new logo, no
- * motion. The current pillar is the one the visitor is already reading.
+ * moved and step to the other two pillars. The pillar the visitor is reading
+ * is the lead. Freshness is a status: the mark is live only when that post
+ * moved today, and quiet when the date is older or the Oscars line is on
+ * record. No new palette and no new logo.
  *
  * @package Lunara_Film
  */
@@ -71,6 +73,23 @@ function lunara_pillar_desk_fresh_label( $mysql_date ) {
 }
 
 /**
+ * The freshness line plus whether that post moved on this local day.
+ *
+ * "On record" is not a movement, so the caller leaves it quiet. An empty
+ * date is not live and does not invent a time.
+ *
+ * @param string $mysql_date Post date.
+ * @return array{fresh:string,live:bool}
+ */
+function lunara_pillar_desk_movement( $mysql_date ) {
+	$fresh = lunara_pillar_desk_fresh_label( $mysql_date );
+	return array(
+		'fresh' => $fresh,
+		'live'  => '' !== $fresh && __( 'Updated today', 'lunara-film' ) === $fresh,
+	);
+}
+
+/**
  * @param string $post_type journal or review.
  * @param string $path      Fallback path.
  * @return string
@@ -88,11 +107,13 @@ function lunara_pillar_desk_url( $post_type, $path ) {
 /**
  * Three pillars, in the order the doors use: Journal, Reviews, Oscars.
  *
- * @return array<int,array{key:string,label:string,url:string,title:string,fresh:string}>
+ * @return array<int,array{key:string,label:string,url:string,title:string,fresh:string,live:bool}>
  */
 function lunara_pillar_desk_items() {
 	$journal = lunara_pillar_desk_latest( 'journal' );
 	$review  = lunara_pillar_desk_latest( 'review' );
+	$journal_move = $journal instanceof WP_Post ? lunara_pillar_desk_movement( (string) ( $journal->post_date ?? '' ) ) : array( 'fresh' => '', 'live' => false );
+	$review_move  = $review instanceof WP_Post ? lunara_pillar_desk_movement( (string) ( $review->post_date ?? '' ) ) : array( 'fresh' => '', 'live' => false );
 	$journal_title = $journal instanceof WP_Post ? trim( wp_strip_all_tags( (string) get_the_title( $journal ) ) ) : '';
 	$review_title  = $review instanceof WP_Post ? trim( wp_strip_all_tags( (string) get_the_title( $review ) ) ) : '';
 	if ( '' !== $review_title && function_exists( 'lunara_home_front_door_film_name' ) ) {
@@ -119,14 +140,16 @@ function lunara_pillar_desk_items() {
 			'label' => __( 'Journal', 'lunara-film' ),
 			'url'   => lunara_pillar_desk_url( 'journal', '/journal/' ),
 			'title' => '' !== $journal_title ? $journal_title : __( 'Film news from the desk.', 'lunara-film' ),
-			'fresh' => $journal instanceof WP_Post ? lunara_pillar_desk_fresh_label( (string) ( $journal->post_date ?? '' ) ) : '',
+			'fresh' => $journal_move['fresh'],
+			'live'  => (bool) $journal_move['live'],
 		),
 		array(
 			'key'   => 'reviews',
 			'label' => __( 'Reviews', 'lunara-film' ),
 			'url'   => lunara_pillar_desk_url( 'review', '/reviews/' ),
 			'title' => '' !== $review_title ? $review_title : __( 'Criticism from the desk.', 'lunara-film' ),
-			'fresh' => $review instanceof WP_Post ? lunara_pillar_desk_fresh_label( (string) ( $review->post_date ?? '' ) ) : '',
+			'fresh' => $review_move['fresh'],
+			'live'  => (bool) $review_move['live'],
 		),
 		array(
 			'key'   => 'oscars',
@@ -134,6 +157,7 @@ function lunara_pillar_desk_items() {
 			'url'   => function_exists( 'home_url' ) ? home_url( '/oscars/' ) : '/oscars/',
 			'title' => $oscars_title,
 			'fresh' => __( 'On record', 'lunara-film' ),
+			'live'  => false,
 		),
 	);
 }
@@ -172,7 +196,7 @@ function lunara_render_pillar_desk( $current ) {
 				<span class="lunara-pillar-desk-kicker"><?php echo esc_html( $item['label'] ); ?></span>
 				<span class="lunara-pillar-desk-title"><?php echo esc_html( $item['title'] ); ?></span>
 				<?php if ( '' !== $item['fresh'] ) : ?>
-					<span class="lunara-pillar-desk-fresh"><?php echo esc_html( $item['fresh'] ); ?></span>
+					<span class="lunara-pillar-desk-fresh<?php echo ! empty( $item['live'] ) ? ' is-live' : ''; ?>"><span class="lunara-pillar-desk-mark" aria-hidden="true"></span><?php echo esc_html( $item['fresh'] ); ?></span>
 				<?php endif; ?>
 			</a>
 		<?php endforeach; ?>

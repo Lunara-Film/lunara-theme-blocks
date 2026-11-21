@@ -63,19 +63,53 @@ $GLOBALS['checks'] = 0;
 
 require dirname( __DIR__ ) . '/inc/pillar-desk.php';
 
+function pillar_dom( $html ) {
+	$dom = new DOMDocument();
+	$previous = libxml_use_internal_errors( true );
+	$dom->loadHTML( '<?xml encoding="utf-8">' . $html );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $previous );
+	return new DOMXPath( $dom );
+}
+
+function pillar_status( $xpath, $label ) {
+	$nodes = $xpath->query( '//a[.//span[contains(@class,"lunara-pillar-desk-kicker") and text()="' . $label . '"]]' );
+	pillar_check( 1 === $nodes->length, $label . ' is one pillar link' );
+	return $nodes->item( 0 );
+}
+
 $journal = lunara_render_pillar_desk( 'journal' );
-pillar_check( 1 === substr_count( $journal, '<nav class="lunara-pillar-desk"' ), 'one desk nav' );
-pillar_check( false !== strpos( $journal, '>Journal<' ) && false !== strpos( $journal, '>Reviews<' ) && false !== strpos( $journal, '>Oscars<' ), 'the desk reads Journal, Reviews, Oscars' );
-pillar_check( 1 === substr_count( $journal, 'aria-current="page"' ) && false !== strpos( $journal, 'lunara-pillar-desk-link is-current' ) && false !== strpos( $journal, 'href="https://example.test/journal/"' ), 'the Journal page marks only itself current and links to the Journal' );
-pillar_check( false !== strpos( $journal, 'Eggers Put the Werewolf Back in the Mud' ) && false !== strpos( $journal, 'Updated today' ), 'the Journal pillar names the newest entry and says it moved today' );
-pillar_check( false !== strpos( $journal, 'Street Fighter – Unhinged on Purpose' ) && false !== strpos( $journal, 'Updated yesterday' ), 'the Reviews pillar names the newest review and its day' );
-pillar_check( false !== strpos( $journal, 'The Lunara Film Oscar Ledger' ) && false !== strpos( $journal, 'On record' ), 'without a ledger line the Oscars pillar stays the ledger, on record' );
-pillar_check( false === strpos( $journal, 'style=' ), 'the desk does not carry an inline style' );
+$xpath = pillar_dom( $journal );
+$nav = $xpath->query( '//nav[contains(@class,"lunara-pillar-desk")]' );
+pillar_check( 1 === $nav->length && 3 === $xpath->query( '//nav[contains(@class,"lunara-pillar-desk")]/a' )->length, 'one desk nav with three links' );
+$kickers = array();
+foreach ( $xpath->query( '//span[contains(@class,"lunara-pillar-desk-kicker")]' ) as $kicker ) {
+	$kickers[] = $kicker->textContent;
+}
+pillar_check( array( 'Journal', 'Reviews', 'Oscars' ) === $kickers, 'the desk reads Journal, Reviews, Oscars in that source order' );
+$current = $xpath->query( '//a[@aria-current="page"]' );
+pillar_check( 1 === $current->length && false !== strpos( $current->item( 0 )->getAttribute( 'class' ), 'is-current' ) && 'https://example.test/journal/' === $current->item( 0 )->getAttribute( 'href' ), 'the Journal page marks only itself current and links to the Journal' );
+$journal_link = pillar_status( $xpath, 'Journal' );
+$review_link = pillar_status( $xpath, 'Reviews' );
+$oscars_link = pillar_status( $xpath, 'Oscars' );
+pillar_check( false !== strpos( $journal_link->textContent, 'Eggers Put the Werewolf Back in the Mud' ), 'the Journal pillar names the newest entry' );
+$journal_fresh = $xpath->query( './/span[contains(@class,"lunara-pillar-desk-fresh")]', $journal_link )->item( 0 );
+pillar_check( $journal_fresh instanceof DOMElement && false !== strpos( $journal_fresh->getAttribute( 'class' ), 'is-live' ) && 'Updated today' === trim( $journal_fresh->textContent ) && 1 === $xpath->query( './/span[contains(@class,"lunara-pillar-desk-mark")]', $journal_fresh )->length, 'a Journal that moved today carries a live freshness mark and says so' );
+$review_fresh = $xpath->query( './/span[contains(@class,"lunara-pillar-desk-fresh")]', $review_link )->item( 0 );
+pillar_check( $review_fresh instanceof DOMElement && false === strpos( $review_fresh->getAttribute( 'class' ), 'is-live' ) && 'Updated yesterday' === trim( $review_fresh->textContent ) && false !== strpos( $review_link->textContent, 'Street Fighter – Unhinged on Purpose' ), 'the Reviews pillar names the newest review and keeps yesterday quiet' );
+$oscars_fresh = $xpath->query( './/span[contains(@class,"lunara-pillar-desk-fresh")]', $oscars_link )->item( 0 );
+pillar_check( $oscars_fresh instanceof DOMElement && false === strpos( $oscars_fresh->getAttribute( 'class' ), 'is-live' ) && 'On record' === trim( $oscars_fresh->textContent ) && false !== strpos( $oscars_link->textContent, 'The Lunara Film Oscar Ledger' ), 'without a ledger line the Oscars pillar stays the ledger, on record, and quiet' );
+pillar_check( 1 === $xpath->query( '//span[contains(@class,"is-live")]' )->length, 'only the pillar that moved today is live' );
+pillar_check( 0 === $xpath->query( '//*[@style]' )->length, 'the desk does not carry an inline style' );
 pillar_check( 'Updated today' === lunara_pillar_desk_dateline_freshness(), 'Home can say updated today when the Journal moved today' );
 
 $GLOBALS['pillar_posts']['journal'][0]->post_date = '2026-01-02 12:00:00';
 $GLOBALS['pillar_posts']['review'][0]->post_date = '2026-01-02 12:00:00';
 pillar_check( '' === lunara_pillar_desk_dateline_freshness(), 'an old Journal and an old review do not claim the day is new' );
+$stale = pillar_dom( lunara_render_pillar_desk( 'reviews' ) );
+pillar_check( 0 === $stale->query( '//span[contains(@class,"is-live")]' )->length, 'an older date does not light the freshness mark' );
+$stale_current = $stale->query( '//a[@aria-current="page"]' );
+pillar_check( 1 === $stale_current->length && 'https://example.test/reviews/' === $stale_current->item( 0 )->getAttribute( 'href' ) && false !== strpos( $stale_current->item( 0 )->textContent, 'Updated January 2' ), 'the Reviews page can be the lead while its own date stays quiet' );
 
 function add_action() { return true; }
 require dirname( __DIR__ ) . '/inc/home-front-desk.php';
@@ -86,8 +120,26 @@ $items = lunara_home_front_door_dateline_items( 248 );
 pillar_check( in_array( 'Dallas', $items, true ) && in_array( '248 reviews', $items, true ) && in_array( 'Updated today', $items, true ), 'the Home dateline keeps place and the review count and adds updated today' );
 
 $css = file_get_contents( dirname( __DIR__ ) . '/assets/css/lunara-public-guardrails.css' );
-$start = strpos( $css, '.lunara-pillar-desk {' );
-$rule = false !== $start ? substr( $css, $start ) : '';
-pillar_check( false !== strpos( $rule, 'min-height: 44px' ) && false !== strpos( $rule, 'font-size: 0.8125rem' ) && false === strpos( $rule, 'transition' ) && false === strpos( $rule, 'border-radius' ), 'the desk control is 44px, type stays at the 13px floor, and it does not move or curve' );
+$start = strpos( $css, '/* Living desk:' );
+$end = false !== $start ? strpos( $css, '/* Living desk end */', $start ) : false;
+$rule = ( false !== $start && false !== $end ) ? substr( $css, $start, $end - $start ) : '';
+pillar_check( '' !== $rule, 'the desk rules are a bounded block' );
+preg_match_all( '/#([0-9a-fA-F]{3,8})\b/', $rule, $colors );
+$allowed_colors = array( 'c9a961', '0f1d2e', 'fafbfc' );
+pillar_check( array() === array_diff( array_map( 'strtolower', $colors[1] ), $allowed_colors ), 'the desk introduces no color outside the gold, surface navy, and text tokens' );
+pillar_check( false !== strpos( $rule, 'min-height: 44px' ) && false !== strpos( $rule, 'font-size: 0.8125rem' ) && false === strpos( $rule, 'border-radius' ), 'the desk control is 44px, type stays at the 13px floor, and the corners stay square' );
+pillar_check( false === strpos( $rule, 'transition' ) && false === strpos( $rule, 'filter' ) && false === stripos( $rule, 'scale(' ), 'the desk does not transition, filter, or zoom' );
+preg_match( '/@keyframes lunara-pillar-desk-lead\s*\{(.*?)\n\}/s', $rule, $lead_motion );
+preg_match( '/@keyframes lunara-pillar-desk-pulse\s*\{(.*?)\n\}/s', $rule, $pulse_motion );
+pillar_check( isset( $lead_motion[1] ) && false !== strpos( $lead_motion[1], 'transform:' ) && false === strpos( $lead_motion[1], 'opacity' ), 'the current pillar shifts with transform only' );
+pillar_check( isset( $pulse_motion[1] ) && false !== strpos( $pulse_motion[1], 'opacity:' ) && false === strpos( $pulse_motion[1], 'transform' ), 'the live freshness mark pulses with opacity only' );
+pillar_check( false !== strpos( $rule, 'prefers-reduced-motion: no-preference' ) && false !== strpos( $rule, 'prefers-reduced-motion: reduce' ) && false !== strpos( $rule, 'animation: none' ), 'reduced motion keeps the lead and the mark still' );
+pillar_check( false !== strpos( $rule, 'max-width: 759px' ) && false !== strpos( $rule, 'order: -1' ) && false !== strpos( $rule, 'grid-area: lead' ), 'on a phone the lead stacks first, and on a wider screen it takes the lead cell' );
+preg_match( '/\.lunara-pillar-desk-title\s*\{[^}]*font-size:\s*clamp\(\s*([0-9.]+)rem/', $rule, $support_size );
+preg_match( '/\.is-current \.lunara-pillar-desk-title\s*\{[^}]*font-size:\s*clamp\(\s*([0-9.]+)rem/', $rule, $lead_size );
+pillar_check( isset( $support_size[1], $lead_size[1] ) && (float) $lead_size[1] > (float) $support_size[1] && (float) $support_size[1] >= 0.8125, 'the lead title is display type larger than the supporting titles, and neither drops under 13px' );
+
+$home_css = file_get_contents( dirname( __DIR__ ) . '/assets/css/lunara-home-modules.css' );
+pillar_check( false !== strpos( $home_css, '.lunara-home-door-status' ) && false !== strpos( $home_css, 'font-size:0.8125rem!important' ) && false !== strpos( $home_css, 'animation:none!important' ), 'each Home door reserves a 13px freshness status and reduced motion stops it' );
 
 fwrite( STDOUT, "Pillar desk runtime passed: {$GLOBALS['checks']} checks.\n" );
