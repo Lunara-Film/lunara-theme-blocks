@@ -72,8 +72,15 @@ and links to the owning Review editor. This does not alter pairing content.
   The wordmark in the masthead is a modest centered mark (at most about 104px
   tall on desktop, 72px on phones, never wider than 560px), not a second
   header; the Brand console logo sizes can shrink it, never enlarge it, and
-  the dek always sits below it. On inner pages the site header shows the
+  the dek always sits below it.   On inner pages the site header shows the
   wordmark at its own proportions, contained, never cropped.
+- The Journal archive, the Reviews archive, and the Oscars portal each carry
+  the same three-pillar desk under the masthead: Journal, Reviews, Oscars.
+  The pillar the visitor is reading is the current one. Each pillar names its
+  newest public fact and when it moved. Home keeps that job on the three
+  doors and adds "Updated today" to the dateline when the Journal or a review
+  landed today. The desk uses the existing type, gold rule, and surface navy.
+  It does not move, recolor, or replace the wordmark.
 - Home is a cover: one wordmark on screen, the masthead's. The site header
   on Home hides its brand and slims to a 64px bar (56px on phones) with
   search and the menu, and the masthead prints no second Search. On desktop,

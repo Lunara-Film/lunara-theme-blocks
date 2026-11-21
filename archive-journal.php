@@ -137,6 +137,7 @@ ob_start();
 	<h1 class="lunara-archive-hero-title"><?php echo esc_html( $title ); ?></h1>
 	<?php if ( '' !== trim( (string) $kicker ) && ! in_array( $kicker, array( __( 'Journal', 'lunara-film' ), __( 'The Lunara Journal', 'lunara-film' ), $title ), true ) ) : ?><p class="lunara-archive-hero-context"><?php echo esc_html( $kicker ); ?></p><?php endif; ?>
 	<?php if ( '' !== trim( (string) $copy ) ) : ?><p class="lunara-archive-hero-copy"><?php echo esc_html( $copy ); ?></p><?php endif; ?>
+	<?php if ( function_exists( 'lunara_render_pillar_desk' ) ) { echo lunara_render_pillar_desk( 'journal' ); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 </header>
 <?php
 $journal_section_markup['hero'] = ob_get_clean();

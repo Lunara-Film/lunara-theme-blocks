@@ -3,7 +3,11 @@
 define( 'ABSPATH', __DIR__ . '/' );
 class WP_Post { public function __construct( $values ) { foreach ( $values as $key => $value ) { $this->$key = $value; } } }
 class WP_Term { public $taxonomy = 'journal_section'; public $term_id = 1; public $name = 'Signal'; public $slug = 'signal'; public $count = 12; }
-class WP_Query { public $posts = array(); public $found_posts = 8; }
+class WP_Query {
+	public $posts = array();
+	public $found_posts = 8;
+	public function __construct( $args = array() ) {}
+}
 function __( $value ) { return $value; }
 function _n( $one, $many, $count ) { return 1 === $count ? $one : $many; }
 function esc_html( $value ) { return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' ); }
@@ -93,4 +97,6 @@ $GLOBALS['jp_config'] = lunara_journal_archive_studio_defaults();
 $titles = array( 'Gremlins 3 Slides to 2028, and It Needs to Pick a Lane', 'Of Course Robert Eggers Isn’t Modernizing Shakespeare', 'Stanley Tucci Is Stealing the Mona Lisa, and That’s All I Needed', 'Clayface Looks Like It’s Going to Be Gnarly', 'Casablanca and Chinatown Now Share a Landlord', 'Letterboxd Is Getting Treated Like a Taste Machine', 'Sacrifice Points the Knife at Famous People', 'Angel Finally Gets a Face That Can Fly' );
 $excerpts = array( 'Gremlins 3 moves to October 2028. Chris Columbus wrote the first one, so at least it’s not a stranger playing with the toys.', 'Eggers is making Romeo and Juliet in Elizabethan English. Zeffirelli did it pretty, Luhrmann did it loud. I can’t wait to see him do it dark.', 'Stanley Tucci plays a thief going after the Mona Lisa with two strangers who turn out to be his kids. That’s all I needed to hear.', 'A body-horror movie about one of Batman’s grossest villains, from the guy who made Eden Lake. Somebody at that studio said yes to this.', 'Paramount and Warner Bros. become Skydance on October 6. One less studio is a bummer, but Hollywood has always changed hands.', 'Letterboxd being shopped is not the boring tech deal it wants to look like.', 'Gavras brought a flamethrower to celebrity culture and I want every frame of the burn.', 'Casting Asa Germann as Angel is the first smart, slightly dangerous thing this new X-Men has taken.' );
 foreach ( $titles as $i => $title ) { $GLOBALS['jp_posts'][$i + 1] = new WP_Post( array( 'ID' => $i + 1, 'post_title' => $title, 'post_excerpt' => $excerpts[$i] ) ); }
+require dirname( __DIR__ ) . '/inc/pillar-desk.php';
+function wp_timezone() { return new DateTimeZone( 'America/Chicago' ); }
 function jp_render() { $GLOBALS['wp_query'] = new WP_Query(); $GLOBALS['wp_query']->posts = array_values( $GLOBALS['jp_posts'] ); ob_start(); include dirname( __DIR__ ) . '/archive-journal.php'; return ob_get_clean(); }
