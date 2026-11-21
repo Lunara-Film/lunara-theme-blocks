@@ -76,11 +76,18 @@ and links to the owning Review editor. This does not alter pairing content.
   wordmark at its own proportions, contained, never cropped.
 - The Journal archive, the Reviews archive, and the Oscars portal each carry
   the same three-pillar desk under the masthead: Journal, Reviews, Oscars.
-  The pillar the visitor is reading is the current one. Each pillar names its
-  newest public fact and when it moved. Home keeps that job on the three
-  doors and adds "Updated today" to the dateline when the Journal or a review
-  landed today. The desk uses the existing type, gold rule, and surface navy.
-  It does not move, recolor, or replace the wordmark.
+  The pillar the visitor is reading is the lead: display type at headline
+  size, the gold rule, and the surface navy. The other two stay beside it
+  as supporting pillars and name the same facts. Each pillar names its
+  newest public fact and when it moved. A square freshness mark is solid
+  and pulses in opacity when that post moved today, and stays dim when the
+  date is older or the Oscars line is "On record". The lead may shift with
+  transform. Reduced motion keeps the same lead, rule, and mark with no
+  animation. On a phone the lead stacks first. Home keeps the three doors
+  and carries the same freshness mark on each door, above the word. The
+  desk adds "Updated today" to the Home dateline when the Journal or a
+  review landed today. It uses the existing type, gold rule, and surface
+  navy. It does not recolor or replace the wordmark.
 - Home is a cover: one wordmark on screen, the masthead's. The site header
   on Home hides its brand and slims to a 64px bar (56px on phones) with
   search and the menu, and the masthead prints no second Search. On desktop,

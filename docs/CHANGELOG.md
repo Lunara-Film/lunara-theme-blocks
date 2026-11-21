@@ -11,6 +11,15 @@ directly from each repo's `git log`, not reconstructed from memory.
 
 ---
 
+## 2026-11-21 — Theme 3.2.163: the pillar desk leads
+
+Dalton, on the live desk: it looks plain, and he wants it more dynamic. The logo and the colors stay.
+
+The Journal, Reviews, and Oscars pages keep the same three links and the same three facts. The pillar the visitor is reading becomes the lead: headline-sized display type, the gold rule, and the surface navy, with the other two stacked beside it. A square mark sits on each freshness line. It pulses in opacity when that post moved today and stays dim for an older date or "On record". The lead shifts with transform. Reduced motion keeps the same lead and the same mark, still. On a phone the lead stacks first. Home's three doors gain the same mark above each word and do not become this nav.
+
+- Measured in `tests/pillar-desk-runtime.php`: one current pillar, a live mark only for "Updated today", quiet marks for yesterday, an older date, and "On record", no inline style, and motion limited to transform and opacity with a reduced-motion stop.
+- The Home door contract still reads Reviews, Journal, Oscars, and now carries those same freshness lines.
+
 ## 2026-11-07 — Theme 3.2.161: the three doors. Home says what Lunara Film is
 
 Dalton, on the live Home: "everything is too small, just too small. It's not dynamic enough, and it doesn't shout immediately what this is. We are reviews, news, and Oscars." Two directions were drawn on the live page and sent as pictures; he picked A, the three doors, with one note: the three words on the same level.

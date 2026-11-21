@@ -25,6 +25,16 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-21 — The pillar desk leads (not merged, not live)
+
+- **Asked:** Dalton, looking at the live pillar desk: it looks plain. Make it more dynamic. Keep the logo and the colors.
+- **Found:** A read-only fetch of `/journal/` (cache miss, `max-age=300`, nothing purged) served Theme 3.2.162. The desk is three equal cells. Journal: "Gremlins 3 Slides to 2028, and It Needs to Pick a Lane", Updated October 5. Reviews: "The Social Reckoning", Updated October 18. Oscars: the Sweep Watch line, On record. No mark and no motion. `inc/pillar-desk.php` is the definition that runs.
+- **Shipped:** nothing yet.
+- **Live:** the plain 3.2.162 desk is still what visitors see.
+- **Holding:** Theme `cursor/dynamic-pillar-desk-0864` (3.2.163). The pillar a visitor is reading is the lead, in display type, with the gold rule and the surface navy. The other two support it. A square mark pulses in opacity only when that post moved today, and stays quiet for an older date or "On record". Home's three doors carry the same mark and stay the doors. Not merged and not deployed. Journal Foundation and Dispatch were not touched.
+- **Next:** open the pull request if this session could not, wait for CI, then merge and deploy the theme by hand. Read `/journal/`, `/reviews/`, `/oscars/`, and Home after the deploy. Do not treat a merge as live.
+- **Found, not fixed:** the About pillars still transition border color and background on hover. The Home door picture still zooms on hover and the door border still changes color. Both were already there.
+
 ## 2026-11-21 — Living desk and a held 2–3 draft cadence (not merged, not live)
 
 - **Asked:** Dalton: supercharge the public site so it feels dynamic and exciting around news, reviews, and the Oscars, keep the logo and the colors, and automate the Journal and Dispatch plugins so at least two or three posts go live per day. The writing voice still needs refinement. The cadence is what he wants.

@@ -523,6 +523,12 @@ function lunara_render_home_front_door() {
 	);
 
 	$dateline = lunara_home_front_door_dateline_items( $review_total );
+	$pillar_fresh = array();
+	if ( function_exists( 'lunara_pillar_desk_items' ) ) {
+		foreach ( lunara_pillar_desk_items() as $pillar_item ) {
+			$pillar_fresh[ $pillar_item['key'] ] = $pillar_item;
+		}
+	}
 
 	ob_start();
 	?>
@@ -559,6 +565,12 @@ function lunara_render_home_front_door() {
 							<span class="lunara-home-door-frame" aria-hidden="true"><?php echo $door_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
 						<span class="lunara-home-door-veil" aria-hidden="true"></span>
+						<?php
+						$pillar_state = $pillar_fresh[ $route['key'] ] ?? array();
+						$pillar_label = trim( (string) ( $pillar_state['fresh'] ?? '' ) );
+						$pillar_live  = ! empty( $pillar_state['live'] );
+						?>
+						<span class="lunara-home-door-status<?php echo $pillar_live ? ' is-live' : ''; ?>"><?php if ( '' !== $pillar_label ) : ?><span class="lunara-pillar-desk-mark" aria-hidden="true"></span><?php echo esc_html( $pillar_label ); ?><?php endif; ?></span>
 						<span class="lunara-home-masthead-route-label"><?php echo esc_html( $route['label'] ); ?></span>
 						<span class="lunara-home-door-line"><?php echo esc_html( $route['line'] ); ?></span>
 						<span class="lunara-home-door-cta"><?php esc_html_e( 'Enter', 'lunara-film' ); ?> <span aria-hidden="true">&rarr;</span></span>
