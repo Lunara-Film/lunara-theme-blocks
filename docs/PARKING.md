@@ -4,6 +4,20 @@ Ideas that are not defects. Each needs three lines and Dalton's yes before any
 agent builds it; features batch into at most one release a quarter. Newest
 first.
 
+## Living pillar desk — Dalton, 2026-11-21
+
+- Visitor gains: Journal, Reviews, and the Oscars read as one desk that is moving, with the newest fact and a freshness line on each pillar, on the archives and the Oscars portal as well as the Home doors.
+- Build cost: one shared nav in the theme, using the posts and ledger facts the site already renders, plus the Home dateline's "Updated today" when news or a review landed today.
+- Keep cost: the desk has to stay on the existing type, gold, and surface navy, and the three pages have to keep showing the same three facts.
+- Status: Dalton asked for this direction on 2026-11-21, so it is being built now. The quarterly batch rule still stands: Theme 3.2.161, the three-doors masthead, already landed in this quarter (2026-11-07). Holding on `cursor/pillar-desk-0864`. Not merged and not live.
+
+## Journal cadence of two or three held drafts a day — Dalton, 2026-11-21
+
+- Visitor gains: once the voice is signed off and an editor approves the drafts, the Journal stays current with two or three pieces a day across news, reviews, and the Oscars.
+- Build cost: a clock and a publication hold in Journal Foundation, and topic selection plus a local composer in Dispatch. Drafts only. No model key is required for the scaffold.
+- Keep cost: the hold stays on until the voice is refined, the daily cap stays at three, and a later model call has to drop into the same draft path instead of publishing on its own.
+- Status: Dalton asked for the cadence on 2026-11-21 and said the voice still needs refinement, so publication stays held. Holding on `cursor/journal-cadence-hold-0864` and `cursor/dispatch-cadence-drafts-0864`. Not merged and not live. The same quarterly note as the pillar desk applies: a feature release already landed this quarter, and this proceeds because he asked for it now.
+
 ## Private Journal app and daily publishing — Dalton, 2026-10-23
 
 - Visitor gains: a consistently active Journal, with at least one post intended for every day; Dalton gains a shared, phone-friendly path from sourced film stories to edited, verified publication.

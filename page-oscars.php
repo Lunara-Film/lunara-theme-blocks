@@ -422,6 +422,7 @@ $command_cards = array(
                     <?php if ( '' !== trim( (string) $hero_copy ) ) : ?>
                         <p class="lunara-home-hero-copy"><?php echo esc_html( $hero_copy ); ?></p>
                     <?php endif; ?>
+                    <?php if ( function_exists( 'lunara_render_pillar_desk' ) ) { echo lunara_render_pillar_desk( 'oscars' ); } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
                     <div class="lunara-oscars-portal-actions">
                         <a class="lunara-button lunara-button-primary" href="<?php echo esc_url( $ceremony_url ); ?>"><?php echo esc_html( $oscars_portal_buttons['ceremony'] ); ?></a>

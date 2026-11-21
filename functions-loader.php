@@ -82,6 +82,7 @@ require_once $lunara_inc . 'journal-archive-critical.php';
 require_once $lunara_inc . 'oscars-portal-critical.php';
 require_once $lunara_inc . 'oscars-ledger-critical.php'; // Ledger route seed + Dossier variable assembly + label-face marker.
 require_once $lunara_inc . 'frontend.php';
+require_once $lunara_inc . 'pillar-desk.php'; // Journal, Reviews, and the Oscars as one living desk.
 require_once $lunara_inc . 'home-front-desk.php'; // The Home masthead as a printed program (3.2.119).
 // Direction D Home sections (3.2.120): each owns one homepage slot, its own
 // renderer and its own stylesheet. front-page.php wires slot => renderer.

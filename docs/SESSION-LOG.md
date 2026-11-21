@@ -25,6 +25,17 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-21 — Living desk and a held 2–3 draft cadence (not merged, not live)
+
+- **Asked:** Dalton: supercharge the public site so it feels dynamic and exciting around news, reviews, and the Oscars, keep the logo and the colors, and automate the Journal and Dispatch plugins so at least two or three posts go live per day. The writing voice still needs refinement. The cadence is what he wants.
+- **Found:** Home already opens on the three doors (Reviews, Journal, Oscars) with one live line each. The Journal archive, the Reviews archive, and the Oscars portal did not share that mix. Dispatch creates Journal drafts through Foundation ingest and will not publish. Its clock is the Control Plane schedule (daily, twice daily, every four hours, or every two hours), capped at three items a run, and pitch mode can file pitches instead of drafts. Foundation's delivery worker publishes one approved reserve item a day, and only after an editor approves it. The publication target on that desk is still one a day. Theme 3.2.161, the three-doors masthead, is the feature release already in this quarter.
+- **Shipped:** nothing. Not merged and not deployed.
+- **Live:** unchanged. No production write, no cache clear, auto-deploy still off.
+- **Holding:** Theme `cursor/pillar-desk-0864` (3.2.162, the pillar desk). Journal Foundation `cursor/journal-cadence-hold-0864` (1.5.5, the clock and the hold). Dispatch `cursor/dispatch-cadence-drafts-0864` (3.4.7, topic selection and the local composer). Unfinished: Dalton's voice sign-off, then setting `lunara_journal_cadence_hold` to `0`, then an editor approving drafts in the Journal Desk. Merge and deploy have not happened. Plugins would deploy before the theme.
+- **Correction:** Pull requests are open and still not merged: theme [#338](https://github.com/Lunara-Film/lunara-theme-blocks/pull/338), Journal Foundation [#38](https://github.com/Lunara-Film/lunara-plugin-journal-foundation/pull/38), Dispatch [#28](https://github.com/Lunara-Film/lunara-plugin-dispatch/pull/28).
+- **Next:** Dalton refines the voice rules next to `Lunara_Dispatch_Voice`. After that, lift the hold and approve drafts. Do not treat a merge as live.
+- **Found, not fixed:** `DESIGN.md` still describes Now Showing before the three doors; the live masthead is doors, then Now Showing. The About page pillars are a static trio and their hover still transitions border color and background. Dispatch pitch mode can still file pitches instead of drafts on the model path; the new cadence files held drafts beside that. A day with fewer than three real topics reports a shortfall instead of inventing a story.
+
 ## 2026-11-07 — The Journal flows again (Dispatch 3.4.5); four deploys verified live; home page directions drawn
 
 - **Asked:** Dalton, 21:50 UTC: "what has happened with the Journal Dispatch automation? There hasn't been an update or a news story posted in days", then "turn the pitch mode off, I need to get the news flowing again". Later: "Deployed Dispatch and unticked Pitch Mode, check it worked", "Deployed Core, Ledger, and the theme too, check those", and "Now let's do the home page redesign, show me the pictures".

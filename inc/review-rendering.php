@@ -3801,6 +3801,9 @@ if ( ! function_exists( 'lunara_render_review_archive_shell' ) ) {
                         <?php if ( '' !== $copy ) : ?>
                             <p class="lunara-archive-hero-copy"><?php echo esc_html( wp_trim_words( $copy, max( 12, intval( $args['copy_words'] ) ) ) ); ?></p>
                         <?php endif; ?>
+                        <?php if ( ! $is_director_archive && function_exists( 'lunara_render_pillar_desk' ) ) : ?>
+                            <?php echo lunara_render_pillar_desk( 'reviews' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </section>

@@ -366,6 +366,43 @@ function lunara_home_front_door_headline_html( $title ) {
 	return '<span class="lunara-home-front-desk-film">' . esc_html( (string) $title ) . '</span>';
 }
 
+/**
+ * Place, month, review count, and "Updated today" when the Journal or a
+ * review moved on this local day. The helper is absent in older call sites,
+ * so a missing freshness function leaves the dateline as it was.
+ *
+ * @param int $review_total Published review count.
+ * @return string[]
+ */
+function lunara_home_front_door_dateline_items( $review_total ) {
+	$items = array(
+		__( 'Dallas', 'lunara-film' ),
+		function_exists( 'wp_date' ) ? wp_date( 'F Y' ) : gmdate( 'F Y' ),
+	);
+	$review_total = absint( $review_total );
+	if ( $review_total > 0 ) {
+		$items[] = sprintf(
+			/* translators: %s: number of published reviews. */
+			_n( '%s review', '%s reviews', $review_total, 'lunara-film' ),
+			number_format_i18n( $review_total )
+		);
+	}
+	if ( function_exists( 'lunara_pillar_desk_dateline_freshness' ) ) {
+		$fresh = trim( (string) lunara_pillar_desk_dateline_freshness() );
+		if ( '' !== $fresh ) {
+			$items[] = $fresh;
+		}
+	}
+	return array_values(
+		array_filter(
+			$items,
+			static function ( $item ) {
+				return '' !== trim( (string) $item );
+			}
+		)
+	);
+}
+
 function lunara_render_home_front_door() {
 	if ( function_exists( 'lunara_render_plugin_backed_home_hero' ) && function_exists( 'lunara_home_cinematic_front_door_is_enabled' ) && lunara_home_cinematic_front_door_is_enabled() ) {
 		$cinematic_front_door = trim( (string) lunara_render_plugin_backed_home_hero() );
@@ -485,17 +522,7 @@ function lunara_render_home_front_door() {
 		),
 	);
 
-	$dateline = array_filter(
-		array(
-			__( 'Dallas', 'lunara-film' ),
-			function_exists( 'wp_date' ) ? wp_date( 'F Y' ) : gmdate( 'F Y' ),
-			$review_total > 0 ? sprintf(
-				/* translators: %s: number of published reviews. */
-				_n( '%s review', '%s reviews', $review_total, 'lunara-film' ),
-				number_format_i18n( $review_total )
-			) : '',
-		)
-	);
+	$dateline = lunara_home_front_door_dateline_items( $review_total );
 
 	ob_start();
 	?>
