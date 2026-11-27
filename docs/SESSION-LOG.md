@@ -31,6 +31,7 @@ there; `AGENTS.md` is the single canonical copy.)
 - **Holding:** Theme 3.2.164 on `codex/screening-room-redesign`. The featured review leads with a widescreen still. The three archive doors follow, and the archive mastheads and editorial typography share the new hierarchy. Site Studio remains the source for the homepage content and layout settings.
 - **Live:** WordPress theme 3.2.163 at the start of this session.
 - **Next:** Verify the final pull request and all required checks, then use the existing manual WordPress.com deployment and confirm the public routes.
+- **Correction:** Theme [#342](https://github.com/Lunara-Film/lunara-theme-blocks/pull/342) merged as `a682da21779ac13993e58baa5c9c2b0f33ee3cfc` after all PHP and browser checks passed for head `b71d4d1f3a53293959d87178623c8fb56e1ab63b`. Main reused the verified tree. Manual WordPress.com deployment 7478 run 297349 completed at 02:03 UTC and matches the merge. Verified build `3.2.164+20261127-020252` on Home, Reviews, Journal, and Oscars using uncached public requests at 1440px and 390px. Public Search and the Awards Tracker both returned 200 on the new build. Older HTML briefly remained in some edge responses as the deploy propagated. Automatic deployment stayed off.
 
 ## 2026-11-21 — The pillar desk leads (not merged, not live)
 
