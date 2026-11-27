@@ -904,12 +904,10 @@ if ( ! function_exists( 'lunara_image_sizes_for' ) ) {
             'pair-card'            => '(max-width: 640px) 96px, 128px',
             'related-grid'         => '(max-width: 640px) 96px, 112px',
             'front-desk-companion' => '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px',
-            // 3.2.161: a door is landscape on a phone and portrait on desktop,
-            // and its picture covers it, so the candidate a door needs is the
-            // wider of its frame and its height at 16:9. Measured at
-            // 320-1920px: full width less 34px sides to 820px, 250px tall;
-            // a third of the panel above, 39vw tall to 560px.
-            'front-door'           => '(max-width: 820px) max(calc(100vw - 68px), 444px), (max-width: 1300px) 69.4vw, min(69.4vw, 996px)',
+            'front-desk-lead'      => '(max-width: 820px) calc(100vw - 68px), min(93.2vw, 1320px)',
+            // A covering still needs its frame's width or the width of its
+            // 16:9 source scaled to the frame's height, whichever is greater.
+            'front-door'           => '(max-width: 640px) max(calc(100vw - 68px), 320px), (max-width: 820px) max(43vw, 400px), clamp(410px, 33vw, 500px)',
             // 3.2.156: the Film Index and the Talent Index cards (one column
             // to 389px, then a fluid auto-fill grid of 158px minimums: 172-241px
             // two-up, 175-187px three-up, 163-194px four-up, 166-172px from
