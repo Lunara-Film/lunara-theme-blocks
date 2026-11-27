@@ -1289,3 +1289,76 @@ body.home .lunara-latest-reviews-section .lunara-review-grid {
 	}
 }
 /* Living desk end */
+
+/* The three desks share a typographic scale, keeping each route's treatment
+   of the native archive controls and editorial layouts. */
+body #primary:is(.lunara-review-archive-page, .lunara-journal-archive-page, .lunara-oscars-portal) {
+  --lunara-desk-hairline: color-mix(in srgb, var(--lunara-gold) 32%, transparent);
+}
+body #primary:is(.lunara-review-archive-page, .lunara-journal-archive-page) .lunara-archive-hero-title {
+  color: var(--lunara-gold-light) !important;
+  font-size: clamp(2.7rem, 6.8vw, 6.5rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -.035em !important;
+  text-wrap: balance;
+}
+#primary:is(.lunara-review-archive-page, .lunara-journal-archive-page) .lunara-archive-hero-title::after {
+  content: "";
+  display: block;
+  width: clamp(32px, 8vw, 112px);
+  height: 1px;
+  margin: clamp(12px, 1.8vw, 20px) auto 0;
+  background: var(--lunara-gold);
+}
+#primary:is(.lunara-review-archive-page, .lunara-journal-archive-page, .lunara-oscars-portal) .lunara-pillar-desk-link.is-current {
+  background-image: linear-gradient(to bottom, color-mix(in srgb, var(--lunara-gold) 8%, transparent), transparent);
+}
+#primary.lunara-review-archive-page .lunara-review-feature-copy { border-block-start: 1px solid var(--lunara-desk-hairline); }
+#primary.lunara-review-archive-page .lunara-review-feature-title-link:is(:hover, :focus-visible) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .15em;
+}
+body #primary.lunara-review-archive-page .lunara-review-archive-run-head .lunara-section-title {
+  font-size: clamp(1.75rem, 3.25vw, 3.15rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -.025em !important;
+  text-wrap: balance;
+}
+#primary.lunara-journal-archive-page > .lunara-journal-archive-slot-deskbar {
+  border-block-end: 1px solid var(--lunara-desk-hairline);
+}
+body #primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-title {
+  font-weight: 400 !important;
+  letter-spacing: -.02em;
+  line-height: 1.16 !important;
+  text-wrap: balance;
+}
+body #primary.lunara-journal-archive-page .lunara-journal-archive-card .lunara-review-grid-link:is(:hover, :focus-visible) .lunara-review-grid-title {
+  color: var(--lunara-gold-light) !important;
+}
+body #primary.lunara-oscars-portal .lunara-oscars-portal-copy .lunara-home-hero-title {
+  color: var(--lunara-gold-light) !important;
+  font-size: clamp(2.25rem, 5.6vw, 5.25rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -.035em !important;
+  line-height: 1.04 !important;
+  max-width: 20ch !important;
+  text-wrap: balance;
+}
+#primary.lunara-oscars-portal .lunara-oscars-portal-stat-grid {
+  border-block: 1px solid var(--lunara-desk-hairline);
+  padding-block: 8px;
+}
+#primary.lunara-oscars-portal .lunara-oscars-portal-stat-value {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+body #primary.lunara-oscars-portal :is(.lunara-oscars-portal-actions, .lunara-oscars-navigator) a {
+  min-height: 44px !important;
+}
+@media (min-width: 981px) {
+  body #primary.lunara-journal-archive-page > .is-editorial-edition > .is-lead .lunara-review-grid-title {
+    font-size: clamp(2.25rem, calc(var(--lunara-journal-archive-lead-title, 1.72rem) * 1.8), 4.15rem) !important;
+  }
+}

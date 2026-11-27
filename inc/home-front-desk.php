@@ -101,7 +101,7 @@ function lunara_home_front_door_still( $image_url, $is_lead ) {
 	// 3.2.154: a companion is full width to 820px, 328-440px in the two-up
 	// to 1100px and 300-417px beside the lead above; it is not the lead's width.
 	$sizes = $is_lead
-		? ( function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'front-desk-lead' ) : '(max-width: 820px) calc(100vw - 68px), min(93.2vw, 1320px)' )
+		? ( function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'front-desk-lead' ) : '(max-width: 820px) calc(100vw - 36px - max(32px, 8vw)), min(calc(93.2vw - clamp(32px, 8vw, 96px)), 1320px)' )
 		: ( function_exists( 'lunara_image_sizes_for' ) ? lunara_image_sizes_for( 'front-desk-companion' ) : '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px' );
 	$attrs = array(
 		'class'    => $class,
@@ -162,7 +162,7 @@ function lunara_home_front_door_door_still( $image_url, $image_id = 0, $shared =
 
 	$sizes = function_exists( 'lunara_image_sizes_for' )
 		? lunara_image_sizes_for( 'front-door' )
-		: '(max-width: 640px) max(calc(100vw - 68px), 320px), (max-width: 820px) max(43vw, 400px), clamp(410px, 33vw, 500px)';
+		: '(max-width: 640px) max(calc(100vw - 36px - max(32px, 8vw)), 365px), (max-width: 820px) 410px, clamp(409px, 37.33vw, 498px)';
 	$attrs = array(
 		'class'    => 'lunara-home-door-media',
 		'alt'      => '',

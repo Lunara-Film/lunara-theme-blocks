@@ -904,10 +904,10 @@ if ( ! function_exists( 'lunara_image_sizes_for' ) ) {
             'pair-card'            => '(max-width: 640px) 96px, 128px',
             'related-grid'         => '(max-width: 640px) 96px, 112px',
             'front-desk-companion' => '(max-width: 820px) calc(100vw - 64px), (max-width: 1100px) 440px, (max-width: 1280px) 340px, 420px',
-            'front-desk-lead'      => '(max-width: 820px) calc(100vw - 68px), min(93.2vw, 1320px)',
+            'front-desk-lead'      => '(max-width: 820px) calc(100vw - 36px - max(32px, 8vw)), min(calc(93.2vw - clamp(32px, 8vw, 96px)), 1320px)',
             // A covering still needs its frame's width or the width of its
             // 16:9 source scaled to the frame's height, whichever is greater.
-            'front-door'           => '(max-width: 640px) max(calc(100vw - 68px), 320px), (max-width: 820px) max(43vw, 400px), clamp(410px, 33vw, 500px)',
+            'front-door'           => '(max-width: 640px) max(calc(100vw - 36px - max(32px, 8vw)), 365px), (max-width: 820px) 410px, clamp(409px, 37.33vw, 498px)',
             // 3.2.156: the Film Index and the Talent Index cards (one column
             // to 389px, then a fluid auto-fill grid of 158px minimums: 172-241px
             // two-up, 175-187px three-up, 163-194px four-up, 166-172px from

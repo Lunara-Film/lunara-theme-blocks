@@ -63,17 +63,17 @@ and links to the owning Review editor. This does not alter pairing content.
   accent in its thread colour (Theme Echo gold, Counter Program terracotta,
   Career Context blue), which the role label shares, and nothing else painted.
   Neither layout uses a painted container inside another.
-- The Home masthead reads as a printed program: a dateline (place, month,
-  review count), the mark and dek, then "Now Showing": the lead
-  story's landscape still, film and take, beside two companion reviews with
-  their stills, then the three section doors. Image, label and headline form
-  one unit, not a painted card. The former live signal bar and the Journal and
-  Ledger signal cards are retired; those sections keep their own modules.
-  The wordmark in the masthead is a modest centered mark (at most about 104px
-  tall on desktop, 72px on phones, never wider than 560px), not a second
-  header; the Brand console logo sizes can shrink it, never enlarge it, and
-  the dek always sits below it. On inner pages the site header shows the
-  wordmark at its own proportions, contained, never cropped.
+- The Home masthead reads as a printed program. A dateline (place, month, and
+  review count), the mark and dek lead to Now Showing. The featured review
+  gets the full-width landscape still with the film, take, and review link.
+  The copy overlays the still at desktop widths and flows beneath it through
+  820px. Without a still, the same feature reads as a centered typographic
+  plate. The Reviews, Journal, and Oscars doors follow the feature and carry
+  their existing archival links and live lines. They share a row on desktop,
+  wrap with a centered final door on tablet, and stack on phones. The leading
+  still requests high priority. Door art loads lazily. The wordmark stays a
+  centered mark, capped at 104px on desktop and 72px on phones. The Brand
+  console can shrink the mark and the dek always follows it.
 - The Journal archive, the Reviews archive, and the Oscars portal each carry
   the same three-pillar desk under the masthead: Journal, Reviews, Oscars.
   The pillar the visitor is reading is the lead: display type at headline
