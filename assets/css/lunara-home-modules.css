@@ -944,8 +944,13 @@ body.home:has(.lunara-front-page>.lunara-home-section.is-home-panel-last) .lunar
 body.home .lunara-front-page > .lunara-home-masthead.lunara-home-doors + .lunara-home-section {
   margin-top: 0 !important;
 }
-body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-panel {
+body.home .lunara-front-page {
   --lunara-home-cover-gutter: max(18px, 3.4vw);
+}
+body.home .lunara-front-page:has(> .lunara-home-masthead.lunara-home-doors) .lunara-home-running-order {
+  padding-inline: var(--lunara-home-cover-gutter);
+}
+body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-panel {
   gap: min(var(--lunara-home-masthead-gap-setting, 26px), 24px) !important;
   padding: min(var(--lunara-home-masthead-top-pad-setting, 36px), 18px)
            var(--lunara-home-cover-gutter)
@@ -1184,8 +1189,10 @@ body.home .lunara-home-masthead.lunara-home-doors .lunara-home-door:hover .lunar
   }
 }
 @media (max-width: 820px) {
-  body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-panel {
+  body.home .lunara-front-page {
     --lunara-home-cover-gutter: 18px;
+  }
+  body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-panel {
     padding-top: min(var(--lunara-home-masthead-mobile-top-setting, 30px), 14px) !important;
   }
   body.home .lunara-home-masthead.lunara-home-doors .lunara-home-masthead-logo-frame { height: auto !important; }
