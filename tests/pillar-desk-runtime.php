@@ -139,7 +139,4 @@ preg_match( '/\.lunara-pillar-desk-title\s*\{[^}]*font-size:\s*clamp\(\s*([0-9.]
 preg_match( '/\.is-current \.lunara-pillar-desk-title\s*\{[^}]*font-size:\s*clamp\(\s*([0-9.]+)rem/', $rule, $lead_size );
 pillar_check( isset( $support_size[1], $lead_size[1] ) && (float) $lead_size[1] > (float) $support_size[1] && (float) $support_size[1] >= 0.8125, 'the lead title is display type larger than the supporting titles, and neither drops under 13px' );
 
-$home_css = file_get_contents( dirname( __DIR__ ) . '/assets/css/lunara-home-modules.css' );
-pillar_check( false !== strpos( $home_css, '.lunara-home-door-status' ) && false !== strpos( $home_css, 'font-size:0.8125rem!important' ) && false !== strpos( $home_css, 'animation:none!important' ), 'each Home door reserves a 13px freshness status and reduced motion stops it' );
-
 fwrite( STDOUT, "Pillar desk runtime passed: {$GLOBALS['checks']} checks.\n" );

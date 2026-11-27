@@ -25,6 +25,13 @@ there; `AGENTS.md` is the single canonical copy.)
 
 ---
 
+## 2026-11-27 — A new cover for Reviews, Journal, and Oscars
+
+- **Asked:** Dalton requested a new public design for the three desks and asked to keep the LUNARA FILM name and palette.
+- **Holding:** Theme 3.2.164 on `codex/screening-room-redesign`. The featured review leads with a widescreen still. The three archive doors follow, and the archive mastheads and editorial typography share the new hierarchy. Site Studio remains the source for the homepage content and layout settings.
+- **Live:** WordPress theme 3.2.163 at the start of this session.
+- **Next:** Verify the final pull request and all required checks, then use the existing manual WordPress.com deployment and confirm the public routes.
+
 ## 2026-11-21 — The pillar desk leads (not merged, not live)
 
 - **Asked:** Dalton, looking at the live pillar desk: it looks plain. Make it more dynamic. Keep the logo and the colors.
