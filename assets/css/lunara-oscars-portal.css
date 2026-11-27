@@ -346,13 +346,14 @@ body.lunara-oscars-portal-page .lunara-oscars-board-note {
     padding: 0 !important;
 }
 #primary.lunara-oscars-portal .lunara-oscars-portal-copy .lunara-home-hero-title {
-    max-width: 24ch !important;
+    color: var(--lunara-gold-light, #e0c481) !important;
+    max-width: min(100%, 20ch) !important;
     margin: 0 auto !important;
     font-family: var(--lunara-font-display) !important;
-    font-size: clamp(2.1rem,4.2vw,3.5rem) !important;
+    font-size: clamp(2.25rem, 5.6vw, 5.25rem) !important;
     font-weight: 400 !important;
-    line-height: 1.08 !important;
-    letter-spacing: -.025em !important;
+    line-height: 1.04 !important;
+    letter-spacing: -.035em !important;
     text-wrap: balance !important;
 }
 #primary.lunara-oscars-portal .lunara-oscars-portal-actions {
@@ -1172,9 +1173,11 @@ body.lunara-oscars-portal-page .lunara-oscars-portal-feature-card {
         overflow-wrap: break-word !important;
         word-break: normal !important;
     }
-    #primary.lunara-oscars-portal .lunara-home-hero-title {
+    #primary.lunara-oscars-portal .lunara-oscars-portal-copy .lunara-home-hero-title {
         font-size: clamp(30px, 7vw, 42px) !important;
         line-height: 1.08 !important;
+        letter-spacing: normal !important;
+        max-width: 100% !important;
     }
     #primary.lunara-oscars-portal .lunara-home-section-title {
         font-size:var(--lunara-type-section,clamp(1.7rem,3vw,2.3rem)) !important;

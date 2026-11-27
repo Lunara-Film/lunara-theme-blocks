@@ -82,7 +82,7 @@ CSS;
 .lunara-review-archive-hero-shell::before{content:none!important}
 .lunara-review-archive-hero-copy-wrap{justify-items:center!important;text-align:center;align-content:start!important;display:grid!important;gap:6px!important;grid-template-columns:minmax(0,1fr)!important;min-width:0!important}
 & :is(.lunara-archive-hero-kicker,.lunara-archive-hero-title){font-family:var(--h)!important}
-.lunara-archive-hero-title{font-size:clamp(2.7rem,6vw,4.5rem)!important;hyphens:none!important;letter-spacing:-.02em!important;line-height:1.1!important;margin:0!important;max-width:none!important;overflow-wrap:break-word!important;word-break:normal!important}
+.lunara-archive-hero-title{font-size:clamp(2.7rem,6.8vw,6.5rem)!important;hyphens:none!important;letter-spacing:-.02em!important;line-height:1!important;margin:0!important;max-width:none!important;overflow-wrap:break-word!important;word-break:normal!important}
 .lunara-archive-hero-copy{font-family:var(--b)!important;font-size:1rem!important;line-height:1.55!important;margin:0!important;max-width:70ch!important;overflow-wrap:anywhere!important}
 CSS;
 
